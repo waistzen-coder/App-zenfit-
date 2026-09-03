@@ -53,16 +53,40 @@ casa. Es la pieza que más reduce el rechazo en la puerta.
 navegador y se le devuelve si vuelve dentro de una semana. Es lo más parecido a
 la recuperación de carritos que puede hacer un tema.
 
-## Cómo entra el pedido
+## Cómo entra el pedido, y dónde ves lo que ha escrito
 
 Al enviar se construye un enlace permanente de carrito:
 
-    /cart/{variante}:{unidades},{recargo}:1?attributes[...]&checkout[...]
+    /cart/{variante}:{unidades},{recargo}:1?attributes[...]&note=...&checkout[...]
 
-Ese enlace reemplaza el carrito entero —así no se duplica el pedido si el
-cliente ya había pulsado el botón del hero—, guarda las respuestas como
-atributos que Shopify enseña en la ficha del pedido, y deja el checkout con la
-dirección ya rellenada.
+Reemplaza el carrito entero —así no se duplica el pedido si ya se había pulsado
+otro botón—, y según la [documentación de Shopify sobre enlaces permanentes](https://shopify.dev/docs/apps/build/checkout/create-cart-permalinks)
+los parámetros `note` y `attributes` **salen en la ficha del pedido**, mientras
+que los `checkout[...]` dejan la dirección rellenada.
+
+Así que todo lo que escribe el comprador te llega por dos vías:
+
+**La nota**, arriba del todo en la ficha del pedido, en diez líneas:
+
+    CONTRAREEMBOLSO · COBRAR 54,95 €
+    Pedido: 1 unidad
+    Nombre: María García López
+    Teléfono: 645210337
+    Correo: maria.garcia@gmail.com
+    Dirección: Calle Mayor, 24, 3º B, escalera izquierda · 28806 Alcalá de Henares (Madrid)
+    Entrega: Tarde (14:00 - 19:00)
+    Si no está, recoge: Mi vecina del 2º A
+    Avisar por WhatsApp: sí
+    Compromiso aceptado: 03/09/2026 20:45
+
+**Los atributos**, en los detalles adicionales, uno por dato: forma de pago,
+importe a cobrar, pack, nombre declarado, teléfono, correo, piso y puerta,
+franja horaria, quién puede recogerlo, aviso por WhatsApp y compromiso de pago.
+
+La diferencia entre los dos no es capricho: los atributos y la nota guardan lo
+que declaró el comprador en el formulario, y no cambian aunque luego toque algo
+en el checkout. La dirección de envío del pedido sí puede cambiarla él. Si un
+día no cuadran, la nota te dice qué escribió de verdad.
 
 ## Lo que esto no puede hacer
 

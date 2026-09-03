@@ -199,12 +199,35 @@ t('el nombre se parte en nombre y apellidos', () => {
   has(u, 'first_name]=María');
   has(u, 'last_name]=García López');
 });
-t('la nota del pedido resume lo que hay que cobrar', () => {
+t('todo lo que escribió el comprador llega como atributo del pedido', () => {
   const u = decodeURIComponent(url);
-  has(u, 'note=CONTRAREEMBOLSO · Cobrar 54,95 €');
-  has(u, 'Tel 645210337');
+  has(u, 'attributes[Nombre declarado]=María García López');
+  has(u, 'attributes[Correo declarado]=maria.garcia@gmail.com');
+  has(u, 'attributes[Pack]=1 unidad');
+  has(u, 'attributes[Piso y puerta]=3º B, escalera izquierda');
+  has(u, 'attributes[Franja horaria]=Tarde (14:00 - 19:00)');
+  has(u, 'attributes[Puede recogerlo]=Mi vecina del 2º A');
+  has(u, 'attributes[Avisar por WhatsApp]=Si');
+  has(u, 'attributes[Compromiso de pago]=Aceptado ');
 });
-t('la URL no se pasa de largo', () => {
+t('la nota va en varias líneas y no se corta', () => {
+  const u = decodeURIComponent(url);
+  const note = u.split('note=')[1].split('&checkout')[0];
+  const lines = note.split('\n');
+  if (lines.length < 9) throw new Error('la nota solo tiene ' + lines.length + ' líneas:\n      ' + note);
+  eq(lines[0], 'CONTRAREEMBOLSO · COBRAR 54,95 €');
+  has(note, 'Nombre: María García López');
+  has(note, 'Teléfono: 645210337');
+  has(note, 'Correo: maria.garcia@gmail.com');
+  has(note, 'Dirección: Calle Mayor, 24, 3º B, escalera izquierda · 28806 Alcalá de Henares (Madrid)');
+  has(note, 'Entrega: Tarde (14:00 - 19:00)');
+  has(note, 'Si no está, recoge: Mi vecina del 2º A');
+  has(note, 'Avisar por WhatsApp: sí');
+  has(note, 'Compromiso aceptado: ');
+  if (note.length > 880) throw new Error('la nota roza el tope: ' + note.length);
+  console.log('      (' + lines.length + ' líneas, ' + note.length + ' caracteres)');
+});
+t('la URL se queda en un tamaño cómodo', () => {
   if (url.length > 2000) throw new Error('URL de ' + url.length + ' caracteres, demasiado larga');
   console.log('      (' + url.length + ' caracteres)');
 });
@@ -214,9 +237,11 @@ t('dirección larguísima → la URL se recorta sola y sigue siendo válida', ()
          city: 'Santa María de los Caballeros del Camino Real', backup: 'X'.repeat(120) });
   const u = buy();
   if (!u) throw new Error('debería seguir pasando');
-  if (u.length > 2000) throw new Error('sigue midiendo ' + u.length);
-  has(decodeURIComponent(u), 'checkout[shipping_address][zip]=28806');
-  console.log('      (' + u.length + ' caracteres tras recortar)');
+  if (u.length > 4200) throw new Error('sigue midiendo ' + u.length);
+  const d = decodeURIComponent(u);
+  has(d, 'checkout[shipping_address][zip]=28806');
+  has(d, 'note=CONTRAREEMBOLSO');          // la nota sobrevive: es lo que se lee
+  console.log('      (' + u.length + ' caracteres, sin perder nada)');
 });
 
 console.log('\n── Contrareembolso con pack de 2 ──');
