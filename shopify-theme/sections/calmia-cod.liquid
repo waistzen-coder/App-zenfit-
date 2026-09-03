@@ -1,0 +1,1339 @@
+{%- comment -%}
+  Calmia · Contrareembolso (formulario completo)
+  ==============================================
+
+  Sustituye a la app EasySell COD Form. Hace, sin app y sin servidor, todo lo
+  que se puede hacer desde un tema:
+
+    · Elección de pack (1 / 2 / 3) con el precio ya descontado.
+    · Elección de forma de pago: tarjeta al precio normal, o contrareembolso
+      con un recargo que sale del precio del producto de servicio.
+    · Cuestionario de reparto completo, pensado para que el paquete se entregue
+      a la primera: nombre, móvil, CP, provincia automática, localidad, calle
+      con número, piso/puerta, franja horaria, persona alternativa y correo.
+    · Filtros antifraude que son los que de verdad mueven la tasa de entrega:
+      móviles falsos, direcciones sin número, provincias bloqueadas para
+      contrareembolso, pedidos duplicados y bots.
+    · Resumen del importe exacto que hay que tener preparado, con casilla de
+      compromiso. Es la pieza que más reduce el «no estaba» y el «no lo quiero».
+    · Recuperación del formulario a medias: lo que escriba se guarda en su
+      navegador y se le devuelve si vuelve.
+
+  Cómo entra el pedido
+  --------------------
+  Al enviar se construye un enlace permanente de carrito:
+
+      /cart/{variante}:{unidades},{recargo}:1?attributes[...]&checkout[...]
+
+  Ese enlace reemplaza el carrito entero (así no se duplica el pedido si ya
+  había pulsado el botón del hero), guarda las respuestas como atributos que
+  Shopify enseña en la ficha del pedido, y deja el checkout con la dirección ya
+  rellenada. El cliente solo tiene que confirmar.
+
+  Lo que sigue sin poder hacerse desde un tema
+  --------------------------------------------
+  Shopify no deja preseleccionar la forma de pago desde fuera del checkout.
+  Ninguna plantilla puede. Por eso el aviso de «elige Contrareembolso en la
+  pantalla de pago» es parte del diseño y no un adorno, y por eso hace falta
+  tener activado el método de pago manual en Ajustes → Pagos. Una app con
+  servidor propio se lo salta creando el pedido por la API; un tema, no.
+
+  Requisitos para que funcione
+  ----------------------------
+  1. El producto del recargo tiene que estar ACTIVO y publicado en la tienda
+     online. Si está en borrador, el enlace falla y el cliente se queda fuera.
+  2. Los porcentajes de cada pack tienen que coincidir con los descuentos
+     automáticos de la tienda, o el precio que se enseña aquí no será el que
+     vea en el pago.
+{%- endcomment -%}
+{% render 'calmia-base' %}
+
+{%- liquid
+  assign p = product
+  if section.settings.product != blank
+    assign p = section.settings.product
+  endif
+  assign cv = p.selected_or_first_available_variant
+
+  assign fee_p = section.settings.fee_product
+  assign fee_v = fee_p.selected_or_first_available_variant
+  assign fee = 0
+  if fee_v != blank
+    assign fee = fee_v.price
+  endif
+  assign has_cod = false
+  if fee_v != blank
+    assign has_cod = true
+  endif
+
+  comment
+    Fecha de entrega, con el mismo cálculo que el hero y la barra fija para que
+    las tres digan lo mismo.
+  endcomment
+  assign meses = 'ene,feb,mar,abr,may,jun,jul,ago,sep,oct,nov,dic' | split: ','
+  assign now_ts = 'now' | date: '%s' | times: 1
+  assign min_ts = section.settings.delivery_min | times: 86400 | plus: now_ts
+  assign max_ts = section.settings.delivery_max | times: 86400 | plus: now_ts
+  assign mi = min_ts | date: '%-m' | minus: 1
+  assign ma = max_ts | date: '%-m' | minus: 1
+  assign da = min_ts | date: '%-d'
+  assign db = max_ts | date: '%-d'
+  if mi == ma
+    assign eta_range = da | append: '–' | append: db | append: ' ' | append: meses[ma]
+  else
+    assign eta_range = da | append: ' ' | append: meses[mi] | append: ' – ' | append: db | append: ' ' | append: meses[ma]
+  endif
+
+  assign pack_blocks = section.blocks | where: 'type', 'pack'
+-%}
+
+{%- if p != blank and cv != blank -%}
+<div class="cal cal-sec calmia-cod" id="calmia-cod-{{ section.id }}" data-calmia-cod>
+  <div class="cal-wrap">
+
+    {%- if section.settings.eyebrow != blank -%}
+      <p class="cal-eyebrow" style="text-align:center">{{ section.settings.eyebrow }}</p>
+    {%- endif -%}
+    <h2 class="cal-h2">{{ section.settings.heading }}{% if section.settings.heading_italic != blank %} <em>{{ section.settings.heading_italic }}</em>{% endif %}</h2>
+    {%- if section.settings.subheading != blank -%}
+      <p class="cal-sub">{{ section.settings.subheading }}</p>
+    {%- endif -%}
+
+    <div class="calmia-cod__card">
+
+      {%- comment -%} ============ Paso 1 · Pack ============ {%- endcomment -%}
+      {%- if pack_blocks.size > 0 -%}
+        <div class="calmia-cod__step">
+          <p class="calmia-cod__steptitle"><i>1</i> {{ section.settings.step_pack }}</p>
+          <div class="calmia-cod__packs" role="radiogroup" aria-label="{{ section.settings.step_pack | escape }}">
+            {%- for block in pack_blocks -%}
+              {%- liquid
+                assign q = block.settings.qty | at_least: 1
+                assign gross = cv.price | times: q
+                assign cut = gross | times: block.settings.discount_pct | divided_by: 100.0 | round
+                assign net = gross | minus: cut
+                assign unit = net | divided_by: q
+              -%}
+              <label
+                class="calmia-cod__pack{% if forloop.first %} is-on{% endif %}{% if block.settings.highlight %} calmia-cod__pack--hot{% endif %}"
+                data-calmia-pack="{{ forloop.index0 }}"
+                {{ block.shopify_attributes }}
+              >
+                <input type="radio" name="calmia-pack-{{ section.id }}" value="{{ forloop.index0 }}"{% if forloop.first %} checked{% endif %}>
+                <span class="calmia-cod__tick" aria-hidden="true">{% render 'calmia-icon', icon: 'check', size: 13 %}</span>
+                <span class="calmia-cod__packbody">
+                  <b>{% if block.settings.label != blank %}{{ block.settings.label }}{% else %}{{ q }} uds.{% endif %}</b>
+                  {%- if block.settings.sublabel != blank -%}<span>{{ block.settings.sublabel }}</span>{%- endif -%}
+                  {%- if block.settings.badge != blank -%}<em class="calmia-cod__packbadge">{{ block.settings.badge }}</em>{%- endif -%}
+                </span>
+                <span class="calmia-cod__packprice">
+                  <b>{{ net | money }}</b>
+                  {%- if cut > 0 -%}<s>{{ gross | money }}</s>{%- endif -%}
+                  <i>{{ unit | money }}{{ section.settings.per_unit_suffix }}</i>
+                </span>
+              </label>
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- endif -%}
+
+      {%- comment -%} ============ Paso 2 · Forma de pago ============ {%- endcomment -%}
+      <div class="calmia-cod__step">
+        <p class="calmia-cod__steptitle"><i>{% if pack_blocks.size > 0 %}2{% else %}1{% endif %}</i> {{ section.settings.step_pay }}</p>
+        <div class="calmia-cod__ways" role="radiogroup" aria-label="{{ section.settings.ways_label | escape }}">
+
+          <label class="calmia-cod__way is-on" data-calmia-way="card">
+            <input type="radio" name="calmia-way-{{ section.id }}" value="card" checked>
+            <span class="calmia-cod__tick" aria-hidden="true">{% render 'calmia-icon', icon: 'check', size: 13 %}</span>
+            <span class="calmia-cod__waybody">
+              <b>{{ section.settings.card_title }}</b>
+              <span>{{ section.settings.card_text }}</span>
+            </span>
+            <span class="calmia-cod__wayprice">
+              <b data-calmia-cod-cardprice>{{ cv.price | money }}</b>
+            </span>
+          </label>
+
+          {%- if has_cod -%}
+            <label class="calmia-cod__way" data-calmia-way="cod">
+              <input type="radio" name="calmia-way-{{ section.id }}" value="cod">
+              <span class="calmia-cod__tick" aria-hidden="true">{% render 'calmia-icon', icon: 'check', size: 13 %}</span>
+              <span class="calmia-cod__waybody">
+                <b>{{ section.settings.cod_title }}</b>
+                <span>{{ section.settings.cod_text }}</span>
+              </span>
+              <span class="calmia-cod__wayprice">
+                <b data-calmia-cod-codprice>{{ cv.price | plus: fee | money }}</b>
+                <i>+{{ fee | money }}</i>
+              </span>
+            </label>
+          {%- endif -%}
+        </div>
+      </div>
+
+      {%- comment -%} ============ Paso 3 · Cuestionario ============ {%- endcomment -%}
+      {%- if has_cod -%}
+        <div class="calmia-cod__form" data-calmia-cod-form hidden>
+          <p class="calmia-cod__steptitle"><i>{% if pack_blocks.size > 0 %}3{% else %}2{% endif %}</i> {{ section.settings.step_form }}</p>
+          {%- if section.settings.form_intro != blank -%}
+            <p class="calmia-cod__formintro">{{ section.settings.form_intro }}</p>
+          {%- endif -%}
+
+          {%- comment -%} Nombre {%- endcomment -%}
+          <div class="calmia-cod__field">
+            <label for="cod-name-{{ section.id }}">{{ section.settings.name_label }} <em>*</em></label>
+            <input type="text" id="cod-name-{{ section.id }}" name="cod_name" autocomplete="name"
+                   placeholder="{{ section.settings.name_placeholder | escape }}" data-cod="name" data-cod-save>
+            <p class="calmia-cod__err" data-cod-err="name" hidden></p>
+          </div>
+
+          {%- comment -%} Móvil {%- endcomment -%}
+          <div class="calmia-cod__field">
+            <label for="cod-phone-{{ section.id }}">{{ section.settings.phone_label }} <em>*</em></label>
+            <input type="tel" id="cod-phone-{{ section.id }}" name="cod_phone" inputmode="numeric" autocomplete="tel"
+                   placeholder="{{ section.settings.phone_placeholder | escape }}" data-cod="phone" data-cod-save>
+            <span class="calmia-cod__hint">{{ section.settings.phone_hint }}</span>
+            <p class="calmia-cod__echo" data-cod-phone-echo hidden></p>
+            <p class="calmia-cod__err" data-cod-err="phone" hidden></p>
+          </div>
+
+          {%- comment -%} Correo {%- endcomment -%}
+          <div class="calmia-cod__field">
+            <label for="cod-email-{{ section.id }}">{{ section.settings.email_label }} <em>*</em></label>
+            <input type="email" id="cod-email-{{ section.id }}" name="cod_email" inputmode="email" autocomplete="email"
+                   placeholder="{{ section.settings.email_placeholder | escape }}" data-cod="email" data-cod-save>
+            <span class="calmia-cod__hint">{{ section.settings.email_hint }}</span>
+            <p class="calmia-cod__err" data-cod-err="email" hidden></p>
+          </div>
+
+          {%- comment -%} CP + provincia {%- endcomment -%}
+          <div class="calmia-cod__row">
+            <div class="calmia-cod__field">
+              <label for="cod-zip-{{ section.id }}">{{ section.settings.zip_label }} <em>*</em></label>
+              <input type="text" id="cod-zip-{{ section.id }}" name="cod_zip" inputmode="numeric" maxlength="5"
+                     autocomplete="postal-code" placeholder="28001" data-cod="zip" data-cod-save>
+              <p class="calmia-cod__err" data-cod-err="zip" hidden></p>
+            </div>
+            <div class="calmia-cod__field">
+              <label for="cod-prov-{{ section.id }}">{{ section.settings.province_label }}</label>
+              <input type="text" id="cod-prov-{{ section.id }}" name="cod_province"
+                     placeholder="{{ section.settings.province_placeholder | escape }}" data-cod="province" readonly>
+            </div>
+          </div>
+
+          {%- comment -%} Localidad {%- endcomment -%}
+          <div class="calmia-cod__field">
+            <label for="cod-city-{{ section.id }}">{{ section.settings.city_label }} <em>*</em></label>
+            <input type="text" id="cod-city-{{ section.id }}" name="cod_city" autocomplete="address-level2"
+                   placeholder="{{ section.settings.city_placeholder | escape }}" data-cod="city" data-cod-save>
+            <p class="calmia-cod__err" data-cod-err="city" hidden></p>
+          </div>
+
+          {%- comment -%} Dirección {%- endcomment -%}
+          <div class="calmia-cod__field">
+            <label for="cod-addr-{{ section.id }}">{{ section.settings.address_label }} <em>*</em></label>
+            <input type="text" id="cod-addr-{{ section.id }}" name="cod_address" autocomplete="address-line1"
+                   placeholder="{{ section.settings.address_placeholder | escape }}" data-cod="address" data-cod-save>
+            <span class="calmia-cod__hint">{{ section.settings.address_hint }}</span>
+            <p class="calmia-cod__err" data-cod-err="address" hidden></p>
+          </div>
+
+          {%- comment -%} Piso y puerta {%- endcomment -%}
+          <div class="calmia-cod__field">
+            <label for="cod-floor-{{ section.id }}">{{ section.settings.floor_label }}</label>
+            <input type="text" id="cod-floor-{{ section.id }}" name="cod_floor" autocomplete="address-line2"
+                   placeholder="{{ section.settings.floor_placeholder | escape }}" data-cod="floor" data-cod-save>
+            <span class="calmia-cod__hint">{{ section.settings.floor_hint }}</span>
+          </div>
+
+          {%- comment -%} Franja horaria {%- endcomment -%}
+          <div class="calmia-cod__field">
+            <label for="cod-slot-{{ section.id }}">{{ section.settings.slot_label }} <em>*</em></label>
+            <select id="cod-slot-{{ section.id }}" name="cod_slot" data-cod="slot" data-cod-save>
+              <option value="">{{ section.settings.slot_empty }}</option>
+              {%- assign slots = section.settings.slots | newline_to_br | split: '<br />' -%}
+              {%- for s in slots -%}
+                {%- assign s_clean = s | strip -%}
+                {%- if s_clean != blank -%}
+                  <option value="{{ s_clean | escape }}">{{ s_clean }}</option>
+                {%- endif -%}
+              {%- endfor -%}
+            </select>
+            <p class="calmia-cod__err" data-cod-err="slot" hidden></p>
+          </div>
+
+          {%- comment -%} Persona alternativa {%- endcomment -%}
+          {%- if section.settings.show_backup -%}
+            <div class="calmia-cod__field">
+              <label for="cod-backup-{{ section.id }}">{{ section.settings.backup_label }}</label>
+              <input type="text" id="cod-backup-{{ section.id }}" name="cod_backup"
+                     placeholder="{{ section.settings.backup_placeholder | escape }}" data-cod="backup" data-cod-save>
+              <span class="calmia-cod__hint">{{ section.settings.backup_hint }}</span>
+            </div>
+          {%- endif -%}
+
+          {%- comment -%} Aviso de zona no servida {%- endcomment -%}
+          <p class="calmia-cod__blocked" data-cod-blocked hidden></p>
+
+          {%- comment -%} Resumen {%- endcomment -%}
+          <div class="calmia-cod__summary" data-cod-summary>
+            <p class="calmia-cod__summarytitle">{{ section.settings.summary_title }}</p>
+            <dl>
+              <div><dt>{{ section.settings.summary_what }}</dt><dd data-cod-sum-what>—</dd></div>
+              <div><dt>{{ section.settings.summary_where }}</dt><dd data-cod-sum-where>—</dd></div>
+              <div class="calmia-cod__summarypay">
+                <dt>{{ section.settings.summary_pay }}</dt>
+                <dd data-cod-sum-pay>{{ cv.price | plus: fee | money }}</dd>
+              </div>
+            </dl>
+          </div>
+
+          {%- comment -%} Compromisos {%- endcomment -%}
+          <label class="calmia-cod__pledge" data-cod-pledge-wrap>
+            <input type="checkbox" data-cod="cash">
+            <span class="calmia-cod__tick calmia-cod__tick--sq" aria-hidden="true">{% render 'calmia-icon', icon: 'check', size: 13 %}</span>
+            <span><span data-cod-cash-text>{{ section.settings.pledge_cash }}</span></span>
+          </label>
+
+          <label class="calmia-cod__pledge" data-cod-pledge-wrap>
+            <input type="checkbox" data-cod="home">
+            <span class="calmia-cod__tick calmia-cod__tick--sq" aria-hidden="true">{% render 'calmia-icon', icon: 'check', size: 13 %}</span>
+            <span>{{ section.settings.pledge_home }}</span>
+          </label>
+
+          {%- if section.settings.show_whatsapp -%}
+            <label class="calmia-cod__pledge" data-cod-pledge-wrap>
+              <input type="checkbox" data-cod="whatsapp" checked>
+              <span class="calmia-cod__tick calmia-cod__tick--sq" aria-hidden="true">{% render 'calmia-icon', icon: 'check', size: 13 %}</span>
+              <span>{{ section.settings.whatsapp_text }}</span>
+            </label>
+          {%- endif -%}
+
+          <p class="calmia-cod__err calmia-cod__err--big" data-cod-err="global" hidden></p>
+
+          {%- comment -%}
+            Trampa para robots: un campo que ninguna persona ve y que los
+            rellenadores automáticos completan igualmente.
+          {%- endcomment -%}
+          <div class="calmia-cod__hp" aria-hidden="true">
+            <label for="cod-web-{{ section.id }}">No rellenar</label>
+            <input type="text" id="cod-web-{{ section.id }}" name="cod_website" tabindex="-1" autocomplete="off" data-cod-hp>
+          </div>
+        </div>
+      {%- endif -%}
+
+      {%- comment -%} ============ Botón ============ {%- endcomment -%}
+      <button type="button" class="cal-btn calmia-cod__btn" data-calmia-cod-submit>
+        {% render 'calmia-icon', icon: 'bag', size: 24 %}
+        <span data-calmia-cod-btntext>{{ section.settings.cta_card }}</span>
+        <span class="cal-btn__sep">—</span>
+        <span data-calmia-cod-btnprice>{{ cv.price | money }}</span>
+      </button>
+
+      {%- if section.settings.checkout_note != blank -%}
+        <p class="calmia-cod__note" data-calmia-cod-note hidden>
+          {% render 'calmia-icon', icon: 'shield', size: 15 %}
+          <span>{{ section.settings.checkout_note }}</span>
+        </p>
+      {%- endif -%}
+
+      {%- if section.settings.eta_text != blank -%}
+        <p class="calmia-cod__eta">
+          {% render 'calmia-icon', icon: 'truck', size: 15 %}
+          {{ section.settings.eta_text }} <b>{{ eta_range }}</b>
+        </p>
+      {%- endif -%}
+    </div>
+
+    {%- assign point_blocks = section.blocks | where: 'type', 'point' -%}
+    {%- if point_blocks.size > 0 -%}
+      <div class="calmia-cod__points">
+        {%- for block in point_blocks -%}
+          <div class="calmia-cod__point" {{ block.shopify_attributes }}>
+            <span class="calmia-cod__pointicon">{% render 'calmia-icon', icon: block.settings.icon, size: 19 %}</span>
+            <div>
+              <h3>{{ block.settings.title }}</h3>
+              <p>{{ block.settings.text }}</p>
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    {%- comment -%}
+      Toda la configuración viaja en un JSON en vez de incrustada a trozos en el
+      script. Los importes ya vienen con el formato de moneda de la tienda, así que
+      el JavaScript nunca formatea dinero por su cuenta y no puede desviarse.
+    {%- endcomment -%}
+    <script type="application/json" data-calmia-cod-config>
+    {
+      "variantId": {{ cv.id }},
+      "feeId": {{ fee_v.id | default: 0 }},
+      "hasCod": {{ has_cod }},
+      "cardMoney": {{ cv.price | money | strip_html | json }},
+      "codMoney": {{ cv.price | plus: fee | money | strip_html | json }},
+      "packs": [
+        {%- if pack_blocks.size > 0 -%}
+          {%- for block in pack_blocks -%}
+            {%- liquid
+              assign q = block.settings.qty | at_least: 1
+              assign gross = cv.price | times: q
+              assign cut = gross | times: block.settings.discount_pct | divided_by: 100.0 | round
+              assign net = gross | minus: cut
+              assign codnet = net | plus: fee
+            -%}
+            {
+              "qty": {{ q }},
+              "label": {{ block.settings.label | default: 'Pack' | json }},
+              "cardMoney": {{ net | money | strip_html | json }},
+              "codMoney": {{ codnet | money | strip_html | json }}
+            }{% unless forloop.last %},{% endunless %}
+          {%- endfor -%}
+        {%- else -%}
+          {
+            "qty": 1,
+            "label": {{ p.title | json }},
+            "cardMoney": {{ cv.price | money | strip_html | json }},
+            "codMoney": {{ cv.price | plus: fee | money | strip_html | json }}
+          }
+        {%- endif -%}
+      ],
+      "blockedZips": {{ section.settings.blocked_zips | json }},
+      "minSeconds": {{ section.settings.min_seconds }},
+      "locale": {{ section.settings.checkout_locale | json }},
+      "text": {
+        "ctaCard": {{ section.settings.cta_card | json }},
+        "ctaCod": {{ section.settings.cta_cod | json }},
+        "ctaLoading": {{ section.settings.cta_loading | json }},
+        "pledgeCash": {{ section.settings.pledge_cash | json }},
+        "phoneEcho": {{ section.settings.phone_echo | json }},
+        "errName": {{ section.settings.err_name | json }},
+        "errPhone": {{ section.settings.err_phone | json }},
+        "errEmail": {{ section.settings.err_email | json }},
+        "errZip": {{ section.settings.err_zip | json }},
+        "errCity": {{ section.settings.err_city | json }},
+        "errAddress": {{ section.settings.err_address | json }},
+        "errAddressNumber": {{ section.settings.err_address_number | json }},
+        "errSlot": {{ section.settings.err_slot | json }},
+        "errCash": {{ section.settings.err_cash | json }},
+        "errHome": {{ section.settings.err_home | json }},
+        "errBlocked": {{ section.settings.err_blocked | json }},
+        "errDuplicate": {{ section.settings.err_duplicate | json }},
+        "ctaDuplicate": {{ section.settings.cta_duplicate | json }},
+        "errGeneric": {{ section.settings.err_generic | json }}
+      }
+    }
+    </script>
+  </div>
+</div>
+
+
+<style>
+  #calmia-cod-{{ section.id }} { background: {{ section.settings.bg }}; }
+
+  .calmia-cod__card {
+    max-width: 640px;
+    margin: 26px auto 0;
+    background: #fff;
+    border-radius: var(--cal-r-lg);
+    box-shadow: var(--cal-shadow);
+    padding: 18px;
+  }
+
+  .calmia-cod__step + .calmia-cod__step { margin-top: 20px; }
+  .calmia-cod__steptitle {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin: 0 0 11px;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.25;
+  }
+  .calmia-cod__steptitle i {
+    flex: 0 0 auto;
+    width: 23px;
+    height: 23px;
+    border-radius: 50%;
+    background: var(--cal-pink);
+    color: #fff;
+    font-style: normal;
+    font-size: 13px;
+    font-weight: 700;
+    display: grid;
+    place-items: center;
+  }
+
+  /* --- Tarjetas de elección (packs y formas de pago) --- */
+  .calmia-cod__packs,
+  .calmia-cod__ways { display: grid; gap: 10px; }
+
+  .calmia-cod__pack,
+  .calmia-cod__way {
+    position: relative;
+    display: grid;
+    grid-template-columns: 24px 1fr auto;
+    gap: 12px;
+    align-items: center;
+    padding: 14px;
+    border: 2px solid var(--cal-line);
+    border-radius: 14px;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+  .calmia-cod__pack input,
+  .calmia-cod__way input { position: absolute; opacity: 0; inset: 0; cursor: pointer; }
+  .calmia-cod__pack.is-on,
+  .calmia-cod__way.is-on { border-color: var(--cal-pink); background: var(--cal-pink-4); }
+  .calmia-cod__pack--hot { border-color: var(--cal-pink-3); }
+
+  .calmia-cod__tick {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2px solid var(--cal-line);
+    background: #fff;
+    color: #fff;
+    display: grid;
+    place-items: center;
+    transition: background 0.15s ease, border-color 0.15s ease;
+  }
+  .calmia-cod__tick--sq { border-radius: 7px; }
+  .calmia-cod__pack.is-on .calmia-cod__tick,
+  .calmia-cod__way.is-on .calmia-cod__tick,
+  .calmia-cod__pledge.is-on .calmia-cod__tick { background: var(--cal-pink); border-color: var(--cal-pink); }
+
+  .calmia-cod__packbody,
+  .calmia-cod__waybody { display: grid; gap: 2px; min-width: 0; }
+  .calmia-cod__packbody b,
+  .calmia-cod__waybody b { font-size: 15.5px; font-weight: 700; line-height: 1.2; }
+  .calmia-cod__packbody span,
+  .calmia-cod__waybody span { font-size: 12.5px; color: var(--cal-ink-3); line-height: 1.35; }
+  .calmia-cod__packbadge {
+    justify-self: start;
+    margin-top: 4px;
+    font-style: normal;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #fff;
+    background: var(--cal-green);
+    border-radius: 999px;
+    padding: 3px 9px;
+  }
+
+  .calmia-cod__packprice,
+  .calmia-cod__wayprice { text-align: right; white-space: nowrap; }
+  .calmia-cod__packprice b,
+  .calmia-cod__wayprice b { display: block; font-size: 17px; font-weight: 700; color: var(--cal-ink); }
+  .calmia-cod__packprice s { display: block; font-size: 12px; color: var(--cal-ink-3); }
+  .calmia-cod__packprice i,
+  .calmia-cod__wayprice i { display: block; font-style: normal; font-size: 11.5px; color: var(--cal-ink-3); margin-top: 1px; }
+
+  /* --- Cuestionario --- */
+  .calmia-cod__form {
+    margin-top: 20px;
+    padding: 16px 14px;
+    border-radius: 14px;
+    background: var(--cal-bg);
+    display: grid;
+    gap: 14px;
+  }
+  .calmia-cod__formintro { margin: -4px 0 0; font-size: 13px; color: var(--cal-ink-2); line-height: 1.45; }
+
+  .calmia-cod__row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .calmia-cod__field { display: grid; gap: 6px; min-width: 0; }
+  .calmia-cod__field label { font-size: 13.5px; font-weight: 600; }
+  .calmia-cod__field label em { font-style: normal; color: var(--cal-pink); }
+  .calmia-cod__field input,
+  .calmia-cod__field select {
+    width: 100%;
+    box-sizing: border-box;
+    font: inherit;
+    font-size: 16px; /* 16px o iOS hace zoom al enfocar */
+    padding: 12px 13px;
+    border: 1.5px solid var(--cal-line);
+    border-radius: 11px;
+    background: #fff;
+    color: var(--cal-ink);
+  }
+  .calmia-cod__field input[readonly] { background: #f6eef0; color: var(--cal-ink-2); }
+  .calmia-cod__field input:focus,
+  .calmia-cod__field select:focus { outline: 2px solid var(--cal-pink-2); outline-offset: 1px; border-color: transparent; }
+  .calmia-cod__field input[aria-invalid='true'],
+  .calmia-cod__field select[aria-invalid='true'] { border-color: #c0392b; background: #fff6f5; }
+  .calmia-cod__hint { font-size: 12px; color: var(--cal-ink-3); line-height: 1.35; }
+  .calmia-cod__echo { margin: 0; font-size: 13px; font-weight: 600; color: var(--cal-green); }
+
+  .calmia-cod__err { margin: 0; font-size: 12.5px; font-weight: 600; color: #c0392b; line-height: 1.35; }
+  .calmia-cod__err--big { font-size: 13.5px; }
+
+  .calmia-cod__blocked {
+    margin: 0;
+    padding: 12px 13px;
+    border-radius: 11px;
+    background: #fff3cd;
+    border: 1px solid #f0d38a;
+    font-size: 13px;
+    color: #6b5312;
+    line-height: 1.45;
+  }
+
+  /* --- Resumen --- */
+  .calmia-cod__summary {
+    background: #fff;
+    border-radius: 12px;
+    padding: 14px;
+    border: 1px solid var(--cal-line);
+  }
+  .calmia-cod__summarytitle {
+    margin: 0 0 9px;
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--cal-ink-3);
+  }
+  .calmia-cod__summary dl { margin: 0; display: grid; gap: 7px; }
+  .calmia-cod__summary dl > div { display: grid; grid-template-columns: auto 1fr; gap: 10px; align-items: baseline; }
+  .calmia-cod__summary dt { font-size: 13px; color: var(--cal-ink-3); }
+  .calmia-cod__summary dd { margin: 0; font-size: 13.5px; font-weight: 600; text-align: right; word-break: break-word; }
+  .calmia-cod__summarypay { border-top: 1px dashed var(--cal-line); padding-top: 8px; margin-top: 2px; }
+  .calmia-cod__summarypay dt { font-weight: 700; color: var(--cal-ink); font-size: 14px; }
+  .calmia-cod__summarypay dd { font-size: 20px; font-weight: 800; color: var(--cal-pink); }
+
+  /* --- Casillas --- */
+  .calmia-cod__pledge {
+    position: relative;
+    display: grid;
+    grid-template-columns: 24px 1fr;
+    gap: 11px;
+    align-items: start;
+    font-size: 13.5px;
+    line-height: 1.4;
+    cursor: pointer;
+  }
+  .calmia-cod__pledge input { position: absolute; opacity: 0; inset: 0; cursor: pointer; }
+  .calmia-cod__pledge.is-bad .calmia-cod__tick { border-color: #c0392b; }
+
+  .calmia-cod__hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+  .calmia-cod__btn { width: 100%; margin-top: 18px; }
+
+  .calmia-cod__note,
+  .calmia-cod__eta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin: 12px 0 0;
+    font-size: 13px;
+    color: var(--cal-ink-2);
+    text-align: center;
+    line-height: 1.4;
+  }
+  .calmia-cod__note { font-weight: 600; color: var(--cal-ink); }
+  .calmia-cod__note svg { color: var(--cal-pink); flex: 0 0 auto; }
+  .calmia-cod__eta svg { color: #2f8b57; flex: 0 0 auto; }
+  .calmia-cod__eta b { white-space: nowrap; }
+
+  /* --- Aclaraciones --- */
+  .calmia-cod__points { max-width: 760px; margin: 24px auto 0; display: grid; gap: 14px; }
+  .calmia-cod__point { display: grid; grid-template-columns: 40px 1fr; gap: 13px; align-items: start; }
+  .calmia-cod__point > div { min-width: 0; }
+  .calmia-cod__pointicon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #fff;
+    color: var(--cal-pink);
+    display: grid;
+    place-items: center;
+    box-shadow: var(--cal-shadow-sm);
+  }
+  .calmia-cod__point h3 { font-size: 15.5px; font-weight: 700; margin: 0 0 3px; line-height: 1.25; }
+  .calmia-cod__point p { margin: 0; font-size: 13.5px; color: var(--cal-ink-2); line-height: 1.5; }
+
+  @media (min-width: 700px) {
+    .calmia-cod__card { padding: 26px; }
+    .calmia-cod__form { padding: 20px 18px; }
+    .calmia-cod__points { grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .calmia-cod__point { grid-template-columns: 1fr; }
+  }
+</style>
+
+<script>
+  (function () {
+    var root = document.getElementById('calmia-cod-{{ section.id }}');
+    if (!root) return;
+
+    var cfgEl = root.querySelector('[data-calmia-cod-config]');
+    if (!cfgEl) return;
+    var CFG;
+    try { CFG = JSON.parse(cfgEl.textContent); } catch (e) { return; }
+
+    var T = CFG.text;
+    var ROOT = (window.Shopify && window.Shopify.routes && window.Shopify.routes.root) || '/';
+    var STORE_KEY = 'calmia_cod_draft';
+    var LAST_KEY = 'calmia_cod_last';
+
+    /* --------------------------------------------------------------------
+       Provincias por código postal. Los nombres son los que espera el
+       checkout de Shopify para España; si se cambian, la dirección llega
+       sin provincia y el cliente tiene que elegirla a mano.
+       -------------------------------------------------------------------- */
+    var PROV = {
+      '01': 'Álava', '02': 'Albacete', '03': 'Alicante', '04': 'Almería',
+      '05': 'Ávila', '06': 'Badajoz', '07': 'Baleares', '08': 'Barcelona',
+      '09': 'Burgos', '10': 'Cáceres', '11': 'Cádiz', '12': 'Castellón',
+      '13': 'Ciudad Real', '14': 'Córdoba', '15': 'A Coruña', '16': 'Cuenca',
+      '17': 'Girona', '18': 'Granada', '19': 'Guadalajara', '20': 'Guipúzcoa',
+      '21': 'Huelva', '22': 'Huesca', '23': 'Jaén', '24': 'León',
+      '25': 'Lleida', '26': 'La Rioja', '27': 'Lugo', '28': 'Madrid',
+      '29': 'Málaga', '30': 'Murcia', '31': 'Navarra', '32': 'Ourense',
+      '33': 'Asturias', '34': 'Palencia', '35': 'Las Palmas', '36': 'Pontevedra',
+      '37': 'Salamanca', '38': 'Santa Cruz de Tenerife', '39': 'Cantabria',
+      '40': 'Segovia', '41': 'Sevilla', '42': 'Soria', '43': 'Tarragona',
+      '44': 'Teruel', '45': 'Toledo', '46': 'Valencia', '47': 'Valladolid',
+      '48': 'Vizcaya', '49': 'Zamora', '50': 'Zaragoza', '51': 'Ceuta',
+      '52': 'Melilla'
+    };
+
+    var blocked = String(CFG.blockedZips || '')
+      .split(',')
+      .map(function (s) { return s.trim(); })
+      .filter(Boolean);
+
+    /* --- Referencias --- */
+    var packEls = root.querySelectorAll('[data-calmia-pack]');
+    var wayEls = root.querySelectorAll('[data-calmia-way]');
+    var form = root.querySelector('[data-calmia-cod-form]');
+    var note = root.querySelector('[data-calmia-cod-note]');
+    var btn = root.querySelector('[data-calmia-cod-submit]');
+    var btnText = root.querySelector('[data-calmia-cod-btntext]');
+    var btnPrice = root.querySelector('[data-calmia-cod-btnprice]');
+    var cardPriceEl = root.querySelector('[data-calmia-cod-cardprice]');
+    var codPriceEl = root.querySelector('[data-calmia-cod-codprice]');
+    var blockedEl = root.querySelector('[data-cod-blocked]');
+    var phoneEcho = root.querySelector('[data-cod-phone-echo]');
+    var hp = root.querySelector('[data-cod-hp]');
+    var sumWhat = root.querySelector('[data-cod-sum-what]');
+    var sumWhere = root.querySelector('[data-cod-sum-where]');
+    var sumPay = root.querySelector('[data-cod-sum-pay]');
+    var cashText = root.querySelector('[data-cod-cash-text]');
+
+    function f(name) { return root.querySelector('[data-cod="' + name + '"]'); }
+    function errBox(name) { return root.querySelector('[data-cod-err="' + name + '"]'); }
+
+    var mode = 'card';
+    var packIndex = 0;
+    var openedAt = 0;
+    var dupConfirmed = false;
+
+    function pack() { return CFG.packs[packIndex] || CFG.packs[0]; }
+
+    /* --------------------------------------------------------------------
+       Pintado
+       -------------------------------------------------------------------- */
+    function paintPrices() {
+      var pk = pack();
+      if (cardPriceEl) cardPriceEl.textContent = pk.cardMoney;
+      if (codPriceEl) codPriceEl.textContent = pk.codMoney;
+      var isCod = mode === 'cod';
+      if (btnPrice) btnPrice.textContent = isCod ? pk.codMoney : pk.cardMoney;
+      if (sumPay) sumPay.textContent = pk.codMoney;
+      if (cashText) cashText.textContent = T.pledgeCash.replace('{importe}', pk.codMoney);
+      if (sumWhat) sumWhat.textContent = pk.label;
+    }
+
+    function paintMode() {
+      wayEls.forEach(function (w) {
+        var on = w.getAttribute('data-calmia-way') === mode;
+        w.classList.toggle('is-on', on);
+        var r = w.querySelector('input');
+        if (r) r.checked = on;
+      });
+      var isCod = mode === 'cod';
+      if (form) form.hidden = !isCod;
+      if (note) note.hidden = !isCod;
+      if (btnText) btnText.textContent = isCod ? T.ctaCod : T.ctaCard;
+      if (isCod && !openedAt) openedAt = Date.now();
+      paintPrices();
+    }
+
+    function paintSummary() {
+      if (!sumWhere) return;
+      var bits = [];
+      var addr = f('address') ? f('address').value.trim() : '';
+      var floor = f('floor') ? f('floor').value.trim() : '';
+      var city = f('city') ? f('city').value.trim() : '';
+      var zip = f('zip') ? f('zip').value.trim() : '';
+      var prov = f('province') ? f('province').value.trim() : '';
+      if (addr) bits.push(addr + (floor ? ', ' + floor : ''));
+      if (zip || city) bits.push((zip + ' ' + city).trim());
+      if (prov) bits.push(prov);
+      sumWhere.textContent = bits.length ? bits.join(' · ') : '—';
+    }
+
+    /* --------------------------------------------------------------------
+       Elecciones
+       -------------------------------------------------------------------- */
+    packEls.forEach(function (el) {
+      el.addEventListener('click', function () {
+        packIndex = parseInt(el.getAttribute('data-calmia-pack'), 10) || 0;
+        packEls.forEach(function (o) { o.classList.toggle('is-on', o === el); });
+        var r = el.querySelector('input');
+        if (r) r.checked = true;
+        paintPrices();
+      });
+    });
+
+    wayEls.forEach(function (el) {
+      el.addEventListener('click', function () {
+        mode = el.getAttribute('data-calmia-way');
+        paintMode();
+      });
+    });
+
+    root.querySelectorAll('.calmia-cod__pledge input').forEach(function (cb) {
+      cb.addEventListener('change', function () {
+        var wrap = cb.closest('.calmia-cod__pledge');
+        wrap.classList.toggle('is-on', cb.checked);
+        if (cb.checked) wrap.classList.remove('is-bad');
+      });
+    });
+
+    /* --------------------------------------------------------------------
+       Código postal → provincia, y zonas donde no se sirve contrareembolso
+       -------------------------------------------------------------------- */
+    var zipEl = f('zip');
+    var provEl = f('province');
+    var zipBlocked = false;
+
+    function onZip() {
+      if (!zipEl) return;
+      var z = zipEl.value.replace(/\D/g, '').slice(0, 5);
+      zipEl.value = z;
+      var pre = z.slice(0, 2);
+      var name = PROV[pre] || '';
+      if (provEl) provEl.value = name;
+
+      zipBlocked = z.length === 5 && blocked.indexOf(pre) !== -1;
+      if (blockedEl) {
+        blockedEl.hidden = !zipBlocked;
+        if (zipBlocked) blockedEl.textContent = T.errBlocked.replace('{provincia}', name || z);
+      }
+      paintSummary();
+    }
+    if (zipEl) zipEl.addEventListener('input', onZip);
+
+    /* --------------------------------------------------------------------
+       Eco del teléfono: se lo enseñamos escrito para que vea el error él solo
+       -------------------------------------------------------------------- */
+    function normPhone(v) {
+      return String(v || '').replace(/[\s.\-()]/g, '').replace(/^(\+34|0034|34)/, '');
+    }
+
+    var phoneEl = f('phone');
+    if (phoneEl) {
+      phoneEl.addEventListener('input', function () {
+        var n = normPhone(phoneEl.value);
+        if (phoneEcho) {
+          if (/^[67]\d{8}$/.test(n)) {
+            phoneEcho.hidden = false;
+            phoneEcho.textContent = T.phoneEcho.replace(
+              '{telefono}',
+              n.slice(0, 3) + ' ' + n.slice(3, 6) + ' ' + n.slice(6)
+            );
+          } else {
+            phoneEcho.hidden = true;
+          }
+        }
+      });
+    }
+
+    ['address', 'floor', 'city'].forEach(function (n) {
+      var el = f(n);
+      if (el) el.addEventListener('input', paintSummary);
+    });
+
+    /* --------------------------------------------------------------------
+       Guardado del formulario a medias. Es lo más parecido a la recuperación
+       de carritos que puede hacer un tema: si el cliente se va y vuelve con
+       el mismo navegador, se lo encuentra escrito.
+       -------------------------------------------------------------------- */
+    function saveDraft() {
+      try {
+        var data = {};
+        root.querySelectorAll('[data-cod-save]').forEach(function (el) { data[el.getAttribute('data-cod')] = el.value; });
+        localStorage.setItem(STORE_KEY, JSON.stringify({ t: Date.now(), d: data }));
+      } catch (e) { /* modo privado: no pasa nada */ }
+    }
+
+    function loadDraft() {
+      try {
+        var raw = localStorage.getItem(STORE_KEY);
+        if (!raw) return;
+        var parsed = JSON.parse(raw);
+        /* Una semana. Más allá, la dirección puede haber cambiado. */
+        if (!parsed || Date.now() - parsed.t > 604800000) return;
+        Object.keys(parsed.d || {}).forEach(function (k) {
+          var el = f(k);
+          if (el && !el.value) el.value = parsed.d[k];
+        });
+        onZip();
+        paintSummary();
+        if (phoneEl) phoneEl.dispatchEvent(new Event('input'));
+      } catch (e) { /* ídem */ }
+    }
+
+    root.querySelectorAll('[data-cod-save]').forEach(function (el) {
+      el.addEventListener('change', saveDraft);
+      el.addEventListener('blur', saveDraft);
+    });
+
+    /* --------------------------------------------------------------------
+       Validación
+       -------------------------------------------------------------------- */
+    function clearErrors() {
+      root.querySelectorAll('[data-cod-err]').forEach(function (e) { e.hidden = true; e.textContent = ''; });
+      root.querySelectorAll('[data-cod]').forEach(function (e) { e.removeAttribute('aria-invalid'); });
+      root.querySelectorAll('.calmia-cod__pledge').forEach(function (e) { e.classList.remove('is-bad'); });
+    }
+
+    function setError(name, msg, el) {
+      var box = errBox(name);
+      if (box) { box.textContent = msg; box.hidden = false; }
+      if (el) el.setAttribute('aria-invalid', 'true');
+    }
+
+    /* Un móvil inventado casi siempre es todo el mismo dígito o una escalera. */
+    function looksFake(n) {
+      if (/^(\d)\1{8}$/.test(n)) return true;
+      if ('012345678987654321'.indexOf(n.slice(1)) !== -1) return true;
+      return ['600000000', '611111111', '666666666', '612345678', '600123456'].indexOf(n) !== -1;
+    }
+
+    function validate() {
+      clearErrors();
+      var bad = null;
+
+      /* Nombre: dos palabras de verdad, sin números. */
+      var nameEl = f('name');
+      var name = nameEl ? nameEl.value.trim().replace(/\s+/g, ' ') : '';
+      var parts = name.split(' ').filter(function (w) { return w.length >= 2; });
+      if (parts.length < 2 || /\d/.test(name)) {
+        setError('name', T.errName, nameEl);
+        bad = bad || nameEl;
+      }
+
+      /* Móvil */
+      var phone = normPhone(phoneEl ? phoneEl.value : '');
+      if (!/^[67]\d{8}$/.test(phone) || looksFake(phone)) {
+        setError('phone', T.errPhone, phoneEl);
+        bad = bad || phoneEl;
+      }
+
+      /* Correo */
+      var emailEl = f('email');
+      var email = emailEl ? emailEl.value.trim() : '';
+      if (!/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(email)) {
+        setError('email', T.errEmail, emailEl);
+        bad = bad || emailEl;
+      }
+
+      /* Código postal */
+      var zip = zipEl ? zipEl.value.trim() : '';
+      if (!/^\d{5}$/.test(zip) || !PROV[zip.slice(0, 2)]) {
+        setError('zip', T.errZip, zipEl);
+        bad = bad || zipEl;
+      } else if (zipBlocked) {
+        setError('zip', T.errBlocked.replace('{provincia}', provEl ? provEl.value : zip), zipEl);
+        bad = bad || zipEl;
+      }
+
+      /* Localidad */
+      var cityEl = f('city');
+      var city = cityEl ? cityEl.value.trim() : '';
+      if (city.length < 3) {
+        setError('city', T.errCity, cityEl);
+        bad = bad || cityEl;
+      }
+
+      /* Dirección: sin número, el repartidor no la encuentra. */
+      var addrEl = f('address');
+      var addr = addrEl ? addrEl.value.trim() : '';
+      if (addr.length < 8) {
+        setError('address', T.errAddress, addrEl);
+        bad = bad || addrEl;
+      } else if (!/\d/.test(addr)) {
+        setError('address', T.errAddressNumber, addrEl);
+        bad = bad || addrEl;
+      }
+
+      /* Franja */
+      var slotEl = f('slot');
+      if (slotEl && !slotEl.value) {
+        setError('slot', T.errSlot, slotEl);
+        bad = bad || slotEl;
+      }
+
+      /* Compromisos */
+      var cash = f('cash');
+      if (cash && !cash.checked) {
+        setError('global', T.errCash);
+        cash.closest('.calmia-cod__pledge').classList.add('is-bad');
+        bad = bad || cash;
+      }
+      var home = f('home');
+      if (home && !home.checked) {
+        setError('global', T.errHome);
+        home.closest('.calmia-cod__pledge').classList.add('is-bad');
+        bad = bad || home;
+      }
+
+      if (bad && bad.focus) {
+        bad.focus();
+        if (bad.scrollIntoView) bad.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      }
+      return !bad;
+    }
+
+    /* --------------------------------------------------------------------
+       Envío
+       -------------------------------------------------------------------- */
+    function q(o) {
+      return Object.keys(o)
+        .filter(function (k) { return o[k] !== '' && o[k] != null; })
+        .map(function (k) { return encodeURIComponent(k) + '=' + encodeURIComponent(String(o[k]).slice(0, 200)); })
+        .join('&');
+    }
+
+    function fire(name) {
+      try {
+        if (window.fbq) window.fbq('track', name);
+        if (window.dataLayer) window.dataLayer.push({ event: 'calmia_' + name.toLowerCase(), method: mode });
+      } catch (e) { /* si el píxel no está, seguimos */ }
+    }
+
+    btn.addEventListener('click', function () {
+      var pk = pack();
+      var isCod = mode === 'cod';
+      var params = {};
+
+      if (isCod) {
+        /* Trampa de robots y prisa inhumana. */
+        if (hp && hp.value) return;
+        if (openedAt && Date.now() - openedAt < CFG.minSeconds * 1000) return;
+
+        if (!validate()) return;
+
+        var phone = normPhone(f('phone').value);
+
+        /* Mismo móvil hace menos de media hora: casi siempre es el mismo
+           pedido dos veces. Se avisa una vez y a la segunda se deja pasar. */
+        if (!dupConfirmed) {
+          try {
+            var last = JSON.parse(localStorage.getItem(LAST_KEY) || 'null');
+            if (last && last.phone === phone && Date.now() - last.t < 1800000) {
+              setError('global', T.errDuplicate);
+              if (btnText) btnText.textContent = T.ctaDuplicate;
+              dupConfirmed = true;
+              return;
+            }
+          } catch (e) { /* sin almacenamiento, sin comprobación */ }
+        }
+
+        var name = f('name').value.trim().replace(/\s+/g, ' ');
+        var space = name.indexOf(' ');
+        var first = space > 0 ? name.slice(0, space) : name;
+        var last2 = space > 0 ? name.slice(space + 1) : '';
+        var floor = f('floor') ? f('floor').value.trim() : '';
+        var backupEl = f('backup');
+        var backup = backupEl ? backupEl.value.trim() : '';
+        var slot = f('slot') ? f('slot').value : '';
+        var wa = f('whatsapp');
+
+        /* Datos que Shopify enseña en la ficha del pedido. */
+        params['attributes[Forma de pago]'] = 'Contrareembolso';
+        params['attributes[Importe a cobrar]'] = pk.codMoney;
+        params['attributes[Telefono de reparto]'] = phone;
+        params['attributes[Franja horaria]'] = slot;
+        params['attributes[Piso y puerta]'] = floor;
+        if (backup) params['attributes[Puede recogerlo]'] = backup;
+        if (wa) params['attributes[Avisar por WhatsApp]'] = wa.checked ? 'Si' : 'No';
+        params['attributes[Compromiso de pago]'] = 'Aceptado ' + new Date().toLocaleString('es-ES');
+        params['attributes[Direccion declarada]'] =
+          f('address').value.trim() +
+          (floor ? ', ' + floor : '') + ' · ' +
+          f('zip').value.trim() + ' ' + f('city').value.trim() +
+          ' (' + (provEl ? provEl.value : '') + ')';
+
+        /* Nota del pedido: lo que lee quien llama para confirmar. */
+        params['note'] =
+          'CONTRAREEMBOLSO · Cobrar ' + pk.codMoney +
+          ' · Tel ' + phone +
+          ' · ' + (slot || 'sin franja') +
+          (floor ? ' · ' + floor : '') +
+          (backup ? ' · Alternativa: ' + backup : '');
+
+        /* Dirección ya rellenada en el checkout. */
+        params['checkout[email]'] = f('email').value.trim();
+        params['checkout[shipping_address][first_name]'] = first;
+        params['checkout[shipping_address][last_name]'] = last2;
+        params['checkout[shipping_address][address1]'] = f('address').value.trim();
+        params['checkout[shipping_address][address2]'] = floor;
+        params['checkout[shipping_address][city]'] = f('city').value.trim();
+        params['checkout[shipping_address][province]'] = provEl ? provEl.value : '';
+        params['checkout[shipping_address][zip]'] = f('zip').value.trim();
+        params['checkout[shipping_address][country]'] = 'Spain';
+        params['checkout[shipping_address][phone]'] = phone;
+
+        try {
+          localStorage.setItem(LAST_KEY, JSON.stringify({ phone: phone, t: Date.now() }));
+          localStorage.removeItem(STORE_KEY);
+        } catch (e) { /* nada */ }
+      }
+
+      if (CFG.locale) params['locale'] = CFG.locale;
+
+      /* Enlace permanente de carrito: reemplaza el carrito entero, así que si
+         ya había pulsado el botón del hero no se duplica el pedido. */
+      var items = CFG.variantId + ':' + pk.qty;
+      if (isCod && CFG.feeId) items += ',' + CFG.feeId + ':1';
+
+      var qs = q(params);
+      var url = ROOT.replace(/\/$/, '') + '/cart/' + items + (qs ? '?' + qs : '');
+
+      btn.disabled = true;
+      if (btnText) btnText.textContent = T.ctaLoading;
+      fire('InitiateCheckout');
+
+      window.location.href = url;
+
+      /* Si la navegación no llega a ocurrir (bloqueada, sin red), se devuelve
+         el botón a su sitio para que pueda reintentar. */
+      setTimeout(function () {
+        btn.disabled = false;
+        if (btnText) btnText.textContent = isCod ? T.ctaCod : T.ctaCard;
+      }, 6000);
+    });
+
+    /* --------------------------------------------------------------------
+       Arranque
+       -------------------------------------------------------------------- */
+    loadDraft();
+    paintMode();
+  })();
+</script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Calmia · Contrareembolso",
+  "tag": "section",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Producto (vacío = el de la página)" },
+    {
+      "type": "product",
+      "id": "fee_product",
+      "label": "Producto del recargo",
+      "info": "El producto de servicio «Contrareembolso — gastos de gestión». Su precio es el recargo: cámbialo ahí y toda la sección se recalcula sola. Tiene que estar ACTIVO y publicado en la tienda online, o el pedido fallará. Si lo dejas vacío desaparece la opción de contrareembolso."
+    },
+
+    { "type": "header", "content": "Cabecera" },
+    { "type": "text", "id": "eyebrow", "label": "Antetítulo", "default": "CÓMO QUIERES PAGARLO" },
+    { "type": "text", "id": "heading", "label": "Titular", "default": "Paga ahora o" },
+    { "type": "text", "id": "heading_italic", "label": "Titular cursiva", "default": "paga cuando lo tengas en la mano" },
+    { "type": "textarea", "id": "subheading", "label": "Subtítulo", "default": "Tú eliges. Si prefieres no dar la tarjeta a una tienda que no conoces, lo entendemos: pagas en efectivo al repartidor cuando el paquete ya esté en tu puerta." },
+
+    { "type": "header", "content": "Títulos de los pasos" },
+    { "type": "text", "id": "step_pack", "label": "Paso del pack", "default": "Elige tu pack" },
+    { "type": "text", "id": "step_pay", "label": "Paso del pago", "default": "Elige cómo pagar" },
+    { "type": "text", "id": "step_form", "label": "Paso del cuestionario", "default": "Dinos dónde te lo llevamos" },
+    { "type": "text", "id": "per_unit_suffix", "label": "Sufijo del precio por unidad", "default": " / unidad" },
+    { "type": "text", "id": "ways_label", "label": "Etiqueta del grupo (accesibilidad)", "default": "Forma de pago" },
+
+    { "type": "header", "content": "Opción 1 · Tarjeta" },
+    { "type": "text", "id": "card_title", "label": "Título", "default": "Pago con tarjeta ahora" },
+    { "type": "text", "id": "card_text", "label": "Texto", "default": "Sin recargo. Tarjeta, Bizum, Apple Pay o Google Pay." },
+    { "type": "text", "id": "cta_card", "label": "Texto del botón", "default": "Comprar ahora" },
+
+    { "type": "header", "content": "Opción 2 · Contrareembolso" },
+    { "type": "text", "id": "cod_title", "label": "Título", "default": "Contrareembolso" },
+    { "type": "text", "id": "cod_text", "label": "Texto", "default": "Pagas en efectivo al repartidor. Lleva un recargo de gestión." },
+    { "type": "text", "id": "cta_cod", "label": "Texto del botón", "default": "Pedir contrareembolso" },
+    { "type": "text", "id": "cta_loading", "label": "Texto mientras carga", "default": "Un momento…" },
+    {
+      "type": "text",
+      "id": "checkout_note",
+      "label": "Aviso del checkout",
+      "default": "En la pantalla de pago, elige «Contrareembolso» como forma de pago.",
+      "info": "Shopify solo deja elegir la forma de pago dentro del checkout: ninguna plantilla puede dejarla marcada de antemano. Este aviso es lo que evita que el cliente acabe pagando con tarjeta habiendo pedido contrareembolso."
+    },
+
+    { "type": "header", "content": "Cuestionario · Textos" },
+    { "type": "textarea", "id": "form_intro", "label": "Introducción", "default": "Cuanto mejor esté esto, antes te llega. El transportista solo intenta la entrega dos veces." },
+    { "type": "text", "id": "name_label", "label": "Nombre", "default": "Nombre y apellidos" },
+    { "type": "text", "id": "name_placeholder", "label": "Ejemplo del nombre", "default": "María García López" },
+    { "type": "text", "id": "phone_label", "label": "Teléfono", "default": "Teléfono móvil" },
+    { "type": "text", "id": "phone_placeholder", "label": "Ejemplo del teléfono", "default": "600 000 000" },
+    { "type": "text", "id": "phone_hint", "label": "Aclaración del teléfono", "default": "El repartidor te avisa antes de subir. Sin teléfono, el paquete se devuelve." },
+    { "type": "text", "id": "phone_echo", "label": "Eco del teléfono", "default": "Te avisaremos al {telefono}", "info": "Usa {telefono} donde quieras que aparezca el número." },
+    { "type": "text", "id": "email_label", "label": "Correo", "default": "Correo electrónico" },
+    { "type": "text", "id": "email_placeholder", "label": "Ejemplo del correo", "default": "maria@correo.com" },
+    { "type": "text", "id": "email_hint", "label": "Aclaración del correo", "default": "Solo para mandarte el número de seguimiento." },
+    { "type": "text", "id": "zip_label", "label": "Código postal", "default": "Código postal" },
+    { "type": "text", "id": "province_label", "label": "Provincia", "default": "Provincia" },
+    { "type": "text", "id": "province_placeholder", "label": "Provincia vacía", "default": "Se rellena sola" },
+    { "type": "text", "id": "city_label", "label": "Localidad", "default": "Localidad" },
+    { "type": "text", "id": "city_placeholder", "label": "Ejemplo de localidad", "default": "Alcalá de Henares" },
+    { "type": "text", "id": "address_label", "label": "Dirección", "default": "Calle y número" },
+    { "type": "text", "id": "address_placeholder", "label": "Ejemplo de dirección", "default": "Calle Mayor, 24" },
+    { "type": "text", "id": "address_hint", "label": "Aclaración de la dirección", "default": "Pon el número. Una calle sin número es una entrega fallida." },
+    { "type": "text", "id": "floor_label", "label": "Piso y puerta", "default": "Piso, puerta, escalera" },
+    { "type": "text", "id": "floor_placeholder", "label": "Ejemplo de piso", "default": "3º B, escalera izquierda" },
+    { "type": "text", "id": "floor_hint", "label": "Aclaración del piso", "default": "Si vives en un bloque y no lo pones, el repartidor no sube." },
+    { "type": "text", "id": "slot_label", "label": "Franja horaria", "default": "¿Cuándo hay alguien en casa?" },
+    { "type": "text", "id": "slot_empty", "label": "Opción vacía", "default": "Elige una franja" },
+    {
+      "type": "textarea",
+      "id": "slots",
+      "label": "Franjas horarias",
+      "default": "Mañana (9:00 - 14:00)\nTarde (14:00 - 19:00)\nCualquier hora, hay alguien todo el día",
+      "info": "Una por línea."
+    },
+    { "type": "checkbox", "id": "show_backup", "label": "Preguntar por una segunda persona", "default": true },
+    { "type": "text", "id": "backup_label", "label": "Segunda persona", "default": "¿Quién puede recogerlo si no estás?" },
+    { "type": "text", "id": "backup_placeholder", "label": "Ejemplo", "default": "Mi vecina del 2º A / la portería" },
+    { "type": "text", "id": "backup_hint", "label": "Aclaración", "default": "Opcional, pero salva la mitad de las entregas fallidas." },
+
+    { "type": "header", "content": "Resumen y compromisos" },
+    { "type": "text", "id": "summary_title", "label": "Título del resumen", "default": "Resumen de tu pedido" },
+    { "type": "text", "id": "summary_what", "label": "Etiqueta del producto", "default": "Pedido" },
+    { "type": "text", "id": "summary_where", "label": "Etiqueta de la dirección", "default": "Entrega" },
+    { "type": "text", "id": "summary_pay", "label": "Etiqueta del importe", "default": "Pagas al repartidor" },
+    {
+      "type": "textarea",
+      "id": "pledge_cash",
+      "label": "Compromiso del importe",
+      "default": "Tendré preparados {importe} para pagar al repartidor en efectivo o con tarjeta.",
+      "info": "Usa {importe} donde quieras que aparezca la cantidad. Esta casilla es la que más baja los rechazos en la puerta."
+    },
+    { "type": "textarea", "id": "pledge_home", "label": "Compromiso de presencia", "default": "La dirección es correcta y habrá alguien para recibir el paquete." },
+    { "type": "checkbox", "id": "show_whatsapp", "label": "Ofrecer aviso por WhatsApp", "default": true },
+    { "type": "textarea", "id": "whatsapp_text", "label": "Texto del WhatsApp", "default": "Avisadme por WhatsApp cuando salga el pedido." },
+
+    { "type": "header", "content": "Filtros de entrega" },
+    {
+      "type": "text",
+      "id": "blocked_zips",
+      "label": "Provincias sin contrareembolso",
+      "default": "35,38,51,52",
+      "info": "Los dos primeros dígitos del código postal, separados por comas. Por defecto: Las Palmas (35), Santa Cruz de Tenerife (38), Ceuta (51) y Melilla (52) — fuera de la península el contrareembolso se entrega mucho peor. Añade 07 si tampoco quieres Baleares. Déjalo vacío para servir a toda España."
+    },
+    {
+      "type": "range",
+      "id": "min_seconds",
+      "label": "Segundos mínimos rellenando",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "s",
+      "default": 4,
+      "info": "Un pedido enviado en menos de esto es un robot. 0 desactiva el filtro."
+    },
+    {
+      "type": "text",
+      "id": "checkout_locale",
+      "label": "Idioma del checkout",
+      "default": "",
+      "info": "Escribe es para forzar el checkout en español. Solo funciona si el español está publicado como idioma de la tienda; si no lo está, se ignora sin romper nada."
+    },
+
+    { "type": "header", "content": "Avisos de error" },
+    { "type": "text", "id": "err_name", "label": "Nombre no válido", "default": "Escribe tu nombre y tus apellidos, como aparecen en el buzón." },
+    { "type": "text", "id": "err_phone", "label": "Teléfono no válido", "default": "Necesitamos un móvil español real de 9 cifras que empiece por 6 o 7." },
+    { "type": "text", "id": "err_email", "label": "Correo no válido", "default": "Revisa el correo: ahí te mandamos el seguimiento." },
+    { "type": "text", "id": "err_zip", "label": "Código postal no válido", "default": "El código postal son 5 cifras de una provincia española." },
+    { "type": "text", "id": "err_city", "label": "Localidad no válida", "default": "Dinos en qué pueblo o ciudad estás." },
+    { "type": "text", "id": "err_address", "label": "Dirección corta", "default": "Escribe la calle completa." },
+    { "type": "text", "id": "err_address_number", "label": "Dirección sin número", "default": "Falta el número de la calle. Sin él el paquete vuelve." },
+    { "type": "text", "id": "err_slot", "label": "Falta la franja", "default": "Elige cuándo hay alguien en casa." },
+    { "type": "text", "id": "err_cash", "label": "Falta el compromiso del importe", "default": "Marca que tendrás preparado el importe para el repartidor." },
+    { "type": "text", "id": "err_home", "label": "Falta el compromiso de presencia", "default": "Marca que habrá alguien para recibir el paquete." },
+    { "type": "text", "id": "err_blocked", "label": "Zona sin contrareembolso", "default": "En {provincia} no podemos hacer contrareembolso. Puedes pedirlo con tarjeta al precio normal, sin el recargo.", "info": "Usa {provincia} para nombrar la provincia detectada." },
+    { "type": "text", "id": "err_duplicate", "label": "Pedido duplicado", "default": "Ya has hecho un pedido con este móvil hace un momento. Si de verdad quieres otro, vuelve a pulsar." },
+    { "type": "text", "id": "cta_duplicate", "label": "Botón del duplicado", "default": "Sí, quiero otro pedido" },
+    { "type": "text", "id": "err_generic", "label": "Error genérico", "default": "No hemos podido preparar el pedido. Inténtalo otra vez o escríbenos." },
+
+    { "type": "header", "content": "Entrega" },
+    { "type": "text", "id": "eta_text", "label": "Texto de la fecha", "default": "Lo tienes entre el" },
+    { "type": "range", "id": "delivery_min", "label": "Días mínimos", "min": 1, "max": 30, "step": 1, "unit": "d", "default": 6, "info": "Ponlos iguales que en el hero y la barra fija para que no se contradigan." },
+    { "type": "range", "id": "delivery_max", "label": "Días máximos", "min": 2, "max": 45, "step": 1, "unit": "d", "default": 12 },
+
+    { "type": "color", "id": "bg", "label": "Fondo", "default": "#fff4f6" }
+  ],
+  "blocks": [
+    {
+      "type": "pack",
+      "name": "Pack",
+      "settings": [
+        { "type": "range", "id": "qty", "label": "Unidades", "min": 1, "max": 6, "step": 1, "default": 1 },
+        {
+          "type": "range",
+          "id": "discount_pct",
+          "label": "Descuento",
+          "min": 0,
+          "max": 70,
+          "step": 5,
+          "unit": "%",
+          "default": 0,
+          "info": "Tiene que ser el mismo que el descuento automático de la tienda para esa cantidad, o el precio que ve aquí no será el del pago."
+        },
+        { "type": "text", "id": "label", "label": "Título", "default": "1 unidad" },
+        { "type": "text", "id": "sublabel", "label": "Subtítulo", "default": "Para probarlo" },
+        { "type": "text", "id": "badge", "label": "Etiqueta", "info": "Por ejemplo: EL QUE MÁS SE LLEVAN" },
+        { "type": "checkbox", "id": "highlight", "label": "Destacar", "default": false }
+      ]
+    },
+    {
+      "type": "point",
+      "name": "Aclaración",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icono",
+          "options": [
+            { "value": "lock", "label": "Candado" },
+            { "value": "shield", "label": "Escudo" },
+            { "value": "truck", "label": "Envío" },
+            { "value": "refresh", "label": "Devolución" },
+            { "value": "clock", "label": "Reloj" },
+            { "value": "chat", "label": "Chat" },
+            { "value": "heart", "label": "Corazón" }
+          ],
+          "default": "truck"
+        },
+        { "type": "text", "id": "title", "label": "Título", "default": "Pagas al repartidor" },
+        { "type": "textarea", "id": "text", "label": "Texto", "default": "En efectivo, en la puerta de tu casa." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Calmia · Contrareembolso",
+      "blocks": [
+        { "type": "pack", "settings": { "qty": 1, "discount_pct": 0, "label": "1 unidad", "sublabel": "Para probarlo" } },
+        { "type": "pack", "settings": { "qty": 2, "discount_pct": 20, "label": "2 unidades", "sublabel": "Una para ti y otra de regalo", "badge": "El que más se llevan", "highlight": true } },
+        { "type": "pack", "settings": { "qty": 3, "discount_pct": 30, "label": "3 unidades", "sublabel": "El mejor precio por unidad", "badge": "Ahorras más" } },
+        { "type": "point" },
+        { "type": "point" },
+        { "type": "point" }
+      ]
+    }
+  ]
+}
+{% endschema %}
