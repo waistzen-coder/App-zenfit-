@@ -429,7 +429,24 @@
 
 
 <style>
-  #calmia-cod-{{ section.id }} { background: {{ section.settings.bg }}; }
+  /* scroll-margin para que al llegar desde la banda de aviso o desde el botón
+     del hero el titular no se quede pegado al borde de arriba. */
+  #calmia-cod-{{ section.id }} { background: {{ section.settings.bg }}; scroll-margin-top: 18px; }
+
+{%- if section.settings.hide_hero_offer %}
+  /* Esta sección pasa a ser la única caja de compra de la página, así que
+     apaga los packs y el botón del hero. Se hace desde aquí, y no editando el
+     hero, para que baste con desmarcar la casilla para devolverlo todo a su
+     sitio. El formulario del hero sigue en el DOM, inerte: su JavaScript
+     espera encontrarlo y si desapareciera dejaría de funcionar el resto. */
+  .calmia-hero .calmia-packs,
+  .calmia-hero .calmia-plus,
+  .calmia-hero .calmia-gift,
+  .calmia-hero .calmia-form { display: none !important; }
+{%- endif %}
+  @media (prefers-reduced-motion: no-preference) {
+    html { scroll-behavior: smooth; }
+  }
 
   .calmia-cod__card {
     max-width: 640px;
@@ -1103,7 +1120,18 @@
       var items = CFG.variantId + ':' + pk.qty;
       if (isCod && CFG.feeId) items += ',' + CFG.feeId + ':1';
 
+      /* Un enlace demasiado largo lo puede cortar el servidor. Si se dispara
+         (direcciones muy largas), se sueltan primero los datos que van
+         duplicados en la dirección del checkout, y solo después la nota. */
       var qs = q(params);
+      if (qs.length > 1700) {
+        delete params['attributes[Direccion declarada]'];
+        qs = q(params);
+      }
+      if (qs.length > 1700) {
+        delete params['note'];
+        qs = q(params);
+      }
       var url = ROOT.replace(/\/$/, '') + '/cart/' + items + (qs ? '?' + qs : '');
 
       btn.disabled = true;
@@ -1272,6 +1300,13 @@
     { "type": "range", "id": "delivery_min", "label": "Días mínimos", "min": 1, "max": 30, "step": 1, "unit": "d", "default": 6, "info": "Ponlos iguales que en el hero y la barra fija para que no se contradigan." },
     { "type": "range", "id": "delivery_max", "label": "Días máximos", "min": 2, "max": 45, "step": 1, "unit": "d", "default": 12 },
 
+    {
+      "type": "checkbox",
+      "id": "hide_hero_offer",
+      "label": "Apagar los packs y el botón de arriba",
+      "default": false,
+      "info": "Actívalo cuando esta sección vaya justo debajo del hero y quieras que sea la única forma de pedir. Oculta el selector de packs y el botón «Comprar ahora» del hero para no tener dos cajas de compra. La foto, el stock, la fecha de entrega y los sellos se quedan. Desmárcalo y todo vuelve a su sitio."
+    },
     { "type": "color", "id": "bg", "label": "Fondo", "default": "#fff4f6" }
   ],
   "blocks": [

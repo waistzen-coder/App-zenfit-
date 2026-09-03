@@ -1,0 +1,142 @@
+{%- comment -%} Calmia · Cierre con oferta {%- endcomment -%}
+{% render 'calmia-base' %}
+
+{%- liquid
+  assign p = product
+  if section.settings.product != blank
+    assign p = section.settings.product
+  endif
+  assign cv = p.selected_or_first_available_variant
+  assign has_compare = false
+  if cv.compare_at_price > cv.price
+    assign has_compare = true
+  endif
+  assign pct = 0
+  if has_compare
+    assign pct = cv.compare_at_price | minus: cv.price | times: 100.0 | divided_by: cv.compare_at_price | round
+  endif
+-%}
+
+<div class="cal cal-sec calmia-final" id="calmia-final-{{ section.id }}">
+  <div class="cal-wrap">
+    <div class="calmia-final__card">
+      {%- if section.settings.badge != blank -%}
+        <span class="cal-pill cal-pill--pink">{{ section.settings.badge }}</span>
+      {%- endif -%}
+
+      <h2 class="cal-h2">{{ section.settings.heading }}{% if section.settings.heading_italic != blank %} <em>{{ section.settings.heading_italic }}</em>{% endif %}</h2>
+      {%- if section.settings.subheading != blank -%}
+        <p class="cal-sub">{{ section.settings.subheading }}</p>
+      {%- endif -%}
+
+      {%- if p != blank -%}
+        <div class="calmia-final__media">
+          {%- if section.settings.image != blank -%}
+            <img src="{{ section.settings.image | image_url: width: 900 }}" alt="{{ p.title | escape }}" width="900" height="700" loading="lazy">
+          {%- elsif p.featured_media -%}
+            <img src="{{ p.featured_media | image_url: width: 900 }}" alt="{{ p.title | escape }}" width="900" height="700" loading="lazy">
+          {%- endif -%}
+        </div>
+
+        <div class="calmia-final__price">
+          {%- if has_compare -%}<s>{{ cv.compare_at_price | money }}</s>{%- endif -%}
+          <span>{{ cv.price | money }}</span>
+          {%- if pct > 0 -%}<em>&minus;{{ pct }}%</em>{%- endif -%}
+        </div>
+
+        {%- if section.settings.cta_target == 'anchor' -%}
+          <a href="{{ section.settings.cta_anchor }}" class="cal-btn">
+            {% render 'calmia-icon', icon: 'bag', size: 25 %}
+            <span>{{ section.settings.cta_text }}</span>
+            <span class="cal-btn__sep">—</span>
+            <span>{{ cv.price | money }}</span>
+          </a>
+        {%- else -%}
+        <form method="post" action="{{ routes.cart_add_url }}" class="calmia-final__form" enctype="multipart/form-data">
+          <input type="hidden" name="form_type" value="product">
+          <input type="hidden" name="utf8" value="✓">
+          <input type="hidden" name="quantity" value="1" data-calmia-sticky-qty>
+          <input type="hidden" name="id" value="{{ cv.id }}" data-calmia-sticky-id>
+          {%- if section.settings.cta_target == 'checkout' -%}
+            <input type="hidden" name="return_to" value="/checkout" data-calmia-sticky-return data-base="/checkout">
+          {%- elsif section.settings.cta_target == 'cart' -%}
+            <input type="hidden" name="return_to" value="/cart" data-calmia-sticky-return data-base="/cart">
+          {%- endif -%}
+          <button type="submit" name="add" class="cal-btn">
+            {% render 'calmia-icon', icon: 'bag', size: 25 %}
+            <span>{{ section.settings.cta_text }}</span>
+            <span class="cal-btn__sep">—</span>
+            <span data-calmia-sticky-price>{{ cv.price | money }}</span>
+          </button>
+        </form>
+        {%- endif -%}
+      {%- endif -%}
+
+      {%- if section.settings.trust_line != blank -%}
+        <p class="calmia-final__trust">{% render 'calmia-icon', icon: 'shield', size: 16 %} {{ section.settings.trust_line }}</p>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+<style>
+  #calmia-final-{{ section.id }} { background: linear-gradient(180deg, {{ section.settings.bg_top }} 0%, {{ section.settings.bg_bottom }} 100%); }
+  .calmia-final__card {
+    background: #fff;
+    border-radius: var(--cal-r-lg);
+    box-shadow: var(--cal-shadow);
+    padding: 28px 20px 26px;
+    max-width: 720px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .calmia-final__card .cal-pill { margin-bottom: 14px; }
+  .calmia-final__media { border-radius: 20px; overflow: hidden; margin: 4px 0 18px; }
+  .calmia-final__media img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+  .calmia-final__price { display: flex; align-items: baseline; justify-content: center; gap: 12px; margin-bottom: 18px; flex-wrap: wrap; }
+  .calmia-final__price s { color: var(--cal-ink-3); font-size: 19px; }
+  .calmia-final__price span { font-family: var(--cal-serif); font-size: clamp(34px, 8vw, 46px); font-weight: 700; color: var(--cal-pink); line-height: 1; }
+  .calmia-final__price em {
+    font-style: normal;
+    border: 1px solid var(--cal-pink-3);
+    border-radius: 999px;
+    padding: 6px 14px;
+    font-size: 14px;
+    color: var(--cal-ink-2);
+  }
+  .calmia-final__trust { display: flex; align-items: center; justify-content: center; gap: 8px; color: var(--cal-ink-3); font-size: 14px; margin: 16px 0 0; }
+  @media (min-width: 750px) { .calmia-final__card { padding: 42px 44px 38px; } }
+</style>
+
+{% schema %}
+{
+  "name": "Calmia · Cierre",
+  "tag": "section",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Producto (vacío = el de la página)" },
+    { "type": "text", "id": "badge", "label": "Etiqueta", "default": "OFERTA DE LANZAMIENTO" },
+    { "type": "text", "id": "heading", "label": "Titular", "default": "Empieza a aliviar" },
+    { "type": "text", "id": "heading_italic", "label": "Titular cursiva", "default": "esta misma noche" },
+    { "type": "textarea", "id": "subheading", "label": "Subtítulo", "default": "Diez minutos al día en casa. Envío gratis y 30 días para devolverlo." },
+    { "type": "image_picker", "id": "image", "label": "Imagen" },
+    { "type": "text", "id": "cta_text", "label": "Texto del botón", "default": "Comprar ahora" },
+    {
+      "type": "select",
+      "id": "cta_target",
+      "label": "Al pulsar el botón",
+      "options": [
+        { "value": "checkout", "label": "Ir directo al pago" },
+        { "value": "cart", "label": "Ir al carrito" },
+        { "value": "anchor", "label": "Llevar al formulario de contrareembolso" },
+        { "value": "default", "label": "Comportamiento del tema" }
+      ],
+      "default": "checkout"
+    },
+    { "type": "text", "id": "cta_anchor", "label": "Enlace del formulario", "default": "#shopify-section-contrareembolso", "info": "Solo se usa con la opción «Llevar al formulario de contrareembolso»." },
+    { "type": "text", "id": "trust_line", "label": "Línea de confianza", "default": "Pago 100% seguro · Envío gratis · Garantía 30 días" },
+    { "type": "color", "id": "bg_top", "label": "Fondo superior", "default": "#fdf1f3" },
+    { "type": "color", "id": "bg_bottom", "label": "Fondo inferior", "default": "#fceaee" }
+  ],
+  "presets": [{ "name": "Calmia · Cierre" }]
+}
+{% endschema %}

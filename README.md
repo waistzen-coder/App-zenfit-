@@ -82,6 +82,39 @@ Consecuencias prácticas:
 Tampoco hay verificación del móvil por SMS ni recuperación de formularios
 abandonados por parte de la tienda: las dos cosas necesitan un servidor.
 
+## Dónde vive en la página
+
+Va **justo debajo de la foto**, en el sitio donde antes estaba el selector de
+packs del hero. Para no tener dos cajas de compra peleándose, la sección apaga
+los packs y el botón del hero desde su propio CSS: se activa con la casilla
+«Apagar los packs y el botón de arriba» y se desactiva desmarcándola, sin tocar
+código. La foto, el stock, la fecha de entrega y los sellos del hero se quedan.
+
+Todos los demás botones de la página llevan aquí: la banda negra de arriba, el
+botón de «Por qué cuesta lo que cuesta», la barra fija de abajo y el cierre.
+Para eso, la barra fija y el cierre tienen una opción nueva en el editor,
+«Llevar al formulario de contrareembolso».
+
+## La prueba
+
+En `pruebas/` está el arnés que ejecuta el JavaScript de verdad de la sección
+contra su HTML de verdad:
+
+    python3 pruebas/render.py     # renderiza la sección con Liquid
+    node pruebas/test.js          # hace pedidos y comprueba la URL resultante
+
+28 comprobaciones, todas en verde: compra con tarjeta de 1 y de 3 unidades,
+cambio a contrareembolso, formulario vacío, móvil falso, móvil fijo, calle sin
+número, nombre de una sola palabra, correo mal escrito, código postal de
+Canarias, compromisos sin marcar, trampa de robots, envío instantáneo,
+direcciones larguísimas, pack de 2 y pedido duplicado. Se comprueba también que
+la URL final lleva el aparato y el recargo en el orden correcto, el importe, el
+teléfono normalizado, la provincia deducida y la dirección completa.
+
+Lo que la prueba **no** cubre, porque desde aquí no se llega a `waistzen.com`:
+que el checkout de Shopify acepte la dirección prerrellenada y que el método de
+pago manual aparezca. Eso hay que verlo en la tienda.
+
 ## Estado en la tienda
 
 Ya hecho y verificado contra la API:
