@@ -82,11 +82,33 @@ Consecuencias prácticas:
 Tampoco hay verificación del móvil por SMS ni recuperación de formularios
 abandonados por parte de la tienda: las dos cosas necesitan un servidor.
 
-## Puesta en marcha
+## Estado en la tienda
 
-1. El producto **Contrareembolso — gastos de gestión** tiene que estar en estado
-   *Activo* y publicado en la Tienda online. En borrador, el pedido falla.
-2. En el editor de temas, añadir la sección *Calmia · Contrareembolso* y elegir
-   ese producto en «Producto del recargo».
-3. Comprobar que los descuentos de cada pack coinciden con los automáticos.
-4. Activar el método de pago manual de contrareembolso.
+Ya hecho y verificado contra la API:
+
+- El producto **Contrareembolso — gastos de gestión** (5,00 €) estaba en
+  *borrador*, que es lo que habría hecho fallar todos los pedidos
+  contrareembolso. Está **activo, publicado en la Tienda online y disponible
+  para la venta**. No lleva inventario ni requiere envío, así que no interfiere
+  con los gastos de envío.
+- La sección está subida al tema **ReliefPath — Calmia Clone (Claude 31-07)**
+  (`OnlineStoreTheme/203751620953`), byte a byte igual que el archivo de este
+  repositorio.
+- Está **colocada en la página**, entre la sección de pago y las preguntas
+  frecuentes, con el producto y el recargo ya asignados, los tres packs
+  cuadrados con los descuentos automáticos de la tienda (−20 % desde 2 uds,
+  −30 % desde 3) y la entrega en 24-48 h, igual que el hero y la barra fija.
+- La banda superior de «CONTRAREEMBOLSO» ahora **enlaza al formulario**, para
+  que quien llegue buscando eso no tenga que recorrer la página entera.
+- Las cuatro plantillas que comparten esta landing (`product.reliefpatch`,
+  `product.ventosa`, `product.padel` e `index`) están sincronizadas.
+
+## Lo que falta, y no lo puedo hacer yo
+
+1. **Activar el contrareembolso** en Ajustes → Pagos → Métodos de pago
+   manuales. Sin esto el cliente rellena el formulario, llega al checkout y no
+   encuentra la opción que acaba de elegir. Es el único punto que rompe el
+   flujo entero.
+2. **Publicar el tema**, que sigue sin publicar.
+3. Comprobar cómo se ve. El proxy de esta sesión no llega a `waistzen.com`,
+   así que la sección no se ha visto renderizada en un navegador real.
