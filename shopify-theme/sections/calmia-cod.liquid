@@ -23,12 +23,21 @@
   --------------------
   Al enviar se construye un enlace permanente de carrito:
 
-      /cart/{variante}:{unidades},{recargo}:1?attributes[...]&checkout[...]
+      /cart/{variante}:{unidades},{recargo}:1?attributes[...]&note=...&checkout[...]
 
   Ese enlace reemplaza el carrito entero (así no se duplica el pedido si ya
-  había pulsado el botón del hero), guarda las respuestas como atributos que
-  Shopify enseña en la ficha del pedido, y deja el checkout con la dirección ya
-  rellenada. El cliente solo tiene que confirmar.
+  había pulsado el botón del hero). Según la documentación de Shopify, note y
+  attributes salen en la ficha del pedido, y los campos checkout[...] dejan la
+  dirección ya rellenada. El cliente solo tiene que confirmar.
+
+  Dónde ves lo que ha escrito el comprador
+  ----------------------------------------
+  En dos sitios de la ficha del pedido:
+    · La NOTA, arriba del todo, con el resumen entero en varias líneas. Es lo
+      que lee quien llama para confirmar.
+    · Los ATRIBUTOS, en los detalles adicionales, uno por dato. Estos siguen
+      ahí aunque el cliente cambie luego algo en el checkout, así que sirven
+      para ver qué declaró él de verdad.
 
   Lo que sigue sin poder hacerse desde un tema
   --------------------------------------------
@@ -1023,7 +1032,11 @@
     function q(o) {
       return Object.keys(o)
         .filter(function (k) { return o[k] !== '' && o[k] != null; })
-        .map(function (k) { return encodeURIComponent(k) + '=' + encodeURIComponent(String(o[k]).slice(0, 200)); })
+        .map(function (k) {
+          /* La nota lleva el resumen entero y necesita más sitio que un atributo. */
+          var max = k === 'note' ? 900 : 200;
+          return encodeURIComponent(k) + '=' + encodeURIComponent(String(o[k]).slice(0, max));
+        })
         .join('&');
     }
 
@@ -1072,31 +1085,46 @@
         var slot = f('slot') ? f('slot').value : '';
         var wa = f('whatsapp');
 
-        /* Datos que Shopify enseña en la ficha del pedido. */
-        params['attributes[Forma de pago]'] = 'Contrareembolso';
-        params['attributes[Importe a cobrar]'] = pk.codMoney;
-        params['attributes[Telefono de reparto]'] = phone;
-        params['attributes[Franja horaria]'] = slot;
-        params['attributes[Piso y puerta]'] = floor;
-        if (backup) params['attributes[Puede recogerlo]'] = backup;
-        if (wa) params['attributes[Avisar por WhatsApp]'] = wa.checked ? 'Si' : 'No';
-        params['attributes[Compromiso de pago]'] = 'Aceptado ' + new Date().toLocaleString('es-ES');
-        params['attributes[Direccion declarada]'] =
+        var email = f('email').value.trim();
+        var stamp = new Date().toLocaleString('es-ES');
+        var declared =
           f('address').value.trim() +
           (floor ? ', ' + floor : '') + ' · ' +
           f('zip').value.trim() + ' ' + f('city').value.trim() +
           ' (' + (provEl ? provEl.value : '') + ')';
 
-        /* Nota del pedido: lo que lee quien llama para confirmar. */
-        params['note'] =
-          'CONTRAREEMBOLSO · Cobrar ' + pk.codMoney +
-          ' · Tel ' + phone +
-          ' · ' + (slot || 'sin franja') +
-          (floor ? ' · ' + floor : '') +
-          (backup ? ' · Alternativa: ' + backup : '');
+        /* Todo lo que ha escrito el comprador viaja como atributos del carrito.
+           Shopify los enseña en la ficha del pedido y siguen ahí aunque luego
+           cambie algo en el checkout: así siempre se ve lo que declaró él. */
+        params['attributes[Forma de pago]'] = 'Contrareembolso';
+        params['attributes[Importe a cobrar]'] = pk.codMoney;
+        params['attributes[Pack]'] = pk.label;
+        params['attributes[Nombre declarado]'] = name;
+        params['attributes[Telefono de reparto]'] = phone;
+        params['attributes[Correo declarado]'] = email;
+        params['attributes[Piso y puerta]'] = floor;
+        params['attributes[Franja horaria]'] = slot;
+        if (backup) params['attributes[Puede recogerlo]'] = backup;
+        if (wa) params['attributes[Avisar por WhatsApp]'] = wa.checked ? 'Si' : 'No';
+        params['attributes[Compromiso de pago]'] = 'Aceptado ' + stamp;
+
+        /* La nota sale arriba del todo en la ficha del pedido. Va en varias
+           líneas para que quien llame a confirmar lo tenga de un vistazo. */
+        params['note'] = [
+          'CONTRAREEMBOLSO · COBRAR ' + pk.codMoney,
+          'Pedido: ' + pk.label,
+          'Nombre: ' + name,
+          'Teléfono: ' + phone,
+          'Correo: ' + email,
+          'Dirección: ' + declared,
+          'Entrega: ' + (slot || 'sin franja'),
+          backup ? 'Si no está, recoge: ' + backup : '',
+          wa ? 'Avisar por WhatsApp: ' + (wa.checked ? 'sí' : 'no') : '',
+          'Compromiso aceptado: ' + stamp
+        ].filter(Boolean).join('\n');
 
         /* Dirección ya rellenada en el checkout. */
-        params['checkout[email]'] = f('email').value.trim();
+        params['checkout[email]'] = email;
         params['checkout[shipping_address][first_name]'] = first;
         params['checkout[shipping_address][last_name]'] = last2;
         params['checkout[shipping_address][address1]'] = f('address').value.trim();
@@ -1120,15 +1148,12 @@
       var items = CFG.variantId + ':' + pk.qty;
       if (isCod && CFG.feeId) items += ',' + CFG.feeId + ':1';
 
-      /* Un enlace demasiado largo lo puede cortar el servidor. Si se dispara
-         (direcciones muy largas), se sueltan primero los datos que van
-         duplicados en la dirección del checkout, y solo después la nota. */
+      /* Red de seguridad para direcciones absurdamente largas: por encima de
+         este tamaño se suelta la nota, que es lo único que va repetido en los
+         atributos. Con datos normales el enlace ronda los 1.800 caracteres y
+         esto no llega a dispararse nunca. */
       var qs = q(params);
-      if (qs.length > 1700) {
-        delete params['attributes[Direccion declarada]'];
-        qs = q(params);
-      }
-      if (qs.length > 1700) {
+      if (qs.length > 4000) {
         delete params['note'];
         qs = q(params);
       }
