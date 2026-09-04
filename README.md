@@ -11,12 +11,28 @@ Una sola sección, autocontenida, que se coloca en la página de producto (o en 
 portada) desde el editor de temas. No necesita servidor, ni suscripción, ni
 permisos de app.
 
+Al lado están las otras piezas del tema que esta sección toca, byte a byte
+iguales a las que están subidas:
+
+    shopify-theme/sections/calmia-final-cta.liquid    · su botón lleva aquí
+    shopify-theme/sections/calmia-sticky-atc.liquid   · ídem
+    shopify-theme/sections/calmia-product-hero.liquid · sin tocar, para las pruebas
+    shopify-theme/templates/product.reliefpatch.json  · la plantilla de la página
+
+Los ficheros del tema no acaban en salto de línea: la API de Shopify se lo come
+al subirlos, y así `md5sum` compara directamente con lo que hay en la tienda.
+
 ## Qué hace
 
 **Elección de pack.** 1, 2 o 3 unidades, con el precio ya descontado. Los
 porcentajes de cada pack se configuran en el editor y tienen que coincidir con
 los descuentos automáticos de la tienda (hoy: −20 % a partir de 2 unidades,
 −30 % a partir de 3).
+
+El precio tachado de cada pack sale del **precio comparativo** de la variante
+(99,95 €), el mismo que enseña el hero justo encima, multiplicado por las
+unidades. Así el pack de 2 tacha 199,90 € y no 99,90 €, que era una cifra tan
+parecida a los 99,95 € de una unidad que se leía como una errata.
 
 **Dos formas de pago.**
 
@@ -114,6 +130,14 @@ los packs y el botón del hero desde su propio CSS: se activa con la casilla
 «Apagar los packs y el botón de arriba» y se desactiva desmarcándola, sin tocar
 código. La foto, el stock, la fecha de entrega y los sellos del hero se quedan.
 
+Apagarlos con CSS no bastaba. El hero calcula su «Ahorras … hoy», el precio de
+su botón y el precio de la barra fija **a partir del pack preseleccionado**, así
+que con el pack de 2 marcado y escondido salía «Ahorras 119,98 €» al lado de un
+precio de 49,95 €, y la barra fija de abajo enseñaba 79,92 €. Por eso los tres
+bloques de pack se han quitado del hero **en la plantilla**: sin packs, el hero
+vuelve a hablar de una unidad y dice 99,95 € tachado → 49,95 €, −50 %, ahorras
+50,00 €, que es exactamente lo que cobra el checkout.
+
 Todos los demás botones de la página llevan aquí: la banda negra de arriba, el
 botón de «Por qué cuesta lo que cuesta», la barra fija de abajo y el cierre.
 Para eso, la barra fija y el cierre tienen una opción nueva en el editor,
@@ -127,11 +151,20 @@ JavaScript de verdad en un navegador simulado, haciendo pedidos completos:
     python3 pruebas/render.py     # renderiza la sección
     node pruebas/test.js          # 29 comprobaciones de la lógica
     node pruebas/simulacro.js     # un pedido narrado, paso a paso, + datos hostiles
+    python3 pruebas/coherencia.py # 30 comprobaciones de que las cifras cuadran
 
 **`test.js`** cubre la lógica: compra con tarjeta de 1 y 3 unidades, cambio a
 contrareembolso, formulario vacío, móvil falso, calle sin número, nombre de una
 palabra, correo mal escrito, CP de Canarias, compromisos sin marcar, trampa de
 robots, envío instantáneo, direcciones larguísimas, pack de 2 y duplicados.
+
+**`coherencia.py`** es la que nació del fallo del «Ahorras 119,98 €». Renderiza
+las cuatro secciones que enseñan precios —hero, contrareembolso, barra fija y
+cierre— con los ajustes reales de la plantilla, y comprueba que ninguna se
+contradice: que el porcentaje cuadra con los dos precios, que el ahorro es la
+resta exacta, que el botón pide lo que enseña, que la barra fija dice lo mismo
+que el hero, que el tachado de cada pack es mayor que lo que se paga y que una
+unidad cuesta lo mismo arriba que abajo.
 
 **`simulacro.js`** hace un pedido entero con datos retorcidos a propósito
 —`Mª Ángeles Fernández-Bermúdez`, `+34 645 21 03 37`, un correo con `+`, una
@@ -157,7 +190,9 @@ Ya hecho y verificado contra la API:
   con los gastos de envío.
 - La sección está subida al tema **ReliefPath — Calmia Clone (Claude 31-07)**
   (`OnlineStoreTheme/203751620953`), byte a byte igual que el archivo de este
-  repositorio.
+  repositorio (md5 `8d31e66662651cd0c25a4490e7b40dc2`).
+- Los packs del hero están fuera de la plantilla, así que ya no hay ninguna
+  cifra que se contradiga con otra en toda la página.
 - Está **colocada en la página**, entre la sección de pago y las preguntas
   frecuentes, con el producto y el recargo ya asignados, los tres packs
   cuadrados con los descuentos automáticos de la tienda (−20 % desde 2 uds,
