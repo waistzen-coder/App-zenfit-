@@ -1,6 +1,6 @@
 # Renderiza calmia-cod.liquid con los mismos ajustes que tiene en la plantilla
 # de la tienda, para poder ejecutar su JavaScript de verdad contra el HTML real.
-import io, re, json, sys
+import io, os, re, json, sys
 from liquid import Environment
 from liquid import DictLoader
 
@@ -68,7 +68,8 @@ for n, f in [('money', money), ('at_least', at_least), ('json', to_json),
 VARIANT, FEE_VARIANT = 59286832939353, 59250983928153
 ctx = {
     'product': {'title': 'ReliefPath™ Ventosas Inteligentes con Terapia de Luz Roja',
-                'selected_or_first_available_variant': {'id': VARIANT, 'price': 4995}},
+                'selected_or_first_available_variant': {'id': VARIANT, 'price': 4995,
+                                                        'compare_at_price': 9995}},
     'section': {'id': 'contrareembolso', 'settings': sec, 'blocks': blocks},
 }
 ctx['section']['settings']['product'] = ctx['product']
@@ -76,7 +77,8 @@ ctx['section']['settings']['fee_product'] = {
     'selected_or_first_available_variant': {'id': FEE_VARIANT, 'price': 500}}
 
 html = env.from_string(body).render(**ctx)
-io.open('/tmp/claude-0/-home-user-App-zenfit-/f4f5f3f5-e7d1-5e54-99bb-0e2d50cf9f5e/scratchpad/t/cod.html','w',encoding='utf-8').write(
+out = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'cod.html')
+io.open(out,'w',encoding='utf-8').write(
     '<!doctype html><html lang="es"><head><meta charset="utf-8"></head><body>' + html + '</body></html>')
 print('HTML renderizado:', len(html), 'bytes')
 print('precios en el HTML:', re.findall(r'\d+,\d\d €', html)[:12])

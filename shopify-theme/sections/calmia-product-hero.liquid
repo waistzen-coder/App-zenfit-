@@ -1,0 +1,1425 @@
+{%- comment -%}
+  Calmia · Hero de producto (galería + bloque de compra)
+  Réplica de la estructura de la landing de referencia, adaptada a ReliefPath™.
+{%- endcomment -%}
+
+{% render 'calmia-base' %}
+
+{%- liquid
+  assign p = product
+  if section.settings.product != blank
+    assign p = section.settings.product
+  endif
+-%}
+
+{%- if p == blank -%}
+  <div class="cal cal-sec"><div class="cal-wrap"><p style="text-align:center">Selecciona un producto en los ajustes de la sección.</p></div></div>
+{%- else -%}
+
+{%- liquid
+  assign cv = p.selected_or_first_available_variant
+  assign has_compare = false
+  if cv.compare_at_price > cv.price
+    assign has_compare = true
+  endif
+  assign pct = 0
+  assign save_amount = 0
+  if has_compare
+    assign save_amount = cv.compare_at_price | minus: cv.price
+    assign pct = save_amount | times: 100.0 | divided_by: cv.compare_at_price | round
+  endif
+
+  assign rating = section.settings.rating
+  assign rating_count = section.settings.rating_count
+  if section.settings.rating_from_metafield and p.metafields.reviews.rating.value != blank
+    assign rating = p.metafields.reviews.rating.value.rating | times: 1.0
+    assign rating_count = p.metafields.reviews.rating_count.value
+  endif
+  assign rating_display = rating | round: 1
+
+  assign pack_count = 0
+  assign first_pack_id = ''
+  assign first_qty = 1
+  assign default_pack_id = ''
+  assign default_qty = 1
+  for block in section.blocks
+    if block.type == 'pack'
+      assign pack_count = pack_count | plus: 1
+      if first_pack_id == ''
+        assign first_pack_id = block.id
+        assign first_qty = block.settings.quantity | default: 1
+      endif
+      if block.settings.preselected and default_pack_id == ''
+        assign default_pack_id = block.id
+        assign default_qty = block.settings.quantity | default: 1
+      endif
+    endif
+  endfor
+  if default_pack_id == ''
+    assign default_pack_id = first_pack_id
+    assign default_qty = first_qty
+  endif
+
+  assign default_disc = 0
+  for block in section.blocks
+    if block.type == 'pack' and block.id == default_pack_id
+      assign default_disc = block.settings.discount | default: 0
+    endif
+  endfor
+
+  assign base_unit = cv.price
+  if has_compare
+    assign base_unit = cv.compare_at_price
+  endif
+  assign dmult = 100 | minus: default_disc
+  assign default_total = cv.price | times: default_qty | times: dmult | divided_by: 100
+  assign default_cross = base_unit | times: default_qty
+  assign default_save = default_cross | minus: default_total
+
+  assign cta_price = cv.price
+  assign save_display = save_amount
+  if pack_count > 0
+    assign cta_price = default_total
+    assign save_display = default_save
+  endif
+
+  assign gal_count = 0
+  assign first_src = ''
+  assign first_alt = ''
+  if section.settings.gallery_source == 'blocks'
+    for block in section.blocks
+      if block.type == 'gallery' and block.settings.image != blank
+        assign gal_count = gal_count | plus: 1
+        if first_src == ''
+          assign first_src = block.settings.image | image_url: width: 1100
+          assign first_alt = block.settings.image.alt | default: p.title
+        endif
+      endif
+    endfor
+  endif
+  assign use_blocks = false
+  if gal_count > 0
+    assign use_blocks = true
+  else
+    assign gal_count = p.media.size
+    if p.featured_media
+      assign first_src = p.featured_media | image_url: width: 1100
+      assign first_alt = p.featured_media.alt | default: p.title
+    endif
+  endif
+
+  assign months = 'enero,febrero,marzo,abril,mayo,junio,julio,agosto,septiembre,octubre,noviembre,diciembre' | split: ','
+  assign now_ts = 'now' | date: '%s' | times: 1
+  assign min_ts = section.settings.delivery_min | times: 86400 | plus: now_ts
+  assign max_ts = section.settings.delivery_max | times: 86400 | plus: now_ts
+  assign min_day = min_ts | date: '%-d'
+  assign max_day = max_ts | date: '%-d'
+  assign min_mi = min_ts | date: '%-m' | minus: 1
+  assign max_mi = max_ts | date: '%-m' | minus: 1
+  assign min_month = months[min_mi]
+  assign max_month = months[max_mi]
+  if min_month == max_month
+    assign delivery_range = min_day | append: ' y el ' | append: max_day | append: ' de ' | append: max_month
+  else
+    assign delivery_range = min_day | append: ' de ' | append: min_month | append: ' y el ' | append: max_day | append: ' de ' | append: max_month
+  endif
+
+  assign bump = section.settings.bump_product
+  assign bump_variant = bump.selected_or_first_available_variant
+
+  assign tz = 'now' | date: '%z'
+  assign stock_qty = 0
+  assign stock_tracked = false
+  if cv.inventory_management != blank
+    assign stock_tracked = true
+    assign stock_qty = cv.inventory_quantity
+  endif
+  assign show_stock = false
+  if section.settings.show_stock and stock_tracked and stock_qty > 0 and stock_qty <= section.settings.stock_threshold
+    assign show_stock = true
+  endif
+  assign stock_pct = stock_qty | times: 100 | divided_by: section.settings.stock_threshold
+  if stock_pct < 8
+    assign stock_pct = 8
+  endif
+-%}
+
+<div class="cal calmia-hero" id="calmia-hero-{{ section.id }}">
+  <div class="cal-wrap">
+
+    {%- if section.settings.badge_left != blank or section.settings.show_discount_badge -%}
+      <div class="calmia-hero__badges">
+        {%- if section.settings.badge_left != blank -%}
+          <span class="cal-pill">{{ section.settings.badge_left }}</span>
+        {%- endif -%}
+        {%- if section.settings.show_discount_badge and pct > 0 -%}
+          <span class="cal-pill cal-pill--pink">&minus;{{ pct }}%</span>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="calmia-hero__grid">
+
+      {%- comment -%} ---------------- Galería ---------------- {%- endcomment -%}
+      <div class="calmia-gallery" data-calmia-gallery>
+        <div class="calmia-gallery__main">
+          {%- if first_src != blank -%}
+            <img
+              src="{{ first_src }}"
+              alt="{{ first_alt | escape }}"
+              loading="eager"
+              fetchpriority="high"
+              data-calmia-main
+            >
+          {%- endif -%}
+          {%- if gal_count > 1 -%}
+            <button type="button" class="calmia-gallery__nav calmia-gallery__nav--prev" data-calmia-prev aria-label="Imagen anterior">{% render 'calmia-icon', icon: 'chevron', size: 22 %}</button>
+            <button type="button" class="calmia-gallery__nav calmia-gallery__nav--next" data-calmia-next aria-label="Imagen siguiente">{% render 'calmia-icon', icon: 'chevron', size: 22 %}</button>
+          {%- endif -%}
+        </div>
+
+        {%- if gal_count > 1 -%}
+          <div class="calmia-gallery__thumbs" role="list">
+            {%- if use_blocks -%}
+              {%- assign gi = 0 -%}
+              {%- for block in section.blocks -%}
+                {%- if block.type == 'gallery' and block.settings.image != blank -%}
+                  <button
+                    type="button"
+                    class="calmia-gallery__thumb{% if gi == 0 %} is-active{% endif %}"
+                    data-calmia-thumb
+                    data-index="{{ gi }}"
+                    data-src="{{ block.settings.image | image_url: width: 1100 }}"
+                    aria-label="Ver imagen {{ gi | plus: 1 }}"
+                    {{ block.shopify_attributes }}
+                  >
+                    <img src="{{ block.settings.image | image_url: width: 240 }}" alt="{{ block.settings.image.alt | escape }}" width="240" height="240" loading="lazy">
+                  </button>
+                  {%- assign gi = gi | plus: 1 -%}
+                {%- endif -%}
+              {%- endfor -%}
+            {%- else -%}
+              {%- for m in p.media limit: 10 -%}
+                <button
+                  type="button"
+                  class="calmia-gallery__thumb{% if forloop.first %} is-active{% endif %}"
+                  data-calmia-thumb
+                  data-index="{{ forloop.index0 }}"
+                  data-src="{{ m | image_url: width: 1100 }}"
+                  aria-label="Ver imagen {{ forloop.index }}"
+                >
+                  <img src="{{ m | image_url: width: 240 }}" alt="{{ m.alt | escape }}" width="240" height="240" loading="lazy">
+                </button>
+              {%- endfor -%}
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} ---------------- Bloque de compra ---------------- {%- endcomment -%}
+      <div class="calmia-buy">
+
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="cal-eyebrow">{{ section.settings.eyebrow }}</p>
+        {%- endif -%}
+
+        <h1 class="cal-h1">
+          {{ section.settings.heading }}
+          {%- if section.settings.heading_italic != blank -%}<em>{{ section.settings.heading_italic }}</em>{%- endif -%}
+        </h1>
+
+        {%- if section.settings.subheading != blank -%}
+          <p class="cal-lead">{{ section.settings.subheading }}</p>
+        {%- endif -%}
+
+        {%- if section.settings.show_rating -%}
+          <div class="calmia-rating">
+            {% render 'calmia-rating', rating: rating, size: 21 %}
+            <strong>{{ rating_display }}</strong>
+            <span class="calmia-rating__dot">·</span>
+            <span>{{ rating_count }} reseñas</span>
+          </div>
+        {%- endif -%}
+
+        <div class="calmia-price">
+          {%- if has_compare -%}
+            <s class="calmia-price__was" data-calmia-compare>{{ cv.compare_at_price | money }}</s>
+          {%- endif -%}
+          <span class="calmia-price__now" data-calmia-price>{{ cv.price | money }}</span>
+          {%- if pct > 0 -%}
+            <span class="calmia-price__off" data-calmia-pct>&minus;{{ pct }}%</span>
+          {%- endif -%}
+        </div>
+
+        {%- if has_compare and section.settings.show_savings -%}
+          <div class="calmia-save">
+            {{ section.settings.savings_label }} <b data-calmia-save>{{ save_display | money }}</b> {{ section.settings.savings_suffix }}
+          </div>
+        {%- endif -%}
+
+        {%- if section.blocks.size > 0 -%}
+          <ul class="calmia-usps">
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'usp' -%}
+                <li class="cal-check" {{ block.shopify_attributes }}>
+                  <i>{% render 'calmia-icon', icon: 'check', size: 15 %}</i>
+                  <span>{{ block.settings.text }}</span>
+                </li>
+              {%- endif -%}
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+
+        {%- comment -%} ---------------- Tarjeta de checkout ---------------- {%- endcomment -%}
+        <div class="calmia-offer">
+
+          {%- if section.settings.stock_label != blank -%}
+            <span class="calmia-offer__stock"><span class="calmia-offer__dot"></span>{{ section.settings.stock_label }}</span>
+          {%- endif -%}
+
+          {%- if pack_count > 0 -%}
+            <div class="calmia-packs" data-calmia-packs>
+              {%- if section.settings.packs_title != blank -%}
+                <p class="calmia-packs__title">{{ section.settings.packs_title }}</p>
+              {%- endif -%}
+
+              {%- for block in section.blocks -%}
+                {%- if block.type == 'pack' -%}
+                  {%- liquid
+                    assign q = block.settings.quantity | default: 1
+                    assign d = block.settings.discount | default: 0
+                    assign mult = 100 | minus: d
+                    assign p_total = cv.price | times: q | times: mult | divided_by: 100
+                    assign p_unit = p_total | divided_by: q
+                    assign p_cross = base_unit | times: q
+                    assign p_save = p_cross | minus: p_total
+                    assign is_on = false
+                    if block.id == default_pack_id
+                      assign is_on = true
+                    endif
+                  -%}
+                  <label
+                    class="calmia-pack{% if is_on %} is-active{% endif %}{% if block.settings.highlight %} is-featured{% endif %}"
+                    {{ block.shopify_attributes }}
+                  >
+                    <input
+                      type="radio"
+                      name="calmia-pack-{{ section.id }}"
+                      value="{{ block.id }}"
+                      data-calmia-pack="{{ block.id }}"
+                      data-qty="{{ q }}"
+                      data-code="{{ block.settings.discount_code | escape }}"
+                      {% if is_on %}checked{% endif %}
+                    >
+                    <span class="calmia-pack__mark" aria-hidden="true"></span>
+                    <span class="calmia-pack__body">
+                      <span class="calmia-pack__name">{{ block.settings.name }}</span>
+                      {%- if block.settings.note != blank -%}
+                        <span class="calmia-pack__note">{{ block.settings.note }}</span>
+                      {%- endif -%}
+                      {%- if q > 1 -%}
+                        <span class="calmia-pack__unit"><b data-calmia-pack-unit>{{ p_unit | money }}</b> {{ section.settings.per_unit_label }}</span>
+                      {%- endif -%}
+                    </span>
+                    <span class="calmia-pack__prices">
+                      <b data-calmia-pack-total>{{ p_total | money }}</b>
+                      {%- if p_cross > p_total -%}
+                        <s data-calmia-pack-cross>{{ p_cross | money }}</s>
+                      {%- endif -%}
+                    </span>
+                    {%- if block.settings.badge != blank -%}
+                      <span class="calmia-pack__badge">{{ block.settings.badge }}</span>
+                    {%- endif -%}
+                    {%- if p_save > 0 -%}
+                      <span class="calmia-pack__save">{{ section.settings.pack_save_label }} <b data-calmia-pack-save>{{ p_save | money }}</b></span>
+                    {%- endif -%}
+                  </label>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+
+          {%- if section.settings.show_stock and stock_tracked -%}
+            <div class="calmia-stock" data-calmia-stock{% unless show_stock %} hidden{% endunless %}>
+              <p class="calmia-stock__text">
+                {{ section.settings.stock_prefix }}
+                <b data-calmia-stock-qty>{{ stock_qty }}</b>
+                {{ section.settings.stock_suffix }}
+                <span data-calmia-stock-variant>{{ cv.title }}</span>
+              </p>
+              <span class="calmia-stock__bar"><i data-calmia-stock-bar style="width: {{ stock_pct }}%"></i></span>
+            </div>
+          {%- endif -%}
+
+          {%- if section.settings.gift_title != blank -%}
+            <div class="calmia-gift">
+              <div class="calmia-gift__row">
+                {%- if section.settings.gift_image != blank -%}
+                  <img class="calmia-gift__img" src="{{ section.settings.gift_image | image_url: width: 180 }}" alt="{{ section.settings.gift_title | escape }}" width="180" height="180" loading="lazy">
+                {%- endif -%}
+                <div class="calmia-gift__body">
+                  <span class="calmia-gift__qty">1X</span>
+                  <p class="calmia-gift__title">{{ section.settings.gift_title }}</p>
+                </div>
+                <div class="calmia-gift__price">
+                  <span class="calmia-gift__free">GRATIS</span>
+                  {%- if section.settings.gift_value != blank -%}
+                    <s>{{ section.settings.gift_value }}</s>
+                  {%- endif -%}
+                </div>
+              </div>
+              {%- if section.settings.gift_note != blank -%}
+                <p class="calmia-gift__note">🎁 {{ section.settings.gift_note }}</p>
+              {%- endif -%}
+            </div>
+            <div class="calmia-plus" aria-hidden="true"><span>+</span></div>
+          {%- endif -%}
+
+          <form method="post" action="{{ routes.cart_add_url }}" class="calmia-form" data-calmia-form enctype="multipart/form-data">
+            <input type="hidden" name="form_type" value="product">
+            <input type="hidden" name="utf8" value="✓">
+            <input type="hidden" name="quantity" value="{{ default_qty }}" data-calmia-qty>
+            <input type="hidden" name="id" value="{{ cv.id }}" data-calmia-varid>
+            {%- if section.settings.cta_target == 'checkout' -%}
+              <input type="hidden" name="return_to" value="/checkout" data-calmia-return data-base="/checkout">
+            {%- elsif section.settings.cta_target == 'cart' -%}
+              <input type="hidden" name="return_to" value="/cart" data-calmia-return data-base="/cart">
+            {%- endif -%}
+
+            {%- unless p.has_only_default_variant -%}
+              {%- for option in p.options_with_values -%}
+                <div class="calmia-options">
+                  <span class="calmia-options__label">{{ option.name }}: <b data-calmia-optlabel="{{ forloop.index0 }}">{{ option.selected_value }}</b></span>
+                  <div class="calmia-options__list">
+                    {%- for value in option.values -%}
+                      <label class="calmia-opt{% if option.selected_value == value %} is-active{% endif %}">
+                        <input
+                          type="radio"
+                          name="calmia-option-{{ section.id }}-{{ forloop.parentloop.index0 }}"
+                          value="{{ value | escape }}"
+                          data-calmia-option="{{ forloop.parentloop.index0 }}"
+                          {% if option.selected_value == value %}checked{% endif %}
+                        >
+                        <span>{{ value }}</span>
+                      </label>
+                    {%- endfor -%}
+                  </div>
+                </div>
+              {%- endfor -%}
+            {%- endunless -%}
+
+            {%- if bump != blank and bump_variant.available -%}
+              <label class="calmia-bump">
+                <input type="checkbox" data-calmia-bump value="{{ bump_variant.id }}">
+                <span class="calmia-bump__box" aria-hidden="true">{% render 'calmia-icon', icon: 'check', size: 13 %}</span>
+                <span class="calmia-bump__body">
+                  <b>{{ section.settings.bump_title | default: bump.title }}</b>
+                  {%- if section.settings.bump_text != blank -%}
+                    <span>{{ section.settings.bump_text }}</span>
+                  {%- endif -%}
+                </span>
+                <span class="calmia-bump__price">+{{ bump_variant.price | money }}</span>
+              </label>
+            {%- endif -%}
+
+            <button type="submit" name="add" class="cal-btn calmia-cta" data-calmia-submit>
+              {% render 'calmia-icon', icon: 'bag', size: 26 %}
+              <span data-calmia-ctatext>{{ section.settings.cta_text }}</span>
+              <span class="cal-btn__sep">—</span>
+              <span data-calmia-ctaprice>{{ cta_price | money }}</span>
+            </button>
+          </form>
+
+          {%- if section.settings.show_delivery -%}
+            <div class="calmia-delivery">
+              <span class="calmia-delivery__icon">{% render 'calmia-icon', icon: 'truck', size: 18 %}</span>
+              <div class="calmia-delivery__body">
+                {%- if section.settings.show_cutoff -%}
+                  <p
+                    class="calmia-delivery__cutoff"
+                    data-calmia-cutoff
+                    data-tz="{{ tz }}"
+                    data-hour="{{ section.settings.cutoff_hour }}"
+                    data-weekdays="{{ section.settings.cutoff_weekdays }}"
+                    hidden
+                  >
+                    {{ section.settings.cutoff_prefix }}
+                    <b data-calmia-cutoff-time>—</b>
+                    <span data-calmia-cutoff-when></span>
+                  </p>
+                {%- endif -%}
+                <p class="calmia-delivery__eta">{{ section.settings.delivery_text }} <b>{{ delivery_range }}</b></p>
+              </div>
+            </div>
+          {%- endif -%}
+
+          {%- if section.settings.quote != blank -%}
+            <div class="calmia-quote">
+              {%- if section.settings.quote_avatar != blank -%}
+                <img class="calmia-quote__avatar" src="{{ section.settings.quote_avatar | image_url: width: 120 }}" alt="" width="120" height="120" loading="lazy">
+              {%- endif -%}
+              {% render 'calmia-rating', rating: 5, size: 13, small: true %}
+              <p class="calmia-quote__text">“{{ section.settings.quote }}”<span> — {{ section.settings.quote_author }}</span></p>
+            </div>
+          {%- endif -%}
+
+          {%- if section.settings.trust_line != blank -%}
+            <p class="calmia-trustline">{% render 'calmia-icon', icon: 'shield', size: 16 %} {{ section.settings.trust_line }}</p>
+          {%- endif -%}
+
+          {%- if section.settings.show_payment_icons -%}
+            <div class="calmia-pay">
+              {%- for type in shop.enabled_payment_types limit: 8 -%}
+                <span class="calmia-pay__i">{{ type | payment_type_svg_tag: class: 'calmia-pay__svg' }}</span>
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+        </div>
+
+        {%- comment -%} ---------------- Acordeones ---------------- {%- endcomment -%}
+        {%- assign acc_count = 0 -%}
+        {%- for block in section.blocks -%}{%- if block.type == 'accordion' -%}{%- assign acc_count = acc_count | plus: 1 -%}{%- endif -%}{%- endfor -%}
+        {%- if acc_count > 0 -%}
+          <div class="calmia-acc">
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'accordion' -%}
+                <details class="calmia-acc__item" {{ block.shopify_attributes }}>
+                  <summary>
+                    <span class="calmia-acc__icon">{% render 'calmia-icon', icon: block.settings.icon, size: 20 %}</span>
+                    <span class="calmia-acc__title">{{ block.settings.title }}</span>
+                    <span class="calmia-acc__chev">{% render 'calmia-icon', icon: 'chevron', size: 20 %}</span>
+                  </summary>
+                  <div class="calmia-acc__body">{{ block.settings.content }}</div>
+                </details>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+
+        {%- if section.settings.social_text != blank -%}
+          <div class="calmia-social">
+            <div class="calmia-social__avatars">
+              {%- for i in (1..4) -%}
+                {%- assign key = 'avatar_' | append: i -%}
+                {%- assign img = section.settings[key] -%}
+                {%- if img != blank -%}
+                  <img src="{{ img | image_url: width: 120 }}" alt="" width="120" height="120" loading="lazy">
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+            <p>{{ section.settings.social_text }}</p>
+          </div>
+        {%- endif -%}
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="application/json" data-calmia-variants="{{ section.id }}">
+  {
+    "variants": [
+      {%- for v in p.variants -%}
+        {
+          "id": {{ v.id }},
+          "available": {{ v.available }},
+          "options": {{ v.options | json }},
+          "title": {{ v.title | json }},
+          "qty": {%- if v.inventory_management != blank -%}{{ v.inventory_quantity }}{%- else -%}null{%- endif -%},
+          "price": {{ v.price | money | json }},
+          "compare": {{ v.compare_at_price | money | json }},
+          "save": {%- if v.compare_at_price > v.price -%}{{ v.compare_at_price | minus: v.price | money | json }}{%- else -%}""{%- endif -%},
+          "pct": {%- if v.compare_at_price > v.price -%}{{ v.compare_at_price | minus: v.price | times: 100.0 | divided_by: v.compare_at_price | round }}{%- else -%}0{%- endif -%},
+          "packs": {
+            {%- assign pk_i = 0 -%}
+            {%- for b in section.blocks -%}
+              {%- if b.type == 'pack' -%}
+                {%- liquid
+                  assign vq = b.settings.quantity | default: 1
+                  assign vd = b.settings.discount | default: 0
+                  assign vmult = 100 | minus: vd
+                  assign vtotal = v.price | times: vq | times: vmult | divided_by: 100
+                  assign vunit = vtotal | divided_by: vq
+                  assign vbase = v.price
+                  if v.compare_at_price > v.price
+                    assign vbase = v.compare_at_price
+                  endif
+                  assign vcross = vbase | times: vq
+                  assign vsave = vcross | minus: vtotal
+                -%}
+                {%- if pk_i > 0 -%},{%- endif -%}
+                {%- assign pk_i = pk_i | plus: 1 -%}
+                {{ b.id | json }}: {
+                  "qty": {{ vq }},
+                  "total": {{ vtotal | money | json }},
+                  "unit": {{ vunit | money | json }},
+                  "cross": {{ vcross | money | json }},
+                  "save": {{ vsave | money | json }}
+                }
+              {%- endif -%}
+            {%- endfor -%}
+          },
+          "image": {%- if v.image -%}{{ v.image | image_url: width: 1100 | json }}{%- else -%}""{%- endif -%}
+        }{%- unless forloop.last -%},{%- endunless -%}
+      {%- endfor -%}
+    ],
+    "soldOut": {{ section.settings.soldout_text | json }}
+  }
+</script>
+
+<style>
+  #calmia-hero-{{ section.id }} { background: linear-gradient(180deg, {{ section.settings.bg_top }} 0%, {{ section.settings.bg_bottom }} 100%); }
+</style>
+
+<script>
+  (function () {
+    var root = document.getElementById('calmia-hero-{{ section.id }}');
+    if (!root) return;
+    var dataEl = document.querySelector('[data-calmia-variants="{{ section.id }}"]');
+    var data = {};
+    try { data = JSON.parse(dataEl.textContent); } catch (e) { return; }
+
+    /* ---- Galería ---- */
+    var main = root.querySelector('[data-calmia-main]');
+    var thumbs = Array.prototype.slice.call(root.querySelectorAll('[data-calmia-thumb]'));
+    var idx = 0;
+    function show(i) {
+      if (!thumbs.length) return;
+      idx = (i + thumbs.length) % thumbs.length;
+      var t = thumbs[idx];
+      if (main) main.src = t.getAttribute('data-src');
+      thumbs.forEach(function (el) { el.classList.remove('is-active'); });
+      t.classList.add('is-active');
+      t.scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: 'smooth' });
+    }
+    thumbs.forEach(function (t, i) { t.addEventListener('click', function () { show(i); }); });
+    var prev = root.querySelector('[data-calmia-prev]');
+    var next = root.querySelector('[data-calmia-next]');
+    if (prev) prev.addEventListener('click', function () { show(idx - 1); });
+    if (next) next.addEventListener('click', function () { show(idx + 1); });
+
+    /* ---- Variantes ---- */
+    var radios = Array.prototype.slice.call(root.querySelectorAll('[data-calmia-option]'));
+    var idField = root.querySelector('[data-calmia-varid]');
+    var priceEl = root.querySelector('[data-calmia-price]');
+    var compareEl = root.querySelector('[data-calmia-compare]');
+    var pctEl = root.querySelector('[data-calmia-pct]');
+    var saveEl = root.querySelector('[data-calmia-save]');
+    var ctaPrice = root.querySelector('[data-calmia-ctaprice]');
+    var ctaText = root.querySelector('[data-calmia-ctatext]');
+    var submit = root.querySelector('[data-calmia-submit]');
+
+    function selected() {
+      var picked = [];
+      radios.forEach(function (r) { if (r.checked) picked[parseInt(r.getAttribute('data-calmia-option'), 10)] = r.value; });
+      return picked;
+    }
+
+    function update() {
+      var picked = selected();
+      if (!picked.length) return;
+      var match = null;
+      data.variants.forEach(function (v) {
+        var ok = true;
+        picked.forEach(function (val, i) { if (val && v.options[i] !== val) ok = false; });
+        if (ok && !match) match = v;
+      });
+      if (!match) return;
+
+      if (idField) idField.value = match.id;
+      if (priceEl) priceEl.textContent = match.price;
+      if (ctaPrice) ctaPrice.textContent = match.price;
+      if (compareEl) { compareEl.textContent = match.compare; compareEl.style.display = match.compare ? '' : 'none'; }
+      if (pctEl) { pctEl.innerHTML = '&minus;' + match.pct + '%'; pctEl.style.display = match.pct ? '' : 'none'; }
+      if (saveEl) saveEl.textContent = match.save;
+      if (submit) {
+        submit.disabled = !match.available;
+        if (ctaText && !match.available) ctaText.textContent = data.soldOut;
+      }
+      if (match.image && main) main.src = match.image;
+
+      root.querySelectorAll('[data-calmia-optlabel]').forEach(function (el) {
+        var i = parseInt(el.getAttribute('data-calmia-optlabel'), 10);
+        if (picked[i]) el.textContent = picked[i];
+      });
+
+      var url = new URL(window.location.href);
+      url.searchParams.set('variant', match.id);
+      window.history.replaceState({}, '', url.toString());
+
+      document.querySelectorAll('[data-calmia-sticky-id]').forEach(function (el) { el.value = match.id; });
+      document.querySelectorAll('[data-calmia-sticky-price]').forEach(function (el) { el.textContent = match.price; });
+
+      currentVariant = match;
+      paintPacks();
+      applyPack();
+      paintStock();
+    }
+
+    radios.forEach(function (r) {
+      r.addEventListener('change', function () {
+        root.querySelectorAll('.calmia-opt').forEach(function (l) { l.classList.remove('is-active'); });
+        r.closest('.calmia-opt').classList.add('is-active');
+        update();
+      });
+    });
+
+    /* ---- Packs ---- */
+    var packRadios = Array.prototype.slice.call(root.querySelectorAll('[data-calmia-pack]'));
+    var qtyField = root.querySelector('[data-calmia-qty]');
+    var returnField = root.querySelector('[data-calmia-return]');
+    var currentVariant = null;
+
+    function checkoutPath(field, code) {
+      var base = field.getAttribute('data-base') || '/checkout';
+      if (!code) return base;
+      return '/discount/' + encodeURIComponent(code) + '?redirect=' + encodeURIComponent(base);
+    }
+
+    function packData(id) {
+      if (!currentVariant || !currentVariant.packs) return null;
+      return currentVariant.packs[id] || null;
+    }
+
+    /* Reescribe los precios de cada pack cuando cambia la variante */
+    function paintPacks() {
+      packRadios.forEach(function (r) {
+        var d = packData(r.getAttribute('data-calmia-pack'));
+        if (!d) return;
+        var box = r.closest('.calmia-pack');
+        var total = box.querySelector('[data-calmia-pack-total]');
+        var unit = box.querySelector('[data-calmia-pack-unit]');
+        var cross = box.querySelector('[data-calmia-pack-cross]');
+        var save = box.querySelector('[data-calmia-pack-save]');
+        if (total) total.textContent = d.total;
+        if (unit) unit.textContent = d.unit;
+        if (cross) cross.textContent = d.cross;
+        if (save) save.textContent = d.save;
+      });
+    }
+
+    /* Aplica el pack elegido: cantidad, precio del botón y ahorro */
+    function applyPack() {
+      if (!packRadios.length) return;
+      var checked = root.querySelector('[data-calmia-pack]:checked') || packRadios[0];
+      checked.checked = true;
+
+      packRadios.forEach(function (r) { r.closest('.calmia-pack').classList.remove('is-active'); });
+      checked.closest('.calmia-pack').classList.add('is-active');
+
+      var qty = parseInt(checked.getAttribute('data-qty'), 10) || 1;
+      var code = checked.getAttribute('data-code') || '';
+
+      if (qtyField) qtyField.value = qty;
+      if (returnField) returnField.value = checkoutPath(returnField, code);
+
+      document.querySelectorAll('[data-calmia-sticky-qty]').forEach(function (el) { el.value = qty; });
+      document.querySelectorAll('[data-calmia-sticky-return]').forEach(function (el) { el.value = checkoutPath(el, code); });
+
+      var d = packData(checked.getAttribute('data-calmia-pack'));
+      if (!d) return;
+      if (ctaPrice) ctaPrice.textContent = d.total;
+      if (saveEl) saveEl.textContent = d.save;
+      document.querySelectorAll('[data-calmia-sticky-price]').forEach(function (el) { el.textContent = d.total; });
+    }
+
+    packRadios.forEach(function (r) { r.addEventListener('change', applyPack); });
+
+    /* ---- Order bump ----
+       El formulario normal sigue funcionando tal cual. Solo cuando el extra
+       está marcado interceptamos el envío para meter las dos líneas de una vez;
+       si algo falla, se envía el formulario original sin el extra. */
+    var bump = root.querySelector('[data-calmia-bump]');
+    var form = root.querySelector('[data-calmia-form]');
+    if (bump && form) {
+      bump.closest('.calmia-bump').addEventListener('click', function () {
+        setTimeout(function () {
+          bump.closest('.calmia-bump').classList.toggle('is-on', bump.checked);
+        }, 0);
+      });
+      form.addEventListener('submit', function (e) {
+        if (!bump.checked) return;
+        e.preventDefault();
+        var mainId = parseInt(idField.value, 10);
+        var qty = parseInt(qtyField ? qtyField.value : '1', 10) || 1;
+        var dest = returnField ? returnField.value : '/cart';
+        fetch(window.Shopify && window.Shopify.routes ? window.Shopify.routes.root + 'cart/add.js' : '/cart/add.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({
+            items: [
+              { id: mainId, quantity: qty },
+              { id: parseInt(bump.value, 10), quantity: 1 }
+            ]
+          })
+        })
+          .then(function (r) { if (!r.ok) throw new Error('add failed'); return r.json(); })
+          .then(function () { window.location.href = dest; })
+          .catch(function () { bump.checked = false; form.submit(); });
+      });
+    }
+
+    /* ---- Stock real ----
+       Sale del inventario de Shopify, así que baja solo según vendes. */
+    var stockBox = root.querySelector('[data-calmia-stock]');
+    var stockThreshold = {{ section.settings.stock_threshold | default: 25 }};
+    function paintStock() {
+      if (!stockBox || !currentVariant) return;
+      var q = currentVariant.qty;
+      if (q === null || q === undefined || q <= 0 || q > stockThreshold) {
+        stockBox.hidden = true;
+        return;
+      }
+      stockBox.hidden = false;
+      var n = stockBox.querySelector('[data-calmia-stock-qty]');
+      var name = stockBox.querySelector('[data-calmia-stock-variant]');
+      var bar = stockBox.querySelector('[data-calmia-stock-bar]');
+      if (n) n.textContent = q;
+      if (name) name.textContent = currentVariant.title || '';
+      if (bar) bar.style.width = Math.max(8, Math.round(q * 100 / stockThreshold)) + '%';
+    }
+
+    /* ---- Corte de almacén ----
+       Cuenta atrás real hasta la hora de corte del día. Se reinicia sola cada
+       jornada porque el corte es un hecho, no una oferta que caduca. */
+    var cutoff = root.querySelector('[data-calmia-cutoff]');
+    if (cutoff) {
+      var tzRaw = cutoff.getAttribute('data-tz') || '+0000';
+      var cutHour = parseInt(cutoff.getAttribute('data-hour'), 10);
+      var onlyWeekdays = cutoff.getAttribute('data-weekdays') === 'true';
+      var days = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
+      var timeEl = cutoff.querySelector('[data-calmia-cutoff-time]');
+      var whenEl = cutoff.querySelector('[data-calmia-cutoff-when]');
+      var txtToday = {{ section.settings.cutoff_today | json }};
+      var txtOther = {{ section.settings.cutoff_other | json }};
+
+      function shopNow() {
+        var m = /^([+-])(\d{2})(\d{2})$/.exec(tzRaw);
+        var offMin = m ? (m[1] === '-' ? -1 : 1) * (parseInt(m[2], 10) * 60 + parseInt(m[3], 10)) : 0;
+        var now = new Date();
+        return new Date(now.getTime() + offMin * 60000 + now.getTimezoneOffset() * 60000);
+      }
+      function isWorkday(d) { return !onlyWeekdays || (d.getDay() !== 0 && d.getDay() !== 6); }
+
+      function tickCutoff() {
+        var now = shopNow();
+        var target = new Date(now);
+        target.setHours(cutHour, 0, 0, 0);
+        var shipsToday = now < target && isWorkday(now);
+        if (!shipsToday) {
+          do { target.setDate(target.getDate() + 1); } while (!isWorkday(target));
+        }
+        var left = target - now;
+        if (left < 0) return;
+        var mins = Math.floor(left / 60000);
+        var h = Math.floor(mins / 60);
+        var mm = mins % 60;
+        if (timeEl) timeEl.textContent = h > 0 ? h + ' h ' + mm + ' min' : mm + ' min';
+        if (whenEl) whenEl.textContent = shipsToday ? txtToday : txtOther.replace('[dia]', days[target.getDay()]);
+        cutoff.hidden = false;
+      }
+      tickCutoff();
+      setInterval(tickCutoff, 30000);
+    }
+
+    /* Estado inicial */
+    var startId = idField ? parseInt(idField.value, 10) : null;
+    data.variants.forEach(function (v) { if (v.id === startId) currentVariant = v; });
+    if (!currentVariant && data.variants.length) currentVariant = data.variants[0];
+    paintPacks();
+    applyPack();
+    paintStock();
+  })();
+</script>
+
+<style>
+  .calmia-hero { padding: 18px 0 46px; }
+  .calmia-hero__badges { display: flex; gap: 10px; align-items: center; margin: 0 0 16px; flex-wrap: wrap; }
+  .calmia-hero__grid { display: grid; grid-template-columns: 1fr; gap: 26px; }
+
+  .calmia-gallery__main {
+    position: relative;
+    border-radius: var(--cal-r-lg);
+    overflow: hidden;
+    background: #fff;
+    box-shadow: var(--cal-shadow);
+  }
+  .calmia-gallery__main img { width: 100%; height: auto; aspect-ratio: 1 / 1; object-fit: cover; }
+  .calmia-gallery__nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 0;
+    background: rgba(255, 255, 255, 0.82);
+    color: var(--cal-ink);
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+  }
+  .calmia-gallery__nav--prev { left: 10px; }
+  .calmia-gallery__nav--prev svg { transform: rotate(90deg); }
+  .calmia-gallery__nav--next { right: 10px; }
+  .calmia-gallery__nav--next svg { transform: rotate(-90deg); }
+
+  .calmia-gallery__thumbs {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-bottom: 4px;
+  }
+  .calmia-gallery__thumbs::-webkit-scrollbar { display: none; }
+  .calmia-gallery__thumb {
+    flex: 0 0 auto;
+    width: 74px;
+    height: 74px;
+    padding: 0;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 2px solid transparent;
+    background: #fff;
+    cursor: pointer;
+  }
+  .calmia-gallery__thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .calmia-gallery__thumb.is-active { border-color: var(--cal-pink-2); }
+
+  .calmia-rating { display: flex; align-items: center; gap: 9px; margin: 16px 0 0; font-size: clamp(15px, 4vw, 18px); }
+  .calmia-rating strong { font-weight: 700; }
+  .calmia-rating__dot { color: var(--cal-ink-3); }
+
+  .calmia-price { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; margin: 14px 0 0; }
+  .calmia-price__was { color: var(--cal-ink-3); font-size: clamp(17px, 4.4vw, 20px); }
+  .calmia-price__now {
+    font-family: var(--cal-serif);
+    font-weight: 700;
+    font-size: clamp(36px, 9vw, 54px);
+    line-height: 1;
+    color: var(--cal-pink);
+  }
+  .calmia-price__off {
+    border: 1px solid var(--cal-pink-3);
+    color: var(--cal-ink-2);
+    border-radius: 999px;
+    padding: 7px 16px;
+    font-size: 15px;
+    font-weight: 500;
+    background: #fff;
+  }
+  .calmia-save {
+    display: inline-block;
+    margin: 14px 0 0;
+    background: #eef4ef;
+    color: var(--cal-green);
+    border-radius: 14px;
+    padding: 12px 20px;
+    font-size: clamp(15px, 3.9vw, 17px);
+    font-weight: 600;
+  }
+  .calmia-save b { font-weight: 700; }
+
+  .calmia-usps { list-style: none; padding: 0; margin: 22px 0 0; }
+
+  .calmia-offer {
+    background: #fff;
+    border-radius: var(--cal-r-lg);
+    box-shadow: var(--cal-shadow);
+    padding: 18px;
+    margin: 22px 0 0;
+  }
+  .calmia-offer__stock {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    border: 1px solid var(--cal-pink-3);
+    color: var(--cal-pink);
+    background: #fff;
+    border-radius: 999px;
+    padding: 9px 20px;
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 14px;
+  }
+  .calmia-offer__dot { width: 9px; height: 9px; border-radius: 50%; background: var(--cal-pink); animation: calmiaPulse 1.6s infinite; }
+  @keyframes calmiaPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.25; } }
+
+  .calmia-gift { background: var(--cal-pink-4); border-radius: 18px; padding: 12px; }
+  .calmia-gift__row { display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: center; }
+  .calmia-gift__img { width: 62px; height: 62px; border-radius: 12px; object-fit: cover; }
+  .calmia-gift__qty { color: var(--cal-ink-3); font-size: 13px; font-weight: 600; }
+  .calmia-gift__title { font-size: 15px; font-weight: 600; margin: 2px 0 0; line-height: 1.3; }
+  .calmia-gift__price { text-align: right; }
+  .calmia-gift__free {
+    display: block;
+    background: var(--cal-pink);
+    color: #fff;
+    border-radius: 8px;
+    padding: 5px 12px;
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 0.04em;
+  }
+  .calmia-gift__price s { color: var(--cal-ink-3); font-size: 14px; display: block; margin-top: 4px; }
+  .calmia-gift__note { text-align: center; font-size: 13px; color: var(--cal-ink-2); margin: 10px 0 0; }
+
+  .calmia-plus { display: grid; place-items: center; margin: -12px 0 -10px; position: relative; z-index: 2; }
+  .calmia-plus span {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--cal-pink);
+    color: #fff;
+    display: grid;
+    place-items: center;
+    font-size: 19px;
+    line-height: 1;
+    box-shadow: 0 0 0 4px #fff;
+  }
+
+  .calmia-packs { display: grid; gap: 10px; margin: 0 0 14px; }
+  .calmia-packs__title {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--cal-ink-3);
+    margin: 0;
+  }
+  .calmia-pack {
+    position: relative;
+    display: grid;
+    grid-template-columns: 22px 1fr auto;
+    gap: 6px 12px;
+    align-items: center;
+    border: 1.5px solid var(--cal-line);
+    border-radius: 16px;
+    padding: 14px;
+    background: #fff;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+  }
+  .calmia-pack + .calmia-pack { margin-top: 2px; }
+  .calmia-pack input { position: absolute; opacity: 0; inset: 0; cursor: pointer; }
+  .calmia-pack__mark {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 2px solid var(--cal-pink-3);
+    position: relative;
+    display: block;
+  }
+  .calmia-pack.is-featured { border-color: var(--cal-pink-2); }
+  .calmia-pack.is-active {
+    border-color: var(--cal-pink);
+    background: var(--cal-pink-4);
+    box-shadow: 0 6px 18px rgba(212, 104, 127, 0.14);
+  }
+  .calmia-pack.is-active .calmia-pack__mark { border-color: var(--cal-pink); }
+  .calmia-pack.is-active .calmia-pack__mark::after {
+    content: '';
+    position: absolute;
+    inset: 3px;
+    border-radius: 50%;
+    background: var(--cal-pink);
+  }
+  .calmia-pack__body { display: grid; gap: 2px; min-width: 0; }
+  .calmia-pack__name { font-weight: 700; font-size: 16px; line-height: 1.2; }
+  .calmia-pack__note { font-size: 12.5px; color: var(--cal-ink-3); line-height: 1.3; }
+  .calmia-pack__unit { font-size: 12.5px; color: var(--cal-pink); }
+  .calmia-pack__unit b { font-weight: 700; }
+  .calmia-pack__prices { text-align: right; display: grid; gap: 1px; }
+  .calmia-pack__prices b { font-size: 18px; font-weight: 700; line-height: 1.1; }
+  .calmia-pack__prices s { font-size: 12.5px; color: var(--cal-ink-3); }
+  .calmia-pack__badge {
+    position: absolute;
+    top: -10px;
+    right: 12px;
+    background: var(--cal-pink);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    border-radius: 999px;
+    padding: 4px 10px;
+    white-space: nowrap;
+    box-shadow: 0 3px 10px rgba(212, 104, 127, 0.35);
+  }
+  .calmia-pack__save {
+    grid-column: 2 / -1;
+    justify-self: start;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--cal-green);
+    background: #eef4ef;
+    border-radius: 8px;
+    padding: 3px 9px;
+  }
+  .calmia-pack__save b { font-weight: 700; }
+
+  @media (max-width: 380px) {
+    .calmia-pack { padding: 12px 11px; grid-template-columns: 20px 1fr auto; gap: 5px 9px; }
+    .calmia-pack__mark { width: 20px; height: 20px; }
+    .calmia-pack__name { font-size: 14.5px; }
+    .calmia-pack__prices b { font-size: 16px; }
+    .calmia-pack__badge { font-size: 10px; padding: 3px 8px; right: 8px; }
+  }
+
+  .calmia-form { margin-top: 16px; }
+  .calmia-options { margin: 0 0 14px; }
+  .calmia-options__label { display: block; font-size: 14px; color: var(--cal-ink-2); margin-bottom: 8px; }
+  .calmia-options__label b { color: var(--cal-ink); font-weight: 600; }
+  .calmia-options__list { display: flex; gap: 8px; flex-wrap: wrap; }
+  .calmia-opt { position: relative; cursor: pointer; }
+  .calmia-opt input { position: absolute; opacity: 0; inset: 0; cursor: pointer; }
+  .calmia-opt span {
+    display: block;
+    border: 1.5px solid var(--cal-line);
+    border-radius: 12px;
+    padding: 10px 18px;
+    font-size: 15px;
+    background: #fff;
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+  .calmia-opt.is-active span { border-color: var(--cal-pink); background: var(--cal-pink-4); font-weight: 600; }
+
+  .calmia-bump {
+    display: grid;
+    grid-template-columns: 22px 1fr auto;
+    gap: 11px;
+    align-items: center;
+    border: 1.5px dashed var(--cal-pink-3);
+    border-radius: 14px;
+    padding: 12px 13px;
+    margin: 0 0 14px;
+    background: var(--cal-bg-2);
+    cursor: pointer;
+    position: relative;
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+  .calmia-bump input { position: absolute; opacity: 0; inset: 0; cursor: pointer; }
+  .calmia-bump__box {
+    width: 22px;
+    height: 22px;
+    border-radius: 7px;
+    border: 2px solid var(--cal-pink-3);
+    background: #fff;
+    display: grid;
+    place-items: center;
+    color: transparent;
+  }
+  .calmia-bump.is-on { border-style: solid; border-color: var(--cal-pink); background: var(--cal-pink-4); }
+  .calmia-bump.is-on .calmia-bump__box { background: var(--cal-pink); border-color: var(--cal-pink); color: #fff; }
+  .calmia-bump__body { display: grid; gap: 2px; min-width: 0; }
+  .calmia-bump__body b { font-size: 14.5px; font-weight: 700; line-height: 1.2; }
+  .calmia-bump__body span { font-size: 12.5px; color: var(--cal-ink-3); line-height: 1.3; }
+  .calmia-bump__price { font-size: 14.5px; font-weight: 700; color: var(--cal-pink); white-space: nowrap; }
+
+  .calmia-stock { margin: 0 0 14px; }
+  .calmia-stock__text { margin: 0 0 7px; font-size: 13.5px; color: var(--cal-ink-2); }
+  .calmia-stock__text b { color: var(--cal-pink); font-weight: 700; font-size: 15px; }
+  .calmia-stock__bar {
+    display: block;
+    height: 7px;
+    border-radius: 999px;
+    background: var(--cal-pink-4);
+    overflow: hidden;
+  }
+  .calmia-stock__bar i {
+    display: block;
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #eda4b3, #d4687f);
+    transition: width 0.4s ease;
+  }
+
+  .calmia-delivery {
+    display: grid;
+    grid-template-columns: 30px 1fr;
+    gap: 10px;
+    align-items: center;
+    margin: 14px 0 0;
+    background: #eef4ef;
+    border-radius: 12px;
+    padding: 11px 13px;
+  }
+  .calmia-delivery__icon { color: var(--cal-green); display: grid; place-items: center; }
+  .calmia-delivery__body { min-width: 0; }
+  .calmia-delivery p { margin: 0; font-size: 13.5px; color: #24593c; min-width: 0; }
+  .calmia-delivery b { font-weight: 700; }
+  .calmia-delivery__cutoff { margin-bottom: 2px !important; }
+  .calmia-delivery__cutoff b { font-variant-numeric: tabular-nums; }
+  .calmia-delivery__eta { opacity: 0.85; font-size: 12.5px !important; }
+
+  .calmia-quote { display: grid; grid-template-columns: auto auto 1fr; gap: 10px; align-items: center; margin: 16px 0 0; padding-top: 16px; border-top: 1px solid var(--cal-line); }
+  .calmia-quote__avatar { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; }
+  .calmia-quote__text { font-size: 13.5px; color: var(--cal-ink-2); line-height: 1.45; margin: 0; }
+  .calmia-quote__text span { color: var(--cal-ink-3); }
+
+  .calmia-trustline {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    color: var(--cal-ink-3);
+    font-size: 14px;
+    margin: 16px 0 0;
+    padding-top: 14px;
+    border-top: 1px solid var(--cal-line);
+    text-align: center;
+  }
+  .calmia-pay { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin: 14px 0 0; }
+  .calmia-pay__i {
+    border: 1px solid var(--cal-line);
+    border-radius: 10px;
+    padding: 6px 10px;
+    background: #fff;
+    display: grid;
+    place-items: center;
+    height: 40px;
+  }
+  .calmia-pay__i svg { height: 22px; width: auto; }
+
+  .calmia-acc { margin: 26px 0 0; }
+  .calmia-acc__item { border-bottom: 1px solid var(--cal-line); }
+  .calmia-acc__item summary {
+    list-style: none;
+    display: grid;
+    grid-template-columns: 48px 1fr 24px;
+    gap: 14px;
+    align-items: center;
+    padding: 18px 0;
+    cursor: pointer;
+  }
+  .calmia-acc__item summary::-webkit-details-marker { display: none; }
+  .calmia-acc__icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--cal-pink-4);
+    color: var(--cal-pink);
+    display: grid;
+    place-items: center;
+  }
+  .calmia-acc__title { font-size: clamp(16px, 4.2vw, 19px); font-weight: 600; }
+  .calmia-acc__chev { color: var(--cal-ink-3); transition: transform 0.2s ease; }
+  .calmia-acc__item[open] .calmia-acc__chev { transform: rotate(180deg); }
+  .calmia-acc__body { padding: 0 0 18px 62px; color: var(--cal-ink-2); font-size: 15px; }
+
+  .calmia-social {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: rgba(255, 255, 255, 0.55);
+    border: 1px solid var(--cal-pink-3);
+    border-radius: 18px;
+    padding: 14px 16px;
+    margin: 24px 0 0;
+  }
+  .calmia-social__avatars { display: flex; }
+  .calmia-social__avatars img {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #fff;
+    margin-left: -12px;
+  }
+  .calmia-social__avatars img:first-child { margin-left: 0; }
+  .calmia-social p { font-size: 14.5px; color: var(--cal-ink-2); margin: 0; }
+
+  @media (min-width: 990px) {
+    .calmia-hero { padding: 26px 0 64px; }
+    .calmia-hero__grid { grid-template-columns: 1.05fr 1fr; gap: 46px; align-items: start; }
+    .calmia-gallery { position: sticky; top: 24px; }
+    .calmia-offer { padding: 24px; }
+    .calmia-gift__img { width: 72px; height: 72px; }
+  }
+</style>
+
+{%- if section.settings.show_schema -%}
+  {% render 'calmia-schema', p: p, cv: cv, with_rating: section.settings.schema_rating, rating: rating_display, rating_count: rating_count %}
+{%- endif -%}
+
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Calmia · Hero producto",
+  "tag": "section",
+  "class": "calmia-section",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Producto (vacío = el de la página)" },
+    { "type": "header", "content": "Cabecera" },
+    { "type": "text", "id": "badge_left", "label": "Etiqueta izquierda", "default": "OFERTA DE LANZAMIENTO" },
+    { "type": "checkbox", "id": "show_discount_badge", "label": "Mostrar etiqueta de descuento", "default": true },
+    { "type": "text", "id": "eyebrow", "label": "Antetítulo", "default": "WAISTZEN · RELIEFPATH™" },
+    { "type": "text", "id": "heading", "label": "Titular", "default": "Adiós a la tensión muscular" },
+    { "type": "text", "id": "heading_italic", "label": "Titular en cursiva (2ª línea)", "default": "en 10 minutos" },
+    { "type": "textarea", "id": "subheading", "label": "Descripción corta", "default": "Succión regulable, calor y luz roja de 650 nm en un solo aparato inalámbrico. Sin pastillas, sin cables, sin depender de nadie." },
+    { "type": "header", "content": "Valoraciones" },
+    { "type": "checkbox", "id": "show_rating", "label": "Mostrar valoración", "default": true },
+    { "type": "checkbox", "id": "rating_from_metafield", "label": "Usar la valoración real del producto", "default": true },
+    { "type": "text", "id": "rating", "label": "Valoración manual", "default": "4.8" },
+    { "type": "text", "id": "rating_count", "label": "Nº de reseñas manual", "default": "94" },
+    { "type": "header", "content": "Precio" },
+    { "type": "checkbox", "id": "show_savings", "label": "Mostrar cuánto ahorra", "default": true },
+    { "type": "text", "id": "savings_label", "label": "Texto antes del ahorro", "default": "Ahorras" },
+    { "type": "text", "id": "savings_suffix", "label": "Texto después del ahorro", "default": "hoy" },
+    { "type": "header", "content": "Galería" },
+    {
+      "type": "select",
+      "id": "gallery_source",
+      "label": "Qué imágenes muestra",
+      "options": [
+        { "value": "media", "label": "Las fotos del producto" },
+        { "value": "blocks", "label": "Las que yo elija (bloques Imagen)" }
+      ],
+      "default": "media",
+      "info": "Con \"las que yo elija\" añades bloques Imagen abajo y la galería usa solo esas."
+    },
+    { "type": "header", "content": "Packs / cantidad" },
+    { "type": "text", "id": "packs_title", "label": "Título del selector", "default": "Elige tu pack" },
+    { "type": "text", "id": "per_unit_label", "label": "Texto tras el precio por unidad", "default": "por unidad" },
+    { "type": "text", "id": "pack_save_label", "label": "Texto antes del ahorro del pack", "default": "Ahorras" },
+    { "type": "header", "content": "Tarjeta de compra" },
+    { "type": "text", "id": "stock_label", "label": "Aviso de stock", "default": "Casi agotado" },
+    { "type": "image_picker", "id": "gift_image", "label": "Imagen del regalo" },
+    { "type": "text", "id": "gift_title", "label": "Regalo incluido", "default": "Guía de Recuperación — Protocolo de 4 semanas en PDF" },
+    { "type": "text", "id": "gift_value", "label": "Valor tachado del regalo", "default": "9,95 €" },
+    { "type": "text", "id": "gift_note", "label": "Nota del regalo", "default": "Regalo incluido en tu pedido" },
+    { "type": "text", "id": "cta_text", "label": "Texto del botón", "default": "Comprar ahora" },
+    {
+      "type": "select",
+      "id": "cta_target",
+      "label": "Al pulsar el botón",
+      "options": [
+        { "value": "checkout", "label": "Ir directo al pago" },
+        { "value": "cart", "label": "Ir al carrito" },
+        { "value": "default", "label": "Comportamiento del tema" }
+      ],
+      "default": "checkout"
+    },
+    { "type": "text", "id": "soldout_text", "label": "Texto si está agotado", "default": "Agotado" },
+    { "type": "header", "content": "Unidades disponibles" },
+    { "type": "checkbox", "id": "show_stock", "label": "Mostrar stock real", "default": true, "info": "Sale del inventario de Shopify: baja solo según vendes y se oculta si el stock sube del umbral." },
+    { "type": "range", "id": "stock_threshold", "label": "Mostrar solo si quedan menos de", "min": 5, "max": 100, "step": 5, "unit": "u", "default": 25 },
+    { "type": "text", "id": "stock_prefix", "label": "Texto antes del número", "default": "Quedan" },
+    { "type": "text", "id": "stock_suffix", "label": "Texto después del número", "default": "unidades en" },
+    { "type": "header", "content": "Fecha de entrega" },
+    { "type": "checkbox", "id": "show_delivery", "label": "Mostrar fecha estimada", "default": true },
+    { "type": "text", "id": "delivery_text", "label": "Texto", "default": "Pídelo hoy y te llega entre el" },
+    { "type": "range", "id": "delivery_min", "label": "Días mínimos", "min": 1, "max": 30, "step": 1, "unit": "d", "default": 6 },
+    { "type": "range", "id": "delivery_max", "label": "Días máximos", "min": 2, "max": 45, "step": 1, "unit": "d", "default": 12 },
+    { "type": "header", "content": "Cuenta atrás del almacén" },
+    { "type": "checkbox", "id": "show_cutoff", "label": "Mostrar cuenta atrás", "default": true, "info": "Cuenta hasta la hora a la que dejas de preparar pedidos. Se reinicia sola cada día porque el corte es real." },
+    { "type": "range", "id": "cutoff_hour", "label": "Hora de corte", "min": 8, "max": 22, "step": 1, "unit": "h", "default": 14 },
+    { "type": "checkbox", "id": "cutoff_weekdays", "label": "Solo días laborables", "default": true },
+    { "type": "text", "id": "cutoff_prefix", "label": "Texto inicial", "default": "Pídelo en" },
+    { "type": "text", "id": "cutoff_today", "label": "Si sale hoy", "default": "y sale hoy mismo" },
+    { "type": "text", "id": "cutoff_other", "label": "Si sale otro día", "default": "y sale el [dia]" },
+    { "type": "header", "content": "Extra opcional (order bump)" },
+    { "type": "product", "id": "bump_product", "label": "Producto extra", "info": "Aparece como casilla encima del botón. Se añade al carrito junto al principal." },
+    { "type": "text", "id": "bump_title", "label": "Título del extra", "default": "Protección de envío" },
+    { "type": "text", "id": "bump_text", "label": "Descripción del extra", "default": "Cubre daños, pérdida o robo durante el transporte" },
+    { "type": "header", "content": "SEO" },
+    { "type": "checkbox", "id": "show_schema", "label": "Datos estructurados de producto", "default": true },
+    { "type": "checkbox", "id": "schema_rating", "label": "Incluir la valoración en los datos estructurados", "default": false, "info": "Actívalo solo si las reseñas son reales y verificables. Google penaliza el marcado de reseñas inventadas." },
+    { "type": "image_picker", "id": "quote_avatar", "label": "Avatar de la reseña" },
+    { "type": "textarea", "id": "quote", "label": "Mini reseña", "default": "Llevaba meses con el cuello cargado. Diez minutos por la noche y me levanto sin esa presión." },
+    { "type": "text", "id": "quote_author", "label": "Autor de la mini reseña", "default": "Marta R." },
+    { "type": "text", "id": "trust_line", "label": "Línea de confianza", "default": "Pago 100% seguro · Envío gratis · Garantía 30 días" },
+    { "type": "checkbox", "id": "show_payment_icons", "label": "Mostrar iconos de pago", "default": true },
+    { "type": "header", "content": "Prueba social" },
+    { "type": "text", "id": "social_text", "label": "Texto", "default": "+1.500 personas ya alivian su tensión con ReliefPath™" },
+    { "type": "image_picker", "id": "avatar_1", "label": "Avatar 1" },
+    { "type": "image_picker", "id": "avatar_2", "label": "Avatar 2" },
+    { "type": "image_picker", "id": "avatar_3", "label": "Avatar 3" },
+    { "type": "image_picker", "id": "avatar_4", "label": "Avatar 4" },
+    { "type": "header", "content": "Fondo" },
+    { "type": "color", "id": "bg_top", "label": "Color superior", "default": "#fceaee" },
+    { "type": "color", "id": "bg_bottom", "label": "Color inferior", "default": "#fdf1f3" }
+  ],
+  "blocks": [
+    {
+      "type": "gallery",
+      "name": "Imagen de galería",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Imagen", "info": "Usa imágenes cuadradas (1:1) para que la galería quede uniforme." }
+      ]
+    },
+    {
+      "type": "pack",
+      "name": "Pack",
+      "settings": [
+        { "type": "text", "id": "name", "label": "Nombre", "default": "1 unidad" },
+        { "type": "text", "id": "note", "label": "Nota", "default": "Para empezar" },
+        { "type": "range", "id": "quantity", "label": "Unidades", "min": 1, "max": 6, "step": 1, "default": 1 },
+        {
+          "type": "range",
+          "id": "discount",
+          "label": "Descuento extra del pack",
+          "min": 0,
+          "max": 50,
+          "step": 5,
+          "unit": "%",
+          "default": 0,
+          "info": "Debe coincidir con un descuento automático por cantidad en Shopify, o con el código de abajo. Si no, el precio del checkout no cuadrará."
+        },
+        { "type": "text", "id": "badge", "label": "Etiqueta superior" },
+        { "type": "checkbox", "id": "highlight", "label": "Resaltar", "default": false },
+        { "type": "checkbox", "id": "preselected", "label": "Preseleccionado", "default": false },
+        { "type": "text", "id": "discount_code", "label": "Código de descuento (opcional)", "info": "Si lo rellenas, el botón lleva al checkout con el código ya aplicado. Déjalo vacío si usas descuentos automáticos." }
+      ]
+    },
+    {
+      "type": "usp",
+      "name": "Beneficio (check)",
+      "settings": [
+        { "type": "inline_richtext", "id": "text", "label": "Texto", "default": "Alivio en 10 minutos — solo colócalo y listo" }
+      ]
+    },
+    {
+      "type": "accordion",
+      "name": "Desplegable",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icono",
+          "options": [
+            { "value": "shield", "label": "Escudo" },
+            { "value": "truck", "label": "Envío" },
+            { "value": "gift", "label": "Regalo" },
+            { "value": "clock", "label": "Reloj" },
+            { "value": "chat", "label": "Chat" },
+            { "value": "spark", "label": "Destello" }
+          ],
+          "default": "shield"
+        },
+        { "type": "text", "id": "title", "label": "Título", "default": "30 Días de Garantía" },
+        { "type": "richtext", "id": "content", "label": "Contenido", "default": "<p>Pruébalo en casa 30 días. Si no es para ti, te devolvemos el importe íntegro.</p>" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Calmia · Hero producto",
+      "blocks": [
+        { "type": "pack" },
+        { "type": "pack" },
+        { "type": "pack" },
+        { "type": "usp" },
+        { "type": "usp" },
+        { "type": "usp" },
+        { "type": "accordion" },
+        { "type": "accordion" },
+        { "type": "accordion" }
+      ]
+    }
+  ]
+}
+{% endschema %}

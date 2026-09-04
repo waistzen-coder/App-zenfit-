@@ -64,6 +64,17 @@
   endif
   assign cv = p.selected_or_first_available_variant
 
+  comment
+    Precio tachado. Se toma del precio comparativo de la variante, el mismo que
+    enseña el hero arriba, para que las dos cajas cuenten la misma historia: si
+    arriba pone 99,95 tachado, aquí un pack de 2 tiene que tachar 199,90 y no
+    99,90. Si el producto no tiene precio comparativo, no se tacha nada.
+  endcomment
+  assign base_unit = cv.price
+  if cv.compare_at_price > cv.price
+    assign base_unit = cv.compare_at_price
+  endif
+
   assign fee_p = section.settings.fee_product
   assign fee_v = fee_p.selected_or_first_available_variant
   assign fee = 0
@@ -122,6 +133,7 @@
                 assign cut = gross | times: block.settings.discount_pct | divided_by: 100.0 | round
                 assign net = gross | minus: cut
                 assign unit = net | divided_by: q
+                assign cross = base_unit | times: q
               -%}
               <label
                 class="calmia-cod__pack{% if forloop.first %} is-on{% endif %}{% if block.settings.highlight %} calmia-cod__pack--hot{% endif %}"
@@ -137,7 +149,7 @@
                 </span>
                 <span class="calmia-cod__packprice">
                   <b>{{ net | money }}</b>
-                  {%- if cut > 0 -%}<s>{{ gross | money }}</s>{%- endif -%}
+                  {%- if cross > net -%}<s>{{ cross | money }}</s>{%- endif -%}
                   <i>{{ unit | money }}{{ section.settings.per_unit_suffix }}</i>
                 </span>
               </label>

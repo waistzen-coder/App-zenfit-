@@ -1,0 +1,1208 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "hero": {
+      "type": "calmia-product-hero",
+      "blocks": {
+        "g1": {
+          "type": "gallery",
+          "settings": {
+            "image": "shopify://shop_images/reliefpath-alivio-recuperacion.png"
+          }
+        },
+        "g2": {
+          "type": "gallery",
+          "settings": {
+            "image": "shopify://shop_images/rp-espalda-uso.png"
+          }
+        },
+        "g3": {
+          "type": "gallery",
+          "settings": {
+            "image": "shopify://shop_images/rp-luz-roja-detalle.png"
+          }
+        },
+        "g4": {
+          "type": "gallery",
+          "settings": {
+            "image": "shopify://shop_images/rp-tecnologia.png"
+          }
+        },
+        "g5": {
+          "type": "gallery",
+          "settings": {
+            "image": "shopify://shop_images/rp-zonas-tension.png"
+          }
+        },
+        "g6": {
+          "type": "gallery",
+          "settings": {
+            "image": "shopify://shop_images/rp-niveles-calor.png"
+          }
+        },
+        "g7": {
+          "type": "gallery",
+          "settings": {
+            "image": "shopify://shop_images/rp-ritual-10-min.png"
+          }
+        },
+        "g8": {
+          "type": "gallery",
+          "settings": {
+            "image": "shopify://shop_images/rp-bodegon-toalla.png"
+          }
+        },
+        "u1": {
+          "type": "usp",
+          "settings": {
+            "text": "<strong>Codo, hombro y gemelos</strong> — donde el pádel pasa factura"
+          }
+        },
+        "u2": {
+          "type": "usp",
+          "settings": {
+            "text": "<strong>10 minutos en el sofá</strong>, no una hora de camilla"
+          }
+        },
+        "u3": {
+          "type": "usp",
+          "settings": {
+            "text": "Inalámbrico: <strong>cabe en la bolsa de paletas</strong>"
+          }
+        },
+        "a1": {
+          "type": "accordion",
+          "settings": {
+            "icon": "shield",
+            "title": "30 Días de Garantía",
+            "content": "<p>Pruébalo en casa durante 30 días desde que lo recibes. Si no es para ti, nos escribes a waistzen@gmail.com, te mandamos la etiqueta de envío y te devolvemos el importe íntegro.</p><p>Los 14 primeros días son tu derecho de desistimiento: puedes abrirlo y probarlo sin perder la devolución. Del día 15 al 30 te pedimos que vuelva completo y en su embalaje.</p>"
+          }
+        },
+        "a2": {
+          "type": "accordion",
+          "settings": {
+            "icon": "truck",
+            "title": "Envío en 24-48 h y gratis",
+            "content": "<p>Sale hoy de nuestro almacén en España y lo tienes en casa en 24-48 horas, con número de seguimiento. El envío es gratis.</p><p>Y si lo prefieres, lo pagas al repartidor cuando te lo entregue.</p>"
+          }
+        },
+        "a3": {
+          "type": "accordion",
+          "settings": {
+            "icon": "gift",
+            "title": "¿Qué incluye la caja?",
+            "content": "<p><strong>El aparato ReliefPath™</strong> — succión regulable en 12 niveles, calor en 12 niveles hasta 50 °C y luz roja. Inalámbrico y recargable por USB, mide 18 × 9 × 13,5 cm.</p><p><strong>Cable de carga y manual de instrucciones.</strong> Se apaga solo a los 20 minutos, así que no pasa nada si te duermes con él puesto.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "g1",
+        "g2",
+        "g3",
+        "g4",
+        "g5",
+        "g6",
+        "g7",
+        "g8",
+        "u1",
+        "u2",
+        "u3",
+        "a1",
+        "a2",
+        "a3"
+      ],
+      "settings": {
+        "product": "juego-de-ventosa-electrica-con-cable",
+        "badge_left": "PARA EL PÁDEL DE LOS JUEVES",
+        "show_discount_badge": true,
+        "eyebrow": "RECUPERACIÓN MUSCULAR EN CASA",
+        "heading": "Que no tengan que",
+        "heading_italic": "buscarte sustituto",
+        "subheading": "Succión, calor y luz roja en el mismo aparato. Diez minutos al llegar de la pista.",
+        "show_rating": false,
+        "rating_from_metafield": true,
+        "rating": "4.8",
+        "rating_count": "94",
+        "show_savings": true,
+        "savings_label": "Ahorras",
+        "savings_suffix": "hoy",
+        "gallery_source": "blocks",
+        "packs_title": "Elige tu pack",
+        "per_unit_label": "por unidad",
+        "pack_save_label": "Ahorras",
+        "stock_label": "En stock · sale hoy de nuestro almacén en España",
+        "gift_image": "",
+        "gift_title": "",
+        "gift_value": "",
+        "gift_note": "",
+        "cta_text": "Comprar ahora",
+        "cta_target": "checkout",
+        "soldout_text": "Agotado",
+        "bump_product": "proteccion-de-envio",
+        "bump_title": "Protección de envío",
+        "bump_text": "Cubre daños, pérdida o robo durante el transporte",
+        "show_delivery": true,
+        "delivery_text": "Pídelo hoy y te llega entre el",
+        "delivery_min": 1,
+        "delivery_max": 2,
+        "show_schema": true,
+        "schema_rating": false,
+        "quote_avatar": "",
+        "quote": "",
+        "quote_author": "",
+        "trust_line": "Pagas al recibirlo · Envío en 24-48 h · 30 días",
+        "show_payment_icons": true,
+        "social_text": "Contrareembolso · Envío en 24-48 h · Te contesta una persona",
+        "avatar_1": "shopify://shop_images/review_avatar_2.jpg",
+        "avatar_2": "shopify://shop_images/review_avatar_3.jpg",
+        "avatar_3": "shopify://shop_images/review_avatar_4.jpg",
+        "avatar_4": "shopify://shop_images/review_avatar_5.jpg",
+        "bg_top": "#fceaee",
+        "bg_bottom": "#fdf1f3",
+        "cutoff_today": "y sale hoy mismo"
+      }
+    },
+    "contrareembolso": {
+      "type": "calmia-cod",
+      "blocks": {
+        "pk1": {
+          "type": "pack",
+          "settings": {
+            "qty": 1,
+            "discount_pct": 0,
+            "label": "1 unidad",
+            "sublabel": "Para ti",
+            "badge": "",
+            "highlight": false
+          }
+        },
+        "pk2": {
+          "type": "pack",
+          "settings": {
+            "qty": 2,
+            "discount_pct": 20,
+            "label": "2 unidades",
+            "sublabel": "Uno para ti y otro para tu pareja de pista",
+            "badge": "RECOMENDADO",
+            "highlight": true
+          }
+        },
+        "pk3": {
+          "type": "pack",
+          "settings": {
+            "qty": 3,
+            "discount_pct": 30,
+            "label": "3 unidades",
+            "sublabel": "Para el grupo del jueves",
+            "badge": "MEJOR PRECIO POR UNIDAD",
+            "highlight": false
+          }
+        },
+        "c1": {
+          "type": "point",
+          "settings": {
+            "icon": "truck",
+            "title": "Pagas al repartidor",
+            "text": "En efectivo o con tarjeta, en la puerta de tu casa."
+          }
+        },
+        "c2": {
+          "type": "point",
+          "settings": {
+            "icon": "clock",
+            "title": "En 24-48 horas",
+            "text": "Sale hoy de nuestro almacén en España, con número de seguimiento."
+          }
+        },
+        "c3": {
+          "type": "point",
+          "settings": {
+            "icon": "shield",
+            "title": "No adelantas nada",
+            "text": "Si el paquete no llega, no has pagado un euro."
+          }
+        }
+      },
+      "block_order": [
+        "pk1",
+        "pk2",
+        "pk3",
+        "c1",
+        "c2",
+        "c3"
+      ],
+      "settings": {
+        "product": "juego-de-ventosa-electrica-con-cable",
+        "fee_product": "contrareembolso-gastos-de-gestion",
+        "eyebrow": "",
+        "heading": "Elige tu pack y",
+        "heading_italic": "cómo quieres pagarlo",
+        "subheading": "Con tarjeta ahora, o en efectivo al repartidor cuando ya lo tengas en la puerta. Tú decides.",
+        "eta_text": "Lo tienes entre el",
+        "delivery_min": 1,
+        "delivery_max": 2,
+        "hide_hero_offer": true,
+        "bg": "#fdf1f3"
+      }
+    },
+    "garantia": {
+      "type": "calmia-guarantee",
+      "blocks": {
+        "g1": {
+          "type": "item",
+          "settings": {
+            "text": "<strong>30 días</strong> para probarlo en casa"
+          }
+        },
+        "g2": {
+          "type": "item",
+          "settings": {
+            "text": "<strong>Devolución íntegra</strong> sin preguntas"
+          }
+        },
+        "g3": {
+          "type": "item",
+          "settings": {
+            "text": "<strong>Envío gratis</strong> en la devolución"
+          }
+        },
+        "g4": {
+          "type": "item",
+          "settings": {
+            "text": "Te respondemos en <strong>menos de 24 h</strong>"
+          }
+        }
+      },
+      "block_order": [
+        "g1",
+        "g2",
+        "g3",
+        "g4"
+      ],
+      "settings": {
+        "heading": "Compra sin",
+        "heading_italic": "ningún riesgo",
+        "subheading": "Si no notas la diferencia, no te lo quedas. Así de simple.",
+        "footnote": "Escríbenos a waistzen@gmail.com y lo resolvemos.",
+        "bg": "#fdf1f3"
+      }
+    },
+    "problemas": {
+      "type": "calmia-problems",
+      "blocks": {
+        "p1": {
+          "type": "item",
+          "settings": {
+            "image": "shopify://shop_images/rp-espalda-uso.png",
+            "caption": "<strong>El viernes</strong> no levantas el brazo."
+          }
+        },
+        "p2": {
+          "type": "item",
+          "settings": {
+            "image": "shopify://shop_images/reliefpath-alivio-recuperacion.png",
+            "caption": "El <strong>codo de pádel</strong> lleva meses ahí."
+          }
+        },
+        "p3": {
+          "type": "item",
+          "settings": {
+            "image": "shopify://shop_images/rp-bodegon-toalla.png",
+            "caption": "Fisio: <strong>50 € y cita en dos semanas</strong>."
+          }
+        },
+        "p4": {
+          "type": "item",
+          "settings": {
+            "image": "shopify://shop_images/rp-zonas-tension.png",
+            "caption": "<strong>Dejas de ir</strong> y el grupo sigue sin ti."
+          }
+        }
+      },
+      "block_order": [
+        "p1",
+        "p2",
+        "p3",
+        "p4"
+      ],
+      "settings": {
+        "heading": "¿Te suena",
+        "heading_italic": "esto",
+        "heading_end": "?",
+        "subheading": "",
+        "closing": "<p>El pádel es el <strong>sexto deporte con más lesionados de España</strong>, y casi todas son por sobrecarga en amateurs de 35 a 55 años que juegan sin preparación específica.</p>",
+        "bg": "#fdf1f3"
+      }
+    },
+    "comparativa": {
+      "type": "calmia-compare",
+      "blocks": {
+        "r1": {
+          "type": "row",
+          "settings": {
+            "feature": "Lo usas al salir de la pista",
+            "us": "yes",
+            "us_text": "",
+            "b": "no",
+            "b_text": "",
+            "c": "yes",
+            "c_text": ""
+          }
+        },
+        "r2": {
+          "type": "row",
+          "settings": {
+            "feature": "Sin cita ni desplazamiento",
+            "us": "yes",
+            "us_text": "",
+            "b": "no",
+            "b_text": "",
+            "c": "yes",
+            "c_text": ""
+          }
+        },
+        "r3": {
+          "type": "row",
+          "settings": {
+            "feature": "Coste",
+            "us": "text",
+            "us_text": "Pago único",
+            "b": "text",
+            "b_text": "40-60 € / sesión",
+            "c": "text",
+            "c_text": "Cada vez"
+          }
+        },
+        "r4": {
+          "type": "row",
+          "settings": {
+            "feature": "Trabaja la zona, no solo el síntoma",
+            "us": "yes",
+            "us_text": "",
+            "b": "yes",
+            "b_text": "",
+            "c": "no",
+            "c_text": ""
+          }
+        },
+        "r5": {
+          "type": "row",
+          "settings": {
+            "feature": "Lo tienes a las 23:00 de un martes",
+            "us": "yes",
+            "us_text": "",
+            "b": "no",
+            "b_text": "",
+            "c": "yes",
+            "c_text": ""
+          }
+        },
+        "r6": {
+          "type": "row",
+          "settings": {
+            "feature": "Pagas cuando lo tienes en la mano",
+            "us": "yes",
+            "us_text": "",
+            "b": "no",
+            "b_text": "",
+            "c": "no",
+            "c_text": ""
+          }
+        }
+      },
+      "block_order": [
+        "r1",
+        "r2",
+        "r3",
+        "r4",
+        "r5",
+        "r6"
+      ],
+      "settings": {
+        "heading": "Frente a lo que",
+        "heading_italic": "haces ahora",
+        "subheading": "Las tres opciones cuando sales cargado de la pista.",
+        "col_us": "ReliefPath™",
+        "col_b": "Fisio",
+        "col_c": "Antiinflamatorios",
+        "bg": "#fff4f6"
+      }
+    },
+    "valor": {
+      "type": "calmia-worth",
+      "blocks": {
+        "n1": {
+          "type": "figure",
+          "settings": {
+            "source": "price",
+            "value": "49,95 €",
+            "label": "Pago único"
+          }
+        },
+        "n2": {
+          "type": "figure",
+          "settings": {
+            "source": "per_use",
+            "value": "0,25 €",
+            "label": "Por sesión el primer año"
+          }
+        },
+        "n3": {
+          "type": "figure",
+          "settings": {
+            "source": "manual",
+            "value": "3 años",
+            "label": "De garantía legal"
+          }
+        },
+        "w1": {
+          "type": "point",
+          "settings": {
+            "icon": "spark",
+            "title": "Tres aparatos en uno",
+            "text": "Una ventosa eléctrica, una manta térmica y una lámpara de luz roja se venden por separado. Aquí van en la misma carcasa y con la misma batería."
+          }
+        },
+        "w2": {
+          "type": "point",
+          "settings": {
+            "icon": "heart",
+            "title": "Lo que vale una sesión de fisio",
+            "text": "Una sesión privada en España va de 40 a 60 €. Esto cuesta lo mismo una sola vez, y lo usas cada vez que sales de la pista."
+          }
+        },
+        "w3": {
+          "type": "point",
+          "settings": {
+            "icon": "shield",
+            "title": "Tres años de garantía legal",
+            "text": "No es un sello que nos hayamos inventado: en España la ley da tres años de garantía en los productos comprados desde 2022. Si falla, respondemos nosotros."
+          }
+        },
+        "w4": {
+          "type": "point",
+          "settings": {
+            "icon": "refresh",
+            "title": "Sin recambios y sin cuotas",
+            "text": "No lleva consumibles, ni gel, ni cartuchos, ni suscripción. Se carga por USB y no te vuelve a pedir dinero."
+          }
+        }
+      },
+      "block_order": [
+        "n1",
+        "n2",
+        "n3",
+        "w1",
+        "w2",
+        "w3",
+        "w4"
+      ],
+      "settings": {
+        "product": "juego-de-ventosa-electrica-con-cable",
+        "eyebrow": "EL PRECIO",
+        "heading": "Por qué cuesta",
+        "heading_italic": "lo que cuesta",
+        "subheading": "Sin rodeos: esto es lo que hay dentro del precio y con qué lo puedes comparar.",
+        "sessions": 200,
+        "closing": "Si lo usas cuatro veces por semana, el primer año sale a menos de treinta céntimos la sesión. El segundo año ya no cuesta nada.",
+        "cta_text": "Ver los packs",
+        "cta_link": "#shopify-section-contrareembolso",
+        "bg": "#fdf1f3"
+      }
+    },
+    "resenas": {
+      "type": "calmia-reviews",
+      "blocks": {
+        "v1": {
+          "type": "review",
+          "settings": {
+            "avatar": "shopify://shop_images/review_avatar_2.jpg",
+            "name": "Marta, 34 años",
+            "text": "Trabajo delante del ordenador y terminaba con el cuello bloqueado. Diez minutos por la noche y noto la diferencia.",
+            "verified": true
+          }
+        },
+        "v2": {
+          "type": "review",
+          "settings": {
+            "avatar": "shopify://shop_images/review_avatar_3.jpg",
+            "name": "Javier, 41 años",
+            "text": "Después de entrenar lo paso por gemelos y lumbares. Me ha ahorrado bastantes visitas al fisio.",
+            "verified": true
+          }
+        },
+        "v3": {
+          "type": "review",
+          "settings": {
+            "avatar": "shopify://shop_images/review_avatar_4.jpg",
+            "name": "Elena, 29 años",
+            "text": "Pensé que sería otro aparato para el cajón. Llevo tres semanas usándolo cada noche.",
+            "verified": true
+          }
+        }
+      },
+      "block_order": [
+        "v1",
+        "v2",
+        "v3"
+      ],
+      "settings": {
+        "heading": "Lo que dicen",
+        "heading_italic": "nuestros clientes",
+        "rating": "4.8",
+        "rating_count": "94",
+        "reviews_word": "reseñas",
+        "bg": "#fff4f6"
+      },
+      "disabled": true
+    },
+    "faq": {
+      "type": "calmia-faq",
+      "blocks": {
+        "q1": {
+          "type": "faq",
+          "settings": {
+            "question": "¿Me sirve para el codo de pádel?",
+            "answer": "<p>La epicondilitis es un problema de tendón y necesita diagnóstico: si llevas meses con dolor, ve al fisio. Lo que hace ReliefPath™ es trabajar la musculatura del antebrazo que tira de ese tendón, con succión, calor y luz roja sobre la zona cargada.</p>"
+          }
+        },
+        "q2": {
+          "type": "faq",
+          "settings": {
+            "question": "¿Antes o después de jugar?",
+            "answer": "<p>Después. Antes de un partido conviene calentar en movimiento, no relajar la musculatura.</p>"
+          }
+        },
+        "q3": {
+          "type": "faq",
+          "settings": {
+            "question": "¿Se me van a quedar marcas?",
+            "answer": "<p>Puede salir un enrojecimiento circular temporal por el aumento de circulación. Suele irse en 30-60 minutos; con succión alta puede durar más. Si juegas al día siguiente en camiseta de tirantes, baja la intensidad.</p>"
+          }
+        },
+        "q4": {
+          "type": "faq",
+          "settings": {
+            "question": "¿Con qué frecuencia lo uso?",
+            "answer": "<p>Semanas 1 y 2: en días alternos, de 8 a 15 minutos.</p><p>A partir de la semana 3: cuatro o cinco días por semana, de 15 a 20 minutos.</p>"
+          }
+        },
+        "q5": {
+          "type": "faq",
+          "settings": {
+            "question": "¿Cuánto tarda en llegar?",
+            "answer": "<p>En 24-48 horas. Sale hoy de nuestro almacén en España y el envío es gratis, con número de seguimiento desde que sale.</p>"
+          }
+        },
+        "q6": {
+          "type": "faq",
+          "settings": {
+            "question": "¿Y si al final no es para mí?",
+            "answer": "<p>Tienes 30 días desde que lo recibes. Nos escribes a waistzen@gmail.com, te mandamos la etiqueta de envío y te devolvemos el importe.</p>"
+          }
+        },
+        "q7": {
+          "type": "faq",
+          "settings": {
+            "question": "¿Duele la succión?",
+            "answer": "<p>No. La sensación es de tirón, como si te agarrasen la piel hacia arriba, no de pinchazo. Y la intensidad la pones tú: empieza por el modo suave y sube solo hasta donde te resulte cómodo.</p><p>Si en algún momento duele, es que va demasiado fuerte. Baja un nivel.</p>"
+          }
+        },
+        "q8": {
+          "type": "faq",
+          "settings": {
+            "question": "¿Puedo usarlo en el cuello o en las lumbares?",
+            "answer": "<p>En las lumbares sí, y es de las zonas donde mejor entra.</p><p>En el cuello, solo por detrás y sobre el trapecio. Nunca en los laterales ni en la parte delantera, que es por donde pasan las arterias. Evita también los huesos, los lunares, las varices y la piel irritada.</p>"
+          }
+        },
+        "q9": {
+          "type": "faq",
+          "settings": {
+            "question": "¿Hay alguien que no deba usarlo?",
+            "answer": "<p>Sí, y preferimos decírtelo antes de que compres. No lo uses si tomas anticoagulantes o tienes problemas de coagulación, si tienes varices en la zona, la piel rota o irritada, si llevas marcapasos o si estás embarazada.</p><p>Y si tienes una lesión diagnosticada, pregunta antes a tu fisio o a tu médico. ReliefPath™ es un aparato de bienestar para casa, no un tratamiento médico.</p>"
+          }
+        },
+        "q10": {
+          "type": "faq",
+          "settings": {
+            "question": "¿Puedo pagar contrareembolso?",
+            "answer": "<p>Sí, y es lo que recomendamos si todavía no nos conoces: haces el pedido, te llega en 24-48 h y le pagas en efectivo al repartidor en tu puerta. No adelantas nada.</p><p><strong>Al llegar a la pantalla de pago, elige «Contrareembolso»</strong> como forma de pago.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "q1",
+        "q2",
+        "q7",
+        "q8",
+        "q3",
+        "q4",
+        "q9",
+        "q10",
+        "q5",
+        "q6"
+      ],
+      "settings": {
+        "heading": "Preguntas",
+        "heading_italic": "frecuentes",
+        "subheading": "",
+        "open_first": true,
+        "help_text": "¿Te queda alguna duda? Escríbenos a waistzen@gmail.com y te respondemos en menos de 24 h.",
+        "bg": "#fdf1f3",
+        "show_schema": true
+      }
+    },
+    "cierre": {
+      "type": "calmia-final-cta",
+      "settings": {
+        "product": "juego-de-ventosa-electrica-con-cable",
+        "badge": "OFERTA DE LANZAMIENTO",
+        "heading": "Nos vemos",
+        "heading_italic": "el jueves",
+        "subheading": "Diez minutos al salir de la pista. En casa en 24-48 h y lo pagas al recibirlo.",
+        "image": "shopify://shop_images/cuprelief_full_banner_1.png",
+        "cta_text": "Comprar ahora",
+        "cta_target": "anchor",
+        "cta_anchor": "#shopify-section-contrareembolso",
+        "trust_line": "Pagas al recibirlo · Envío en 24-48 h · Garantía 30 días",
+        "bg_top": "#fff4f6",
+        "bg_bottom": "#fceaee"
+      }
+    },
+    "barra": {
+      "type": "calmia-sticky-atc",
+      "settings": {
+        "product": "juego-de-ventosa-electrica-con-cable",
+        "short_title": "ReliefPath™ Ventosa Eléctrica",
+        "cta_text": "Comprar ahora",
+        "cta_target": "anchor",
+        "cta_anchor": "#shopify-section-contrareembolso",
+        "offset": 250,
+        "show_eta": true,
+        "eta_text": "Pídelo hoy y lo tienes entre el",
+        "delivery_min": 1,
+        "delivery_max": 2
+      }
+    },
+    "marquesina": {
+      "type": "calmia-marquee",
+      "blocks": {
+        "m1": {
+          "type": "phrase",
+          "settings": {
+            "icon": "truck",
+            "text": "Envío en 24-48 h a toda España"
+          }
+        },
+        "m2": {
+          "type": "phrase",
+          "settings": {
+            "icon": "refresh",
+            "text": "30 días para devolverlo"
+          }
+        },
+        "m3": {
+          "type": "phrase",
+          "settings": {
+            "icon": "gift",
+            "text": "Cabe en la bolsa de paletas"
+          }
+        },
+        "m4": {
+          "type": "phrase",
+          "settings": {
+            "icon": "truck",
+            "text": "Contrareembolso disponible"
+          }
+        },
+        "m5": {
+          "type": "phrase",
+          "settings": {
+            "icon": "clock",
+            "text": "10 minutos por sesión"
+          }
+        },
+        "m6": {
+          "type": "phrase",
+          "settings": {
+            "icon": "chat",
+            "text": "Te responde una persona"
+          }
+        }
+      },
+      "block_order": [
+        "m1",
+        "m2",
+        "m3",
+        "m4",
+        "m5",
+        "m6"
+      ],
+      "settings": {
+        "bg": "#d4687f",
+        "text_color": "#ffffff",
+        "speed": 40,
+        "aria": "Ventajas de comprar en Waistzen",
+        "deadline": "",
+        "timer_label": "La oferta de lanzamiento termina en"
+      }
+    },
+    "video": {
+      "type": "calmia-video",
+      "blocks": {
+        "v1": {
+          "type": "point",
+          "settings": {
+            "icon": "clock",
+            "text": "Una sesión dura lo que un resumen"
+          }
+        },
+        "v2": {
+          "type": "point",
+          "settings": {
+            "icon": "wave",
+            "text": "Succión, calor y luz roja a la vez"
+          }
+        },
+        "v3": {
+          "type": "point",
+          "settings": {
+            "icon": "heart",
+            "text": "Lo usas tú solo, en el sofá"
+          }
+        }
+      },
+      "block_order": [
+        "v1",
+        "v2",
+        "v3"
+      ],
+      "settings": {
+        "product": "juego-de-ventosa-electrica-con-cable",
+        "eyebrow": "ASÍ SE USA",
+        "heading": "Diez minutos",
+        "heading_italic": "y a cenar",
+        "subheading": "Llegas de la pista, lo colocas en la zona cargada, eliges intensidad y te olvidas.",
+        "video_url": "https://cdn.shopify.com/videos/c/o/v/52697a1bffaf4f859337c9a460634804.mp4",
+        "poster": "shopify://shop_images/rp-ritual-10-min.png",
+        "allow_sound": true,
+        "cta_text": "Comprar ahora",
+        "bg": "#fdf1f3"
+      }
+    },
+    "incluye": {
+      "type": "calmia-included",
+      "blocks": {
+        "i1": {
+          "type": "item",
+          "settings": {
+            "text": "<strong>El aparato ReliefPath™</strong> — inalámbrico, recargable por USB y del tamaño de una pelota"
+          }
+        },
+        "i2": {
+          "type": "item",
+          "settings": {
+            "text": "<strong>Cable de carga USB y manual</strong> — no necesita consumibles, ni geles, ni recambios"
+          }
+        },
+        "i3": {
+          "type": "item",
+          "settings": {
+            "text": "<strong>30 días para devolverlo</strong> con la etiqueta de envío puesta por nosotros"
+          }
+        },
+        "s1": {
+          "type": "spec",
+          "settings": {
+            "label": "Terapias",
+            "value": "Succión + calor + luz roja"
+          }
+        },
+        "s2": {
+          "type": "spec",
+          "settings": {
+            "label": "Apagado automático",
+            "value": "A los 20 minutos"
+          }
+        },
+        "s3": {
+          "type": "spec",
+          "settings": {
+            "label": "Niveles de calor",
+            "value": "12 (hasta 50 °C)"
+          }
+        },
+        "s4": {
+          "type": "spec",
+          "settings": {
+            "label": "Niveles de succión",
+            "value": "12"
+          }
+        },
+        "s5": {
+          "type": "spec",
+          "settings": {
+            "label": "Batería",
+            "value": "Recargable por USB"
+          }
+        },
+        "s6": {
+          "type": "spec",
+          "settings": {
+            "label": "Sesión recomendada",
+            "value": "10 a 20 minutos"
+          }
+        },
+        "s7": {
+          "type": "spec",
+          "settings": {
+            "label": "Zonas de uso",
+            "value": "Antebrazo, hombro, trapecio, lumbares y gemelos"
+          }
+        },
+        "s8": {
+          "type": "spec",
+          "settings": {
+            "label": "Medidas",
+            "value": "18 × 9 × 13,5 cm"
+          }
+        }
+      },
+      "block_order": [
+        "i1",
+        "i2",
+        "i3",
+        "s1",
+        "s2",
+        "s3",
+        "s4",
+        "s5",
+        "s6",
+        "s7",
+        "s8"
+      ],
+      "settings": {
+        "eyebrow": "TU PEDIDO",
+        "heading": "Qué te llega",
+        "heading_italic": "a casa",
+        "subheading": "Sin sorpresas: esto es exactamente lo que hay dentro de la caja.",
+        "image": "shopify://shop_images/rp-tecnologia.png",
+        "specs_title": "Ficha técnica",
+        "bg": "#fdf1f3"
+      }
+    },
+    "pago": {
+      "type": "calmia-payment",
+      "blocks": {
+        "z1": {
+          "type": "reason",
+          "settings": {
+            "icon": "truck",
+            "title": "No adelantas ni un euro",
+            "text": "Pides, recibes y pagas en efectivo al repartidor en tu puerta. Si el paquete no llega, no has pagado nada."
+          }
+        },
+        "z2": {
+          "type": "reason",
+          "settings": {
+            "icon": "clock",
+            "title": "En 24-48 horas en tu casa",
+            "text": "Sale hoy de nuestro almacén en España. Nada de esperar tres semanas a un paquete que viene de fuera."
+          }
+        },
+        "z3": {
+          "type": "reason",
+          "settings": {
+            "icon": "lock",
+            "title": "Y si prefieres tarjeta",
+            "text": "También puedes pagarlo al momento con tarjeta, Bizum, Apple Pay o Google Pay. El cobro lo procesa Shopify Payments y los datos no pasan por nosotros."
+          }
+        },
+        "z4": {
+          "type": "reason",
+          "settings": {
+            "icon": "chat",
+            "title": "Y si algo va mal, escríbenos",
+            "text": "Te contestamos el mismo día y lo resolvemos nosotros, sin que tengas que pelearte con nadie."
+          }
+        }
+      },
+      "block_order": [
+        "z1",
+        "z2",
+        "z3",
+        "z4"
+      ],
+      "settings": {
+        "eyebrow": "EL PAGO",
+        "heading": "Pagas cuando",
+        "heading_italic": "lo tienes en la mano.",
+        "subheading": "Contrareembolso a toda España: haces el pedido, te llega en 24-48 h y le pagas al repartidor en tu puerta. No adelantas nada.",
+        "methods_title": "Formas de pago aceptadas",
+        "extra_badge": "",
+        "legal": "Waistzen · Camino de las Ventillas, 18600 Motril (Granada), España · waistzen@gmail.com · 722 400 270",
+        "bg": "#fff4f6"
+      }
+    },
+    "quien": {
+      "type": "calmia-founder",
+      "settings": {
+        "photo": "shopify://shop_images/rp-bodegon-toalla.png",
+        "eyebrow": "LA MARCA",
+        "heading": "Detrás de ReliefPath",
+        "heading_italic": "hay un criterio",
+        "text": "<p>ReliefPath nace de una idea simple: recuperarte de un partido no debería depender de encontrar hueco en la agenda de un fisio. Por eso reunimos las tres terapias que de verdad funcionan en casa —succión, calor y luz roja— en un solo aparato que cabe en la bolsa de paletas.</p><p>No vendemos catálogo. Vendemos un producto, lo conocemos a fondo y respondemos por él: tres años de garantía, treinta días para devolverlo y una persona al otro lado del correo que sabe de lo que le hablas.</p>",
+        "name": "El equipo de ReliefPath",
+        "role": "Waistzen · Motril, Granada",
+        "location": "Enviamos desde España",
+        "email": "waistzen@gmail.com",
+        "whatsapp": "",
+        "whatsapp_label": "Escríbenos por WhatsApp",
+        "note": "Atención en español, de lunes a viernes.",
+        "bg": "#fff4f6"
+      }
+    },
+    "valoran": {
+      "type": "calmia-stats",
+      "blocks": {
+        "y1": {
+          "type": "stat",
+          "settings": {
+            "percent": 90,
+            "text": "Nota la zona más suelta el día después de jugar."
+          }
+        },
+        "y2": {
+          "type": "stat",
+          "settings": {
+            "percent": 90,
+            "text": "Destaca lo rápido que es: diez minutos y a otra cosa."
+          }
+        },
+        "y3": {
+          "type": "stat",
+          "settings": {
+            "percent": 90,
+            "text": "Lo prefiere a pedir cita con el fisio para una sobrecarga."
+          }
+        }
+      },
+      "block_order": [
+        "y1",
+        "y2",
+        "y3"
+      ],
+      "settings": {
+        "eyebrow": "SOBRE LAS OPINIONES",
+        "heading": "Lo que más valoran",
+        "heading_italic": "quienes lo usan",
+        "source": "Sustituye estos porcentajes por los tuyos antes de activar la sección, y di aquí sobre cuántas reseñas están calculados.",
+        "bg": "#fdf1f3"
+      },
+      "disabled": true
+    },
+    "chat": {
+      "type": "calmia-chat",
+      "settings": {
+        "whatsapp": "",
+        "email": "waistzen@gmail.com",
+        "label": "Escríbenos",
+        "prefill": "Hola, tengo una duda sobre el ReliefPath",
+        "offset_mobile": 116,
+        "offset_desktop": 24,
+        "compact_mobile": true
+      }
+    },
+    "entrega": {
+      "type": "calmia-track",
+      "settings": {
+        "heading": "Así llega tu pedido",
+        "prep_days": 1,
+        "delivery_min": 1,
+        "delivery_max": 2,
+        "step_1": "Lo pides",
+        "step_2": "Sale de nuestro almacén",
+        "step_3": "Lo tienes en casa",
+        "note": "Con número de seguimiento desde que sale.",
+        "bg": "#fff4f6"
+      }
+    },
+    "mecanismo": {
+      "type": "calmia-how",
+      "blocks": {
+        "h1": {
+          "type": "step",
+          "settings": {
+            "icon": "wave",
+            "title": "La copa hace el vacío",
+            "text": "Sella sobre la piel y tira de ella hacia arriba. Es la sensación de tirón que notas al empezar, y la regulas tú."
+          }
+        },
+        "h2": {
+          "type": "step",
+          "settings": {
+            "icon": "spark",
+            "title": "El tejido se descomprime",
+            "text": "Al separar la piel del tejido de debajo aumenta el flujo de sangre en la zona. Es lo contrario de amasar: en vez de apretar, tira."
+          }
+        },
+        "h3": {
+          "type": "step",
+          "settings": {
+            "icon": "heart",
+            "title": "El calor entra a la vez",
+            "text": "De 38 a 50 °C, en doce niveles. La musculatura cargada responde mejor al calor que al frío una vez pasado el partido."
+          }
+        },
+        "h4": {
+          "type": "step",
+          "settings": {
+            "icon": "sun",
+            "title": "Y la luz roja acompaña",
+            "text": "Luz roja sobre la zona, encendida durante toda la sesión. Es un recurso habitual en las rutinas de recuperación en casa."
+          }
+        }
+      },
+      "block_order": [
+        "h1",
+        "h2",
+        "h3",
+        "h4"
+      ],
+      "settings": {
+        "eyebrow": "ASÍ FUNCIONA",
+        "heading": "De la succión",
+        "heading_italic": "al músculo suelto",
+        "subheading": "Cuatro cosas que pasan en los diez minutos que lo tienes puesto.",
+        "show_diagram": true,
+        "diagram_title": "Dónde actúa cada cosa",
+        "cup_label": "La copa sella y hace el vacío",
+        "layer_1": "Piel",
+        "layer_1_note": "La succión la levanta y la separa del tejido de debajo.",
+        "layer_1_color": "#e8a7b6",
+        "layer_2": "Tejido superficial",
+        "layer_2_note": "Hasta aquí llega la luz roja.",
+        "layer_2_color": "#d4687f",
+        "layer_3": "Músculo",
+        "layer_3_note": "Donde el calor de 38 a 50 °C hace su trabajo.",
+        "layer_3_color": "#a34459",
+        "note": "Esquema orientativo. ReliefPath™ es un aparato de bienestar para uso doméstico y no sustituye a un diagnóstico ni a un tratamiento médico.",
+        "bg": "#fff4f6"
+      }
+    },
+    "zonas": {
+      "type": "calmia-zones",
+      "blocks": {
+        "zn1": {
+          "type": "zone",
+          "settings": {
+            "name": "Antebrazo",
+            "image": "shopify://shop_images/rp-luz-roja-detalle.png",
+            "title": "Antebrazo",
+            "text": "El que agarra la pala y el que acaba tirando del codo. Colócalo en la masa muscular, a un par de dedos del codo, nunca sobre el hueso.",
+            "time": "8-12 minutos"
+          }
+        },
+        "zn2": {
+          "type": "zone",
+          "settings": {
+            "name": "Hombro",
+            "image": "shopify://shop_images/rp-espalda-uso.png",
+            "title": "Hombro",
+            "text": "El del remate y el del saque. Trabaja la parte carnosa de delante y de detrás, sin pasar por encima de la articulación.",
+            "time": "10-15 minutos"
+          }
+        },
+        "zn3": {
+          "type": "zone",
+          "settings": {
+            "name": "Trapecio",
+            "image": "shopify://shop_images/rp-zonas-tension.png",
+            "title": "Trapecio y cuello",
+            "text": "Se carga juegues o no: del ordenador entre semana y del partido el jueves. Solo por detrás y sobre el músculo, nunca en los laterales del cuello.",
+            "time": "10-15 minutos"
+          }
+        },
+        "zn4": {
+          "type": "zone",
+          "settings": {
+            "name": "Lumbares",
+            "image": "shopify://shop_images/rp-bodegon-toalla.png",
+            "title": "Lumbares",
+            "text": "De flexionar y girar durante una hora seguida. A los lados de la columna, sobre la musculatura, nunca encima de las vértebras.",
+            "time": "10-15 minutos"
+          }
+        },
+        "zn5": {
+          "type": "zone",
+          "settings": {
+            "name": "Gemelo",
+            "image": "shopify://shop_images/rp-ritual-10-min.png",
+            "title": "Gemelo",
+            "text": "El que paga los arranques y los frenazos. Es de las zonas que mejor responden y donde antes se nota al día siguiente.",
+            "time": "10-15 minutos"
+          }
+        }
+      },
+      "block_order": [
+        "zn1",
+        "zn2",
+        "zn3",
+        "zn4",
+        "zn5"
+      ],
+      "settings": {
+        "eyebrow": "DÓNDE SE USA",
+        "heading": "Elige la zona",
+        "heading_italic": "que te está molestando",
+        "subheading": "El mismo aparato, cinco sitios. Toca una zona y te decimos cómo se usa ahí.",
+        "note": "No lo uses sobre huesos, lunares, varices ni piel irritada. En el cuello, solo por detrás y sobre el trapecio.",
+        "bg": "#fff4f6"
+      }
+    },
+    "aviso": {
+      "type": "calmia-announce",
+      "settings": {
+        "icon": "truck",
+        "text": "Envío en <strong>24-48 h</strong> y lo pagas cuando lo recibes",
+        "badge": "CONTRAREEMBOLSO",
+        "link": "#shopify-section-contrareembolso",
+        "bg": "#2b1f23",
+        "color": "#ffffff",
+        "badge_bg": "#e6a1b0",
+        "badge_color": "#2b1f23"
+      }
+    }
+  },
+  "order": [
+    "marquesina",
+    "aviso",
+    "hero",
+    "contrareembolso",
+    "entrega",
+    "problemas",
+    "mecanismo",
+    "video",
+    "zonas",
+    "incluye",
+    "comparativa",
+    "valor",
+    "quien",
+    "valoran",
+    "resenas",
+    "garantia",
+    "pago",
+    "faq",
+    "cierre",
+    "barra",
+    "chat"
+  ]
+}
