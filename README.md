@@ -119,25 +119,32 @@ botón de «Por qué cuesta lo que cuesta», la barra fija de abajo y el cierre.
 Para eso, la barra fija y el cierre tienen una opción nueva en el editor,
 «Llevar al formulario de contrareembolso».
 
-## La prueba
+## Las pruebas
 
-En `pruebas/` está el arnés que ejecuta el JavaScript de verdad de la sección
-contra su HTML de verdad:
+En `pruebas/` hay un arnés que renderiza la sección con Liquid y ejecuta su
+JavaScript de verdad en un navegador simulado, haciendo pedidos completos:
 
-    python3 pruebas/render.py     # renderiza la sección con Liquid
-    node pruebas/test.js          # hace pedidos y comprueba la URL resultante
+    python3 pruebas/render.py     # renderiza la sección
+    node pruebas/test.js          # 29 comprobaciones de la lógica
+    node pruebas/simulacro.js     # un pedido narrado, paso a paso, + datos hostiles
 
-28 comprobaciones, todas en verde: compra con tarjeta de 1 y de 3 unidades,
-cambio a contrareembolso, formulario vacío, móvil falso, móvil fijo, calle sin
-número, nombre de una sola palabra, correo mal escrito, código postal de
-Canarias, compromisos sin marcar, trampa de robots, envío instantáneo,
-direcciones larguísimas, pack de 2 y pedido duplicado. Se comprueba también que
-la URL final lleva el aparato y el recargo en el orden correcto, el importe, el
-teléfono normalizado, la provincia deducida y la dirección completa.
+**`test.js`** cubre la lógica: compra con tarjeta de 1 y 3 unidades, cambio a
+contrareembolso, formulario vacío, móvil falso, calle sin número, nombre de una
+palabra, correo mal escrito, CP de Canarias, compromisos sin marcar, trampa de
+robots, envío instantáneo, direcciones larguísimas, pack de 2 y duplicados.
 
-Lo que la prueba **no** cubre, porque desde aquí no se llega a `waistzen.com`:
-que el checkout de Shopify acepte la dirección prerrellenada y que el método de
-pago manual aparezca. Eso hay que verlo en la tienda.
+**`simulacro.js`** hace un pedido entero con datos retorcidos a propósito
+—`Mª Ángeles Fernández-Bermúdez`, `+34 645 21 03 37`, un correo con `+`, una
+dirección con paréntesis y `&`, una segunda persona con `=`— y luego **vuelve a
+parsear la URL generada** para comprobar campo por campo que nada se ha
+corrompido. Los `&` y `=` dentro de un texto no parten el enlace, las tildes
+llegan intactas y el cero delante del CP se conserva. También comprueba que se
+puede corregir un error sin recargar: pones Tenerife, te frena, cambias a
+Madrid y el pedido sale con Madrid, no con el dato viejo.
+
+Lo que las pruebas **no** cubren, porque desde aquí no se llega a
+`waistzen.com`: que el checkout acepte la dirección prerrellenada y que el
+método de pago manual aparezca. Eso solo se ve en la tienda.
 
 ## Estado en la tienda
 

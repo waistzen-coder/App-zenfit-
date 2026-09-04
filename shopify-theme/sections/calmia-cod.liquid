@@ -866,7 +866,10 @@
       phoneEl.addEventListener('input', function () {
         var n = normPhone(phoneEl.value);
         if (phoneEcho) {
-          if (/^[67]\d{8}$/.test(n)) {
+          /* looksFake también aquí: si no, un 666666666 se vería en verde
+             («Te avisaremos al 666 666 666») y al enviar saltaría el error.
+             El eco tiene que decir lo mismo que la validación. */
+          if (/^[67]\d{8}$/.test(n) && !looksFake(n)) {
             phoneEcho.hidden = false;
             phoneEcho.textContent = T.phoneEcho.replace(
               '{telefono}',
