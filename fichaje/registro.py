@@ -221,6 +221,62 @@ def construir_anotacion(anterior: Anotacion | None, empresa_id: str,
     return replace(borrador, huella=borrador.calcular_huella())
 
 
+
+# ------------------------------------------- las reglas, en un solo sitio
+#
+# Devuelven los campos de la anotación que toca escribir, ya validados. Las usan
+# por igual el libro en memoria y el de PostgreSQL: si cada implementación
+# llevara su copia, tarde o temprano una aceptaría lo que la otra rechaza.
+
+def campos_fichaje(trabajador_id: str, centro_id: str, tipo: Tipo, momento: datetime,
+                   zona_horaria: str, anotado_en: datetime | None = None,
+                   origen: str = "movil", autor_id: str | None = None,
+                   parte: Parte = Parte.TRABAJADOR) -> dict:
+    if tipo not in FICHAJES:
+        raise AnotacionInvalida(f"{tipo.value} no es un fichaje")
+    return dict(
+        centro_id=centro_id, trabajador_id=trabajador_id, tipo=tipo,
+        momento=momento, anotado_en=anotado_en or momento,
+        zona_horaria=zona_horaria, autor_id=autor_id or trabajador_id,
+        parte=parte, origen=origen,
+    )
+
+
+def campos_propuesta(original: Anotacion, momento_propuesto: datetime, motivo: str,
+                     autor_id: str, parte: Parte, anotado_en: datetime) -> dict:
+    if original.tipo not in FICHAJES:
+        raise AnotacionInvalida("Solo se corrigen fichajes, no correcciones")
+    if not motivo.strip():
+        raise AnotacionInvalida("El decreto exige constancia de por qué se cambió")
+    return dict(
+        centro_id=original.centro_id, trabajador_id=original.trabajador_id,
+        tipo=Tipo.CORRECCION_PROPUESTA, momento=original.momento,
+        momento_propuesto=momento_propuesto, anotado_en=anotado_en,
+        zona_horaria=original.zona_horaria, autor_id=autor_id, parte=parte,
+        motivo=motivo, corrige=original.numero,
+    )
+
+
+def campos_resolucion(propuesta: Anotacion, ya_resuelta: bool, acepta: bool,
+                      autor_id: str, parte: Parte, anotado_en: datetime) -> dict:
+    if propuesta.tipo is not Tipo.CORRECCION_PROPUESTA:
+        raise AnotacionInvalida(f"La anotación {propuesta.numero} no es una propuesta")
+    if parte is propuesta.parte:
+        raise AnotacionInvalida(
+            "Una corrección exige el acuerdo de las dos partes: no puede "
+            "aceptarla quien la propuso"
+        )
+    if ya_resuelta:
+        raise AnotacionInvalida(f"La propuesta {propuesta.numero} ya está resuelta")
+    return dict(
+        centro_id=propuesta.centro_id, trabajador_id=propuesta.trabajador_id,
+        tipo=Tipo.CORRECCION_ACEPTADA if acepta else Tipo.CORRECCION_RECHAZADA,
+        momento=propuesta.momento, momento_propuesto=propuesta.momento_propuesto,
+        anotado_en=anotado_en, zona_horaria=propuesta.zona_horaria,
+        autor_id=autor_id, parte=parte, corrige=propuesta.numero,
+    )
+
+
 @dataclass(frozen=True)
 class Veredicto:
     """El resultado de verificar un libro, para poder actuar sobre él."""
@@ -301,51 +357,24 @@ class Libro:
                momento: datetime, zona_horaria: str, anotado_en: datetime | None = None,
                origen: str = "movil", autor_id: str | None = None,
                parte: Parte = Parte.TRABAJADOR) -> Anotacion:
-        if tipo not in FICHAJES:
-            raise AnotacionInvalida(f"{tipo.value} no es un fichaje")
-        return self._anadir(
-            centro_id=centro_id, trabajador_id=trabajador_id, tipo=tipo,
-            momento=momento, anotado_en=anotado_en or momento,
-            zona_horaria=zona_horaria, autor_id=autor_id or trabajador_id,
-            parte=parte, origen=origen,
-        )
+        return self._anadir(**campos_fichaje(
+            trabajador_id, centro_id, tipo, momento, zona_horaria, anotado_en,
+            origen, autor_id, parte))
 
     def proponer_correccion(self, numero: int, momento_propuesto: datetime, motivo: str,
                             autor_id: str, parte: Parte, anotado_en: datetime) -> Anotacion:
         """Propone cambiar la hora de un fichaje. No cambia nada todavía."""
-        original = self.anotacion(numero)
-        if original.tipo not in FICHAJES:
-            raise AnotacionInvalida("Solo se corrigen fichajes, no correcciones")
-        if not motivo.strip():
-            raise AnotacionInvalida("El decreto exige constancia de por qué se cambió")
-        return self._anadir(
-            centro_id=original.centro_id, trabajador_id=original.trabajador_id,
-            tipo=Tipo.CORRECCION_PROPUESTA, momento=original.momento,
-            momento_propuesto=momento_propuesto, anotado_en=anotado_en,
-            zona_horaria=original.zona_horaria, autor_id=autor_id, parte=parte,
-            motivo=motivo, corrige=numero,
-        )
+        return self._anadir(**campos_propuesta(
+            self.anotacion(numero), momento_propuesto, motivo, autor_id, parte,
+            anotado_en))
 
     def resolver_correccion(self, numero: int, acepta: bool, autor_id: str,
                             parte: Parte, anotado_en: datetime) -> Anotacion:
         """Acepta o rechaza una propuesta. Tiene que hacerlo la otra parte."""
         propuesta = self.anotacion(numero)
-        if propuesta.tipo is not Tipo.CORRECCION_PROPUESTA:
-            raise AnotacionInvalida(f"La anotación {numero} no es una propuesta")
-        if parte is propuesta.parte:
-            raise AnotacionInvalida(
-                "Una corrección exige el acuerdo de las dos partes: no puede "
-                "aceptarla quien la propuso"
-            )
-        if self._resolucion_de(numero) is not None:
-            raise AnotacionInvalida(f"La propuesta {numero} ya está resuelta")
-        return self._anadir(
-            centro_id=propuesta.centro_id, trabajador_id=propuesta.trabajador_id,
-            tipo=Tipo.CORRECCION_ACEPTADA if acepta else Tipo.CORRECCION_RECHAZADA,
-            momento=propuesta.momento, momento_propuesto=propuesta.momento_propuesto,
-            anotado_en=anotado_en, zona_horaria=propuesta.zona_horaria,
-            autor_id=autor_id, parte=parte, corrige=numero,
-        )
+        return self._anadir(**campos_resolucion(
+            propuesta, self._resolucion_de(numero) is not None, acepta, autor_id,
+            parte, anotado_en))
 
     # -------------------------------------------------------------- consultar
 
