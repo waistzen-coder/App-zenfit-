@@ -10,15 +10,16 @@ trabajador lo firme, y el trabajador no puede bajarla sin que la firme la
 empresa. Nadie puede tocar la nómina por su cuenta, y el libro conserva quién
 pidió qué y por qué.
 
-Una jornada pertenece al día en que se entró, aunque se salga de madrugada.
+Una jornada pertenece al día en que se entró, aunque se salga de madrugada. Y
+lo que el cálculo no puede hacer nunca es callarse: un fichaje descolgado, una
+pausa sin abrir o una jornada que nadie cerró salen en las incidencias, porque
+una hora que falta en la nómina es una reclamación esperando a ocurrir.
 """
 
 from dataclasses import dataclass
 from datetime import date, datetime, timedelta
 
-from .registro import Libro, Tipo
-
-FICHAJES = {Tipo.ENTRADA, Tipo.SALIDA, Tipo.PAUSA_INICIO, Tipo.PAUSA_FIN}
+from .registro import FICHAJES, Libro, Tipo
 
 
 @dataclass
@@ -29,6 +30,7 @@ class Jornada:
     salida: datetime | None
     pausas: timedelta
     corregida: bool          # alguna de sus horas se cambió con acuerdo
+    retroactiva: bool        # algún fichaje suyo se escribió mucho después
     incidencias: list[str]
 
     @property
@@ -47,13 +49,18 @@ class Jornada:
 
 
 def _fichajes_vigentes(libro: Libro, trabajador: str):
-    """Los fichajes de una persona, con la hora que vale hoy, en orden."""
+    """Los fichajes de una persona, con la hora que vale hoy, en orden.
+
+    Las correcciones se resuelven de una sola pasada sobre el libro. Hacerlo
+    dentro del bucle costaba doce segundos en un libro de tres años.
+    """
+    correcciones = libro.correcciones_vigentes()
     salida = []
     for a in libro.anotaciones:
         if a.trabajador != trabajador or a.tipo not in FICHAJES:
             continue
-        vigente = libro.momento_vigente(a.numero)
-        salida.append((vigente, a.tipo, vigente != a.momento))
+        vigente = correcciones.get(a.numero, a.momento)
+        salida.append((vigente, a.tipo, vigente != a.momento, a.retroactiva))
     return sorted(salida, key=lambda f: f[0])
 
 
@@ -62,19 +69,23 @@ def jornadas_de(libro: Libro, trabajador: str) -> list[Jornada]:
     actual: Jornada | None = None
     pausa_desde: datetime | None = None
 
-    for momento, tipo, corregido in _fichajes_vigentes(libro, trabajador):
+    def marcar(jornada: Jornada, corregido: bool, retro: bool) -> None:
+        jornada.corregida = jornada.corregida or corregido
+        jornada.retroactiva = jornada.retroactiva or retro
+
+    for momento, tipo, corregido, retro in _fichajes_vigentes(libro, trabajador):
         if tipo is Tipo.ENTRADA:
             if actual is not None:
                 actual.incidencias.append("entró otra vez sin haber salido")
                 jornadas.append(actual)
             actual = Jornada(trabajador, momento.date(), momento, None,
-                             timedelta(), corregido, [])
+                             timedelta(), corregido, retro, [])
             pausa_desde = None
 
         elif tipo is Tipo.SALIDA:
             if actual is None:
                 jornadas.append(Jornada(trabajador, momento.date(), momento, momento,
-                                        timedelta(), corregido,
+                                        timedelta(), corregido, retro,
                                         ["salida sin entrada"]))
                 continue
             if pausa_desde is not None:
@@ -82,21 +93,26 @@ def jornadas_de(libro: Libro, trabajador: str) -> list[Jornada]:
                 actual.incidencias.append("salió sin volver de la pausa")
                 pausa_desde = None
             actual.salida = momento
-            actual.corregida = actual.corregida or corregido
+            marcar(actual, corregido, retro)
             jornadas.append(actual)
             actual = None
 
         elif tipo is Tipo.PAUSA_INICIO:
             if actual is None:
                 continue
+            if pausa_desde is not None:
+                actual.incidencias.append("empezó una pausa sin cerrar la anterior")
             pausa_desde = momento
-            actual.corregida = actual.corregida or corregido
+            marcar(actual, corregido, retro)
 
         elif tipo is Tipo.PAUSA_FIN:
-            if actual is None or pausa_desde is None:
+            if actual is None:
+                continue
+            if pausa_desde is None:
+                actual.incidencias.append("volvió de una pausa que no había empezado")
                 continue
             actual.pausas += momento - pausa_desde
-            actual.corregida = actual.corregida or corregido
+            marcar(actual, corregido, retro)
             pausa_desde = None
 
     if actual is not None:
