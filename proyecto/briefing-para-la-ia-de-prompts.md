@@ -62,18 +62,20 @@ lo confirma: no hay package.json, ni tsconfig.json, ni hsproject.json, ni src/.
 
 Producto: FICHAJE DIGITAL PARA MICROEMPRESAS ESPAÑOLAS.
 
-Tesis: el registro de jornada pasa a ser obligatoriamente digital, automático e
-interoperable con la Inspección de Trabajo; el papel y el Excel editable dejan
-de valer. Entrada en vigor prevista entre marzo y abril de 2027. Afecta a todas
-las empresas y autónomos con empleados, sin excepción por tamaño ni sector
-(≈1,5 millones). Las sanciones se plantean por trabajador afectado.
+Tesis: el artículo 34.9 del Estatuto de los Trabajadores ya obliga desde 2019 a
+registrar la jornada diaria con horario concreto, conservarla cuatro años y
+tenerla disponible para el trabajador, sus representantes y la Inspección. Hay
+además un PROYECTO de real decreto que endurecería los requisitos técnicos y que
+NO está en vigor: no tiene fecha, porque entraría veinte días después de
+publicarse en el BOE y todavía no se ha publicado. No decir nunca «obligatorio
+desde marzo de 2027»: eso era una estimación de prensa.
 
 Diferencia frente a Factorial, Sesame y las cincuenta apps de fichar: ellas
 cobran por empleado con mínimos de ~82 €/mes. Nosotros hacemos precio plano por
-empresa, sin instalar nada (móvil o QR en la pared), y sobre todo hacemos lo
-que el decreto exige y un Excel no puede: registro inalterable, y cada
-corrección con acuerdo entre empresa y trabajador dejando constancia de quién
-cambió qué y por qué. Canal de venta: gestorías y asesorías laborales.
+empresa, sin instalar nada (móvil o QR en la pared), y sobre todo hacemos lo que
+un Excel no puede: un registro que DETECTA modificaciones —no «inalterable»— y
+cada corrección con acuerdo entre empresa y trabajador dejando constancia de
+quién cambió qué y por qué. Canal de venta: gestorías y asesorías laborales.
 
 CÓDIGO YA CONSTRUIDO Y PROBADO (Python, sin dependencias):
 - fichaje/registro.py — el libro: solo se añade, encadenado con SHA-256.

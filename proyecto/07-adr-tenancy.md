@@ -121,4 +121,5 @@ Se adopta lo anterior. Y una consecuencia que conviene dejar escrita: **el
 panel administra entidades y no reescribe historia**. Una equivocación en un
 fichaje no se arregla desde aquí; se arreglará en la fase siguiente añadiendo
 hechos nuevos con el acuerdo de la empresa y de la persona, que es lo que el
-decreto exige y lo que el dominio ya sabe hacer.
+proyecto normativo contempla y lo que el dominio ya sabe hacer. Ver
+[`08-estado-normativo.md`](08-estado-normativo.md).

@@ -1,7 +1,7 @@
 """El registro de jornada: un libro al que solo se puede añadir.
 
-La idea entera del producto está en este fichero. El decreto no pide una app de
-fichar; pide un registro que aguante una inspección, y eso son cinco cosas:
+La idea entera del producto está en este fichero. Lo que hace falta no es una
+app de fichar, sino un registro que aguante que lo miren, y eso son cinco cosas:
 
 **Nada se borra ni se reescribe.** Un fichaje mal puesto no se corrige
 machacándolo: se añade una corrección que apunta al original. Los dos quedan.
@@ -281,7 +281,10 @@ def campos_propuesta(original: Anotacion, momento_propuesto: datetime, motivo: s
     if original.tipo not in FICHAJES:
         raise AnotacionInvalida("Solo se corrigen fichajes, no correcciones")
     if not motivo.strip():
-        raise AnotacionInvalida("El decreto exige constancia de por qué se cambió")
+        raise AnotacionInvalida(
+            "Una corrección sin motivo no se puede justificar después. "
+            "Escribe por qué se cambia."
+        )
     return dict(
         centro_id=original.centro_id, trabajador_id=original.trabajador_id,
         tipo=Tipo.CORRECCION_PROPUESTA, momento=original.momento,
