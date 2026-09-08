@@ -1,7 +1,7 @@
 """El registro de jornada: un libro al que solo se puede añadir.
 
 La idea entera del producto está en este fichero. El decreto no pide una app de
-fichar; pide un registro que aguante una inspección, y eso son tres cosas:
+fichar; pide un registro que aguante una inspección, y eso son cuatro cosas:
 
 **Nada se borra ni se reescribe.** Un fichaje mal puesto no se corrige
 machacándolo: se añade una corrección que apunta al original. Los dos quedan.
@@ -10,20 +10,30 @@ el propio libro.
 
 **Cada anotación va encadenada a la anterior por su huella.** Si alguien edita
 la base de datos por detrás para arreglar un mes entero, la cadena se rompe y
-`verificar` dice exactamente en qué anotación. Es lo que separa un registro
-inalterable de un Excel con buena voluntad.
+`verificar` dice exactamente en qué anotación.
 
-**Una corrección necesita a los dos.** El decreto dice que corregir un fichaje
+**El libro de una empresa no vale en otra.** La empresa entra en la huella, así
+que un bloque de anotaciones trasplantado de otro libro no verifica. Sin esto,
+las anotaciones de un bar servían tal cual en el libro de un taller.
+
+**La hora no puede fabricarse a posteriori sin que se vea.** La cadena solo
+prueba el orden en que se escribió, no que la hora sea verdad, así que el libro
+guarda además cuándo se escribió cada anotación, exige que ese momento nunca
+retroceda, prohíbe fichar en el futuro y marca como retroactiva toda anotación
+escrita mucho después del instante que dice registrar. Un fichaje inventado tres
+meses tarde sigue pudiendo escribirse —a veces hay que hacerlo, y por eso no se
+prohíbe— pero llega a la nómina con la etiqueta puesta.
+
+Y una corrección necesita a los dos. El decreto dice que corregir un fichaje
 exige el acuerdo entre empresa y persona trabajadora. Así que aquí una
 corrección no es un cambio: es una propuesta que la otra parte acepta o rechaza,
-y hasta que la acepta no cuenta para nada. Si la propone la empresa, la acepta
-el trabajador; si la propone el trabajador, la acepta la empresa.
+y hasta que la acepta no cuenta para nada.
 """
 
 import hashlib
 import json
-from dataclasses import asdict, dataclass, field
-from datetime import datetime
+from dataclasses import asdict, dataclass, field, replace
+from datetime import datetime, timedelta
 from enum import Enum
 
 
@@ -42,12 +52,19 @@ class Parte(str, Enum):
     TRABAJADOR = "trabajador"
 
 
+FICHAJES = {Tipo.ENTRADA, Tipo.SALIDA, Tipo.PAUSA_INICIO, Tipo.PAUSA_FIN}
+
 # La huella de la que cuelga la primera anotación de cada empresa.
 ORIGEN = "0" * 64
+
+# A partir de cuánto retraso entre lo que se registra y cuándo se registra
+# consideramos que la anotación es retroactiva y hay que decirlo.
+UMBRAL_RETROACTIVO = timedelta(minutes=5)
 
 
 @dataclass(frozen=True)
 class Anotacion:
+    empresa: str                 # entra en la huella: ata la anotación a su libro
     numero: int                  # posición en el libro de la empresa, desde 1
     trabajador: str
     tipo: Tipo
@@ -75,13 +92,22 @@ class Anotacion:
     def calcular_huella(self) -> str:
         return hashlib.sha256(self._cuerpo().encode("utf-8")).hexdigest()
 
+    @property
+    def retroactiva(self) -> bool:
+        """El fichaje se escribió bastante después de la hora que dice registrar."""
+        return self.tipo in FICHAJES and self.anotado_en - self.momento > UMBRAL_RETROACTIVO
+
 
 class RegistroCorrupto(Exception):
     """La cadena no cuadra: alguien ha tocado el libro por detrás."""
 
 
-class CorreccionInvalida(Exception):
-    """Se ha intentado corregir de una forma que el decreto no admite."""
+class AnotacionInvalida(Exception):
+    """Se ha intentado escribir algo que el registro no admite."""
+
+
+# Nombre anterior, conservado para no romper a quien lo importe.
+CorreccionInvalida = AnotacionInvalida
 
 
 @dataclass
@@ -94,24 +120,37 @@ class Libro:
     # ------------------------------------------------------------- escribir
 
     def _anadir(self, **campos) -> Anotacion:
-        anterior = self.anotaciones[-1].huella if self.anotaciones else ORIGEN
-        sin_huella = Anotacion(
+        ultima = self.anotaciones[-1] if self.anotaciones else None
+
+        anotado_en = campos["anotado_en"]
+        if campos["momento"] > anotado_en:
+            raise AnotacionInvalida(
+                f"No se puede anotar un momento futuro: "
+                f"{campos['momento']:%d/%m/%Y %H:%M} se está escribiendo el "
+                f"{anotado_en:%d/%m/%Y %H:%M}"
+            )
+        if ultima is not None and anotado_en < ultima.anotado_en:
+            raise AnotacionInvalida(
+                f"El libro no puede retroceder: la anotación {ultima.numero} se "
+                f"escribió el {ultima.anotado_en:%d/%m/%Y %H:%M} y esta dice "
+                f"escribirse el {anotado_en:%d/%m/%Y %H:%M}"
+            )
+
+        borrador = Anotacion(
+            empresa=self.empresa,
             numero=len(self.anotaciones) + 1,
-            huella_anterior=anterior,
+            huella_anterior=ultima.huella if ultima else ORIGEN,
             **campos,
         )
-        anotacion = Anotacion(**{**asdict(sin_huella),
-                                 "tipo": sin_huella.tipo,
-                                 "parte": sin_huella.parte,
-                                 "huella": sin_huella.calcular_huella()})
+        anotacion = replace(borrador, huella=borrador.calcular_huella())
         self.anotaciones.append(anotacion)
         return anotacion
 
     def fichar(self, trabajador: str, tipo: Tipo, momento: datetime,
                anotado_en: datetime | None = None, origen: str = "movil",
                autor: str | None = None, parte: Parte = Parte.TRABAJADOR) -> Anotacion:
-        if tipo not in {Tipo.ENTRADA, Tipo.SALIDA, Tipo.PAUSA_INICIO, Tipo.PAUSA_FIN}:
-            raise CorreccionInvalida(f"{tipo.value} no es un fichaje")
+        if tipo not in FICHAJES:
+            raise AnotacionInvalida(f"{tipo.value} no es un fichaje")
         return self._anadir(
             trabajador=trabajador, tipo=tipo, momento=momento,
             anotado_en=anotado_en or momento, autor=autor or trabajador,
@@ -122,10 +161,10 @@ class Libro:
                             autor: str, parte: Parte, anotado_en: datetime) -> Anotacion:
         """Propone cambiar la hora de un fichaje. No cambia nada todavía."""
         original = self.anotacion(numero)
-        if original.tipo not in {Tipo.ENTRADA, Tipo.SALIDA, Tipo.PAUSA_INICIO, Tipo.PAUSA_FIN}:
-            raise CorreccionInvalida("Solo se corrigen fichajes, no correcciones")
+        if original.tipo not in FICHAJES:
+            raise AnotacionInvalida("Solo se corrigen fichajes, no correcciones")
         if not motivo.strip():
-            raise CorreccionInvalida("El decreto exige constancia de por qué se cambió")
+            raise AnotacionInvalida("El decreto exige constancia de por qué se cambió")
         return self._anadir(
             trabajador=original.trabajador, tipo=Tipo.CORRECCION_PROPUESTA,
             momento=original.momento, momento_propuesto=momento_propuesto,
@@ -138,14 +177,14 @@ class Libro:
         """Acepta o rechaza una propuesta. Tiene que hacerlo la otra parte."""
         propuesta = self.anotacion(numero)
         if propuesta.tipo is not Tipo.CORRECCION_PROPUESTA:
-            raise CorreccionInvalida(f"La anotación {numero} no es una propuesta")
+            raise AnotacionInvalida(f"La anotación {numero} no es una propuesta")
         if parte is propuesta.parte:
-            raise CorreccionInvalida(
+            raise AnotacionInvalida(
                 "Una corrección exige el acuerdo de las dos partes: no puede "
                 "aceptarla quien la propuso"
             )
         if self._resolucion_de(numero) is not None:
-            raise CorreccionInvalida(f"La propuesta {numero} ya está resuelta")
+            raise AnotacionInvalida(f"La propuesta {numero} ya está resuelta")
         return self._anadir(
             trabajador=propuesta.trabajador,
             tipo=Tipo.CORRECCION_ACEPTADA if acepta else Tipo.CORRECCION_RECHAZADA,
@@ -157,7 +196,7 @@ class Libro:
 
     def anotacion(self, numero: int) -> Anotacion:
         if not 1 <= numero <= len(self.anotaciones):
-            raise CorreccionInvalida(f"No existe la anotación {numero}")
+            raise AnotacionInvalida(f"No existe la anotación {numero}")
         return self.anotaciones[numero - 1]
 
     def _resolucion_de(self, numero: int) -> Anotacion | None:
@@ -167,26 +206,48 @@ class Libro:
                 return a
         return None
 
-    def momento_vigente(self, numero: int) -> datetime:
-        """La hora que vale hoy de un fichaje: la corregida si se aceptó."""
-        fichaje = self.anotacion(numero)
-        vigente = fichaje.momento
+    def correcciones_vigentes(self) -> dict[int, datetime]:
+        """Las horas que hoy sustituyen a las originales, en una sola pasada.
+
+        Si un mismo fichaje llegó a tener dos correcciones aceptadas, manda la
+        última acordada: el libro conserva las dos, pero la nómina usa la de
+        arriba.
+        """
+        vigentes: dict[int, datetime] = {}
         for a in self.anotaciones:
             if a.tipo is not Tipo.CORRECCION_ACEPTADA:
                 continue
             propuesta = self.anotacion(a.corrige)
-            if propuesta.corrige == numero and propuesta.momento_propuesto:
-                vigente = propuesta.momento_propuesto
-        return vigente
+            if propuesta.corrige is not None and propuesta.momento_propuesto is not None:
+                vigentes[propuesta.corrige] = propuesta.momento_propuesto
+        return vigentes
+
+    def momento_vigente(self, numero: int) -> datetime:
+        """La hora que vale hoy de un fichaje: la corregida si se aceptó.
+
+        Recorre el libro entero. Para calcular muchas de golpe, usa
+        `correcciones_vigentes()` una vez en lugar de llamar aquí en un bucle.
+        """
+        return self.correcciones_vigentes().get(numero, self.anotacion(numero).momento)
+
+    def retroactivas(self) -> list[Anotacion]:
+        """Los fichajes escritos mucho después de la hora que dicen registrar."""
+        return [a for a in self.anotaciones if a.retroactiva]
 
     def verificar(self) -> None:
         """Recorre la cadena entera. Si algo no cuadra, dice dónde."""
         anterior = ORIGEN
+        anotado_en_previo: datetime | None = None
         for posicion, a in enumerate(self.anotaciones, start=1):
             if a.numero != posicion:
                 raise RegistroCorrupto(
                     f"La anotación en la posición {posicion} dice ser la {a.numero}: "
                     f"se ha quitado o reordenado algo"
+                )
+            if a.empresa != self.empresa:
+                raise RegistroCorrupto(
+                    f"La anotación {a.numero} pertenece al libro de «{a.empresa}» "
+                    f"y está en el de «{self.empresa}»"
                 )
             if a.huella_anterior != anterior:
                 raise RegistroCorrupto(
@@ -198,4 +259,16 @@ class Libro:
                     f"La anotación {a.numero} ({a.tipo.value} de {a.trabajador}, "
                     f"{a.momento:%d/%m/%Y %H:%M}) se ha modificado después de escribirse"
                 )
+            if a.momento > a.anotado_en:
+                raise RegistroCorrupto(
+                    f"La anotación {a.numero} registra un momento futuro: "
+                    f"{a.momento:%d/%m/%Y %H:%M} escrito el "
+                    f"{a.anotado_en:%d/%m/%Y %H:%M}"
+                )
+            if anotado_en_previo is not None and a.anotado_en < anotado_en_previo:
+                raise RegistroCorrupto(
+                    f"La anotación {a.numero} dice haberse escrito antes que la "
+                    f"anterior: el libro no puede retroceder en el tiempo"
+                )
             anterior = a.huella
+            anotado_en_previo = a.anotado_en
