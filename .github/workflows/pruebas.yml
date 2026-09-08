@@ -1,0 +1,92 @@
+# Las pruebas, en una máquina limpia.
+#
+# Que pasen en el ordenador de quien las escribió no dice gran cosa: ahí están
+# la base de datos con datos viejos, el paquete que se instaló a mano y la
+# variable de entorno que alguien exportó hace tres semanas. Aquí no hay nada
+# de eso, y por eso esto sí cuenta.
+#
+# Los secretos se generan al vuelo y mueren con el trabajo. No hay ninguno
+# guardado en GitHub, y no hace falta: nada de lo que se prueba aquí toca datos
+# reales.
+
+name: pruebas
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+jobs:
+  pruebas:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: fichaje
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      FICHAJE_DSN: postgresql://postgres:postgres@127.0.0.1:5432/fichaje
+      PGPASSWORD: postgres
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Cliente de PostgreSQL
+        # Hace falta pg_dump y pg_restore para probar la copia de seguridad.
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq postgresql-client-16
+
+      - name: Dependencias
+        run: pip install --quiet -r requirements.txt
+
+      - name: Secretos efímeros
+        # Se generan aquí y mueren con el trabajo. Ninguno está guardado.
+        run: |
+          echo "FICHAJE_APP_PASSWORD=$(python3 -c 'import secrets;print(secrets.token_urlsafe(24))')" >> $GITHUB_ENV
+          echo "FICHAJE_SECRETO=$(python3 -c 'import secrets;print(secrets.token_hex(32))')" >> $GITHUB_ENV
+          echo "FICHAJE_PANEL_SECRETO=$(python3 -c 'import secrets;print(secrets.token_hex(32))')" >> $GITHUB_ENV
+
+      - name: El dominio, sin base de datos
+        run: python3 -m fichaje.pruebas
+
+      - name: El motor de morosidad
+        run: python3 -m motor.pruebas
+
+      - name: Migraciones sobre una base vacía
+        run: |
+          python3 -m fichaje.migrar
+          echo "— y otra vez, para comprobar que no hace nada la segunda —"
+          python3 -m fichaje.migrar
+
+      - name: Persistencia, concurrencia y manipulación
+        run: python3 -m fichaje.pruebas_postgres
+
+      - name: El fichaje desde el móvil
+        run: python3 -m fichaje.pruebas_web
+
+      - name: El panel y su aislamiento entre gestorías
+        run: python3 -m fichaje.pruebas_panel
+
+      - name: Correcciones
+        run: python3 -m fichaje.pruebas_correcciones
+
+      - name: Exportación auditable y su verificador
+        run: python3 -m fichaje.pruebas_exportacion
+
+      - name: Copia de seguridad y restauración de verdad
+        run: python3 -m fichaje.copia comprobar

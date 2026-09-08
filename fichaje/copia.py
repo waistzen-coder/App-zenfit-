@@ -23,7 +23,25 @@ from urllib.parse import urlparse
 from .postgres import LibroPostgres, conectar, dsn
 from .registro import verificar_cadena
 
-BIN = os.environ.get("PG_BIN", "/usr/lib/postgresql/16/bin")
+def _herramienta(nombre: str) -> str:
+    """Encuentra pg_dump y compañía estén donde estén.
+
+    Antes había una ruta fija de Debian. En cualquier otra máquina —el runner
+    de CI, un contenedor distinto— no existe, y la copia fallaba sin decir por
+    qué. Se busca primero en PATH, que es donde suelen estar.
+    """
+    import shutil
+    carpeta = os.environ.get("PG_BIN")
+    if carpeta and os.path.exists(os.path.join(carpeta, nombre)):
+        return os.path.join(carpeta, nombre)
+    encontrada = shutil.which(nombre)
+    if encontrada:
+        return encontrada
+    for candidata in ("/usr/lib/postgresql/16/bin", "/usr/lib/postgresql/17/bin"):
+        if os.path.exists(os.path.join(candidata, nombre)):
+            return os.path.join(candidata, nombre)
+    raise SystemExit(f"No se encuentra {nombre}. Instala el cliente de PostgreSQL "
+                     f"o indica su carpeta en PG_BIN.")
 
 
 def _partes(cadena: str) -> dict:
@@ -39,7 +57,7 @@ def _partes(cadena: str) -> dict:
 def volcar(destino: str, cadena: str | None = None) -> str:
     p = _partes(cadena or dsn())
     subprocess.run(
-        [f"{BIN}/pg_dump", "-h", p["host"], "-p", p["port"], "-U", p["user"],
+        [_herramienta("pg_dump"), "-h", p["host"], "-p", p["port"], "-U", p["user"],
          "-Fc", "-f", destino, p["base"]],
         check=True, capture_output=True)
     return destino
@@ -49,11 +67,11 @@ def restaurar(origen: str, base_destino: str, cadena: str | None = None) -> None
     """Restaura sobre una base recién creada. Nunca sobre una que tenga datos."""
     p = _partes(cadena or dsn())
     comun = ["-h", p["host"], "-p", p["port"], "-U", p["user"]]
-    subprocess.run([f"{BIN}/dropdb", *comun, "--if-exists", base_destino],
+    subprocess.run([_herramienta("dropdb"), *comun, "--if-exists", base_destino],
                    check=True, capture_output=True)
-    subprocess.run([f"{BIN}/createdb", *comun, base_destino],
+    subprocess.run([_herramienta("createdb"), *comun, base_destino],
                    check=True, capture_output=True)
-    subprocess.run([f"{BIN}/pg_restore", *comun, "-d", base_destino, origen],
+    subprocess.run([_herramienta("pg_restore"), *comun, "-d", base_destino, origen],
                    check=True, capture_output=True)
 
 
