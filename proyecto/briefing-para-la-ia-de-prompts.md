@@ -78,7 +78,7 @@ cambió qué y por qué. Canal de venta: gestorías y asesorías laborales.
 CÓDIGO YA CONSTRUIDO Y PROBADO (Python, sin dependencias):
 - fichaje/registro.py — el libro: solo se añade, encadenado con SHA-256.
 - fichaje/jornada.py — las horas, deducidas de los hechos del libro.
-- fichaje/pruebas.py — 43 comprobaciones, todas en verde.
+- fichaje/pruebas.py — 48 comprobaciones, todas en verde.
 
 AUDITORÍA DE SEGURIDAD YA EJECUTADA. Tres fallos reales encontrados,
 reproducidos y arreglados:

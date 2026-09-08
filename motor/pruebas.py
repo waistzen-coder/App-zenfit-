@@ -18,9 +18,12 @@ from .calculo import (
 from .tipos import SemestreSinTipo, tipo_de
 
 fallos: list[str] = []
+hechas = 0          # comprobaciones realmente ejecutadas
 
 
 def comprobar(descripcion: str, obtenido, esperado):
+    global hechas
+    hechas += 1
     if obtenido != esperado:
         fallos.append(f"{descripcion}\n    esperado: {esperado!r}\n    obtenido: {obtenido!r}")
 
@@ -139,8 +142,8 @@ comprobar("Frente a la Administración el plazo es más corto: a los 4 años y m
 
 
 if fallos:
-    print(f"\n{len(fallos)} comprobaciones fallan:\n")
+    print(f"\n{len(fallos)} de {hechas} comprobaciones fallan:\n")
     for fallo in fallos:
         print(f"  · {fallo}\n")
     raise SystemExit(1)
-print("Todas las comprobaciones pasan.")
+print(f"Todas las comprobaciones pasan: {hechas} sobre el motor.")
