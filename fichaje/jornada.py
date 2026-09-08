@@ -7,25 +7,34 @@ original si la corrección se quedó sin aceptar o la rechazaron.
 
 Ese detalle es todo el asunto: la empresa no puede subir una hora sin que el
 trabajador lo firme, y el trabajador no puede bajarla sin que la firme la
-empresa. Nadie puede tocar la nómina por su cuenta, y el libro conserva quién
-pidió qué y por qué.
+empresa. Nadie toca la nómina por su cuenta.
 
-Una jornada pertenece al día en que se entró, aunque se salga de madrugada. Y
-lo que el cálculo no puede hacer nunca es callarse: un fichaje descolgado, una
-pausa sin abrir o una jornada que nadie cerró salen en las incidencias, porque
-una hora que falta en la nómina es una reclamación esperando a ocurrir.
+Dos cosas que parecen detalles:
+
+**El día es el del centro, no el del servidor.** Una jornada pertenece al día en
+que se entró *visto desde el centro de trabajo*. Con las fechas guardadas en
+UTC, quien entra a la una de la madrugada en Madrid entró el día anterior para
+el servidor y el mismo día para su encargado. Manda el encargado.
+
+**El cálculo no se calla.** Un fichaje descolgado, una pausa cerrada sin abrir o
+una jornada que nadie cerró salen en las incidencias, porque una hora que falta
+en la nómina es una reclamación esperando a ocurrir.
+
+Trabaja sobre una lista de anotaciones, no sobre un `Libro`, para poder recibir
+igual las que vienen de memoria y las que vienen de la base de datos.
 """
 
 from dataclasses import dataclass
 from datetime import date, datetime, timedelta
+from zoneinfo import ZoneInfo
 
-from .registro import FICHAJES, Libro, Tipo
+from .registro import FICHAJES, Anotacion, Tipo, correcciones_vigentes
 
 
 @dataclass
 class Jornada:
-    trabajador: str
-    dia: date
+    trabajador_id: str
+    dia: date                # el día visto desde el centro de trabajo
     entrada: datetime
     salida: datetime | None
     pausas: timedelta
@@ -48,23 +57,24 @@ class Jornada:
         return round(self.trabajado.total_seconds() / 3600, 2)
 
 
-def _fichajes_vigentes(libro: Libro, trabajador: str):
+def _fichajes_vigentes(anotaciones: list[Anotacion], trabajador_id: str):
     """Los fichajes de una persona, con la hora que vale hoy, en orden.
 
-    Las correcciones se resuelven de una sola pasada sobre el libro. Hacerlo
-    dentro del bucle costaba doce segundos en un libro de tres años.
+    Las correcciones se resuelven de una sola pasada. Hacerlo dentro del bucle
+    costaba doce segundos en un libro de tres años.
     """
-    correcciones = libro.correcciones_vigentes()
+    correcciones = correcciones_vigentes(anotaciones)
     salida = []
-    for a in libro.anotaciones:
-        if a.trabajador != trabajador or a.tipo not in FICHAJES:
+    for a in anotaciones:
+        if a.trabajador_id != trabajador_id or a.tipo not in FICHAJES:
             continue
         vigente = correcciones.get(a.numero, a.momento)
-        salida.append((vigente, a.tipo, vigente != a.momento, a.retroactiva))
+        salida.append((vigente, a.tipo, vigente != a.momento, a.retroactiva,
+                       a.zona_horaria))
     return sorted(salida, key=lambda f: f[0])
 
 
-def jornadas_de(libro: Libro, trabajador: str) -> list[Jornada]:
+def jornadas_de(anotaciones: list[Anotacion], trabajador_id: str) -> list[Jornada]:
     jornadas: list[Jornada] = []
     actual: Jornada | None = None
     pausa_desde: datetime | None = None
@@ -73,20 +83,24 @@ def jornadas_de(libro: Libro, trabajador: str) -> list[Jornada]:
         jornada.corregida = jornada.corregida or corregido
         jornada.retroactiva = jornada.retroactiva or retro
 
-    for momento, tipo, corregido, retro in _fichajes_vigentes(libro, trabajador):
+    def dia_local(momento: datetime, zona: str) -> date:
+        return momento.astimezone(ZoneInfo(zona)).date()
+
+    for momento, tipo, corregido, retro, zona in _fichajes_vigentes(anotaciones,
+                                                                    trabajador_id):
         if tipo is Tipo.ENTRADA:
             if actual is not None:
                 actual.incidencias.append("entró otra vez sin haber salido")
                 jornadas.append(actual)
-            actual = Jornada(trabajador, momento.date(), momento, None,
+            actual = Jornada(trabajador_id, dia_local(momento, zona), momento, None,
                              timedelta(), corregido, retro, [])
             pausa_desde = None
 
         elif tipo is Tipo.SALIDA:
             if actual is None:
-                jornadas.append(Jornada(trabajador, momento.date(), momento, momento,
-                                        timedelta(), corregido, retro,
-                                        ["salida sin entrada"]))
+                jornadas.append(Jornada(trabajador_id, dia_local(momento, zona),
+                                        momento, momento, timedelta(), corregido,
+                                        retro, ["salida sin entrada"]))
                 continue
             if pausa_desde is not None:
                 actual.pausas += momento - pausa_desde
@@ -122,8 +136,9 @@ def jornadas_de(libro: Libro, trabajador: str) -> list[Jornada]:
     return jornadas
 
 
-def horas_del_mes(libro: Libro, trabajador: str, anio: int, mes: int) -> float:
+def horas_del_mes(anotaciones: list[Anotacion], trabajador_id: str,
+                  anio: int, mes: int) -> float:
     return round(sum(
-        j.horas for j in jornadas_de(libro, trabajador)
+        j.horas for j in jornadas_de(anotaciones, trabajador_id)
         if j.dia.year == anio and j.dia.month == mes
     ), 2)
