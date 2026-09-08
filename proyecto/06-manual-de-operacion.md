@@ -231,3 +231,51 @@ Las equivocaciones en los fichajes se corrigen añadiendo hechos nuevos con el
 acuerdo de la empresa y de la persona. Es lo que contempla el proyecto de real
 decreto, que **todavía no está en vigor**: ver
 [`08-estado-normativo.md`](08-estado-normativo.md).
+
+---
+
+# El expediente auditable
+
+Cuando alguien pida el registro de una empresa —la propia empresa, un abogado,
+un inspector— se le da esto.
+
+## Generarlo
+
+Desde el panel, en la ficha de la empresa: **Exportar registro**. Sale un ZIP.
+
+## Qué lleva dentro
+
+| | |
+| --- | --- |
+| `registro.csv` | Los fichajes, con la hora original y la vigente. Se abre en Excel |
+| `correcciones.csv` | Cada cambio pedido: motivo, quién lo pidió, qué contestaron |
+| `libro.jsonl` | El libro tal como se firmó, para poder comprobarlo |
+| `manifest.json` | Qué hay dentro y la huella de cada archivo |
+| `LEEME.txt` | Qué significa todo, y qué **no** demuestra |
+
+## Comprobarlo
+
+```bash
+python3 -m fichaje.verificar_exportacion expediente.zip
+```
+
+**No necesita base de datos, ni conexión, ni acceso a la aplicación.** Ese es el
+punto: cualquiera puede comprobarlo por su cuenta, sin fiarse de nosotros.
+
+Si alguien ha cambiado una hora, un motivo o una huella, si falta una línea o si
+están desordenadas, el comando lo dice y señala dónde.
+
+## Lo que hay que decir al entregarlo, y lo que no
+
+**Se puede decir:** que el registro no se ha modificado por dentro desde que se
+escribió, que cualquiera puede comprobarlo con el comando de arriba, y que cada
+corrección conserva quién la pidió, por qué y qué contestó la otra parte.
+
+**No se puede decir:** que sea un formato oficial de la Inspección —no existe
+ninguno publicado—, que sea inalterable, ni que cumpla ninguna norma. Eso último
+lo dice un inspector o un juez, no nosotros.
+
+## Lo que se descarga el trabajador
+
+Desde su móvil, en **Mis registros → Descargar mis registros**: sus jornadas en
+CSV. Solo las suyas, nunca las de un compañero.
