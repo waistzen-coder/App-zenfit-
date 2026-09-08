@@ -26,6 +26,7 @@ from zoneinfo import ZoneInfo
 import psycopg
 from flask import (
     Flask,
+    Response,
     abort,
     g,
     redirect,
@@ -35,14 +36,24 @@ from flask import (
     url_for,
 )
 
+from .correcciones import (
+    correcciones_de,
+    esperando_a,
+    nombre_del_autor,
+    proponer,
+    responder,
+)
 from .credenciales import comprobar, huella_de_token, nuevo_token
-from .jornada import COMO_SE_LLAMA, acciones_posibles, estado_actual, ultimo_fichaje
+from .exportar import fila_segura_para_hoja
+from .jornada import COMO_SE_LLAMA, acciones_posibles, estado_actual, jornadas_de, ultimo_fichaje
 from .postgres import LibroPostgres, conectar
-from .registro import IntegridadRota, Tipo
+from .registro import FICHAJES, AnotacionInvalida, IntegridadRota, Parte, Tipo
 
 # --------------------------------------------------------------- configuración
 
 DURACION_SESION = timedelta(hours=12)      # un turno largo, y no más
+FICHAJES_WEB = FICHAJES          # los tipos que el trabajador puede corregir
+
 FALLOS_POR_CODIGO = 5                      # antes de bloquear a esa persona
 FALLOS_POR_ORIGEN = 20                     # antes de bloquear a esa red
 VENTANA_BLOQUEO = timedelta(minutes=15)
@@ -61,8 +72,30 @@ ERRORES = {
     "BASE_NO_DISPONIBLE": "No se ha podido conectar. Inténtalo otra vez en unos segundos.",
     "INTEGRIDAD": "Hay un problema con el registro de esta empresa. Se ha avisado "
                   "y no se van a anotar más fichajes hasta revisarlo.",
+    "NO_ES_TUYO": "Ese registro no es tuyo.",
+    "YA_RESUELTA": "Esa propuesta ya estaba contestada.",
+    "SIN_MOTIVO": "Escribe por qué quieres cambiar la hora.",
+    "HORA_MAL": "Esa hora no se entiende. Se escribe como 18:30.",
+    "YA_HAY_PROPUESTA": "Ese fichaje ya tiene una propuesta de cambio sin "
+                        "contestar. Hay que resolver esa antes de pedir otra.",
     "DESCONOCIDO": "Ha ocurrido un error. Inténtalo otra vez.",
 }
+
+
+def _hora_pedida(texto: str | None, original, zona: str) -> datetime | None:
+    """La hora que pide el trabajador, en el día del fichaje y en su huso.
+
+    Solo se cambia la hora, no el día: mover un fichaje a otra fecha ya no es
+    corregir una errata, es otra cosa, y no entra en esta versión.
+    """
+    try:
+        horas, minutos = (int(x) for x in (texto or "").strip().split(":"))
+    except (ValueError, AttributeError):
+        return None
+    if not (0 <= horas < 24 and 0 <= minutos < 60):
+        return None
+    local = original.momento.astimezone(ZoneInfo(zona))
+    return local.replace(hour=horas, minute=minutos, second=0, microsecond=0)
 
 
 def crear_app(cadena_bd: str | None = None) -> Flask:
@@ -285,6 +318,120 @@ def crear_app(cadena_bd: str | None = None) -> Flask:
             accion=COMO_SE_LLAMA[anotacion.tipo],
             repetido=request.args.get("r") == "1")
 
+    # ------------------------------------------------------- mis registros
+
+    def libro_y_mio(centro: dict, trabajador: dict):
+        """Las anotaciones de la empresa y las jornadas de quien pregunta.
+
+        Todo parte de la identidad de la sesión. Ningún formulario dice de quién
+        son los registros que se enseñan.
+        """
+        anotaciones = LibroPostgres(centro["empresa_id"], bd()).anotaciones()
+        return anotaciones, jornadas_de(anotaciones, trabajador["id"])
+
+    @app.get("/f/<token>/mis-registros")
+    def mis_registros(token: str):
+        centro = centro_por_token(token)
+        trabajador = sesion_valida(centro)
+        if trabajador is None:
+            return redirect(url_for("portada", token=token, e="SESION_CADUCADA"))
+        anotaciones, jornadas = libro_y_mio(centro, trabajador)
+        huso = ZoneInfo(centro["zona"])
+        mias = correcciones_de(anotaciones, trabajador["id"])
+        return render_template_string(
+            REGISTROS, centro=centro, trabajador=trabajador,
+            nombres={t.value: n for t, n in COMO_SE_LLAMA.items()},
+            jornadas=list(reversed(jornadas)), huso=huso,
+            correcciones=list(reversed(mias)),
+            esperan=esperando_a(anotaciones, Parte.TRABAJADOR, trabajador["id"]),
+            autor=lambda i: nombre_del_autor(bd(), i),
+            fichajes={a.numero: a for a in anotaciones
+                      if a.trabajador_id == trabajador["id"] and a.tipo in FICHAJES_WEB},
+            clave=secrets.token_urlsafe(18),
+            aviso=ERRORES.get(request.args.get("e", ""), ""))
+
+    @app.post("/f/<token>/proponer")
+    def proponer_cambio(token: str):
+        comprobar_csrf()
+        centro = centro_por_token(token)
+        trabajador = sesion_valida(centro)
+        if trabajador is None:
+            return redirect(url_for("portada", token=token, e="SESION_CADUCADA"))
+        libro = LibroPostgres(centro["empresa_id"], bd())
+        try:
+            numero = int(request.form.get("numero") or 0)
+            original = libro.anotacion(numero)
+        except (ValueError, AnotacionInvalida):
+            return redirect(url_for("mis_registros", token=token, e="NO_ES_TUYO"))
+        # La comprobación que de verdad importa: el fichaje tiene que ser suyo.
+        # Da igual qué número mande el formulario.
+        if original.trabajador_id != trabajador["id"]:
+            return redirect(url_for("mis_registros", token=token, e="NO_ES_TUYO"))
+
+        motivo = (request.form.get("motivo") or "").strip()
+        if not motivo:
+            return redirect(url_for("mis_registros", token=token, e="SIN_MOTIVO"))
+        nuevo = _hora_pedida(request.form.get("hora"), original, centro["zona"])
+        if nuevo is None:
+            return redirect(url_for("mis_registros", token=token, e="HORA_MAL"))
+        try:
+            proponer(libro, request.form.get("clave") or secrets.token_urlsafe(18),
+                     numero, nuevo, motivo, trabajador["id"], Parte.TRABAJADOR,
+                     datetime.now(timezone.utc))
+        except AnotacionInvalida as fallo:
+            codigo = "YA_HAY_PROPUESTA" if "sin contestar" in str(fallo) else "SIN_MOTIVO"
+            return redirect(url_for("mis_registros", token=token, e=codigo))
+        return redirect(url_for("mis_registros", token=token))
+
+    @app.post("/f/<token>/responder")
+    def responder_propuesta(token: str):
+        comprobar_csrf()
+        centro = centro_por_token(token)
+        trabajador = sesion_valida(centro)
+        if trabajador is None:
+            return redirect(url_for("portada", token=token, e="SESION_CADUCADA"))
+        libro = LibroPostgres(centro["empresa_id"], bd())
+        try:
+            numero = int(request.form.get("numero") or 0)
+            propuesta = libro.anotacion(numero)
+        except (ValueError, AnotacionInvalida):
+            return redirect(url_for("mis_registros", token=token, e="NO_ES_TUYO"))
+        if propuesta.trabajador_id != trabajador["id"]:
+            return redirect(url_for("mis_registros", token=token, e="NO_ES_TUYO"))
+        try:
+            responder(libro, request.form.get("clave") or secrets.token_urlsafe(18),
+                      numero, request.form.get("respuesta") == "acepto",
+                      trabajador["id"], Parte.TRABAJADOR, datetime.now(timezone.utc))
+        except AnotacionInvalida as fallo:
+            codigo = "YA_RESUELTA" if "ya está resuelta" in str(fallo) else "NO_ES_TUYO"
+            return redirect(url_for("mis_registros", token=token, e=codigo))
+        return redirect(url_for("mis_registros", token=token))
+
+    @app.get("/f/<token>/mis-registros.csv")
+    def mis_registros_csv(token: str):
+        """La copia de sus propios registros, y solo de los suyos."""
+        centro = centro_por_token(token)
+        trabajador = sesion_valida(centro)
+        if trabajador is None:
+            return redirect(url_for("portada", token=token, e="SESION_CADUCADA"))
+        _, jornadas = libro_y_mio(centro, trabajador)
+        huso = ZoneInfo(centro["zona"])
+        lineas = ["dia,entrada,salida,pausas_minutos,horas,incidencias"]
+        for j in jornadas:
+            lineas.append(",".join(fila_segura_para_hoja([
+                str(j.dia),
+                j.entrada.astimezone(huso).strftime("%H:%M:%S"),
+                j.salida.astimezone(huso).strftime("%H:%M:%S") if j.salida else "",
+                str(int(j.pausas.total_seconds() // 60)),
+                f"{j.horas:.2f}",
+                "; ".join(j.incidencias),
+            ])))
+        return Response(
+            "\ufeff" + "\r\n".join(lineas),
+            mimetype="text/csv; charset=utf-8",
+            headers={"Content-Disposition":
+                     'attachment; filename="mis-registros.csv"'})
+
     @app.post("/f/<token>/salir")
     def salir(token: str):
         comprobar_csrf()
@@ -389,6 +536,8 @@ FICHAR = BASE.replace("{% block cuerpo %}{% endblock %}", """
 {% endfor %}
 {% if ultimo %}<p class="pie">Último fichaje: {{ ultimo[1] }} a las
   {{ ultimo[0].strftime('%H:%M') }} del {{ ultimo[0].strftime('%d/%m') }}</p>{% endif %}
+<p class="pie"><a href="{{ url_for('mis_registros', token=request.view_args.token) }}"
+  >Ver mis registros</a></p>
 <form method="post" action="{{ url_for('salir', token=request.view_args.token) }}"
       class="pie"><input type="hidden" name="csrf" value="{{ csrf() }}">
   <button type="submit">Cerrar sesión</button></form>
@@ -407,6 +556,113 @@ HECHO = BASE.replace("{% block cuerpo %}{% endblock %}", """
 <p class="pie"><a href="{{ url_for('portada', token=request.view_args.token) }}"
   >Volver</a></p>
 """)
+
+REGISTROS = BASE.replace("{% block cuerpo %}{% endblock %}", """
+<h1>Mis registros</h1>
+<p class="centro">{{ trabajador.nombre }} · {{ centro.nombre }}</p>
+{% if aviso %}<div class="aviso">{{ aviso }}</div>{% endif %}
+
+{% if esperan %}
+<h2 style="font-size:16px;margin:20px 0 10px">Te piden cambiar una hora</h2>
+{% for c in esperan %}
+<div class="propuesta">
+  <p style="margin:0 0 8px"><b>{{ c.original.local().strftime('%d/%m/%Y') }}</b> ·
+   {{ nombres[c.original.tipo.value] }}</p>
+  <dl style="margin:0 0 12px">
+    <dt>Hora que está registrada</dt>
+    <dd>{{ c.original.local().strftime('%H:%M') }}</dd>
+    <dt>Hora que proponen</dt>
+    <dd>{{ c.propuesta.local(c.propuesta.momento_propuesto).strftime('%H:%M') }}</dd>
+    <dt>Motivo</dt><dd style="font-weight:400">{{ c.propuesta.motivo }}</dd>
+    <dt>Lo pide</dt><dd style="font-weight:400">{{ autor(c.propuesta.autor_id) }},
+      el {{ c.propuesta.local(c.propuesta.anotado_en).strftime('%d/%m/%Y') }}</dd>
+  </dl>
+  <form method="post" action="{{ url_for('responder_propuesta', token=request.view_args.token) }}">
+    <input type="hidden" name="csrf" value="{{ csrf() }}">
+    <input type="hidden" name="numero" value="{{ c.propuesta.numero }}">
+    <input type="hidden" name="clave" value="{{ clave }}-r{{ c.propuesta.numero }}">
+    <input type="hidden" name="respuesta" value="acepto">
+    <button type="submit">Estoy de acuerdo</button></form>
+  <form method="post" action="{{ url_for('responder_propuesta', token=request.view_args.token) }}">
+    <input type="hidden" name="csrf" value="{{ csrf() }}">
+    <input type="hidden" name="numero" value="{{ c.propuesta.numero }}">
+    <input type="hidden" name="clave" value="{{ clave }}-d{{ c.propuesta.numero }}">
+    <input type="hidden" name="respuesta" value="discrepo">
+    <button class="otra" type="submit">No estoy de acuerdo</button></form>
+  <p class="pie" style="margin:6px 0 0">Si no estás de acuerdo, la hora no cambia
+   y queda escrito que no lo estabas.</p>
+</div>
+{% endfor %}
+{% endif %}
+
+<h2 style="font-size:16px;margin:24px 0 10px">Mis jornadas</h2>
+{% if jornadas %}
+{% for j in jornadas %}
+<div class="dia">
+ <p style="margin:0"><b>{{ j.dia.strftime('%d/%m/%Y') }}</b> ·
+  {{ j.entrada.astimezone(huso).strftime('%H:%M') }} –
+  {{ j.salida.astimezone(huso).strftime('%H:%M') if j.salida else 'sin cerrar' }}
+  · <b>{{ j.horas }} h</b>
+  {% if j.corregida %}<span class="marca">hora corregida</span>{% endif %}
+  {% if j.retroactiva %}<span class="marca">añadido después</span>{% endif %}</p>
+ {% for i in j.incidencias %}<p class="pie" style="margin:2px 0 0;text-align:left"
+   >{{ i }}</p>{% endfor %}
+</div>
+{% endfor %}
+{% else %}<p class="pie">Todavía no has fichado ningún día.</p>{% endif %}
+
+<h2 style="font-size:16px;margin:24px 0 10px">Pedir que se cambie una hora</h2>
+{% if fichajes %}
+<form method="post" action="{{ url_for('proponer_cambio', token=request.view_args.token) }}">
+  <input type="hidden" name="csrf" value="{{ csrf() }}">
+  <input type="hidden" name="clave" value="{{ clave }}-p">
+  <label for="numero">Fichaje</label>
+  <select id="numero" name="numero" style="width:100%;padding:14px;font-size:16px;
+    border:1px solid #ccc;border-radius:10px;margin-bottom:12px">
+   {% for n, a in fichajes.items() | sort(reverse=true) %}
+   <option value="{{ n }}">{{ a.local().strftime('%d/%m/%Y') }} ·
+     {{ nombres[a.tipo.value] }} · {{ a.local().strftime('%H:%M') }}</option>
+   {% endfor %}
+  </select>
+  <label for="hora">Hora que debería poner</label>
+  <input id="hora" name="hora" placeholder="18:30" inputmode="numeric" required>
+  <label for="motivo">Por qué</label>
+  <input id="motivo" name="motivo" placeholder="Se me olvidó fichar la salida" required>
+  <button class="otra" type="submit">Pedir el cambio</button>
+</form>
+{% else %}<p class="pie">Cuando tengas fichajes podrás pedir que se corrija una hora.</p>
+{% endif %}
+
+{% if correcciones %}
+<h2 style="font-size:16px;margin:24px 0 10px">Cambios pedidos</h2>
+{% for c in correcciones %}
+<div class="dia">
+ <p style="margin:0">{{ c.original.local().strftime('%d/%m') }} ·
+  {{ c.original.local().strftime('%H:%M') }} →
+  {{ c.propuesta.local(c.propuesta.momento_propuesto).strftime('%H:%M') }}
+  <span class="marca {{ 'ok' if c.aceptada else '' }}">{{
+   'aceptado' if c.aceptada else ('sin contestar' if c.pendiente else 'sin acuerdo') }}</span></p>
+ <p class="pie" style="margin:2px 0 0;text-align:left">{{ c.propuesta.motivo }}
+  — {{ autor(c.propuesta.autor_id) }}</p>
+</div>
+{% endfor %}
+{% endif %}
+
+<p class="pie" style="margin-top:22px">
+ <a href="{{ url_for('mis_registros_csv', token=request.view_args.token) }}"
+   >Descargar mis registros</a> ·
+ <a href="{{ url_for('portada', token=request.view_args.token) }}">Volver a fichar</a></p>
+""").replace("</style>", """
+ .propuesta{border:1px solid #d9a441;background:#fffaf0;border-radius:12px;
+   padding:16px;margin-bottom:14px}
+ @media(prefers-color-scheme:dark){.propuesta{background:#2a2418;border-color:#6b5320}}
+ .dia{border-top:1px solid #e6e6e8;padding:10px 0}
+ @media(prefers-color-scheme:dark){.dia{border-color:#2c2c2e}}
+ .marca{display:inline-block;padding:1px 8px;border-radius:999px;font-size:12px;
+   background:#eceef1;color:#555;margin-left:6px}
+ @media(prefers-color-scheme:dark){.marca{background:#2c2c2e;color:#aaa}}
+ .marca.ok{background:#dcf3e3;color:#0a5c27}
+</style>""")
 
 SIMPLE = """
 <!doctype html><html lang="es"><head><meta charset="utf-8">

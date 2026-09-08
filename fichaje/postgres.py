@@ -202,26 +202,32 @@ class LibroPostgres:
             "select numero from peticion_fichaje where clave = %s", (clave,)).fetchone()
         return self.anotacion(fila[0]) if fila else None
 
-    def fichar_una_sola_vez(self, clave: str, **campos) -> tuple[Anotacion, bool]:
-        """Ficha, y si la misma petición vuelve, devuelve lo que ya se escribió.
+    def una_sola_vez(self, clave: str, campos: dict | None = None,
+                     decidir=None) -> tuple[Anotacion, bool]:
+        """Escribe, y si la misma petición vuelve, devuelve lo que ya se escribió.
 
         Un doble toque, un reenvío de Safari al volver la cobertura o un
-        refresco de pantalla no pueden convertirse en dos fichajes. La clave de
-        la petición se escribe en la **misma transacción** que la anotación, así
-        que o entran las dos o no entra ninguna; no hay ventana en la que exista
-        la anotación y no su clave.
+        refresco de pantalla no pueden convertirse en dos hechos. La clave de la
+        petición se escribe en la **misma transacción** que la anotación, así que
+        o entran las dos o no entra ninguna; no hay ventana en la que exista la
+        anotación y no su clave.
+
+        Sirve igual para fichar y para proponer o resolver una corrección: son
+        todas escrituras en el mismo libro, y todas llegan por una web donde el
+        usuario puede pulsar dos veces.
 
         Devuelve (anotación, ya_estaba).
         """
-        ya = self.conexion.execute(
-            "select numero from peticion_fichaje where clave = %s", (clave,)).fetchone()
-        if ya:
-            return self.anotacion(ya[0]), True
+        ya = self.resultado_de(clave)
+        if ya is not None:
+            return ya, True
         try:
             with self.conexion.transaction():
                 cur = self.conexion.cursor()
                 cur.execute("select pg_advisory_xact_lock(hashtext(%s))",
                             (self.empresa_id,))
+                if decidir is not None:
+                    campos = decidir(cur)
                 cur.execute(
                     f"select {CAMPOS} from anotacion where empresa_id = %s "
                     f"order by numero desc limit 1", (self.empresa_id,))
@@ -235,14 +241,15 @@ class LibroPostgres:
                     (clave, self.empresa_id, anotacion.numero))
             return anotacion, False
         except psycopg.errors.UniqueViolation:
-            # Dos peticiones idénticas a la vez: una escribió, la otra chocó
-            # contra la clave. La que chocó devuelve lo que escribió la primera.
-            ya = self.conexion.execute(
-                "select numero from peticion_fichaje where clave = %s",
-                (clave,)).fetchone()
-            if ya:
-                return self.anotacion(ya[0]), True
+            # Dos peticiones idénticas a la vez: una escribió, la otra chocó.
+            # La que chocó devuelve lo que escribió la primera.
+            ya = self.resultado_de(clave)
+            if ya is not None:
+                return ya, True
             raise
+
+    def fichar_una_sola_vez(self, clave: str, **campos) -> tuple[Anotacion, bool]:
+        return self.una_sola_vez(clave, campos)
 
     def fichar(self, trabajador_id: str, centro_id: str, tipo: Tipo,
                momento: datetime, zona_horaria: str, anotado_en: datetime | None = None,

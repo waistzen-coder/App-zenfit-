@@ -41,6 +41,7 @@ class Permiso(str, Enum):
     GESTIONAR_EMPRESAS = "gestionar_empresas"           # empresas y centros
     ROTAR_QR = "rotar_qr"
     GESTIONAR_USUARIOS = "gestionar_usuarios"
+    CORREGIR = "corregir"                # tocar horas ya registradas
 
 
 # Dos roles y cinco permisos. Con doce roles nadie sabe quién puede qué, y el
@@ -50,6 +51,10 @@ class Permiso(str, Enum):
 # atiende el teléfono da de alta gente y le resetea el PIN todo el día, y eso no
 # puede necesitar al jefe. Dar de alta una empresa cliente, rotar un QR o crear
 # usuarios sí son decisiones de quien manda.
+# Corregir horas es distinto de todo lo demás: no cambia una ficha, cambia lo
+# que se le va a pagar a alguien y lo que se enseñaría en una inspección. Se
+# queda en el rol de administración hasta que sepamos cómo lo usan de verdad las
+# gestorías; ampliarlo después es fácil, recortarlo cuando ya se usa, no.
 PERMISOS: dict[Rol, frozenset[Permiso]] = {
     Rol.ADMIN: frozenset(Permiso),
     Rol.USUARIO: frozenset({Permiso.VER, Permiso.GESTIONAR_TRABAJADORES}),
