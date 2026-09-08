@@ -243,9 +243,18 @@ falla("No se ficha en el futuro", AnotacionInvalida,
 
 libro = Libro(EMPRESA)
 libro.fichar(LUCIA, tipo=Tipo.ENTRADA, momento=h(2, 9, 0), **MOTRIL)
-falla("El libro no retrocede: no se escribe antes que la anotación previa",
-      AnotacionInvalida, libro.fichar, LUCIA, tipo=Tipo.SALIDA,
-      momento=h(1, 17, 0), **MOTRIL)
+libro.fichar(LUCIA, tipo=Tipo.SALIDA, momento=h(1, 17, 0), **MOTRIL)
+comprobar("El libro no retrocede: una escritura con hora anterior se ajusta a "
+          "la de la anotación previa",
+          libro.anotacion(2).anotado_en, libro.anotacion(1).anotado_en)
+comprobar("Pero la hora del fichaje no se toca",
+          libro.anotacion(2).momento, h(1, 17, 0))
+comprobar("Y el libro sigue verificando", bool(libro.verificar()), True)
+
+libro = Libro(EMPRESA)
+libro.fichar(LUCIA, tipo=Tipo.ENTRADA, momento=h(1, 9, 0), anotado_en=None, **MOTRIL)
+comprobar("Sin hora de escritura, la pone el libro con el reloj del servidor",
+          libro.anotacion(1).anotado_en.year, datetime.now(ZoneInfo("UTC")).year)
 
 # --------------------------------- el cálculo no se calla ante un fichaje descolgado
 
