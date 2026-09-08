@@ -26,6 +26,7 @@ igual las que vienen de memoria y las que vienen de la base de datos.
 
 from dataclasses import dataclass
 from datetime import date, datetime, timedelta
+from enum import Enum
 from zoneinfo import ZoneInfo
 
 from .registro import FICHAJES, Anotacion, Tipo, correcciones_vigentes
@@ -142,3 +143,56 @@ def horas_del_mes(anotaciones: list[Anotacion], trabajador_id: str,
         j.horas for j in jornadas_de(anotaciones, trabajador_id)
         if j.dia.year == anio and j.dia.month == mes
     ), 2)
+
+
+# --------------------------------------------- qué puede hacer ahora una persona
+
+class Estado(str, Enum):
+    """En qué situación está alguien ahora mismo, según sus fichajes."""
+
+    FUERA = "fuera"
+    DENTRO = "dentro"
+    EN_PAUSA = "en_pausa"
+
+
+# La regla vive aquí y solo aquí. La web pregunta; no decide.
+ACCIONES = {
+    Estado.FUERA: (Tipo.ENTRADA,),
+    Estado.DENTRO: (Tipo.PAUSA_INICIO, Tipo.SALIDA),
+    Estado.EN_PAUSA: (Tipo.PAUSA_FIN, Tipo.SALIDA),
+}
+
+COMO_SE_LLAMA = {
+    Tipo.ENTRADA: "Entrar",
+    Tipo.SALIDA: "Salir",
+    Tipo.PAUSA_INICIO: "Empezar pausa",
+    Tipo.PAUSA_FIN: "Volver de la pausa",
+}
+
+
+def estado_actual(anotaciones: list[Anotacion], trabajador_id: str) -> Estado:
+    """Dónde está esta persona ahora, mirando su último fichaje vigente.
+
+    Existe para que la interfaz no tenga que razonar «si el último fue una
+    entrada, entonces...». Esa regla es del dominio: si un día cambia, cambia
+    en un sitio.
+    """
+    fichajes = _fichajes_vigentes(anotaciones, trabajador_id)
+    if not fichajes:
+        return Estado.FUERA
+    ultimo = fichajes[-1][1]
+    if ultimo is Tipo.ENTRADA or ultimo is Tipo.PAUSA_FIN:
+        return Estado.DENTRO
+    if ultimo is Tipo.PAUSA_INICIO:
+        return Estado.EN_PAUSA
+    return Estado.FUERA
+
+
+def acciones_posibles(anotaciones: list[Anotacion], trabajador_id: str) -> tuple[Tipo, ...]:
+    return ACCIONES[estado_actual(anotaciones, trabajador_id)]
+
+
+def ultimo_fichaje(anotaciones: list[Anotacion], trabajador_id: str):
+    """El último fichaje vigente de una persona: (momento, tipo) o None."""
+    fichajes = _fichajes_vigentes(anotaciones, trabajador_id)
+    return (fichajes[-1][0], fichajes[-1][1]) if fichajes else None
