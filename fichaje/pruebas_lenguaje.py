@@ -62,7 +62,6 @@ for fichero in sorted(REVISABLES):
         if limpia.startswith(">") or "no dice" in limpia or "prohibido" in limpia:
             continue
         for patron, motivo in PROHIBIDAS.items():
-            hechas += 1
             if re.search(patron, limpia):
                 fallos.append(
                     f"{relativo}:{numero}\n    dice: {linea.strip()[:90]}\n"
@@ -74,5 +73,5 @@ if fallos:
         print(f"  · {fallo}\n")
     print("Lo que se puede decir está en proyecto/08-estado-normativo.md")
     raise SystemExit(1)
-print(f"Todas las comprobaciones pasan: {hechas} sobre el lenguaje normativo "
-      f"en {len(REVISABLES)} archivos.")
+print(f"Todas las comprobaciones pasan: {len(REVISABLES)} archivos revisados "
+      f"contra {len(PROHIBIDAS)} afirmaciones prohibidas.")
