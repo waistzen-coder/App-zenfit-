@@ -15,14 +15,19 @@ from .registro import (
 )
 
 fallos: list[str] = []
+hechas = 0          # comprobaciones realmente ejecutadas
 
 
 def comprobar(descripcion: str, obtenido, esperado):
+    global hechas
+    hechas += 1
     if obtenido != esperado:
         fallos.append(f"{descripcion}\n    esperado: {esperado!r}\n    obtenido: {obtenido!r}")
 
 
 def falla(descripcion: str, excepcion, funcion, *args, **kwargs):
+    global hechas
+    hechas += 1
     try:
         funcion(*args, **kwargs)
     except excepcion:
@@ -255,10 +260,33 @@ comprobar("20.000 anotaciones: salen las 500 jornadas de una persona",
 comprobar(f"Y en menos de un segundo (ha tardado {tardanza:.2f} s)",
           tardanza < 1.0, True)
 
+# ======================================= caracterización: la vara de medir
+
+from . import caracterizacion as carac
+
+canonico = carac.libro_canonico()
+canonico.verificar()
+comprobar("El libro canónico tiene las anotaciones esperadas",
+          len(canonico.anotaciones), carac.ANOTACIONES)
+comprobar("Y su huella final es exactamente la fijada",
+          canonico.anotaciones[-1].huella, carac.HUELLA_FINAL)
+comprobar("Las horas de Lucía, con la corrección aceptada",
+          [j.horas for j in jornadas_de(canonico, "Lucía")], carac.HORAS_LUCIA)
+comprobar("Las de Jose, con la corrección rechazada y el día sin cerrar",
+          [j.horas for j in jornadas_de(canonico, "Jose")], carac.HORAS_JOSE)
+comprobar("Los fichajes retroactivos son los que son",
+          [a.numero for a in canonico.retroactivas()], carac.RETROACTIVAS)
+comprobar("Y las incidencias de Jose",
+          [j.incidencias for j in jornadas_de(canonico, "Jose")],
+          carac.INCIDENCIAS_JOSE)
+comprobar("Construirlo dos veces da exactamente el mismo libro",
+          [a.huella for a in carac.libro_canonico().anotaciones],
+          [a.huella for a in canonico.anotaciones])
+
 
 if fallos:
-    print(f"\n{len(fallos)} comprobaciones fallan:\n")
+    print(f"\n{len(fallos)} de {hechas} comprobaciones fallan:\n")
     for fallo in fallos:
         print(f"  · {fallo}\n")
     raise SystemExit(1)
-print("Todas las comprobaciones pasan.")
+print(f"Todas las comprobaciones pasan: {hechas} sobre el registro de jornada.")
