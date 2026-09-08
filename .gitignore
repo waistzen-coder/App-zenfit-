@@ -1,3 +1,39 @@
+# Lo que Python genera solo
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Entornos
+.venv/
+venv/
+env/
+
+# Secretos y configuración local. Nunca en el repositorio.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Lo que producen los comandos del proyecto
+*.log
+*.dump
+*.sql.gz
+copia*.dump
+cartel*.svg
+*.zip
+exportacion-*/
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Lo que SÍ se versiona, dicho aquí para que nadie lo añada por error:
+#   migraciones/*.sql   la forma de la base de datos
+#   proyecto/*.md       por qué está hecho como está
+#   fichaje/, motor/    el código
+
+# Del proyecto antiguo de Shopify, que sigue en pruebas/ y shopify-theme/
 pruebas/cod.html
 pruebas/node_modules/
 pruebas/package*.json
