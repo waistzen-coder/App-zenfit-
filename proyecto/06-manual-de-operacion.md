@@ -137,3 +137,96 @@ su postgres -c "/usr/lib/postgresql/16/bin/pg_ctl \
 - **Cambiar la hora de un fichaje a mano.** Lo mismo.
 - **Ver el PIN de alguien.** No se guarda: solo se guarda algo derivado de él,
   del que no se puede volver atrás. Se pone uno nuevo y ya está.
+
+---
+
+# El panel de la gestoría
+
+Desde aquí una asesoría lleva sus empresas cliente sin que nosotros toquemos la
+base de datos.
+
+## Crear la primera gestoría y su administrador
+
+Esto se hace una vez por cliente nuevo, desde el terminal, porque todavía no hay
+alta comercial automática:
+
+```bash
+python3 -m fichaje.admin gestoria "Asesoría Pérez"
+# devuelve el identificador de la gestoría
+
+python3 -m fichaje.admin usuario <gestoria> ana@asesoria.es "Ana Pérez" admin
+# pide la contraseña por teclado, dos veces
+```
+
+La contraseña **se teclea, no se pasa como argumento**: un argumento queda en el
+historial del terminal y en la lista de procesos, donde lo ve cualquiera que
+esté en la misma máquina. Mínimo doce caracteres; una frase que recuerdes vale
+más que un símbolo raro.
+
+El último argumento es el permiso: `admin` para quien manda, cualquier otra cosa
+para uso diario.
+
+## Arrancar el panel
+
+```bash
+python3 -m fichaje.panel        # escucha en el puerto 5001
+```
+
+Es una aplicación **distinta** de la del fichaje, y va en otro puerto a
+propósito. Necesita su propia clave:
+
+```bash
+export FICHAJE_PANEL_SECRETO="$(python3 -c 'import secrets;print(secrets.token_hex(32))')"
+```
+
+## Lo que ya puede hacer la gestoría sola, sin ti
+
+Entrando en `/panel/entrar` con su correo y contraseña:
+
+- **Dar de alta empresas cliente** y renombrarlas.
+- **Crear centros de trabajo** con su zona horaria.
+- **Descargar el cartel del QR** de cada centro, e imprimirlo.
+- **Rotar el QR** si alguien fotografía el cartel.
+- **Dar de alta personas**, con su código y su PIN inicial.
+- **Resetear un PIN** cuando a alguien se le olvide.
+- **Dar de baja** a quien se va.
+- **Ver quién está trabajando ahora**, la jornada de cualquier día y las
+  incidencias.
+- **Crear más usuarios** del panel, y desactivarlos.
+
+## Comprobar la integridad de los libros
+
+Verificar una cadena es recorrerla entera, así que **no se hace al abrir una
+página**: se ejecuta una vez al día, y el panel enseña el último resultado con
+su fecha.
+
+```bash
+python3 -m fichaje.admin verificar
+```
+
+Conviene dejarlo en una tarea programada nocturna. Si alguna empresa sale mal,
+aparece en rojo en el resumen de su gestoría y en su ficha.
+
+**No hay ningún botón de reparar, y no lo va a haber.** Un libro que no cuadra
+es un incidente que hay que mirar, no algo que se arregla recalculando las
+huellas: recalcularlas sería precisamente borrar la prueba.
+
+## Si alguien de la gestoría se queda fuera
+
+Se desbloquea solo al cuarto de hora. Para cambiarle la contraseña:
+
+```bash
+python3 -m fichaje.admin contrasena <usuario>
+```
+
+## Lo que el panel NO puede hacer, y es a propósito
+
+- **Cambiar la hora de un fichaje.** No hay ruta, ni formulario, ni comando.
+- **Borrar un fichaje o una jornada.** Lo mismo.
+- **Ver el PIN de nadie.** No se guarda.
+- **Ver nada de otra gestoría.** Un identificador ajeno responde «no
+  encontrado», sin confirmar siquiera que exista.
+
+Las equivocaciones en los fichajes se corregirán en la fase siguiente, añadiendo
+hechos nuevos con el acuerdo de la empresa y de la persona, que es lo que exige
+el decreto.
