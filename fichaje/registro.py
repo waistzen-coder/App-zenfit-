@@ -46,6 +46,10 @@ class Tipo(str, Enum):
     PAUSA_FIN = "pausa_fin"
     CORRECCION_PROPUESTA = "correccion_propuesta"
     CORRECCION_ACEPTADA = "correccion_aceptada"
+    CORRECCION_DISCREPANCIA = "correccion_discrepancia"
+    # Se escribía así antes de llamar a las cosas por su nombre. No se escribe
+    # nunca más, pero se sigue leyendo: las anotaciones que ya lo llevan
+    # calcularon su huella con esta palabra, y cambiársela las invalidaría.
     CORRECCION_RECHAZADA = "correccion_rechazada"
 
 
@@ -55,6 +59,11 @@ class Parte(str, Enum):
 
 
 FICHAJES = {Tipo.ENTRADA, Tipo.SALIDA, Tipo.PAUSA_INICIO, Tipo.PAUSA_FIN}
+
+# Una propuesta se cierra aceptándola o dejando constancia del desacuerdo. Las
+# dos cosas la cierran; ninguna borra nada.
+RESOLUCIONES = {Tipo.CORRECCION_ACEPTADA, Tipo.CORRECCION_DISCREPANCIA,
+                Tipo.CORRECCION_RECHAZADA}
 
 # La huella de la que cuelga la primera anotación de cada empresa.
 ORIGEN = "0" * 64
@@ -277,9 +286,19 @@ def campos_fichaje(trabajador_id: str, centro_id: str, tipo: Tipo, momento: date
 
 
 def campos_propuesta(original: Anotacion, momento_propuesto: datetime, motivo: str,
-                     autor_id: str, parte: Parte, anotado_en: datetime) -> dict:
+                     autor_id: str, parte: Parte, anotado_en: datetime,
+                     hay_pendiente: bool = False) -> dict:
     if original.tipo not in FICHAJES:
         raise AnotacionInvalida("Solo se corrigen fichajes, no correcciones")
+    if hay_pendiente:
+        # Un fichaje con dos propuestas abiertas a la vez no tiene respuesta
+        # buena: si se aceptan las dos, ¿cuál manda? Si se acepta una y se
+        # discrepa de la otra, ¿qué queda escrito? Se resuelve la que hay y
+        # luego se propone otra.
+        raise AnotacionInvalida(
+            f"El fichaje {original.numero} ya tiene una propuesta de cambio sin "
+            f"contestar. Hay que resolver esa antes de proponer otra."
+        )
     if not motivo.strip():
         raise AnotacionInvalida(
             "Una corrección sin motivo no se puede justificar después. "
@@ -296,6 +315,13 @@ def campos_propuesta(original: Anotacion, momento_propuesto: datetime, motivo: s
 
 def campos_resolucion(propuesta: Anotacion, ya_resuelta: bool, acepta: bool,
                       autor_id: str, parte: Parte, anotado_en: datetime) -> dict:
+    """La respuesta de la otra parte: acepta, o deja constancia del desacuerdo.
+
+    No hay una tercera opción, y la discrepancia no borra nada: la propuesta, su
+    motivo, quién la hizo y quién no estuvo de acuerdo quedan los cuatro
+    escritos. Ocultar el conflicto sería justamente perder el dato que hace
+    falta el día que alguien pregunte.
+    """
     if propuesta.tipo is not Tipo.CORRECCION_PROPUESTA:
         raise AnotacionInvalida(f"La anotación {propuesta.numero} no es una propuesta")
     if parte is propuesta.parte:
@@ -307,7 +333,7 @@ def campos_resolucion(propuesta: Anotacion, ya_resuelta: bool, acepta: bool,
         raise AnotacionInvalida(f"La propuesta {propuesta.numero} ya está resuelta")
     return dict(
         centro_id=propuesta.centro_id, trabajador_id=propuesta.trabajador_id,
-        tipo=Tipo.CORRECCION_ACEPTADA if acepta else Tipo.CORRECCION_RECHAZADA,
+        tipo=Tipo.CORRECCION_ACEPTADA if acepta else Tipo.CORRECCION_DISCREPANCIA,
         momento=propuesta.momento, momento_propuesto=propuesta.momento_propuesto,
         anotado_en=anotado_en, zona_horaria=propuesta.zona_horaria,
         autor_id=autor_id, parte=parte, corrige=propuesta.numero,
@@ -403,7 +429,7 @@ class Libro:
         """Propone cambiar la hora de un fichaje. No cambia nada todavía."""
         return self._anadir(**campos_propuesta(
             self.anotacion(numero), momento_propuesto, motivo, autor_id, parte,
-            anotado_en))
+            anotado_en, hay_pendiente=self.hay_propuesta_pendiente(numero)))
 
     def resolver_correccion(self, numero: int, acepta: bool, autor_id: str,
                             parte: Parte, anotado_en: datetime) -> Anotacion:
@@ -420,10 +446,17 @@ class Libro:
             raise AnotacionInvalida(f"No existe la anotación {numero}")
         return self.anotaciones[numero - 1]
 
+    def hay_propuesta_pendiente(self, numero_fichaje: int) -> bool:
+        """Si ese fichaje tiene una propuesta esperando respuesta."""
+        for a in self.anotaciones:
+            if (a.tipo is Tipo.CORRECCION_PROPUESTA and a.corrige == numero_fichaje
+                    and self._resolucion_de(a.numero) is None):
+                return True
+        return False
+
     def _resolucion_de(self, numero: int) -> Anotacion | None:
         for a in self.anotaciones:
-            if a.corrige == numero and a.tipo in {Tipo.CORRECCION_ACEPTADA,
-                                                  Tipo.CORRECCION_RECHAZADA}:
+            if a.corrige == numero and a.tipo in RESOLUCIONES:
                 return a
         return None
 

@@ -95,9 +95,15 @@ def libro_canonico() -> Libro:
 # Los valores observables que la base de datos tendrá que reproducir clavados.
 # Salen de una ejecución real, no de escribirlos a ojo: la primera vez que se
 # escribieron a mano estaban mal.
+#
+# La huella cambió una vez, de 187bc7f2… a 4ab6d2b5…, al pasar de escribir
+# «correccion_rechazada» a «correccion_discrepancia». Es un valor dentro del
+# cuerpo firmado, así que la huella tenía que cambiar; la ESTRUCTURA no cambió,
+# así que la versión sigue siendo la 2 y las anotaciones que ya llevaban la
+# palabra vieja siguen verificando con su huella original.
 ANOTACIONES = 17
 VERSION = 2
-HUELLA_FINAL = "187bc7f252a7926a738ffa0dbcbe09b099f1e639f3c1eb384397d6fa7c16ba7c"
+HUELLA_FINAL = "4ab6d2b54a5490626024fe512bb8a11daca5dbb2d9c59e6e6d7e8b712e29330d"
 
 # Día 1 corregido a las 19:00, día 4 retroactivo, y la noche del 5 al 6.
 HORAS_LUCIA = [9.0, 8.0, 4.0]

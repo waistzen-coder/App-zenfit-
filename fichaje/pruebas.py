@@ -339,6 +339,36 @@ comprobar("Construirlo dos veces da exactamente el mismo libro",
           [a.huella for a in canonico.anotaciones])
 
 
+# ------------------------- lo escrito con la palabra vieja se sigue leyendo
+
+from dataclasses import replace as _replace  # noqa: E402
+
+libro = libro_de_un_dia()
+libro.proponer_correccion(4, h(1, 17, 0), "Se fue antes", PACO,
+                          Parte.EMPRESA, h(2, 9, 0))
+libro.resolver_correccion(5, False, LUCIA, Parte.TRABAJADOR, h(2, 9, 5))
+comprobar("Un desacuerdo se escribe como discrepancia, no como rechazo",
+          libro.anotacion(6).tipo, Tipo.CORRECCION_DISCREPANCIA)
+comprobar("Y no toca la hora del fichaje",
+          jornadas_de(libro.anotaciones, LUCIA)[0].horas, 8.0)
+comprobar("La propuesta, su motivo y quién la hizo siguen en el libro",
+          (libro.anotacion(5).motivo, libro.anotacion(5).parte),
+          ("Se fue antes", Parte.EMPRESA))
+comprobar("Y quién no estuvo de acuerdo, también",
+          libro.anotacion(6).parte, Parte.TRABAJADOR)
+
+# Una anotación con la palabra antigua, como las que pudiera haber escrito la
+# versión anterior: se recalcula su huella con su propia palabra y verifica.
+antigua = libro.anotacion(6)
+vieja = _replace(antigua, tipo=Tipo.CORRECCION_RECHAZADA, huella="")
+vieja = _replace(vieja, huella=vieja.calcular_huella())
+libro.anotaciones[5] = vieja
+comprobar("Una anotación escrita con «rechazada» sigue verificando",
+          bool(libro.verificar()), True)
+comprobar("Y sigue cerrando la propuesta",
+          libro._resolucion_de(5) is not None, True)
+
+
 if fallos:
     print(f"\n{len(fallos)} de {hechas} comprobaciones fallan:\n")
     for fallo in fallos:
