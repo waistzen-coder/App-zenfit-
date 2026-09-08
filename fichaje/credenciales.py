@@ -107,3 +107,44 @@ def huella_de_token(token: str) -> str:
     azar, así que no hay nada que adivinar y no hace falta encarecer nada.
     """
     return hashlib.sha256(token.encode("utf-8")).hexdigest()
+
+
+# ------------------------------------------- contraseñas del personal de gestoría
+
+# Longitud antes que reglas raras. Obligar a una mayúscula, un número y un
+# símbolo produce «Verano2026!» en todas las empresas del país; pedir doce
+# caracteres produce frases que nadie adivina y que caben en un gestor de
+# contraseñas. No se trunca nada: se derivan enteras.
+LARGO_MINIMO_CONTRASENA = 12
+
+
+class ContrasenaInvalida(Exception):
+    """La contraseña no cumple lo mínimo."""
+
+
+def validar_contrasena(contrasena: str) -> str:
+    if len(contrasena) < LARGO_MINIMO_CONTRASENA:
+        raise ContrasenaInvalida(
+            f"La contraseña necesita al menos {LARGO_MINIMO_CONTRASENA} "
+            f"caracteres. Una frase que recuerdes vale más que un símbolo raro."
+        )
+    return contrasena
+
+
+def derivar_contrasena(contrasena: str) -> str:
+    validar_contrasena(contrasena)
+    sal = secrets.token_bytes(LONGITUD_SAL)
+    clave = hashlib.scrypt(contrasena.encode("utf-8"), salt=sal, n=N, r=R, p=P,
+                           dklen=LONGITUD_CLAVE, maxmem=MEMORIA_MAXIMA)
+    return (f"{ALGORITMO}${N}${R}${P}$"
+            f"{base64.b64encode(sal).decode()}${base64.b64encode(clave).decode()}")
+
+
+def comprobar_contrasena(contrasena: str, guardada: str | None) -> bool:
+    """Mismo camino tanto si el usuario existe como si no.
+
+    Si no hay contraseña guardada igualmente se deriva una falsa: contestar
+    antes cuando el email no existe es decirle a quien prueba qué correos están
+    dados de alta.
+    """
+    return comprobar(contrasena, guardada)
