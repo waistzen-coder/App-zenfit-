@@ -8,7 +8,10 @@ Usa el usuario dueño del esquema, no el de la aplicación: dar de alta gente y
 cambiar PIN son cosas de administración, y el proceso que atiende internet no
 tiene por qué poder hacerlas.
 
-    python3 -m fichaje.admin empresa "Bar Casa Paco"
+    python3 -m fichaje.admin gestoria "Asesoría Pérez"
+    python3 -m fichaje.admin usuario <gestoria> ana@asesoria.es "Ana Pérez" admin
+    python3 -m fichaje.admin contrasena <usuario>
+    python3 -m fichaje.admin empresa "Bar Casa Paco" <gestoria>
     python3 -m fichaje.admin centro <empresa> "Local de la playa" Europe/Madrid
     python3 -m fichaje.admin trabajador <empresa> "Lucía García" 1042
     python3 -m fichaje.admin pin <trabajador> 482913
@@ -23,6 +26,7 @@ import sys
 
 import segno
 
+from . import gestoria as G
 from .credenciales import derivar, nuevo_token, validar
 from .organizacion import nuevo_id, validar_zona
 from .postgres import conectar
@@ -34,11 +38,24 @@ def url_del_centro(token: str) -> str:
     return f"{RAIZ.rstrip('/')}/f/{token}"
 
 
-def crear_empresa(conexion, nombre: str) -> str:
+def crear_empresa(conexion, nombre: str, gestoria_id: str | None = None) -> str:
     identificador = nuevo_id()
-    conexion.execute("insert into empresa (id, nombre) values (%s, %s)",
-                     (identificador, nombre))
+    conexion.execute("insert into empresa (id, nombre, gestoria_id) values (%s,%s,%s)",
+                     (identificador, nombre, gestoria_id))
     return identificador
+
+
+def pedir_contrasena() -> str:
+    """La contraseña se teclea, no se pasa por argumento.
+
+    Un argumento acaba en el historial del terminal y en la lista de procesos,
+    donde lo ve cualquiera que esté en la misma máquina.
+    """
+    import getpass
+    primera = getpass.getpass("Contraseña (12 caracteres o más): ")
+    if primera != getpass.getpass("Otra vez: "):
+        raise SystemExit("No coinciden.")
+    return primera
 
 
 def crear_centro(conexion, empresa_id: str, nombre: str,
@@ -100,6 +117,24 @@ def desbloquear(conexion, centro_id: str, codigo: str) -> int:
         "and not acertado", (centro_id, codigo)).rowcount
 
 
+def verificar_todo(conexion) -> None:
+    """Comprueba el libro de todas las empresas y guarda el resultado.
+
+    Pensado para una tarea periódica, una vez al día. Verificar es recorrer la
+    cadena entera, así que no puede hacerse al pintar una página.
+    """
+    empresas = conexion.execute(
+        "select id::text, nombre from empresa order by nombre").fetchall()
+    rotas = 0
+    for identificador, nombre in empresas:
+        resultado = G.verificar_y_guardar(conexion, identificador)
+        if not resultado["valido"]:
+            rotas += 1
+            print(f"  ROTO  {nombre}: anotación {resultado['primera_fallida']} "
+                  f"{resultado['motivo']}")
+    print(f"{len(empresas)} empresas comprobadas · {rotas} con problemas")
+
+
 def cartel(conexion, centro_id: str, destino: str | None = None) -> str:
     """El cartel para imprimir: un QR, el nombre del centro y nada más.
 
@@ -133,13 +168,21 @@ def cartel(conexion, centro_id: str, destino: str | None = None) -> str:
 
 
 ORDENES = {
-    "empresa": lambda c, a: print(crear_empresa(c, a[0])),
+    "gestoria": lambda c, a: print(G.crear_gestoria(c, a[0])),
+    "empresa": lambda c, a: print(crear_empresa(c, a[0], a[1] if len(a) > 1 else None)),
+    "usuario": lambda c, a: print(G.crear_usuario(
+        c, a[0], a[1], a[2],
+        pedir_contrasena(),
+        G.Rol.ADMIN if len(a) > 3 and a[3] == "admin" else G.Rol.USUARIO)),
+    "contrasena": lambda c, a: (G.cambiar_contrasena(c, a[0], pedir_contrasena()),
+                                print("Contraseña cambiada"))[1],
     "trabajador": lambda c, a: print(crear_trabajador(c, a[0], a[1], a[2])),
     "pin": lambda c, a: (poner_pin(c, a[0], a[1]), print("PIN actualizado"))[1],
     "baja": lambda c, a: (cambiar_actividad(c, a[0], False), print("De baja"))[1],
     "alta": lambda c, a: (cambiar_actividad(c, a[0], True), print("De alta"))[1],
     "rotar-qr": lambda c, a: print(url_del_centro(rotar_token(c, a[0]))),
     "desbloquear": lambda c, a: print(f"{desbloquear(c, a[0], a[1])} intentos borrados"),
+    "verificar": lambda c, a: verificar_todo(c),
 }
 
 

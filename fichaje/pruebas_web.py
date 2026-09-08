@@ -45,12 +45,24 @@ def comprobar(descripcion: str, obtenido, esperado):
         fallos.append(f"{descripcion}\n    esperado: {esperado!r}\n    obtenido: {obtenido!r}")
 
 
+def vaciar_base(conexion) -> None:
+    """Tira todas las tablas del esquema, sean las que sean.
+
+    Antes había una lista escrita a mano y cada tabla nueva la rompía: la
+    migración intentaba crear algo que ya estaba. La base se pregunta a sí
+    misma qué tiene.
+    """
+    tablas = [f[0] for f in conexion.execute(
+        "select tablename from pg_tables where schemaname = 'public'").fetchall()]
+    if tablas:
+        from psycopg import sql
+        conexion.execute(sql.SQL("drop table {} cascade").format(
+            sql.SQL(", ").join(sql.Identifier(t) for t in tablas)))
+
 # ------------------------------------------------------------------ montaje
 
 admin = conectar()
-admin.execute("drop table if exists peticion_fichaje, intento_acceso, sesion, "
-              "anotacion, trabajador, centro, empresa, _yoyo_migration, _yoyo_log, "
-              "_yoyo_version, yoyo_lock cascade")
+vaciar_base(admin)
 admin.close()
 aplicar()
 admin = conectar()

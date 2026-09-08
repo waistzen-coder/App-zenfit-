@@ -170,6 +170,20 @@ COMO_SE_LLAMA = {
 }
 
 
+def estado_segun_ultimo(tipo: Tipo | None) -> Estado:
+    """La regla, en un solo sitio: qué significa el último fichaje de alguien.
+
+    Vive suelta para que el panel pueda preguntarla sobre el último fichaje que
+    le devuelva la base de datos, sin cargar el libro entero de cada empresa y
+    sin reescribir la regla por su cuenta.
+    """
+    if tipo is Tipo.ENTRADA or tipo is Tipo.PAUSA_FIN:
+        return Estado.DENTRO
+    if tipo is Tipo.PAUSA_INICIO:
+        return Estado.EN_PAUSA
+    return Estado.FUERA
+
+
 def estado_actual(anotaciones: list[Anotacion], trabajador_id: str) -> Estado:
     """Dónde está esta persona ahora, mirando su último fichaje vigente.
 
@@ -178,14 +192,7 @@ def estado_actual(anotaciones: list[Anotacion], trabajador_id: str) -> Estado:
     en un sitio.
     """
     fichajes = _fichajes_vigentes(anotaciones, trabajador_id)
-    if not fichajes:
-        return Estado.FUERA
-    ultimo = fichajes[-1][1]
-    if ultimo is Tipo.ENTRADA or ultimo is Tipo.PAUSA_FIN:
-        return Estado.DENTRO
-    if ultimo is Tipo.PAUSA_INICIO:
-        return Estado.EN_PAUSA
-    return Estado.FUERA
+    return estado_segun_ultimo(fichajes[-1][1] if fichajes else None)
 
 
 def acciones_posibles(anotaciones: list[Anotacion], trabajador_id: str) -> tuple[Tipo, ...]:

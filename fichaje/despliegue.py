@@ -29,15 +29,29 @@ from .postgres import conectar, dsn
 ROL = os.environ.get("FICHAJE_APP_ROL", "fichaje_app")
 
 # Lo que la aplicación necesita para funcionar, y ni una cosa más.
+# El panel administra entidades, así que la aplicación necesita poder crear y
+# editar empresas, centros y personas. Lo que NO cambia, y es lo único que de
+# verdad importa: sobre `anotacion` puede leer y añadir, nunca modificar ni
+# borrar. Ese permiso no existe para nadie salvo el dueño del esquema, y ni
+# siquiera para él, porque además está el disparador.
 PERMISOS = [
-    ("empresa", "select"),
-    ("centro", "select"),
-    ("trabajador", "select"),
-    ("anotacion", "select, insert"),      # jamás update ni delete
-    ("sesion", "select, insert, update"),  # se cierra marcando cerrada_en
+    ("gestoria", "select"),
+    ("usuario_gestoria", "select, insert, update"),
+    ("empresa", "select, insert, update"),
+    ("centro", "select, insert, update"),
+    ("trabajador", "select, insert, update"),
+    ("anotacion", "select, insert"),           # jamás update ni delete
+    ("sesion", "select, insert, update"),
+    ("sesion_panel", "select, insert, update"),
     ("intento_acceso", "select, insert"),
+    ("intento_panel", "select, insert"),
     ("peticion_fichaje", "select, insert"),
+    ("registro_administrativo", "select, insert"),
+    ("verificacion_libro", "select, insert, update"),
 ]
+
+SECUENCIAS = ["intento_acceso_id_seq", "intento_panel_id_seq",
+              "registro_administrativo_id_seq"]
 
 
 def configurar_rol(conexion: psycopg.Connection, rol: str = ROL,
@@ -72,8 +86,10 @@ def configurar_rol(conexion: psycopg.Connection, rol: str = ROL,
     for tabla, permisos in PERMISOS:
         conexion.execute(sql.SQL("grant {} on {} to {}").format(sql.SQL(permisos), sql.Identifier(tabla), sql.Identifier(rol)))
 
-    # intento_acceso lleva un bigserial: sin esto no puede escribir.
-    conexion.execute(sql.SQL("grant usage, select on sequence intento_acceso_id_seq to {}").format(sql.Identifier(rol)))
+    # Las tablas con bigserial necesitan además su secuencia.
+    for secuencia in SECUENCIAS:
+        conexion.execute(sql.SQL("grant usage, select on sequence {} to {}").format(
+            sql.Identifier(secuencia), sql.Identifier(rol)))
 
 
 def dsn_aplicacion(rol: str = ROL, contrasena: str | None = None) -> str:
