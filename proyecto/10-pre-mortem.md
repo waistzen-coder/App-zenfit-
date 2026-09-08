@@ -1,0 +1,95 @@
+# Pre-mortem: mañana lo miran un inspector, un abogado y un pentester
+
+Ejercicio de imaginar el fracaso antes de que ocurra. Quince motivos por los que
+nos lo podrían tirar, ordenados por lo que de verdad preocupa.
+
+---
+
+## LEGAL
+
+**1 · No hay acceso para los representantes de los trabajadores.**
+Probabilidad alta · Impacto alto. Es un requisito **en vigor** desde 2019, no de
+borrador. Hoy detectado y escrito en la matriz de cobertura; sin implementar.
+**Mitigación:** diseñar la figura antes del piloto. Es el hueco más caro.
+
+**2 · Vender urgencia que no existe.**
+Probabilidad media · Impacto muy alto. Decirle a una gestoría «entra en vigor en
+marzo» y que no entre destruye la confianza de golpe. Ya ocurrió dentro de
+nuestra propia documentación. **Mitigación:** `pruebas_lenguaje.py` recorre
+código y documentación en cada ejecución de CI.
+
+**3 · Los cuatro años no están probados.**
+Probabilidad media · Impacto alto. Nada borra, pero nadie ha restaurado todavía
+un libro de hace años. **Mitigación:** `copia.py` restaura y verifica; falta
+hacerlo con datos antiguos de verdad, y no los hay todavía.
+
+## SEMÁNTICA
+
+**4 · Solo se corrige la hora, no el día.**
+Probabilidad alta · Impacto medio. Quien se olvidó de fichar un día entero no
+puede arreglarlo desde la web. **Mitigación:** hoy lo hace la gestoría dando de
+alta el fichaje, y queda marcado como retroactivo. Conviene resolverlo bien.
+
+**5 · No hay guardias, disponibilidad ni desplazamientos.**
+Probabilidad media · Impacto medio. Un transportista o un técnico de guardia no
+caben en «entrada, pausa, salida».
+
+**6 · La discrepancia deja la hora original.**
+Probabilidad media · Impacto medio. El borrador dice que sin acuerdo la empresa
+refleja la modificación y el trabajador su discrepancia, lo que podría
+interpretarse como que la modificación sí se aplica. Hemos elegido no cambiar la
+hora unilateralmente y guardarlo todo. **Mitigación:** ninguna información se
+pierde, así que el día que la norma lo aclare se puede recalcular sin haber
+destruido nada.
+
+## SEGURIDAD
+
+**7 · Un PIN de seis cifras.**
+Probabilidad media · Impacto alto si se filtra la base. Un millón de
+combinaciones son catorce horas de una máquina. **Mitigación:** scrypt, límite
+de intentos y bloqueo; escrito en `credenciales.py` sin adornos.
+
+**8 · El QR fotografiado.**
+Probabilidad alta · Impacto bajo. No es un fallo: el QR es la puerta del centro,
+no una prueba de presencia. Se puede rotar. **Mitigación:** dicho en la
+documentación, y nunca presentado como prueba de que alguien estuvo allí.
+
+**9 · Un fichaje desde casa.**
+Probabilidad alta · Impacto medio. Sin geolocalización, nada impide fichar desde
+el sofá. Es una decisión: no se recoge la ubicación de nadie. **Mitigación:**
+decirlo claro. Quien quiera control de presencia física necesita otra cosa.
+
+**10 · Una ruta nueva que se olvide de la frontera entre gestorías.**
+Probabilidad media · Impacto muy alto. Es el riesgo permanente del panel.
+**Mitigación:** las consultas llevan la frontera dentro, y el banco de pruebas
+ataca todas las rutas desde la gestoría equivocada. Cada ruta nueva entra ahí.
+
+## INTEGRIDAD
+
+**11 · Truncar el libro por el final no se detecta.**
+Probabilidad baja · Impacto muy alto si ocurre. Escrito en el LEEME de cada
+expediente y en la documentación. **Mitigación:** anclaje externo, diseñado pero
+no implementado. Es la siguiente fase.
+
+**12 · Quien controle la aplicación y la base puede rehacer la historia.**
+Probabilidad baja · Impacto muy alto. Misma mitigación, mismo estado.
+
+**13 · La verificación es nocturna.**
+Probabilidad media · Impacto medio. El panel puede enseñar un dato de hasta
+veinticuatro horas atrás. **Mitigación:** siempre se muestra la fecha de la
+comprobación, y una empresa sin comprobar lo dice.
+
+## PRIVACIDAD
+
+**14 · Se guarda la IP en los intentos de acceso.**
+Probabilidad media · Impacto medio. Es dato personal y no hay política de
+borrado escrita. **Mitigación:** solo se guarda en intentos, no en fichajes.
+**Falta** definir la retención.
+
+## OPERACIÓN
+
+**15 · Todo depende de una persona.**
+Probabilidad alta · Impacto alto. Sin despliegue, sin monitorización, sin nadie
+de guardia. Una gestoría con cien empresas fichando a las ocho de la mañana no
+puede esperar a que alguien se levante. **Mitigación:** ninguna hoy. Es la razón
+por la que no debe haber piloto sin antes desplegar en serio.
