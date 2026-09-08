@@ -227,6 +227,7 @@ python3 -m fichaje.admin contrasena <usuario>
 - **Ver nada de otra gestoría.** Un identificador ajeno responde «no
   encontrado», sin confirmar siquiera que exista.
 
-Las equivocaciones en los fichajes se corregirán en la fase siguiente, añadiendo
-hechos nuevos con el acuerdo de la empresa y de la persona, que es lo que exige
-el decreto.
+Las equivocaciones en los fichajes se corrigen añadiendo hechos nuevos con el
+acuerdo de la empresa y de la persona. Es lo que contempla el proyecto de real
+decreto, que **todavía no está en vigor**: ver
+[`08-estado-normativo.md`](08-estado-normativo.md).

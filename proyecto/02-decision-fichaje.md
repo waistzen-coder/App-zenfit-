@@ -1,3 +1,15 @@
+> **Corrección posterior (8 de septiembre de 2026).** Este documento se
+> escribió el 7 de septiembre de 2026 y da por hecha una entrada en vigor
+> «entre marzo y abril de 2027». **Ese dato es incorrecto**: era una
+> estimación de prensa. El proyecto de real decreto no está aprobado y no
+> tiene fecha, porque entraría en vigor veinte días después de publicarse en
+> el BOE. Lo que sí está en vigor desde 2019 es el artículo 34.9 del Estatuto
+> de los Trabajadores. El estado real está en
+> [`08-estado-normativo.md`](08-estado-normativo.md). Se conserva el texto
+> razonamiento original intacto y solo se corrigen los datos falsos: rehacer
+> el razonamiento a posteriori sería la mejor forma de no aprender nada de él,
+> pero dejar una afirmación falsa a la vista es peor.
+
 # El registro de jornada que aguanta una inspección
 
 Decidido el 7 de septiembre de 2026, sobre cuatro ideas verificadas una a una.
@@ -38,7 +50,9 @@ lentitud: migrar los datos del programa viejo duele y la venta es larga.
 Es la única en la que el cliente no elige. El registro de jornada va a ser
 obligatoriamente **digital, automático e interoperable con la Inspección de
 Trabajo**; el papel y el Excel editable dejan de ser válidos. Si la reforma se
-aprueba, entra en vigor **entre marzo y abril de 2027**. Y afecta a **todas las
+aprueba, entraría en vigor **veinte días después de publicarse en el BOE, sin
+fecha conocida** (aquí decía «entre marzo y abril de 2027», que era una
+estimación de prensa). Y afecta a **todas las
 empresas y autónomos con empleados, sin excepción por tamaño ni por sector**:
 cerca de un millón y medio. Las sanciones se plantean **por trabajador
 afectado**, no por centro de trabajo, lo que multiplica la factura de quien no
@@ -46,8 +60,8 @@ cumpla.
 
 ## Por qué no es un suicidio contra Factorial
 
-Porque el decreto exige tres cosas que un Excel no puede hacer y que los planes
-baratos de las suites de RRHH no resuelven:
+Porque el proyecto de real decreto contempla tres cosas que un Excel no puede
+hacer y que los planes baratos de las suites de RRHH no resuelven:
 
 1. Un registro **inalterable**.
 2. **Cada corrección de un fichaje exige el acuerdo entre empresa y persona
@@ -65,7 +79,7 @@ móvil o un QR pegado en la pared.**
 
 Gestorías y asesorías laborales. Cada uno de ese millón y medio de empresarios
 tiene una gestoría haciéndole las nóminas, y esa gestoría va a recibir
-trescientas llamadas en marzo de 2027. Una conversación con ella son trescientos
+trescientas llamadas el día que se publique. Una conversación con ella son trescientos
 clientes. Es el mismo patrón que funciona siempre para un fundador solo: vender
 al intermediario, no al cliente final.
 

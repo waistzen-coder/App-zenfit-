@@ -67,6 +67,9 @@ jobs:
       - name: El motor de morosidad
         run: python3 -m motor.pruebas
 
+      - name: Lo que afirmamos sobre la ley
+        run: python3 -m fichaje.pruebas_lenguaje
+
       - name: Migraciones sobre una base vacía
         run: |
           python3 -m fichaje.migrar
