@@ -71,10 +71,25 @@ def sembrar(conexion, empresa_id, centros, trabajadores) -> None:
             "on conflict do nothing", (trabajador_id, empresa_id, "Persona"))
 
 
-conexion = conectar()
-conexion.execute("drop table if exists anotacion, trabajador, centro, empresa cascade")
-crear_esquema(conexion)
-comprobar("El esquema se crea sin quejarse", True, True)
+def base_limpia() -> psycopg.Connection:
+    """Una base recién hecha, con la forma que dicen las migraciones.
+
+    Se tiran TODAS las tablas, incluidas las que yoyo usa para llevar la cuenta:
+    si se dejan, cree que las migraciones ya están puestas y no crea nada.
+    """
+    from psycopg import sql
+    conexion = conectar()
+    tablas = [f[0] for f in conexion.execute(
+        "select tablename from pg_tables where schemaname = 'public'").fetchall()]
+    if tablas:
+        conexion.execute(sql.SQL("drop table {} cascade").format(
+            sql.SQL(", ").join(sql.Identifier(x) for x in tablas)))
+    crear_esquema()
+    return conexion
+
+
+conexion = base_limpia()
+comprobar("El esquema se crea desde las migraciones", True, True)
 
 INSTANTE = h(1, 8, 0)
 

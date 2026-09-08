@@ -36,6 +36,7 @@ import psycopg
 
 from .registro import (
     Anotacion,
+    AnotacionInvalida,
     Parte,
     Tipo,
     Veredicto,
@@ -72,87 +73,6 @@ def conectar(cadena: str | None = None) -> psycopg.Connection:
     return conexion
 
 
-ESQUEMA = """
-create table if not exists empresa (
-    id          uuid primary key,
-    nombre      text not null,
-    creada_en   timestamptz not null default now()
-);
-
-create table if not exists centro (
-    id            uuid primary key,
-    empresa_id    uuid not null references empresa(id),
-    nombre        text not null,
-    zona_horaria  text not null,
-    creado_en     timestamptz not null default now()
-);
-
-create table if not exists trabajador (
-    id          uuid primary key,
-    empresa_id  uuid not null references empresa(id),
-    nombre      text not null,
-    activo      boolean not null default true,
-    alta_en     timestamptz not null default now()
-);
-
-create table if not exists anotacion (
-    empresa_id         uuid not null references empresa(id),
-    numero             integer not null,
-    version            smallint not null,
-    centro_id          uuid not null references centro(id),
-    trabajador_id      uuid not null references trabajador(id),
-    tipo               text not null,
-    momento            timestamptz not null,
-    anotado_en         timestamptz not null,
-    zona_horaria       text not null,
-    autor_id           uuid not null,
-    parte              text not null,
-    origen             text not null default '',
-    motivo             text not null default '',
-    corrige            integer,
-    momento_propuesto  timestamptz,
-    huella_anterior    char(64) not null,
-    huella             char(64) not null,
-
-    primary key (empresa_id, numero),
-
-    -- Una bifurcación de la cadena no se puede ni escribir: dos anotaciones no
-    -- pueden colgar de la misma.
-    constraint sin_bifurcacion unique (empresa_id, huella_anterior),
-    constraint huella_unica unique (huella),
-
-    constraint numero_desde_uno check (numero >= 1),
-    constraint no_se_anota_el_futuro check (momento <= anotado_en),
-    constraint tipo_conocido check (tipo in (
-        'entrada', 'salida', 'pausa_inicio', 'pausa_fin',
-        'correccion_propuesta', 'correccion_aceptada', 'correccion_rechazada')),
-    constraint parte_conocida check (parte in ('empresa', 'trabajador')),
-    constraint solo_las_correcciones_corrigen check (
-        corrige is null or tipo in (
-            'correccion_propuesta', 'correccion_aceptada', 'correccion_rechazada'))
-);
-
-create index if not exists anotacion_por_trabajador
-    on anotacion (empresa_id, trabajador_id, numero);
-
--- El libro solo admite añadir. Esto no para a un superusuario decidido, pero sí
--- para un UPDATE despistado de la propia aplicación, que es el accidente que de
--- verdad va a ocurrir algún día.
-create or replace function prohibir_cambios_en_el_libro() returns trigger
-language plpgsql as $$
-begin
-    raise exception
-        'El libro de fichajes solo admite añadir; se ha intentado % sobre la '
-        'anotación %/% . Una corrección es una anotación nueva.',
-        tg_op, old.empresa_id, old.numero;
-end $$;
-
-drop trigger if exists anotacion_solo_anadir on anotacion;
-create trigger anotacion_solo_anadir
-    before update or delete on anotacion
-    for each row execute function prohibir_cambios_en_el_libro();
-"""
-
 CAMPOS = (
     "empresa_id::text, numero, version, centro_id::text, trabajador_id::text, "
     "tipo, momento, anotado_en, zona_horaria, autor_id::text, parte, origen, "
@@ -160,9 +80,17 @@ CAMPOS = (
 )
 
 
-def crear_esquema(conexion: psycopg.Connection) -> None:
-    conexion.execute(ESQUEMA)
-    conexion.commit()
+def crear_esquema(conexion: psycopg.Connection | None = None) -> None:
+    """Deja la base con la forma que toca, aplicando las migraciones.
+
+    Aquí vivía el esquema entero copiado en una constante. Era la segunda
+    versión de la verdad, y pasó lo que pasa siempre: se añadió un tipo nuevo de
+    anotación en una migración y esta copia se quedó atrás, así que las pruebas
+    que la usaban rechazaban datos que la base real aceptaba. La forma de la
+    base de datos se define en `migraciones/`, y en ningún otro sitio.
+    """
+    from .migrar import aplicar
+    aplicar()
 
 
 def _fila_a_anotacion(fila) -> Anotacion:
@@ -201,17 +129,29 @@ class LibroPostgres:
 
     # ------------------------------------------------------------- escribir
 
-    def _anadir(self, **campos) -> Anotacion:
+    def _anadir(self, campos: dict | None = None, decidir=None) -> Anotacion:
         """Encadena y escribe, todo dentro de una transacción.
 
         Leer la última anotación y escribir la siguiente tiene que ser
         indivisible: si dos fichajes leyeran la misma «última», los dos
         construirían la número siguiente y uno de los dos sobraría.
+
+        `decidir` es para las operaciones que además necesitan **mirar el estado
+        del libro antes de decidir si pueden escribir**, como resolver una
+        corrección. Recibe el cursor y devuelve los campos, y se ejecuta ya
+        dentro del bloqueo.
+
+        Esto no es un adorno arquitectónico: cuando esas lecturas se hacían
+        fuera, cien intentos simultáneos de resolver la misma propuesta
+        escribían nueve resoluciones. Todos pasaban el control antes de que
+        ninguno hubiera escrito.
         """
         with self.conexion.transaction():
             cur = self.conexion.cursor()
             cur.execute("select pg_advisory_xact_lock(hashtext(%s))",
                         (self.empresa_id,))
+            if decidir is not None:
+                campos = decidir(cur)
             cur.execute(
                 f"select {CAMPOS} from anotacion where empresa_id = %s "
                 f"order by numero desc limit 1", (self.empresa_id,))
@@ -220,6 +160,36 @@ class LibroPostgres:
             anotacion = construir_anotacion(anterior, self.empresa_id, **campos)
             _insertar(cur, anotacion)
         return anotacion
+
+    # Lecturas que se hacen con el cursor de la transacción en curso, para que
+    # lo que se lee y lo que se escribe no puedan separarse.
+
+    def _anotacion_en(self, cur, numero: int) -> Anotacion:
+        cur.execute(f"select {CAMPOS} from anotacion where empresa_id = %s "
+                    f"and numero = %s", (self.empresa_id, numero))
+        fila = cur.fetchone()
+        if fila is None:
+            raise AnotacionInvalida(f"No existe la anotación {numero}")
+        return _fila_a_anotacion(fila)
+
+    def _resuelta_en(self, cur, numero: int) -> bool:
+        cur.execute(
+            "select 1 from anotacion where empresa_id = %s and corrige = %s "
+            "and tipo in ('correccion_aceptada', 'correccion_discrepancia', "
+            "'correccion_rechazada') limit 1",
+            (self.empresa_id, numero))
+        return cur.fetchone() is not None
+
+    def _pendiente_en(self, cur, numero_fichaje: int) -> bool:
+        """Si el fichaje tiene una propuesta esperando respuesta."""
+        cur.execute(
+            "select 1 from anotacion p where p.empresa_id = %s and p.corrige = %s "
+            "and p.tipo = 'correccion_propuesta' and not exists ("
+            "  select 1 from anotacion r where r.empresa_id = p.empresa_id "
+            "  and r.corrige = p.numero and r.tipo in ('correccion_aceptada',"
+            "  'correccion_discrepancia','correccion_rechazada')) limit 1",
+            (self.empresa_id, numero_fichaje))
+        return cur.fetchone() is not None
 
     def resultado_de(self, clave: str) -> Anotacion | None:
         """Lo que se escribió con esta clave, si ya se escribió algo.
@@ -278,21 +248,31 @@ class LibroPostgres:
                momento: datetime, zona_horaria: str, anotado_en: datetime | None = None,
                origen: str = "movil", autor_id: str | None = None,
                parte: Parte = Parte.TRABAJADOR) -> Anotacion:
-        return self._anadir(**campos_fichaje(
+        return self._anadir(campos_fichaje(
             trabajador_id, centro_id, tipo, momento, zona_horaria, anotado_en,
             origen, autor_id, parte))
 
     def proponer_correccion(self, numero: int, momento_propuesto: datetime, motivo: str,
                             autor_id: str, parte: Parte, anotado_en: datetime) -> Anotacion:
-        return self._anadir(**campos_propuesta(
-            self.anotacion(numero), momento_propuesto, motivo, autor_id, parte,
-            anotado_en))
+        """Propone cambiar la hora de un fichaje.
+
+        Mira dentro del bloqueo si ese fichaje ya tiene una propuesta sin
+        contestar: dos abiertas a la vez no tienen respuesta buena.
+        """
+        return self._anadir(decidir=lambda cur: campos_propuesta(
+            self._anotacion_en(cur, numero), momento_propuesto, motivo, autor_id,
+            parte, anotado_en, hay_pendiente=self._pendiente_en(cur, numero)))
 
     def resolver_correccion(self, numero: int, acepta: bool, autor_id: str,
                             parte: Parte, anotado_en: datetime) -> Anotacion:
-        propuesta = self.anotacion(numero)
-        return self._anadir(**campos_resolucion(
-            propuesta, self._resuelta(numero), acepta, autor_id, parte, anotado_en))
+        """Acepta o registra discrepancia sobre una propuesta.
+
+        La comprobación de «sigue sin resolver» ocurre dentro del bloqueo. Fuera
+        de él, cien intentos simultáneos escribían nueve resoluciones.
+        """
+        return self._anadir(decidir=lambda cur: campos_resolucion(
+            self._anotacion_en(cur, numero), self._resuelta_en(cur, numero),
+            acepta, autor_id, parte, anotado_en))
 
     # -------------------------------------------------------------- consultar
 
@@ -308,14 +288,14 @@ class LibroPostgres:
             (self.empresa_id, numero))
         fila = cur.fetchone()
         if fila is None:
-            from .registro import AnotacionInvalida
             raise AnotacionInvalida(f"No existe la anotación {numero}")
         return _fila_a_anotacion(fila)
 
     def _resuelta(self, numero: int) -> bool:
         cur = self.conexion.execute(
             "select 1 from anotacion where empresa_id = %s and corrige = %s "
-            "and tipo in ('correccion_aceptada', 'correccion_rechazada') limit 1",
+            "and tipo in ('correccion_aceptada', 'correccion_discrepancia', "
+            "'correccion_rechazada') limit 1",
             (self.empresa_id, numero))
         return cur.fetchone() is not None
 
