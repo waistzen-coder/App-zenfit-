@@ -40,6 +40,13 @@ PERMITIDOS = {
     "README.md",                       # su sección «lo que NO afirma»
 }
 
+# Formas de negar. Una línea que lleva cualquiera de estas está diciendo lo
+# contrario de lo que el patrón busca.
+NEGACIONES = (
+    "no dice", "no es un", "no se llama", "no existe", "prohibido",
+    "nunca", "no afirma", "no lo es", "no demuestra", "no hay",
+)
+
 REVISABLES = (
     list((RAIZ / "fichaje").glob("*.py"))
     + list((RAIZ / "migraciones").glob("*.sql"))
@@ -56,10 +63,15 @@ for fichero in sorted(REVISABLES):
         continue
     texto = fichero.read_text(encoding="utf-8")
     for numero, linea in enumerate(texto.splitlines(), start=1):
-        # Una línea que empieza por «>» es una cita marcada, y una que dice «no
-        # dice que» o «prohibido escribir» está justamente negándolo.
+        # Decir «esto NO es un formato oficial» es exactamente lo que hay que
+        # hacer, así que una línea que niega no cuenta como afirmación. Se
+        # reconocen las formas de negar que se usan de verdad; si aparece otra,
+        # se añade aquí en vez de eximir el archivo entero, que dejaría de
+        # revisarse.
         limpia = linea.strip().lower()
-        if limpia.startswith(">") or "no dice" in limpia or "prohibido" in limpia:
+        if limpia.startswith(">"):
+            continue
+        if any(n in limpia for n in NEGACIONES):
             continue
         for patron, motivo in PROHIBIDAS.items():
             if re.search(patron, limpia):

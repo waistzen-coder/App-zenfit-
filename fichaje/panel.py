@@ -34,16 +34,24 @@ from flask import (
 
 from . import gestoria as G
 from .admin import cartel, crear_centro, crear_trabajador, poner_pin, rotar_token
+from .correcciones import (
+    correcciones_de,
+    esperando_a,
+    nombre_del_autor,
+    proponer,
+    responder,
+)
+from .exportar import paquete_de_empresa
 from .credenciales import (
     ContrasenaInvalida,
     PinInvalido,
     comprobar_contrasena,
     huella_de_token,
 )
-from .jornada import Estado, jornadas_de
+from .jornada import COMO_SE_LLAMA, Estado, jornadas_de
 from .organizacion import ZonaInvalida, nuevo_id
 from .postgres import LibroPostgres, conectar
-from .registro import verificar_cadena
+from .registro import FICHAJES, AnotacionInvalida, Parte, verificar_cadena
 
 FALLOS_ANTES_DE_BLOQUEAR = 5
 VENTANA_BLOQUEO = timedelta(minutes=15)
@@ -59,6 +67,11 @@ ERRORES = {
     "VALIDACION": "Faltan datos o no son correctos.",
     "BASE_NO_DISPONIBLE": "No se ha podido conectar con la base de datos.",
     "ERROR": "Ha ocurrido un error.",
+    "SIN_MOTIVO": "Hay que escribir por qué se cambia la hora.",
+    "HORA_MAL": "Esa hora no se entiende. Se escribe como 18:30.",
+    "YA_HAY_PROPUESTA": "Ese fichaje ya tiene una propuesta sin contestar.",
+    "YA_RESUELTA": "Esa propuesta ya estaba contestada.",
+    "NO_ES_FICHAJE": "Solo se corrigen fichajes.",
 }
 
 
@@ -442,6 +455,128 @@ def crear_panel(cadena_bd: str | None = None) -> Flask:
                   detalle={"motivo": resultado["motivo"]})
         return volver("empresa", empresa_id=empresa_id)
 
+    # ---------------------------------------------------------- correcciones
+
+    @app.get("/panel/empresas/<empresa_id>/correcciones")
+    def correcciones(empresa_id: str):
+        usuario = exigir_sesion()
+        try:
+            datos = G.empresa_de(bd(), usuario, empresa_id)
+        except G.NoExiste:
+            abort(404)
+        anotaciones = LibroPostgres(empresa_id, bd()).anotaciones()
+        gente = dict(bd().execute(
+            "select id::text, nombre from trabajador where empresa_id = %s",
+            (empresa_id,)).fetchall())
+        return render_template_string(
+            CORRECCIONES, u=usuario, e=datos,
+            esperan=esperando_a(anotaciones, Parte.EMPRESA),
+            historial=list(reversed(correcciones_de(anotaciones))),
+            fichajes=[a for a in reversed(anotaciones) if a.tipo in FICHAJES][:200],
+            gente=gente, nombres={t.value: n for t, n in COMO_SE_LLAMA.items()},
+            autor=lambda i: nombre_del_autor(bd(), i),
+            clave=secrets.token_urlsafe(18),
+            aviso=ERRORES.get(request.args.get("e", ""), ""))
+
+    def _hora_pedida(texto, original, zona):
+        try:
+            horas, minutos = (int(x) for x in (texto or "").strip().split(":"))
+        except (ValueError, AttributeError):
+            return None
+        if not (0 <= horas < 24 and 0 <= minutos < 60):
+            return None
+        local = original.momento.astimezone(ZoneInfo(zona))
+        return local.replace(hour=horas, minute=minutos, second=0, microsecond=0)
+
+    @app.post("/panel/empresas/<empresa_id>/correcciones")
+    def proponer_correccion(empresa_id: str):
+        comprobar_csrf()
+        usuario = exigir_sesion()
+        if not usuario.puede(G.Permiso.CORREGIR):
+            abort(403)
+        try:
+            G.empresa_de(bd(), usuario, empresa_id)
+        except G.NoExiste:
+            abort(404)
+        libro = LibroPostgres(empresa_id, bd())
+        try:
+            original = libro.anotacion(int(request.form.get("numero") or 0))
+        except (ValueError, AnotacionInvalida):
+            abort(404)
+        if original.tipo not in FICHAJES:
+            return volver("correcciones", empresa_id=empresa_id, e="NO_ES_FICHAJE")
+        motivo = (request.form.get("motivo") or "").strip()
+        if not motivo:
+            return volver("correcciones", empresa_id=empresa_id, e="SIN_MOTIVO")
+        nuevo = _hora_pedida(request.form.get("hora"), original, original.zona_horaria)
+        if nuevo is None:
+            return volver("correcciones", empresa_id=empresa_id, e="HORA_MAL")
+        try:
+            # La parte es la empresa, pero el autor es la persona del panel que
+            # lo hizo. Poner aquí el id de la empresa habría borrado el único
+            # dato que hace falta el día que alguien pregunte quién lo cambió.
+            proponer(libro, request.form.get("clave") or secrets.token_urlsafe(18),
+                     original.numero, nuevo, motivo, usuario.id, Parte.EMPRESA,
+                     datetime.now(timezone.utc))
+        except AnotacionInvalida as fallo:
+            return volver("correcciones", empresa_id=empresa_id,
+                          e="YA_HAY_PROPUESTA" if "sin contestar" in str(fallo)
+                          else "SIN_MOTIVO")
+        G.apuntar(bd(), usuario, "proponer_correccion", "anotacion",
+                  str(original.numero), detalle={"motivo": motivo})
+        return volver("correcciones", empresa_id=empresa_id)
+
+    @app.post("/panel/empresas/<empresa_id>/correcciones/responder")
+    def responder_correccion(empresa_id: str):
+        comprobar_csrf()
+        usuario = exigir_sesion()
+        if not usuario.puede(G.Permiso.CORREGIR):
+            abort(403)
+        try:
+            G.empresa_de(bd(), usuario, empresa_id)
+        except G.NoExiste:
+            abort(404)
+        libro = LibroPostgres(empresa_id, bd())
+        try:
+            numero = int(request.form.get("numero") or 0)
+            libro.anotacion(numero)
+        except (ValueError, AnotacionInvalida):
+            abort(404)
+        acepta = request.form.get("respuesta") == "acepto"
+        try:
+            responder(libro, request.form.get("clave") or secrets.token_urlsafe(18),
+                      numero, acepta, usuario.id, Parte.EMPRESA,
+                      datetime.now(timezone.utc))
+        except AnotacionInvalida as fallo:
+            return volver("correcciones", empresa_id=empresa_id,
+                          e="YA_RESUELTA" if "ya está resuelta" in str(fallo)
+                          else "ERROR")
+        G.apuntar(bd(), usuario, "aceptar" if acepta else "discrepar", "anotacion",
+                  str(numero))
+        return volver("correcciones", empresa_id=empresa_id)
+
+    # ------------------------------------------------------------ expediente
+
+    @app.get("/panel/empresas/<empresa_id>/expediente.zip")
+    def expediente(empresa_id: str):
+        usuario = exigir_sesion()
+        try:
+            datos = G.empresa_de(bd(), usuario, empresa_id)
+        except G.NoExiste:
+            abort(404)
+        try:
+            desde = date.fromisoformat(request.args["d"]) if request.args.get("d") else None
+            hasta = date.fromisoformat(request.args["h"]) if request.args.get("h") else None
+        except ValueError:
+            desde = hasta = None
+        paquete = paquete_de_empresa(bd(), empresa_id, datos["nombre"], desde, hasta)
+        G.apuntar(bd(), usuario, "exportar", "empresa", empresa_id,
+                  detalle={"bytes": len(paquete)})
+        nombre = f"expediente-{datos['nombre'][:40].replace(' ', '-')}.zip"
+        return Response(paquete, mimetype="application/zip",
+                        headers={"Content-Disposition":
+                                 f'attachment; filename="{nombre}"'})
+
     # -------------------------------------------------------------- usuarios
 
     @app.get("/panel/usuarios")
@@ -674,7 +809,9 @@ EMPRESAS = BASE.replace("CUERPO", """
 EMPRESA = BASE.replace("CUERPO", """
 {% if aviso %}<div class="aviso">{{ aviso }}</div>{% endif %}
 <h1>{{ e.nombre }}</h1>
-<p class="sub"><a href="{{ url_for('jornada', empresa_id=e.id) }}">Ver la jornada de hoy</a></p>
+<p class="sub"><a href="{{ url_for('jornada', empresa_id=e.id) }}">Ver la jornada de hoy</a>
+ · <a href="{{ url_for('correcciones', empresa_id=e.id) }}">Correcciones</a>
+ · <a href="{{ url_for('expediente', empresa_id=e.id) }}">Exportar registro</a></p>
 
 {% if v and not v.valido %}
 <div class="alarma"><b>El libro de esta empresa no cuadra</b><br>
@@ -833,6 +970,81 @@ fichajes: son dos registros distintos.</p>
  <td>{% if l.resultado == 'ok' %}ok{% else %}<span class="etq mal">{{ l.resultado }}</span>{% endif %}</td>
 </tr>{% endfor %}</table>
 {% if not lineas %}<div class="tarjeta vacio">Todavía no hay actividad.</div>{% endif %}
+""")
+
+CORRECCIONES = BASE.replace("CUERPO", """
+{% if aviso %}<div class="aviso">{{ aviso }}</div>{% endif %}
+<h1>Correcciones · {{ e.nombre }}</h1>
+<p class="sub"><a href="{{ url_for('empresa', empresa_id=e.id) }}">Volver a la empresa</a>
+ · Un fichaje no se modifica nunca: se propone un cambio y la otra parte
+ responde. Todo queda escrito, haya acuerdo o no.</p>
+
+{% if esperan %}
+<h2>Esperan tu respuesta</h2>
+{% for c in esperan %}
+<div class="tarjeta">
+ <p style="margin:0 0 8px"><b>{{ gente.get(c.original.trabajador_id, '—') }}</b> ·
+  {{ c.original.local().strftime('%d/%m/%Y') }} ·
+  {{ nombres[c.original.tipo.value] }}</p>
+ <p style="margin:0 0 8px">
+  {{ c.original.local().strftime('%H:%M') }} →
+  <b>{{ c.propuesta.local(c.propuesta.momento_propuesto).strftime('%H:%M') }}</b>
+  · «{{ c.propuesta.motivo }}»</p>
+ <p class="sub" style="margin:0 0 12px">Lo pide {{ autor(c.propuesta.autor_id) }},
+  el {{ c.propuesta.local(c.propuesta.anotado_en).strftime('%d/%m/%Y') }}</p>
+ {% if u.puede(Permiso.CORREGIR) %}
+ <form class="linea" method="post"
+   action="{{ url_for('responder_correccion', empresa_id=e.id) }}">
+  <input type="hidden" name="csrf" value="{{ csrf() }}">
+  <input type="hidden" name="numero" value="{{ c.propuesta.numero }}">
+  <input type="hidden" name="clave" value="{{ clave }}-a{{ c.propuesta.numero }}">
+  <input type="hidden" name="respuesta" value="acepto">
+  <button type="submit">Aceptar el cambio</button></form>
+ <form class="linea" method="post" style="margin-top:8px"
+   action="{{ url_for('responder_correccion', empresa_id=e.id) }}">
+  <input type="hidden" name="csrf" value="{{ csrf() }}">
+  <input type="hidden" name="numero" value="{{ c.propuesta.numero }}">
+  <input type="hidden" name="clave" value="{{ clave }}-d{{ c.propuesta.numero }}">
+  <input type="hidden" name="respuesta" value="discrepo">
+  <button class="gris" type="submit">No aceptar y dejar constancia</button></form>
+ {% endif %}
+</div>
+{% endfor %}
+{% endif %}
+
+{% if u.puede(Permiso.CORREGIR) %}
+<h2>Proponer un cambio</h2>
+<div class="tarjeta"><form class="linea" method="post"
+  action="{{ url_for('proponer_correccion', empresa_id=e.id) }}">
+ <input type="hidden" name="csrf" value="{{ csrf() }}">
+ <input type="hidden" name="clave" value="{{ clave }}-p">
+ <select name="numero">
+  {% for a in fichajes %}<option value="{{ a.numero }}">
+   {{ gente.get(a.trabajador_id, '—') }} ·
+   {{ a.local().strftime('%d/%m %H:%M') }} · {{ nombres[a.tipo.value] }}</option>
+  {% endfor %}</select>
+ <input name="hora" placeholder="18:30" size="7" required>
+ <input name="motivo" placeholder="Por qué se cambia" required>
+ <button type="submit">Proponer</button></form></div>
+{% endif %}
+
+<h2>Historial</h2>
+{% if historial %}
+<table><tr><th>Trabajador</th><th>Día</th><th>Original</th><th>Propuesta</th>
+<th>Motivo</th><th>Lo pide</th><th>Resultado</th></tr>
+{% for c in historial %}<tr>
+ <td>{{ gente.get(c.original.trabajador_id, '—') }}</td>
+ <td>{{ c.original.local().strftime('%d/%m/%Y') }}</td>
+ <td>{{ c.original.local().strftime('%H:%M') }}</td>
+ <td>{{ c.propuesta.local(c.propuesta.momento_propuesto).strftime('%H:%M') }}</td>
+ <td>{{ c.propuesta.motivo }}</td>
+ <td>{{ autor(c.propuesta.autor_id) }}</td>
+ <td>{% if c.aceptada %}<span class="etq dentro">aceptada</span>
+     {% elif c.pendiente %}<span class="etq pausa">sin contestar</span>
+     {% else %}<span class="etq mal">sin acuerdo</span>{% endif %}</td>
+</tr>{% endfor %}</table>
+{% else %}<div class="tarjeta vacio">Todavía no se ha pedido ningún cambio.</div>
+{% endif %}
 """)
 
 SIMPLE = """
