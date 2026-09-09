@@ -7,10 +7,15 @@ nos lo podrían tirar, ordenados por lo que de verdad preocupa.
 
 ## LEGAL
 
-**1 · No hay acceso para los representantes de los trabajadores.**
-Probabilidad alta · Impacto alto. Es un requisito **en vigor** desde 2019, no de
-borrador. Hoy detectado y escrito en la matriz de cobertura; sin implementar.
-**Mitigación:** diseñar la figura antes del piloto. Es el hueco más caro.
+**1 · El acceso de los representantes depende de un paso manual.**
+Probabilidad alta · Impacto medio. Lo que está en vigor desde 2019 es la
+**disponibilidad** del registro para quien representa a la plantilla. El
+artículo 34.9 no impone un mecanismo concreto, así que no tener un portal no es
+por sí solo un incumplimiento, y decir lo contrario sería vender miedo. El
+riesgo real es otro y es nuestro: hoy depende de que la empresa o la gestoría
+exporte y entregue, y eso se olvida, se retrasa y no deja rastro. Delante de un
+inspector, «se lo dimos» sin constancia vale poco. **Mitigación:** un acceso
+propio de solo lectura que registre quién consultó y cuándo.
 
 **2 · Vender urgencia que no existe.**
 Probabilidad media · Impacto muy alto. Decirle a una gestoría «entra en vigor en

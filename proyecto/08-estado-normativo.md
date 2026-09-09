@@ -24,6 +24,15 @@ Exige, entre otras cosas:
 - Disponibilidad para **sus representantes**.
 - Disponibilidad para **la Inspección de Trabajo**.
 
+**Qué significa «disponibilidad», y qué no.** El artículo exige que el registro
+esté a disposición de esas tres partes. No dice cómo. No exige un portal en
+línea, ni acceso remoto, ni autoservicio: entregar una copia legible cuando se
+pide satisface la obligación. De ahí que en este repositorio no se escriba que
+la ley obligue a tener un portal de representantes, ni que no tenerlo sea un
+incumplimiento. Lo que sí se puede escribir es que sin un mecanismo propio la
+disponibilidad depende de un paso manual, y eso es una debilidad operativa
+nuestra, no una infracción declarada.
+
 Esto es lo único que se puede afirmar hoy como obligación legal, y es la base
 sobre la que se construye el producto.
 
