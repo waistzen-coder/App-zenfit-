@@ -88,6 +88,17 @@ def _todas_recalculan(anotaciones) -> bool:
         return False
 
 
+def _cuantas_filas(conexion) -> dict[str, int]:
+    """Cuántas filas hay en cada tabla del esquema, preguntándoselo a la base."""
+    from psycopg import sql
+    tablas = [f[0] for f in conexion.execute(
+        "select tablename from pg_tables where schemaname = 'public' "
+        "order by tablename").fetchall()]
+    return {tabla: conexion.execute(
+        sql.SQL("select count(*) from {}").format(sql.Identifier(tabla))
+    ).fetchone()[0] for tabla in tablas}
+
+
 def comprobar(cadena: str | None = None) -> bool:
     """El ciclo entero, sobre una base de destino aparte. Devuelve si cuadra."""
     cadena = cadena or dsn()
@@ -96,6 +107,16 @@ def comprobar(cadena: str | None = None) -> bool:
     empresas = [f[0] for f in origen.execute(
         "select distinct empresa_id::text from anotacion").fetchall()]
     libros = {e: LibroPostgres(e, origen).anotaciones() for e in empresas}
+    # Y cuántas filas hay en CADA tabla, no solo en el libro.
+    #
+    # Hasta ahora esto solo comprobaba las anotaciones, y eso deja fuera todo lo
+    # demás: quién tiene acceso, quién ha consultado el registro, las
+    # credenciales. Una copia que se llevara el libro y se dejara la tabla de
+    # representantes pasaría por buena, y el día que hiciera falta restaurar de
+    # verdad habría que darlos de alta otra vez a mano sin saber ni quiénes
+    # eran. Se pregunta a la base qué tablas tiene, para que una tabla nueva
+    # entre sola en la comprobación y nadie tenga que acordarse de añadirla.
+    conteos = _cuantas_filas(origen)
     origen.close()
 
     if not libros:
@@ -112,6 +133,19 @@ def comprobar(cadena: str | None = None) -> bool:
 
     copia = conectar(cadena.replace(f"/{p['base']}", f"/{destino}"))
     todo_bien = True
+
+    conteos_copia = _cuantas_filas(copia)
+    faltan = sorted(set(conteos) - set(conteos_copia))
+    if faltan:
+        todo_bien = False
+        print(f"  FALLA  la copia no trae estas tablas: {', '.join(faltan)}")
+    for tabla, cuantas in sorted(conteos.items()):
+        if tabla in conteos_copia and conteos_copia[tabla] != cuantas:
+            todo_bien = False
+            print(f"  FALLA  tabla {tabla}: {cuantas} filas en el original, "
+                  f"{conteos_copia[tabla]} en la copia")
+    if not faltan and todo_bien:
+        print(f"  OK     {len(conteos)} tablas con el mismo número de filas")
     for empresa, original in libros.items():
         restaurado = LibroPostgres(empresa, copia).anotaciones()
         veredicto = verificar_cadena(restaurado, empresa)
