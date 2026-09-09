@@ -20,6 +20,7 @@ del repositorio.
 
 import os
 import sys
+from urllib.parse import quote, urlsplit, urlunsplit
 
 import psycopg
 from psycopg import sql
@@ -93,12 +94,25 @@ def configurar_rol(conexion: psycopg.Connection, rol: str = ROL,
 
 
 def dsn_aplicacion(rol: str = ROL, contrasena: str | None = None) -> str:
-    """La cadena de conexión de la aplicación, con su usuario restringido."""
+    """La cadena de conexión de la aplicación, con su usuario restringido.
+
+    Se deriva de `FICHAJE_DSN`: **el mismo servidor, la misma base, el mismo
+    puerto**, y lo único que cambia son las credenciales. Esa es la razón de que
+    exista esta función y de que nadie escriba una cadena de conexión a mano en
+    ninguna otra parte. Un sitio que escriba «127.0.0.1:5433» por su cuenta
+    funciona en el portátil de quien lo escribió y falla en cualquier otro
+    ordenador, que es exactamente lo que pasó.
+
+    El usuario y la contraseña se escapan: una contraseña con una arroba o una
+    barra partiría la dirección y acabaríamos conectando a otro sitio.
+    """
     contrasena = contrasena or os.environ.get("FICHAJE_APP_PASSWORD", "")
-    base = dsn()
-    resto = base.split("://", 1)[1]
-    resto = resto.split("@", 1)[1] if "@" in resto else resto
-    return f"postgresql://{rol}:{contrasena}@{resto}"
+    partes = urlsplit(dsn())
+    autoridad = f"{quote(rol, safe='')}:{quote(contrasena, safe='')}@{partes.hostname or ''}"
+    if partes.port:
+        autoridad += f":{partes.port}"
+    return urlunsplit(("postgresql", autoridad, partes.path,
+                       partes.query, partes.fragment))
 
 
 if __name__ == "__main__":

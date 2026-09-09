@@ -1,30 +1,50 @@
 """Pruebas del libro guardado en PostgreSQL. `python3 -m fichaje.pruebas_postgres`.
 
-Necesitan una base de datos de verdad. Se toma de `FICHAJE_DSN`, o de
-`postgresql://postgres@127.0.0.1:5433/fichaje` si no está puesta. Estas pruebas
-**borran y recrean sus tablas**, así que no se apuntan nunca a datos reales.
+Necesitan una base de datos de verdad, y la sacan de `FICHAJE_DSN`. Si no está
+puesta se usa la de desarrollo local que monta el README. Ninguna dirección se
+escribe aquí a mano: la conexión del usuario restringido se deriva de la misma
+variable cambiando solo las credenciales, para que estas pruebas corran igual en
+un portátil que en un servidor limpio.
+
+**Borran y recrean sus tablas**, así que no se apuntan nunca a datos reales.
 """
 
 import os
+import pathlib
+import re
 import threading
 import time
 from datetime import timedelta
+from urllib.parse import unquote, urlsplit
 
-import psycopg
+# Para poder ejecutar esto en local sin exportar nada. En CI la variable ya
+# viene puesta con un secreto de usar y tirar, y `setdefault` no la pisa.
+os.environ.setdefault("FICHAJE_APP_PASSWORD", "prueba-local")
 
-from . import caracterizacion as carac
-from .caracterizacion import CENTRO_CANARIAS, CENTRO_MOTRIL, JOSE, LUCIA, MADRID, h
-from .jornada import jornadas_de
-from .organizacion import nuevo_id
-from .postgres import (
+import psycopg  # noqa: E402
+
+from . import caracterizacion as carac  # noqa: E402
+from .caracterizacion import (  # noqa: E402
+    CENTRO_CANARIAS,
+    CENTRO_MOTRIL,
+    JOSE,
+    LUCIA,
+    MADRID,
+    h,
+)
+from .despliegue import configurar_rol, dsn_aplicacion  # noqa: E402
+from .jornada import jornadas_de  # noqa: E402
+from .organizacion import nuevo_id  # noqa: E402
+from .postgres import (  # noqa: E402
     CAMPOS,
     LibroPostgres,
     _fila_a_anotacion,
     _insertar,
     conectar,
     crear_esquema,
+    dsn,
 )
-from .registro import (
+from .registro import (  # noqa: E402
     AnotacionInvalida,
     Parte,
     Tipo,
@@ -258,18 +278,25 @@ falla("Un DELETE, también", psycopg.errors.RaiseException,
       lambda: conexion.execute(
           "delete from anotacion where empresa_id = %s and numero = 1", (empresa_c,)))
 
-conexion.execute("drop role if exists app_fichaje")
-conexion.execute("create role app_fichaje login password 'prueba'")
-conexion.execute("grant select, insert on anotacion, empresa, centro, trabajador "
-                 "to app_fichaje")
-conexion.execute("revoke update, delete on anotacion from app_fichaje")
-como_app = psycopg.connect(
-    os.environ.get("FICHAJE_DSN_APP",
-                   "postgresql://app_fichaje:prueba@127.0.0.1:5433/fichaje"),
-    autocommit=True)
+# El usuario que se prueba aquí es EL DE PRODUCCIÓN, el que crea
+# `despliegue.configurar_rol`, no uno inventado para la ocasión. Antes esta
+# prueba se fabricaba su propio rol con sus propios permisos y se conectaba a
+# una dirección escrita a mano. Eso tenía dos defectos, y los dos se pagaron:
+# comprobaba los permisos de un rol que no existe en ningún servidor de verdad,
+# y solo funcionaba en un ordenador donde PostgreSQL escuchara justo en el
+# puerto 5433. La conexión sale ahora de `dsn_aplicacion()`, que se deriva de
+# `FICHAJE_DSN`: donde esté la base, ahí se conecta.
+configurar_rol(conexion)
+como_app = psycopg.connect(dsn_aplicacion(), autocommit=True)
 falla("El rol de la aplicación ni siquiera tiene permiso para modificar el libro",
       psycopg.errors.InsufficientPrivilege,
       lambda: como_app.execute("update anotacion set motivo = 'x'"))
+falla("Ni para borrar del libro",
+      psycopg.errors.InsufficientPrivilege,
+      lambda: como_app.execute("delete from anotacion"))
+falla("Ni para tocar el esquema",
+      psycopg.errors.InsufficientPrivilege,
+      lambda: como_app.execute("create table colada (x int)"))
 comprobar("Pero sí puede leer",
           como_app.execute("select count(*) from anotacion").fetchone()[0] > 0, True)
 como_app.close()
@@ -398,6 +425,50 @@ print(f"    verificación  {verificacion:6.3f} s")
 print(f"    nómina        {calculo:6.3f} s")
 print(f"    100 fichajes concurrentes: {concurrencia:.2f} s")
 print()
+
+# ==================================== una sola fuente de conexión, y solo una
+
+# Esto es un cortafuegos contra el fallo que dejó la integración continua en
+# rojo siete veces seguidas: una prueba con «127.0.0.1:5433» escrito dentro.
+# Pasaba en el ordenador donde se escribió y fallaba en cualquier máquina
+# limpia, que es el único sitio donde una prueba dice algo. El único lugar del
+# repositorio donde puede aparecer una dirección de base de datos es
+# `postgres.py`, y es la comodidad de desarrollo local que documenta el README.
+# Se busca un servidor concreto DENTRO de una cadena de conexión, no las dos
+# cosas sueltas en la misma línea. Escrito de la otra manera, el propio buscador
+# se encontraba a sí mismo: la línea que dice qué buscar contiene lo buscado.
+DIRECCION_A_MANO = re.compile(r"postgresql://\S*\d{1,3}(?:\.\d{1,3}){3}")
+
+
+def direcciones_escritas_a_mano() -> list[str]:
+    encontradas = []
+    for archivo in sorted(pathlib.Path(__file__).parent.glob("*.py")):
+        if archivo.name == "postgres.py":     # el valor por defecto vive ahí
+            continue
+        for numero, linea in enumerate(archivo.read_text().splitlines(), 1):
+            if DIRECCION_A_MANO.search(linea):
+                encontradas.append(f"{archivo.name}:{numero}")
+    return encontradas
+
+
+comprobar("Ninguna prueba lleva la dirección de la base escrita dentro",
+          direcciones_escritas_a_mano(), [])
+comprobar("La conexión de la aplicación sale del mismo sitio que FICHAJE_DSN",
+          urlsplit(dsn_aplicacion()).port, urlsplit(dsn()).port)
+comprobar("Y del mismo servidor",
+          urlsplit(dsn_aplicacion()).hostname, urlsplit(dsn()).hostname)
+comprobar("Y de la misma base de datos",
+          urlsplit(dsn_aplicacion()).path, urlsplit(dsn()).path)
+
+# Una contraseña generada al azar puede traer cualquier cosa dentro. Si no se
+# escapa, una arroba parte la dirección y se acaba conectando a otro servidor:
+# no falla, que es lo peor que puede hacer.
+fea = dsn_aplicacion(contrasena="con@arroba:y/barra")
+comprobar("Una contraseña con arroba no cambia el servidor",
+          urlsplit(fea).hostname, urlsplit(dsn()).hostname)
+comprobar("Ni el puerto", urlsplit(fea).port, urlsplit(dsn()).port)
+comprobar("Y se recupera entera al leerla",
+          unquote(urlsplit(fea).password or ""), "con@arroba:y/barra")
 
 conexion.close()
 
