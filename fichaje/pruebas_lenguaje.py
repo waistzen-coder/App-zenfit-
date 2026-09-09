@@ -29,6 +29,13 @@ PROHIBIDAS = {
     r"cumple (la ley|el decreto|la normativa)": "eso lo dice un juez, no nosotros",
     r"validado por la inspecci": "nadie lo ha validado",
     r"garantiza el cumplimiento": "no se garantiza nada",
+    # El 34.9 obliga a que el registro esté DISPONIBLE para los representantes.
+    # No dice cómo, así que convertir eso en «la ley exige un portal» es
+    # inventarse una obligación, y es un error tentador porque justifica
+    # construir justo lo que queremos construir.
+    r"(exige|obliga a|impone) (tener )?un portal": "el 34.9 exige disponibilidad, no un mecanismo concreto",
+    r"portal de representantes[^.]{0,30}obligatori": "ídem",
+    r"incumplimiento legal autom": "eso lo dice un inspector mirando un caso",
 }
 
 # Dónde SÍ pueden aparecer: el documento que las prohíbe, esta prueba, y las
@@ -45,6 +52,7 @@ PERMITIDOS = {
 NEGACIONES = (
     "no dice", "no es un", "no se llama", "no existe", "prohibido",
     "nunca", "no afirma", "no lo es", "no demuestra", "no hay",
+    "no exige", "no obliga", "no impone", "no sea", "sin que",
 )
 
 REVISABLES = (

@@ -20,8 +20,16 @@ problema es tenerlo y no saberlo.
 | **Horario concreto de inicio y final** | **SÍ** | tipos `entrada` y `salida`; `jornada.py` los empareja | — | — |
 | **Conservación cuatro años** | **PARCIAL** | nada borra: el libro solo admite añadir, y el rol de la aplicación no tiene `DELETE` | No hay política de retención escrita, ni archivado, ni una prueba de que a los cuatro años siga ahí. Depende de que las copias del proveedor funcionen | Definir retención y probar una restauración de un año atrás cuando haya un año atrás |
 | Disponibilidad para **la persona trabajadora** | **SÍ** | `/f/<token>/mis-registros` y su descarga en CSV | — | — |
-| Disponibilidad para **sus representantes** | **NO** | — | No existe la figura del representante ni del comité: nadie puede ver el registro de un colectivo | Diseñarla. Es un requisito **vigente**, no de borrador |
+| Disponibilidad para **sus representantes** | **PARCIAL** | el expediente auditable se exporta desde el panel y se puede entregar a quien represente a la plantilla | La entrega es manual y la hace la empresa o su gestoría. En el producto no existe la figura del representante: ni acceso propio, ni ámbito de representación delimitado, ni constancia de quién consultó y cuándo | Añadir un acceso propio de solo lectura |
 | Disponibilidad para la **Inspección** | **PARCIAL** | expediente auditable exportable desde el panel, verificable sin base de datos | La descarga la hace la gestoría, no la Inspección. No hay acceso directo ni remoto | Depende de la Orden técnica, que está en consulta |
+
+> **Qué obliga el 34.9 y qué no.** La obligación vigente es la **disponibilidad**
+> del registro. El artículo no impone un mecanismo concreto: no exige un portal
+> en línea, ni acceso remoto, ni autoservicio. Entregar una copia legible cuando
+> se pide la satisface. Por eso aquí no se dice que no tener un portal de
+> representantes sea un incumplimiento: no lo es. Lo que sí se dice, que es más
+> modesto y más cierto, es que hoy esa disponibilidad depende de un paso manual,
+> y un paso manual se olvida, se retrasa y no deja constancia de haberse dado.
 
 ## Sobre el PROYECTO de real decreto · no está en vigor
 
@@ -43,9 +51,12 @@ problema es tenerlo y no saberlo.
 
 ## Huecos, ordenados por lo que importan
 
-1. **Representantes de los trabajadores.** Es el único hueco de un requisito
-   **vigente**. Hoy no hay forma de dar acceso al registro de una plantilla a
-   quien la representa.
+1. **Representantes de los trabajadores, sin mecanismo propio.** La obligación
+   vigente es que el registro esté disponible para quien representa a la
+   plantilla, y hoy eso se resuelve exportando el expediente y entregándolo.
+   Funciona; lo que no hace es dejar constancia de que se hizo, ni permitir
+   ejercer el acceso sin pedírselo a la empresa. Un acceso propio de solo
+   lectura convierte un favor en un derecho ejercitable, y deja traza.
 2. **Retención de cuatro años, sin probar.** Nada borra, pero eso no es lo mismo
    que haber demostrado que dentro de cuatro años sigue estando y se puede leer.
 3. **Anclaje externo.** Sin él no se detecta que a un libro le falten las últimas
