@@ -20,7 +20,7 @@ problema es tenerlo y no saberlo.
 | **Horario concreto de inicio y final** | **SÍ** | tipos `entrada` y `salida`; `jornada.py` los empareja | — | — |
 | **Conservación cuatro años** | **PARCIAL** | nada borra: el libro solo admite añadir, y el rol de la aplicación no tiene `DELETE` | No hay política de retención escrita, ni archivado, ni una prueba de que a los cuatro años siga ahí. Depende de que las copias del proveedor funcionen | Definir retención y probar una restauración de un año atrás cuando haya un año atrás |
 | Disponibilidad para **la persona trabajadora** | **SÍ** | `/f/<token>/mis-registros` y su descarga en CSV | — | — |
-| Disponibilidad para **sus representantes** | **PARCIAL** | el expediente auditable se exporta desde el panel y se puede entregar a quien represente a la plantilla | La entrega es manual y la hace la empresa o su gestoría. En el producto no existe la figura del representante: ni acceso propio, ni ámbito de representación delimitado, ni constancia de quién consultó y cuándo | Añadir un acceso propio de solo lectura |
+| Disponibilidad para **sus representantes** | **SÍ** | portal propio de solo lectura (`portal.py`), con ámbito de empresa o de centro, mandato con fechas, revocación inmediata y registro de cada consulta que ven las dos partes | Sigue sin haber acceso para la Inspección, que es otra fila. El portal enseña la jornada, no el expediente firmado: para eso está la exportación | — |
 | Disponibilidad para la **Inspección** | **PARCIAL** | expediente auditable exportable desde el panel, verificable sin base de datos | La descarga la hace la gestoría, no la Inspección. No hay acceso directo ni remoto | Depende de la Orden técnica, que está en consulta |
 
 > **Qué obliga el 34.9 y qué no.** La obligación vigente es la **disponibilidad**
@@ -51,19 +51,16 @@ problema es tenerlo y no saberlo.
 
 ## Huecos, ordenados por lo que importan
 
-1. **Representantes de los trabajadores, sin mecanismo propio.** La obligación
-   vigente es que el registro esté disponible para quien representa a la
-   plantilla, y hoy eso se resuelve exportando el expediente y entregándolo.
-   Funciona; lo que no hace es dejar constancia de que se hizo, ni permitir
-   ejercer el acceso sin pedírselo a la empresa. Un acceso propio de solo
-   lectura convierte un favor en un derecho ejercitable, y deja traza.
-2. **Retención de cuatro años, sin probar.** Nada borra, pero eso no es lo mismo
+1. **Retención de cuatro años, sin probar.** Nada borra, pero eso no es lo mismo
    que haber demostrado que dentro de cuatro años sigue estando y se puede leer.
-3. **Anclaje externo.** Sin él no se detecta que a un libro le falten las últimas
+   El portal ya recorta a cuatro años lo que enseña, que es la mitad fácil del
+   asunto; la difícil —restaurar un libro de hace años— sigue sin poderse
+   probar porque no hay libros de hace años.
+2. **Anclaje externo.** Sin él no se detecta que a un libro le falten las últimas
    anotaciones. Está escrito en el LEEME de cada expediente.
-4. **Totalización mensual, calculada pero no enseñada.**
-5. **Categorías de tiempo distintas de trabajar y pausar.**
-6. **Acceso de la Inspección**, que depende de una Orden que aún no existe.
+3. **Totalización mensual, calculada pero no enseñada.**
+4. **Categorías de tiempo distintas de trabajar y pausar.**
+5. **Acceso de la Inspección**, que depende de una Orden que aún no existe.
 
 ## Lo que no se va a decir
 

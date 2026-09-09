@@ -33,6 +33,7 @@ from flask import (
 )
 
 from . import gestoria as G
+from . import representacion as Rep
 from .admin import cartel, crear_centro, crear_trabajador, poner_pin, rotar_token
 from .correcciones import (
     correcciones_de,
@@ -72,6 +73,8 @@ ERRORES = {
     "YA_HAY_PROPUESTA": "Ese fichaje ya tiene una propuesta sin contestar.",
     "YA_RESUELTA": "Esa propuesta ya estaba contestada.",
     "NO_ES_FICHAJE": "Solo se corrigen fichajes.",
+    "REPETIDO": "Ese correo ya está dado de alta como representante.",
+    "CONTRASENA": "La contraseña necesita al menos doce caracteres.",
 }
 
 
@@ -275,6 +278,86 @@ def crear_panel(cadena_bd: str | None = None) -> Flask:
         G.apuntar(bd(), usuario, "renombrar", "empresa", empresa_id,
                   detalle={"nombre": nombre})
         return volver("empresa", empresa_id=empresa_id)
+
+    # ------------------------------------------------------ representantes
+
+    @app.get("/panel/empresas/<empresa_id>/representantes")
+    def representantes(empresa_id: str):
+        usuario = exigir_sesion()
+        try:
+            datos = G.empresa_de(bd(), usuario, empresa_id)
+        except G.NoExiste:
+            abort(404)
+        return render_template_string(
+            REPRESENTANTES, u=usuario, e=datos,
+            filas=[f["r"] for f in Rep.de_empresa(bd(), empresa_id)],
+            centros=G.centros_de(bd(), usuario, empresa_id),
+            accesos=Rep.accesos_de_empresa(bd(), empresa_id, 100),
+            hoy=datetime.now(ZoneInfo("Europe/Madrid")).date(),
+            aviso=ERRORES.get(request.args.get("e", ""), ""))
+
+    @app.post("/panel/empresas/<empresa_id>/representantes")
+    def nuevo_representante(empresa_id: str):
+        comprobar_csrf()
+        usuario = exigir_sesion()
+        if not usuario.puede(G.Permiso.GESTIONAR_REPRESENTANTES):
+            abort(403)
+        # La empresa se comprueba contra la gestoría ANTES de nada: sin esto,
+        # el identificador del formulario mandaría sobre la frontera.
+        try:
+            G.empresa_de(bd(), usuario, empresa_id)
+        except G.NoExiste:
+            abort(404)
+
+        centro = request.form.get("centro") or ""
+        desde = (request.form.get("desde") or "").strip()
+        hasta = (request.form.get("hasta") or "").strip()
+        try:
+            identificador = Rep.crear(
+                bd(), empresa_id,
+                request.form.get("nombre") or "",
+                request.form.get("email") or "",
+                request.form.get("contrasena") or "",
+                vigente_desde=date.fromisoformat(desde) if desde
+                else datetime.now(timezone.utc).date(),
+                vigente_hasta=date.fromisoformat(hasta) if hasta else None,
+                centro_id=centro or None,
+                creado_por=usuario.id)
+        except (Rep.DatoInvalido, ValueError):
+            return volver("representantes", empresa_id=empresa_id, e="VALIDACION")
+        except ContrasenaInvalida:
+            return volver("representantes", empresa_id=empresa_id, e="CONTRASENA")
+        except psycopg.errors.UniqueViolation:
+            return volver("representantes", empresa_id=empresa_id, e="REPETIDO")
+        # Se apunta quién dio el acceso. El día que se pregunte por qué alguien
+        # veía la jornada de una plantilla, la respuesta tiene que tener nombre.
+        G.apuntar(bd(), usuario, "crear", "representante", identificador,
+                  detalle={"empresa": empresa_id, "ambito": centro or "empresa"})
+        return volver("representantes", empresa_id=empresa_id)
+
+    @app.post("/panel/empresas/<empresa_id>/representantes/revocar")
+    def revocar_representante(empresa_id: str):
+        comprobar_csrf()
+        usuario = exigir_sesion()
+        if not usuario.puede(G.Permiso.GESTIONAR_REPRESENTANTES):
+            abort(403)
+        try:
+            G.empresa_de(bd(), usuario, empresa_id)
+        except G.NoExiste:
+            abort(404)
+        identificador = request.form.get("representante") or ""
+        # Y el representante se busca DENTRO de esa empresa. Revocar por
+        # identificador a secas dejaría a una gestoría cerrarle la puerta al
+        # representante de una plantilla que no es cliente suya.
+        suyo = bd().execute(
+            "select 1 from representante where id = %s and empresa_id = %s",
+            (identificador, empresa_id)).fetchone()
+        if not suyo:
+            abort(404)
+        Rep.revocar(bd(), identificador)
+        G.apuntar(bd(), usuario, "revocar", "representante", identificador,
+                  detalle={"empresa": empresa_id})
+        return volver("representantes", empresa_id=empresa_id)
 
     # -------------------------------------------------------------- centros
 
@@ -811,7 +894,8 @@ EMPRESA = BASE.replace("CUERPO", """
 <h1>{{ e.nombre }}</h1>
 <p class="sub"><a href="{{ url_for('jornada', empresa_id=e.id) }}">Ver la jornada de hoy</a>
  · <a href="{{ url_for('correcciones', empresa_id=e.id) }}">Correcciones</a>
- · <a href="{{ url_for('expediente', empresa_id=e.id) }}">Exportar registro</a></p>
+ · <a href="{{ url_for('expediente', empresa_id=e.id) }}">Exportar registro</a>
+ · <a href="{{ url_for('representantes', empresa_id=e.id) }}">Representación</a></p>
 
 {% if v and not v.valido %}
 <div class="alarma"><b>El libro de esta empresa no cuadra</b><br>
@@ -1046,6 +1130,84 @@ CORRECCIONES = BASE.replace("CUERPO", """
 {% else %}<div class="tarjeta vacio">Todavía no se ha pedido ningún cambio.</div>
 {% endif %}
 """)
+
+REPRESENTANTES = BASE.replace("CUERPO", """
+<h1>{{ e.nombre }}</h1>
+<p class="sub">Representación de la plantilla ·
+   <a href="{{ url_for('empresa', empresa_id=e.id) }}">volver a la empresa</a></p>
+{% if aviso %}<p class="aviso">{{ aviso }}</p>{% endif %}
+
+<div class="tarjeta">
+<p class="sub" style="margin:0">Quien representa a la plantilla puede consultar
+el registro de jornada de su ámbito, y solo consultarlo: desde su acceso no se
+puede modificar ni proponer nada. Cada consulta queda apuntada abajo, y la ve
+tanto la empresa como quien la hizo.</p>
+</div>
+
+<h2>Con acceso</h2>
+{% if filas %}
+<table>
+ <tr><th>Nombre</th><th>Correo</th><th>Ámbito</th><th>Mandato</th><th></th></tr>
+ {% for r in filas %}
+ <tr>
+  <td>{{ r.nombre }}</td>
+  <td>{{ r.email }}</td>
+  <td>{% if r.ambito == 'centro' %}{{ r.centro }}{% else %}Toda la plantilla{% endif %}</td>
+  <td>{{ r.vigente_desde }} — {% if r.vigente_hasta %}{{ r.vigente_hasta }}{% else %}sin fecha{% endif %}
+      {% if r.revocado_en %}<span class="etq mal">revocado</span>
+      {% elif not r.vigente(hoy) %}<span class="etq">fuera de vigencia</span>
+      {% else %}<span class="etq dentro">con acceso</span>{% endif %}</td>
+  <td>{% if not r.revocado_en and u.puede(Permiso.GESTIONAR_REPRESENTANTES) %}
+      <form method="post" action="{{ url_for('revocar_representante', empresa_id=e.id) }}">
+        <input type="hidden" name="csrf" value="{{ csrf() }}">
+        <input type="hidden" name="representante" value="{{ r.id }}">
+        <button class="gris">Revocar</button></form>{% endif %}</td>
+ </tr>
+ {% endfor %}
+</table>
+{% else %}
+<p class="tarjeta">Todavía no hay nadie dado de alta.</p>
+{% endif %}
+
+{% if u.puede(Permiso.GESTIONAR_REPRESENTANTES) %}
+<h2>Dar acceso</h2>
+<form method="post" class="tarjeta">
+  <input type="hidden" name="csrf" value="{{ csrf() }}">
+  <p class="linea">
+    <label>Nombre <input name="nombre" required></label>
+    <label>Correo <input name="email" type="email" required></label>
+  </p>
+  <p class="linea">
+    <label>Contraseña <input name="contrasena" type="password" required></label>
+    <label>Ámbito <select name="centro">
+      <option value="">Toda la plantilla</option>
+      {% for c in centros %}<option value="{{ c.id }}">{{ c.nombre }}</option>{% endfor %}
+    </select></label>
+  </p>
+  <p class="linea">
+    <label>Desde <input name="desde" type="date" value="{{ hoy }}"></label>
+    <label>Hasta <input name="hasta" type="date"></label>
+    <button>Dar acceso</button>
+  </p>
+  <p class="sub" style="margin:8px 0 0">El mandato caduca solo en la fecha de
+  fin. Si no se pone ninguna, el acceso dura hasta que se revoque a mano.</p>
+</form>
+{% endif %}
+
+<h2>Quién ha consultado</h2>
+{% if accesos %}
+<table>
+ <tr><th>Cuándo</th><th>Quién</th><th>Qué</th><th>Periodo o persona</th></tr>
+ {% for a in accesos %}
+ <tr><td>{{ a.momento.strftime('%d/%m/%Y %H:%M') }}</td><td>{{ a.quien }}</td>
+     <td>{{ a.accion }}</td><td>{{ a.detalle }}</td></tr>
+ {% endfor %}
+</table>
+{% else %}
+<p class="tarjeta">Nadie ha consultado todavía.</p>
+{% endif %}
+""")
+
 
 SIMPLE = """
 <!doctype html><html lang="es"><head><meta charset="utf-8">

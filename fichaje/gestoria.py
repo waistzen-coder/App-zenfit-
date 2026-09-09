@@ -42,15 +42,21 @@ class Permiso(str, Enum):
     ROTAR_QR = "rotar_qr"
     GESTIONAR_USUARIOS = "gestionar_usuarios"
     CORREGIR = "corregir"                # tocar horas ya registradas
+    GESTIONAR_REPRESENTANTES = "gestionar_representantes"  # dar y quitar acceso
 
 
-# Dos roles y cinco permisos. Con doce roles nadie sabe quién puede qué, y el
+# Dos roles y seis permisos. Con doce roles nadie sabe quién puede qué, y el
 # día que hay que revisarlo no se revisa.
 #
 # El reparto sale del trabajo real de una asesoría laboral: la persona que
 # atiende el teléfono da de alta gente y le resetea el PIN todo el día, y eso no
 # puede necesitar al jefe. Dar de alta una empresa cliente, rotar un QR o crear
 # usuarios sí son decisiones de quien manda.
+# Dar de alta a un representante es de las decisiones más serias del panel: le
+# abre a alguien la jornada de TODA una plantilla, no la de una persona. Y
+# revocarlo lo es igual, por lo contrario: quien revoca por su cuenta puede
+# cerrarle la puerta a quien tenía derecho a mirar. Se queda en administración.
+#
 # Corregir horas es distinto de todo lo demás: no cambia una ficha, cambia lo
 # que se le va a pagar a alguien y lo que se enseñaría en una inspección. Se
 # queda en el rol de administración hasta que sepamos cómo lo usan de verdad las

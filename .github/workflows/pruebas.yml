@@ -58,6 +58,8 @@ jobs:
         # Se generan aquí y mueren con el trabajo. Ninguno está guardado.
         run: |
           echo "FICHAJE_APP_PASSWORD=$(python3 -c 'import secrets;print(secrets.token_urlsafe(24))')" >> $GITHUB_ENV
+          echo "FICHAJE_PORTAL_PASSWORD=$(python3 -c 'import secrets;print(secrets.token_urlsafe(24))')" >> $GITHUB_ENV
+          echo "FICHAJE_PORTAL_SECRETO=$(python3 -c 'import secrets;print(secrets.token_hex(32))')" >> $GITHUB_ENV
           echo "FICHAJE_SECRETO=$(python3 -c 'import secrets;print(secrets.token_hex(32))')" >> $GITHUB_ENV
           echo "FICHAJE_PANEL_SECRETO=$(python3 -c 'import secrets;print(secrets.token_hex(32))')" >> $GITHUB_ENV
 
@@ -90,6 +92,9 @@ jobs:
 
       - name: Exportación auditable y su verificador
         run: python3 -m fichaje.pruebas_exportacion
+
+      - name: El portal de representantes y su aislamiento
+        run: python3 -m fichaje.pruebas_representantes
 
       - name: Copia de seguridad y restauración de verdad
         run: python3 -m fichaje.copia comprobar
