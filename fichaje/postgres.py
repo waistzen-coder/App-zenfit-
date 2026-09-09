@@ -47,6 +47,13 @@ from .registro import (
     verificar_cadena,
 )
 
+# La única dirección de base de datos escrita en todo el repositorio, y solo
+# como comodidad: es el servidor de desarrollo que monta el README, en un puerto
+# apartado para no chocar con otro PostgreSQL que ya estuviera instalado. En
+# cualquier otro sitio —integración continua, servidor de verdad— manda
+# `FICHAJE_DSN`, y todo lo demás se deriva de ahí. Escribir una segunda
+# dirección en cualquier otro archivo es lo que dejó las pruebas en rojo, así
+# que hay una comprobación que lo impide.
 DSN_POR_DEFECTO = "postgresql://postgres@127.0.0.1:5433/fichaje"
 
 
