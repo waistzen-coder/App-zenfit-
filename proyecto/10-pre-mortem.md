@@ -7,15 +7,27 @@ nos lo podrían tirar, ordenados por lo que de verdad preocupa.
 
 ## LEGAL
 
-**1 · El acceso de los representantes depende de un paso manual.**
-Probabilidad alta · Impacto medio. Lo que está en vigor desde 2019 es la
-**disponibilidad** del registro para quien representa a la plantilla. El
+**1 · Alguien da de alta a un representante que no lo es.**
+Probabilidad media · Impacto muy alto. El portal ya no depende de un paso
+manual: existe, y se abre desde el panel. Eso mueve el riesgo de sitio, no lo
+elimina. Ahora el punto débil es el alta: quien tenga el permiso en la gestoría
+puede abrirle a alguien la jornada de una plantilla entera, y desde fuera no se
+distingue un alta legítima de una que no lo es. **Mitigación:** el permiso está
+en el rol de administración, el alta queda apuntada con nombre de quien la hizo,
+el mandato caduca solo si se le pone fecha, y la empresa ve en su propia página
+quién ha consultado su registro. Lo que falta y se sabe: nadie confirma desde el
+lado de la plantilla que esa persona sea de verdad su representante.
+
+**1b · El acceso de los representantes dependía de un paso manual.**
+Resuelto. Se deja escrito porque el razonamiento sigue valiendo. Lo que está en
+vigor desde 2019 es la **disponibilidad** del registro para quien representa a
+la plantilla. El
 artículo 34.9 no impone un mecanismo concreto, así que no tener un portal no es
 por sí solo un incumplimiento, y decir lo contrario sería vender miedo. El
 riesgo real es otro y es nuestro: hoy depende de que la empresa o la gestoría
 exporte y entregue, y eso se olvida, se retrasa y no deja rastro. Delante de un
-inspector, «se lo dimos» sin constancia vale poco. **Mitigación:** un acceso
-propio de solo lectura que registre quién consultó y cuándo.
+inspector, «se lo dimos» sin constancia vale poco. **Mitigación aplicada:** el
+portal de solo lectura, con registro de quién consultó y cuándo.
 
 **2 · Vender urgencia que no existe.**
 Probabilidad media · Impacto muy alto. Decirle a una gestoría «entra en vigor en
