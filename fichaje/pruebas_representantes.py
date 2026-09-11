@@ -34,6 +34,7 @@ from .despliegue import (  # noqa: E402
 )
 from .migrar import aplicar  # noqa: E402
 from .panel import crear_panel  # noqa: E402
+from .web import crear_app  # noqa: E402
 from .portal import crear_portal  # noqa: E402
 from .postgres import LibroPostgres, conectar  # noqa: E402
 from .registro import Tipo  # noqa: E402
@@ -149,6 +150,8 @@ portal = crear_portal(dsn_portal())
 portal.config["TESTING"] = True
 panel = crear_panel(dsn_aplicacion())
 panel.config["TESTING"] = True
+web = crear_app(dsn_aplicacion())
+web.config["TESTING"] = True
 
 # Usuarios del panel: Ana manda en la gestoría A, Luis solo ve y da de alta
 # gente, y Bea es de la gestoría rival.
@@ -673,6 +676,61 @@ comprobar("Ana sí revoca", r.status_code, 302)
 comprobar("Y queda revocada",
           admin.execute("select revocado_en is not null from representante "
                         "where id = %s", (NUEVA[0],)).fetchone()[0], True)
+
+# =============================== lo que la plantilla ve sobre quién la mira
+
+# El alta la hace la gestoría y nadie la confirma desde el lado de los
+# trabajadores. Eso no se arregla enseñándolo, pero un acceso que se ve es un
+# acceso que se puede discutir, y uno silencioso no.
+from .admin import poner_pin, rotar_token  # noqa: E402
+
+poner_pin(admin, LUCIA, "482913")
+poner_pin(admin, NURIA, "771122")
+TOKEN_PLAYA = admin.execute(
+    "select token_publico from centro where id = %s", (CENTRO_PLAYA,)).fetchone()[0]
+TOKEN_PUEBLO = admin.execute(
+    "select token_publico from centro where id = %s", (CENTRO_PUEBLO,)).fetchone()[0]
+
+
+def entrar_movil(token, codigo, pin):
+    c = web.test_client()
+    c.get(f"/f/{token}")
+    with c.session_transaction() as s:
+        csrf = s["csrf"]
+    c.post(f"/f/{token}/entrar", data={"codigo": codigo, "pin": pin, "csrf": csrf})
+    return c
+
+
+c_lucia = entrar_movil(TOKEN_PLAYA, "1042", "482913")
+r = c_lucia.get(f"/f/{TOKEN_PLAYA}/mis-registros")
+comprobar("Lucía entra en sus registros", r.status_code, 200)
+comprobar("Y ve que Carmen puede mirarlos", b"Carmen Vega" in r.data, True)
+comprobar("Con el aviso de que no puede cambiarlos",
+          "no puede cambiarlas".encode() in r.data, True)
+# Pablo es del centro del pueblo; Lucía ficha en la playa, así que él no la ve y
+# ella no tiene por qué verlo a él en esta lista.
+comprobar("Y NO ve al representante del otro centro, que no la representa",
+          b"Pablo Sanz" in r.data, False)
+
+c_nuria = entrar_movil(TOKEN_PUEBLO, "1044", "771122")
+r = c_nuria.get(f"/f/{TOKEN_PUEBLO}/mis-registros")
+comprobar("Nuria, que ficha en el pueblo, ve a los dos: el de empresa y el suyo",
+          b"Carmen Vega" in r.data and b"Pablo Sanz" in r.data, True)
+
+# Un representante revocado deja de aparecer. Si siguiera en la lista, el aviso
+# mentiría en la dirección peor: haría pensar que alguien mira cuando ya no.
+antes = R.crear(admin, A, "Temporal Ruiz", "temporal@plantilla.es",
+                "una-clave-larguisima", vigente_desde=HOY - timedelta(days=5))
+r = c_lucia.get(f"/f/{TOKEN_PLAYA}/mis-registros")
+comprobar("Un alta nueva aparece en el acto", b"Temporal Ruiz" in r.data, True)
+R.revocar(admin, antes)
+r = c_lucia.get(f"/f/{TOKEN_PLAYA}/mis-registros")
+comprobar("Y al revocarlo desaparece", b"Temporal Ruiz" in r.data, False)
+
+# Y nunca los de otra empresa, por mucho que existan.
+r = c_lucia.get(f"/f/{TOKEN_PLAYA}/mis-registros")
+comprobar("Ni rastro de la representante de la empresa rival",
+          b"Rita Rival" in r.data, False)
 
 # ================================================================= rendimiento
 

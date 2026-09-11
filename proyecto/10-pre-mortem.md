@@ -14,9 +14,16 @@ elimina. Ahora el punto débil es el alta: quien tenga el permiso en la gestorí
 puede abrirle a alguien la jornada de una plantilla entera, y desde fuera no se
 distingue un alta legítima de una que no lo es. **Mitigación:** el permiso está
 en el rol de administración, el alta queda apuntada con nombre de quien la hizo,
-el mandato caduca solo si se le pone fecha, y la empresa ve en su propia página
-quién ha consultado su registro. Lo que falta y se sabe: nadie confirma desde el
-lado de la plantilla que esa persona sea de verdad su representante.
+el mandato caduca solo si se le pone fecha, la empresa ve en su propia página
+quién ha consultado su registro, y **cada trabajador ve en su móvil quién puede
+mirar sus horas**, con el aviso de que si ahí aparece alguien que no representa
+a su plantilla lo diga.
+
+Eso no es confirmación y no se vende como tal: nadie del lado de la plantilla
+tiene que dar el visto bueno para que el acceso exista. Lo que cambia es que un
+acceso silencioso pasa a ser uno que cualquiera de la plantilla puede ver y
+discutir, y que alguien mire tus horas sin que tú sepas que puede es lo que no
+debería pasar nunca. La confirmación de verdad sigue pendiente.
 
 **1b · El acceso de los representantes dependía de un paso manual.**
 Resuelto. Se deja escrito porque el razonamiento sigue valiendo. Lo que está en
