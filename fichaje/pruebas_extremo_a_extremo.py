@@ -221,6 +221,31 @@ with zipfile.ZipFile(io.BytesIO(paquete)) as z:
     correcciones = z.read("correcciones.csv").decode("utf-8-sig")
     libro_jsonl = z.read("libro.jsonl").decode("utf-8")
 
+# --- y la totalización mensual, en las dos pantallas donde sale
+#
+# El panel y el expediente la calculan con el mismo código a propósito. Esta
+# comprobación existe para que siga siendo así: el día que alguien duplique la
+# suma «para no depender del dominio», aquí saltará.
+mes_de_ayer = f"{AYER.year:04d}-{AYER.month:02d}"
+r = c_panel.get(f"/panel/empresas/{EMPRESA}/totales?mes={mes_de_ayer}")
+comprobar("El panel enseña las horas del mes", r.status_code, 200)
+comprobar("Y son las siete corregidas", b"<b>7.00</b>" in r.data, True)
+comprobar("No las nueve de antes de corregir", b"<b>9.00</b>" in r.data, False)
+
+with zipfile.ZipFile(io.BytesIO(paquete)) as z:
+    totales_csv = z.read("totales-mensuales.csv").decode("utf-8-sig")
+filas_csv = [l.split(",") for l in totales_csv.splitlines()[1:] if l.strip()]
+comprobar("El expediente trae una fila para Lucía en ese mes",
+          [f for f in filas_csv if f[0] == "Lucía García" and f[1] == mes_de_ayer]
+          != [], True)
+fila_lucia = [f for f in filas_csv
+              if f[0] == "Lucía García" and f[1] == mes_de_ayer][0]
+comprobar("Con las mismas siete horas que enseña el panel",
+          float(fila_lucia[3]), ESPERADO)
+comprobar("Un día con jornada", int(fila_lucia[2]), 1)
+comprobar("Y marcada como corregida, para que no parezca una suma limpia",
+          int(fila_lucia[6]), 1)
+
 # ================= 5 · pero el libro guarda las dos versiones, no una sola
 
 # Esto es lo que separa una corrección de un borrado. La hora original sigue

@@ -125,9 +125,9 @@ comprobar("Y dice cuántas anotaciones ha comprobado",
 
 with zipfile.ZipFile(io.BytesIO(paquete)) as zf:
     dentro_nombres = set(zf.namelist())
-comprobar("Lleva los cinco archivos", dentro_nombres,
-          {"registro.csv", "correcciones.csv", "libro.jsonl", "manifest.json",
-           "LEEME.txt"})
+comprobar("Lleva los seis archivos", dentro_nombres,
+          {"registro.csv", "correcciones.csv", "totales-mensuales.csv",
+           "libro.jsonl", "manifest.json", "LEEME.txt"})
 
 manifest = json.loads(dentro("manifest.json"))
 comprobar("El manifiesto declara la versión del formato",
@@ -141,7 +141,8 @@ comprobar("Y el resultado de verificar", manifest["resultado_verificacion"]["val
           True)
 comprobar("Con la huella SHA-256 de cada archivo",
           sorted(manifest["archivos"]),
-          ["LEEME.txt", "correcciones.csv", "libro.jsonl", "registro.csv"])
+          ["LEEME.txt", "correcciones.csv", "libro.jsonl", "registro.csv",
+           "totales-mensuales.csv"])
 
 texto_registro = dentro("registro.csv").decode("utf-8")
 comprobar("El registro trae la hora original y la vigente",
@@ -184,6 +185,101 @@ for peligroso in ("=1+1", "+1", "-1", "@x"):
 
 libro_lineas = dentro("libro.jsonl").decode("utf-8").splitlines()
 
+# ======================================= los totales dicen lo que dicen los fichajes
+
+# Un resumen que no cuadra con el detalle es peor que no tener resumen: el que
+# lo lea se queda con la cifra grande y no baja a comprobarla. Así que la suma
+# se recalcula aquí desde las jornadas y tiene que coincidir a la coma.
+import csv as _csv_mod  # noqa: E402
+
+from .jornada import jornadas_por_trabajador  # noqa: E402
+
+filas_totales = list(_csv_mod.reader(
+    io.StringIO(dentro("totales-mensuales.csv").decode("utf-8-sig"))))
+cabecera_totales, filas_totales = filas_totales[0], filas_totales[1:]
+comprobar("La cabecera de los totales", cabecera_totales[:4],
+          ["trabajador", "mes", "dias_con_jornada", "horas_trabajadas"])
+
+# Los nombres salen de la base, igual que los saca el exportador: recalcular la
+# suma con nombres escritos a mano aquí probaría otra cosa.
+nombres_bd = dict(admin.execute(
+    "select id::text, nombre from trabajador where empresa_id = %s",
+    (EMPRESA,)).fetchall())
+
+# Los nombres van escapados también aquí, y este archivo es el que más se abre
+# con una hoja de cálculo —son sumas—, así que es justo donde más duele que
+# alguien llamado «=HYPERLINK(...)» convierta el resumen en una forma de sacar
+# datos del ordenador de quien lo abre. Se mira sobre el texto crudo, antes de
+# que el lector de CSV lo deshaga.
+comprobar("Un nombre peligroso sale escapado también en los totales",
+          "'=HYPERLINK" in dentro("totales-mensuales.csv").decode("utf-8-sig"),
+          True)
+
+
+def sin_escapar(celda: str) -> str:
+    """La comilla que se antepone a las celdas peligrosas, quitada."""
+    return celda[1:] if celda.startswith("'") else celda
+por_persona = jornadas_por_trabajador(libro.anotaciones())
+esperados = {}
+for trabajador, jornadas in por_persona.items():
+    for j in jornadas:
+        clave = (nombres_bd[trabajador], f"{j.dia.year:04d}-{j.dia.month:02d}")
+        esperados.setdefault(clave, []).append(j)
+
+comprobar("Hay una fila por persona y mes con jornadas",
+          len(filas_totales), len(esperados))
+cuadran = all(
+    int(fila[2]) == len(esperados[(sin_escapar(fila[0]), fila[1])])
+    and abs(float(fila[3])
+            - sum(j.horas for j in esperados[(sin_escapar(fila[0]), fila[1])])) < 0.005
+    for fila in filas_totales)
+comprobar("Y las horas y los días cuadran con las jornadas, a la coma",
+          cuadran, True)
+
+# Y lo importante: la hora que se suma es la CORREGIDA, no la original. Si se
+# sumaran las originales, el resumen contradiría al detalle de registro.csv en
+# la única fila que a alguien le va a interesar mirar.
+con_correccion = [f for f in filas_totales if int(f[6]) > 0]
+comprobar("Alguna fila tiene jornadas corregidas, si no esto no probaría nada",
+          len(con_correccion) > 0, True)
+for fila in con_correccion:
+    jornadas = esperados[(sin_escapar(fila[0]), fila[1])]
+    horas_corregidas = sum(j.horas for j in jornadas)
+    comprobar(f"Las horas de {fila[0]} en {fila[1]} son las corregidas",
+              abs(float(fila[3]) - horas_corregidas) < 0.005, True)
+
+# Y cuadran con lo que dice registro.csv, que es la otra mitad del expediente.
+comprobar("Los totales no inventan a nadie que no esté en el registro",
+          {sin_escapar(f[0]) for f in filas_totales} <= set(nombres_bd.values()),
+          True)
+
+# ------------------------------------------ y respetan el periodo que se pide
+
+# Sin esto, el resumen cubría todo el libro mientras el detalle cubría solo el
+# periodo, y las dos mitades del mismo expediente decían cosas distintas. Un
+# sabotaje que quitaba el recorte no lo notaba nadie.
+dias_con_jornada = sorted({j.dia for js in por_persona.values() for j in js})
+if len(dias_con_jornada) > 1:
+    solo_el_primero = dias_con_jornada[0]
+    recortado = paquete_de_empresa(admin, EMPRESA, "Bar Casa Paco",
+                                   desde=solo_el_primero, hasta=solo_el_primero)
+    with zipfile.ZipFile(io.BytesIO(recortado)) as zf:
+        filas_recortadas = list(_csv_mod.reader(io.StringIO(
+            zf.read("totales-mensuales.csv").decode("utf-8-sig"))))[1:]
+        registro_recortado = zf.read("registro.csv").decode("utf-8-sig")
+
+    dias_esperados = {
+        (nombre, mes): len([j for j in js if j.dia == solo_el_primero])
+        for (nombre, mes), js in esperados.items()}
+    comprobar("Con un periodo de un día, los totales solo cuentan ese día",
+              {int(f[2]) for f in filas_recortadas},
+              {v for v in dias_esperados.values() if v} or {0})
+    comprobar("Y no sobra ninguna fila de meses sin jornadas en el periodo",
+              all(int(f[2]) > 0 for f in filas_recortadas), True)
+    comprobar("El detalle del mismo paquete tampoco trae otros días",
+              str(dias_con_jornada[-1]) in registro_recortado
+              if dias_con_jornada[-1] != solo_el_primero else False, False)
+
 ataques = {
     "cambiar una hora en el libro": rehacer({
         "libro.jsonl": "\n".join(
@@ -210,6 +306,15 @@ ataques = {
     "cambiar el manifiesto": rehacer({
         "manifest.json": json.dumps(
             {**manifest, "numero_anotaciones": 999}, ensure_ascii=False).encode()}),
+    # El que más tienta: los totales son lo primero que mira quien abre el
+    # expediente, y cambiar una suma no parece tocar el libro.
+    # Este no busca ninguna cadena concreta dentro del archivo: añade una fila.
+    # Un ataque escrito como «reemplaza tal texto» puede no encontrar el texto y
+    # entonces no cambia nada, y una prueba que no cambia nada pasa siempre. Me
+    # pasó tres veces escribiendo estas pruebas.
+    "colar una fila en los totales": rehacer({
+        "totales-mensuales.csv": dentro("totales-mensuales.csv")
+        + b"Nadie,2026-01,99,999.00,0.00,0,0\r\n"}),
     "añadir un archivo": rehacer({"extra.txt": b"colado"}),
     "quitar un archivo": rehacer({}, quitar={"correcciones.csv"}),
     "truncar el final del libro": rehacer({

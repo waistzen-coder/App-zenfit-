@@ -43,7 +43,7 @@ problema es tenerlo y no saberlo.
 | **Autorización de empresa y trabajador** | **SÍ** | una propuesta solo la resuelve la otra parte | — |
 | **Discrepancia en ausencia de acuerdo** | **SÍ** | `correccion_discrepancia`: no borra nada y la hora sigue siendo la original | — |
 | **Totalización diaria** | **SÍ** | `Jornada.horas` | — |
-| **Totalización mensual** | **PARCIAL** | existe `horas_del_mes()` | No se enseña en el panel ni sale en el expediente |
+| **Totalización mensual** | **SÍ** | `jornada.totales_mensuales()`, que alimenta a la vez la pantalla «Horas del mes» del panel y el `totales-mensuales.csv` del expediente: el mismo código, para que no puedan discrepar | — |
 | **Formatos tratables y legibles** | **PARCIAL** | CSV y JSONL, abiertos y documentados | Son formatos nuestros. No hay especificación publicada con la que compararse |
 | **Acceso remoto de la Inspección** | **NO** | — | No existe. Depende de la Orden técnica |
 | **Cuatro años de conservación** | **PARCIAL** | igual que arriba | igual que arriba |
@@ -60,9 +60,10 @@ problema es tenerlo y no saberlo.
    apuntando cuándo se hizo.
 2. **Anclaje externo.** Sin él no se detecta que a un libro le falten las últimas
    anotaciones. Está escrito en el LEEME de cada expediente.
-3. **Totalización mensual, calculada pero no enseñada.**
-4. **Categorías de tiempo distintas de trabajar y pausar.**
-5. **Acceso de la Inspección**, que depende de una Orden que aún no existe.
+3. **Categorías de tiempo distintas de trabajar y pausar.** Guardias,
+   disponibilidad y desplazamientos no existen: solo hay entrada, salida y
+   pausa. Lo contempla el borrador, no la norma en vigor.
+4. **Acceso de la Inspección**, que depende de una Orden que aún no existe.
 
 ## Lo que no se va a decir
 

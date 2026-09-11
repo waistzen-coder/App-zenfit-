@@ -23,6 +23,7 @@ from .exportar import json_a_anotacion
 from .registro import verificar_cadena
 
 ARCHIVOS_ESPERADOS = {"registro.csv", "correcciones.csv", "libro.jsonl",
+                      "totales-mensuales.csv",
                       "LEEME.txt", "manifest.json"}
 
 

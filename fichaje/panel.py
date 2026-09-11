@@ -54,6 +54,7 @@ from .jornada import (
     Estado,
     jornadas_de,
     jornadas_por_trabajador,
+    totales_mensuales,
 )
 from .organizacion import ZonaInvalida, nuevo_id
 from .postgres import LibroPostgres, conectar
@@ -550,6 +551,35 @@ def crear_panel(cadena_bd: str | None = None) -> Flask:
                   detalle={"motivo": resultado["motivo"]})
         return volver("empresa", empresa_id=empresa_id)
 
+    # ------------------------------------------------------ totales mensuales
+
+    @app.get("/panel/empresas/<empresa_id>/totales")
+    def totales(empresa_id: str):
+        """Horas por persona y por mes.
+
+        El cálculo no se hace aquí: sale de `jornada.totales_mensuales`, el
+        mismo que escribe `totales-mensuales.csv` dentro del expediente. Si esta
+        pantalla sumara por su cuenta, algún día diría una cifra distinta de la
+        que se entrega en una inspección, y las dos serían nuestras.
+        """
+        usuario = exigir_sesion()
+        try:
+            datos = G.empresa_de(bd(), usuario, empresa_id)
+        except G.NoExiste:
+            abort(404)
+        anotaciones = LibroPostgres(empresa_id, bd()).anotaciones()
+        gente = dict(bd().execute(
+            "select id::text, nombre from trabajador where empresa_id = %s",
+            (empresa_id,)).fetchall())
+        filas = totales_mensuales(anotaciones)
+        meses = sorted({f.mes for f in filas}, reverse=True)
+        mes = request.args.get("mes") or (meses[0] if meses else "")
+        return render_template_string(
+            TOTALES, u=usuario, e=datos, meses=meses, mes=mes,
+            filas=[f for f in filas if f.mes == mes],
+            gente=gente,
+            total=round(sum(f.horas for f in filas if f.mes == mes), 2))
+
     # ---------------------------------------------------------- correcciones
 
     @app.get("/panel/empresas/<empresa_id>/correcciones")
@@ -907,6 +937,7 @@ EMPRESA = BASE.replace("CUERPO", """
 <p class="sub"><a href="{{ url_for('jornada', empresa_id=e.id) }}">Ver la jornada de hoy</a>
  · <a href="{{ url_for('correcciones', empresa_id=e.id) }}">Correcciones</a>
  · <a href="{{ url_for('expediente', empresa_id=e.id) }}">Exportar registro</a>
+ · <a href="{{ url_for('totales', empresa_id=e.id) }}">Horas del mes</a>
  · <a href="{{ url_for('representantes', empresa_id=e.id) }}">Representación</a></p>
 
 {% if v and not v.valido %}
@@ -1142,6 +1173,42 @@ CORRECCIONES = BASE.replace("CUERPO", """
 {% else %}<div class="tarjeta vacio">Todavía no se ha pedido ningún cambio.</div>
 {% endif %}
 """)
+
+TOTALES = BASE.replace("CUERPO", """
+<h1>{{ e.nombre }}</h1>
+<p class="sub">Horas por persona y mes ·
+   <a href="{{ url_for('empresa', empresa_id=e.id) }}">volver a la empresa</a></p>
+
+{% if meses %}
+<form class="linea tarjeta" method="get">
+  <label>Mes <select name="mes">
+    {% for m in meses %}<option value="{{ m }}"{% if m == mes %} selected{% endif %}>{{ m }}</option>{% endfor %}
+  </select></label>
+  <button>Ver</button>
+  <a href="{{ url_for('expediente', empresa_id=e.id) }}">Descargar el expediente</a>
+</form>
+<table>
+ <tr><th>Persona</th><th>Días</th><th>Horas</th><th>Pausas</th><th></th></tr>
+ {% for f in filas %}
+ <tr>
+  <td>{{ gente.get(f.trabajador_id, f.trabajador_id) }}</td>
+  <td>{{ f.dias }}</td>
+  <td><b>{{ '%.2f'|format(f.horas) }}</b></td>
+  <td>{{ '%.2f'|format(f.pausa) }}</td>
+  <td>{% if f.sin_cerrar %}<span class="etq mal">{{ f.sin_cerrar }} sin cerrar</span>{% endif %}
+      {% if f.con_correccion %}<span class="etq">{{ f.con_correccion }} corregida{{ 's' if f.con_correccion > 1 }}</span>{% endif %}</td>
+ </tr>
+ {% endfor %}
+ <tr><td><b>Total</b></td><td></td><td><b>{{ '%.2f'|format(total) }}</b></td><td></td><td></td></tr>
+</table>
+<p class="sub">Estas son las horas con las correcciones acordadas ya aplicadas, y
+son exactamente las que salen en <code>totales-mensuales.csv</code> dentro del
+expediente: las calcula el mismo código.</p>
+{% else %}
+<p class="tarjeta">Todavía no hay jornadas registradas.</p>
+{% endif %}
+""")
+
 
 REPRESENTANTES = BASE.replace("CUERPO", """
 <h1>{{ e.nombre }}</h1>
