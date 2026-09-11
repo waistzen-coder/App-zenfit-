@@ -19,17 +19,31 @@ repositorio**:
 ```bash
 export FICHAJE_DSN='postgresql://usuario@servidor:5432/fichaje'
 export FICHAJE_APP_PASSWORD='una-contraseña-larga-y-tuya'
+export FICHAJE_PORTAL_PASSWORD='otra-distinta-para-el-portal'
 export FICHAJE_SECRETO="$(python3 -c 'import secrets;print(secrets.token_hex(32))')"
+export FICHAJE_PANEL_SECRETO="$(python3 -c 'import secrets;print(secrets.token_hex(32))')"
+export FICHAJE_PORTAL_SECRETO="$(python3 -c 'import secrets;print(secrets.token_hex(32))')"
 export FICHAJE_URL='https://tu-dominio'      # lo que se codifica en el QR
 export FICHAJE_HTTPS=1                        # solo en producción
 ```
+
+Son tres secretos distintos y tres contraseñas porque son **tres aplicaciones
+distintas**: el fichaje, el panel y el portal de la representación. Compartir
+una cookie o una clave entre ellas haría que una sesión de una valiera en otra,
+que es justo lo que no puede pasar.
 
 Preparar la base de datos:
 
 ```bash
 python3 -m fichaje.migrar        # crea o actualiza las tablas
-python3 -m fichaje.despliegue    # crea el usuario limitado de la aplicación
+python3 -m fichaje.despliegue    # crea los dos usuarios limitados
 ```
+
+`despliegue` crea dos usuarios de base de datos: `fichaje_app`, que puede leer y
+añadir anotaciones pero nunca modificarlas ni borrarlas, y `fichaje_portal`,
+que sobre el libro **solo puede leer**. El portal corre con el segundo, así que
+si algún día apareciera un fallo que intentara escribir desde ahí, PostgreSQL lo
+rechaza; no hay que confiar en que el código no lo intente.
 
 `migrar` se puede repetir las veces que haga falta: aplica solo lo que falte.
 
@@ -112,14 +126,26 @@ la cookie de sesión viaje cifrada.
 ## Comprobar que todo está bien
 
 ```bash
-python3 -m fichaje.pruebas             # el registro de jornada
-python3 -m fichaje.pruebas_postgres    # la base de datos
-python3 -m fichaje.pruebas_web         # el fichaje desde el móvil
-python3 -m fichaje.copia comprobar     # copia, restauración y cadena
+python3 -m fichaje.pruebas                   # el registro de jornada
+python3 -m fichaje.pruebas_postgres          # la base de datos
+python3 -m fichaje.pruebas_web               # el fichaje desde el móvil
+python3 -m fichaje.pruebas_panel             # el panel y su aislamiento
+python3 -m fichaje.pruebas_correcciones      # las correcciones de hora
+python3 -m fichaje.pruebas_exportacion       # el expediente y su verificador
+python3 -m fichaje.pruebas_representantes    # el portal de la representación
+python3 -m fichaje.pruebas_retencion         # los cuatro años
+python3 -m fichaje.pruebas_extremo_a_extremo # los tres contextos, de punta a punta
+python3 -m fichaje.pruebas_sellos            # el recorte del libro
+python3 -m fichaje.pruebas_lenguaje          # lo que afirmamos sobre la ley
+python3 -m fichaje.copia comprobar           # copia, restauración y cadena
 ```
 
-Las tres primeras **borran y recrean sus tablas**: no las apuntes nunca a la
-base de datos de un cliente.
+Todas menos las dos últimas **borran y recrean sus tablas**: no las apuntes
+nunca a la base de datos de un cliente.
+
+Las mismas se ejecutan solas en GitHub Actions con cada subida, sobre una
+máquina limpia y una base recién creada. Que pasen aquí no dice gran cosa; que
+pasen allí, sí.
 
 ## Si la base de datos está en este ordenador y no arranca
 
@@ -204,12 +230,51 @@ su fecha.
 python3 -m fichaje.admin verificar
 ```
 
-Conviene dejarlo en una tarea programada nocturna. Si alguna empresa sale mal,
+Conviene dejarlo en una tarea programada nocturna, junto al sellado y la copia.
+**La tarea nocturna entera, los tres comandos en orden:**
+
+```bash
+python3 -m fichaje.admin verificar   # ¿cuadra cada cadena?
+python3 -m fichaje.sello sellar      # deja constancia de cuántas hay hoy
+python3 -m fichaje.copia comprobar   # copia, restaura y vuelve a verificar
+```
+
+El orden importa poco salvo en una cosa: sellar después de verificar evita
+sellar un libro que ya sabes que está roto. Si alguna empresa sale mal,
 aparece en rojo en el resumen de su gestoría y en su ficha.
 
 **No hay ningún botón de reparar, y no lo va a haber.** Un libro que no cuadra
 es un incidente que hay que mirar, no algo que se arregla recalculando las
 huellas: recalcularlas sería precisamente borrar la prueba.
+
+## Sellar los libros, y por qué hace falta
+
+La cadena de huellas detecta que alguien **cambie** una anotación. No detecta
+que alguien **borre las últimas**, porque un trozo del principio de una cadena
+válida también es una cadena válida. Y ese es justo el borrado que interesaría a
+quien quiere esconder horas extra: las de ayer, no las del año pasado.
+
+Un sello es una fila que dice «el día tal este libro tenía N anotaciones y la
+última era la X». Si mañana hay menos, se ve.
+
+```bash
+python3 -m fichaje.sello sellar      # una vez al día
+python3 -m fichaje.sello comprobar   # ¿siguen cuadrando?
+```
+
+Los sellos van dentro del expediente, así que un recorte se ve también con el
+ZIP en la mano, sin acceso a la base de datos.
+
+**Lo que esto no es:** un anclaje externo. Los sellos los generamos nosotros.
+Quien tenga la base entera puede recortar el libro y recortar los sellos: son
+dos tablas y dos disparadores en vez de uno, más caro y más ruidoso, pero no
+imposible. Publicar la huella donde no mandemos nosotros sigue pendiente.
+
+## Ver las horas del mes
+
+Desde el panel, en la ficha de la empresa: **Horas del mes**. Salen las horas
+por persona y mes, con las correcciones acordadas ya aplicadas, y son
+exactamente las mismas que van en el expediente: las calcula el mismo código.
 
 ## Si alguien de la gestoría se queda fuera
 
@@ -234,6 +299,95 @@ decreto, que **todavía no está en vigor**: ver
 
 ---
 
+# El portal de la representación de la plantilla
+
+El tercer sitio donde se entra, y el único que **solo lee**.
+
+## Por qué existe, dicho sin exagerar
+
+Lo que el artículo 34.9 obliga es a que el registro esté **disponible** para la
+persona trabajadora, para quien la representa y para la Inspección. No dice
+cómo: entregar una copia legible cuando se pide ya lo cumple, y eso se podía
+hacer desde el primer día con **Exportar registro**.
+
+Esto no se construyó porque la ley lo exija. Se construyó porque el camino
+manual no deja constancia: si un día se discute si la empresa facilitó el
+registro, «se lo dimos» sin rastro vale poco, y quien lo pidió tampoco puede
+demostrar que lo pidió. Aquí las dos partes ven el mismo apunte.
+
+## Arrancarlo
+
+```bash
+python3 -m fichaje.portal        # escucha en el puerto 5002
+```
+
+Tercera aplicación, tercer puerto, tercera cookie. Y corre con
+`fichaje_portal`, el usuario de base de datos que sobre el libro solo tiene
+lectura.
+
+## Dar acceso a alguien
+
+Lo hace la gestoría desde el panel: ficha de la empresa → **Representación** →
+*Dar acceso*. Hacen falta nombre, correo, contraseña y el ámbito —toda la
+plantilla o un centro concreto—, y opcionalmente la fecha en que termina el
+mandato.
+
+**Si no se pone fecha de fin, el acceso dura hasta que se revoque a mano.**
+Ponerla es lo sensato: un representante que dejó de serlo hace dos años y sigue
+entrando es una fuga de datos con la puerta abierta desde dentro.
+
+Solo puede darlo quien tenga permiso de administración en la gestoría, y queda
+apuntado con su nombre. El día que alguien pregunte por qué esa persona veía la
+jornada de una plantilla, la respuesta tiene nombre.
+
+## Quitarlo
+
+Mismo sitio, botón **Revocar**. El acceso se corta en el acto, incluso si tenía
+la sesión abierta.
+
+## Qué ve, y qué no
+
+Ve las horas de su ámbito, con las correcciones acordadas ya aplicadas, y se las
+puede descargar en CSV. Ve también quién ha consultado el registro, incluido él.
+
+No ve otra plantilla, ni otro centro fuera de su ámbito, ni nada anterior al
+inicio de su mandato, ni nada de hace más de cuatro años. No ve correos,
+teléfonos ni PIN de nadie: nombre y horas.
+
+Y **no puede cambiar nada**. No hay formulario para corregir una hora ni para
+proponerla, porque quien puede pedir que se cambie una hora es la persona a la
+que se le apuntó y la empresa.
+
+## Lo que NO se guarda de nadie
+
+**No hay campo de sindicato, ni de afiliación, ni de sección sindical**, y no es
+un olvido. Es categoría especial de datos y para dar acceso al registro no hace
+falta. Hay una prueba que recorre las columnas de la tabla y falla si alguna vez
+aparece.
+
+## Lo que la plantilla ve de todo esto
+
+Cada persona, en **Mis registros** desde su móvil, ve quién puede consultar sus
+horas y hasta cuándo, con el aviso de que si ahí aparece alguien que no
+representa a su plantilla lo diga.
+
+Eso no es confirmación: nadie del lado de los trabajadores da el visto bueno
+para que el acceso exista. Lo que cambia es que un acceso silencioso pasa a ser
+uno que se puede ver y discutir. La confirmación de verdad sigue pendiente y
+está escrita como el riesgo número uno en
+[`10-pre-mortem.md`](10-pre-mortem.md).
+
+## Descargar el CSV del portal no es el expediente
+
+Son cosas distintas y conviene no confundirlas al hablar con un cliente:
+
+| | |
+| --- | --- |
+| **CSV del portal** | Las horas de un periodo. Cómodo de leer. **No se puede verificar contra la cadena**, porque para eso hace falta el libro entero |
+| **Expediente** (`Exportar registro`) | El libro completo, con sus huellas y sus sellos. Se comprueba sin base de datos y sin nosotros |
+
+---
+
 # El expediente auditable
 
 Cuando alguien pida el registro de una empresa —la propia empresa, un abogado,
@@ -249,7 +403,9 @@ Desde el panel, en la ficha de la empresa: **Exportar registro**. Sale un ZIP.
 | --- | --- |
 | `registro.csv` | Los fichajes, con la hora original y la vigente. Se abre en Excel |
 | `correcciones.csv` | Cada cambio pedido: motivo, quién lo pidió, qué contestaron |
+| `totales-mensuales.csv` | Horas por persona y mes, ya con las correcciones aplicadas |
 | `libro.jsonl` | El libro tal como se firmó, para poder comprobarlo |
+| `sellos.jsonl` | Los sellos: cuántas anotaciones había cada día. Detecta recortes |
 | `manifest.json` | Qué hay dentro y la huella de cada archivo |
 | `LEEME.txt` | Qué significa todo, y qué **no** demuestra |
 

@@ -6,7 +6,8 @@ puede añadir, encadenado criptográficamente, que se puede poner delante de un
 inspector.
 
 La gestoría lleva sus empresas cliente desde un panel aparte, sin que nadie
-toque la base de datos.
+toque la base de datos. Y quien representa a la plantilla tiene su propio
+acceso, de solo lectura, con constancia de cada consulta.
 
 ---
 
@@ -30,11 +31,16 @@ las fuentes, está en [`proyecto/08-estado-normativo.md`](proyecto/08-estado-nor
       credenciales.py    PIN y contraseñas (scrypt)
       postgres.py        cómo se guarda sin que la cadena se bifurque
       gestoria.py        la frontera entre gestorías, y quién puede qué
+      representacion.py  quién representa a la plantilla, y qué puede ver
+      sello.py           los sellos periódicos: detectan que se recorte el libro
+      exportar.py        el expediente auditable
+      verificar_exportacion.py  comprobarlo sin base de datos y sin nosotros
       web.py             el fichaje desde el móvil, con QR
       panel.py           el panel de la gestoría
+      portal.py          el portal de la representación, solo lectura
       admin.py           administración por línea de comandos
       migrar.py          aplicar las migraciones
-      despliegue.py      el usuario restringido de la base de datos
+      despliegue.py      los usuarios restringidos de la base de datos
       copia.py           copia de seguridad, y su restauración comprobada
       caracterizacion.py el libro canónico, vara de medir de todo
       pruebas*.py        las suites
@@ -48,6 +54,7 @@ las fuentes, está en [`proyecto/08-estado-normativo.md`](proyecto/08-estado-nor
 
     export FICHAJE_DSN='postgresql://usuario@servidor:5432/fichaje'
     export FICHAJE_APP_PASSWORD='una-contraseña-larga-y-tuya'
+    export FICHAJE_PORTAL_PASSWORD='otra-distinta-para-el-portal'
     export FICHAJE_SECRETO="$(python3 -c 'import secrets;print(secrets.token_hex(32))')"
     export FICHAJE_PANEL_SECRETO="$(python3 -c 'import secrets;print(secrets.token_hex(32))')"
 
