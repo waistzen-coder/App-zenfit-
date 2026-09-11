@@ -58,8 +58,14 @@ problema es tenerlo y no saberlo.
    no se demuestra con software, es que las copias del proveedor aguanten cuatro
    años naturales. Eso se prueba restaurando de verdad, cada cierto tiempo, y
    apuntando cuándo se hizo.
-2. **Anclaje externo.** Sin él no se detecta que a un libro le falten las últimas
-   anotaciones. Está escrito en el LEEME de cada expediente.
+2. **Anclaje externo.** Ya hay sellos periódicos: cada uno dice cuántas
+   anotaciones tenía el libro un día dado y cuál era la última, van encadenados
+   entre ellos, viven en otra tabla con su propio disparador, y el expediente
+   los lleva dentro para que un recorte se vea con el ZIP en la mano. Eso sube
+   el listón pero **no es un anclaje externo**: los sellos los generamos
+   nosotros. Lo que demuestran es que el libro no se ha recortado sin recortar
+   también los sellos. Un anclaje de verdad exige publicar la huella donde no
+   mandemos nosotros, y eso sigue sin estar.
 3. **Categorías de tiempo distintas de trabajar y pausar.** Guardias,
    disponibilidad y desplazamientos no existen: solo hay entrada, salida y
    pausa. Lo contempla el borrador, no la norma en vigor.

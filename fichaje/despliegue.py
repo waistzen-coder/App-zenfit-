@@ -63,6 +63,9 @@ PERMISOS = [
     ("representante", "select, insert, update"),
     ("acceso_representante", "select"),     # la empresa lo lee, nadie lo edita
     ("sesion_representante", "select, update"),   # para poder cerrarlas al revocar
+    # Sellar es añadir. Nunca modificar ni borrar: un sello que se puede editar
+    # no sirve para nada, porque quien recorta el libro editaría el sello.
+    ("sello", "select, insert"),
 ]
 
 SECUENCIAS = ["intento_acceso_id_seq", "intento_panel_id_seq",

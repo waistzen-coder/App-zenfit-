@@ -102,5 +102,8 @@ jobs:
       - name: De extremo a extremo, cruzando los tres contextos
         run: python3 -m fichaje.pruebas_extremo_a_extremo
 
+      - name: Los sellos y el recorte del libro
+        run: python3 -m fichaje.pruebas_sellos
+
       - name: Copia de seguridad y restauración de verdad
         run: python3 -m fichaje.copia comprobar
