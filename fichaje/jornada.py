@@ -179,6 +179,54 @@ def _construir(trabajador_id: str, fichajes) -> list[Jornada]:
     return jornadas
 
 
+@dataclass
+class TotalMensual:
+    """Lo trabajado por una persona en un mes, con las correcciones aplicadas."""
+    trabajador_id: str
+    mes: str                      # «2026-09», en el día local del centro
+    dias: int
+    horas: float
+    pausa: float
+    sin_cerrar: int
+    con_correccion: int
+
+
+def totales_mensuales(anotaciones: list[Anotacion], desde: date | None = None,
+                      hasta: date | None = None) -> list[TotalMensual]:
+    """La totalización mensual de todo el mundo, ordenada.
+
+    Vive aquí y no en el exportador porque la usan dos sitios: el panel, donde
+    la mira la gestoría, y el expediente, que va a una inspección. Si cada uno
+    la calculara por su cuenta, el día que discreparan tendríamos dos cifras
+    defendibles por separado y ninguna defendible junta.
+
+    Las jornadas se emparejan con el libro ENTERO aunque se pida un periodo,
+    porque una jornada puede empezar el día 31 y acabar el 1; recortando antes
+    de emparejar saldrían medias jornadas. El recorte se hace después, sobre el
+    día local que cada jornada ya tiene calculado.
+    """
+    salida = []
+    for trabajador, jornadas in jornadas_por_trabajador(anotaciones).items():
+        por_mes: dict[str, list[Jornada]] = {}
+        for j in jornadas:
+            if desde and j.dia < desde:
+                continue
+            if hasta and j.dia > hasta:
+                continue
+            por_mes.setdefault(f"{j.dia.year:04d}-{j.dia.month:02d}", []).append(j)
+        for mes, suyas in por_mes.items():
+            salida.append(TotalMensual(
+                trabajador_id=trabajador,
+                mes=mes,
+                dias=len(suyas),
+                horas=round(sum(j.horas for j in suyas), 2),
+                pausa=round(sum(j.pausas.total_seconds() for j in suyas) / 3600, 2),
+                sin_cerrar=sum(1 for j in suyas if j.abierta),
+                con_correccion=sum(1 for j in suyas if j.corregida),
+            ))
+    return sorted(salida, key=lambda t: (t.mes, t.trabajador_id))
+
+
 def horas_del_mes(anotaciones: list[Anotacion], trabajador_id: str,
                   anio: int, mes: int) -> float:
     return round(sum(

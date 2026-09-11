@@ -27,7 +27,7 @@ from datetime import date, datetime, timezone
 from zoneinfo import ZoneInfo
 
 from .correcciones import correcciones_de
-from .jornada import jornadas_de
+from .jornada import jornadas_de, totales_mensuales
 from .registro import FICHAJES, Anotacion, Tipo, correcciones_vigentes, verificar_cadena
 
 VERSION_FORMATO = "1.0"
@@ -132,6 +132,12 @@ registro.csv       Los fichajes: quién, dónde, cuándo, y si la hora se corrig
 
 correcciones.csv   Cada cambio de hora que se pidió: quién lo pidió, por qué,
                    qué hora proponía, y qué contestó la otra parte.
+
+totales-mensuales.csv
+                   Horas por persona y por mes, ya con las correcciones
+                   acordadas aplicadas. Es una suma de lo que hay en
+                   registro.csv, no un dato aparte: si no cuadra con él, manda
+                   registro.csv.
 
 libro.jsonl        El libro tal como se firmó, una anotación por línea y en su
                    orden exacto. Es el archivo que permite comprobar que nada se
@@ -240,6 +246,19 @@ def construir_paquete(anotaciones: list[Anotacion], empresa_id: str,
          "fecha_propuesta", "resultado", "respondida_por", "autor_respuesta",
          "fecha_respuesta"], filas)
 
+    # La totalización mensual. El cálculo está en `jornada.py` porque lo usan
+    # también el panel y las pruebas: dos implementaciones de la misma suma es
+    # tener dos cifras que algún día discreparán.
+    filas = [[nombres.get(x.trabajador_id, x.trabajador_id), x.mes, str(x.dias),
+              f"{x.horas:.2f}", f"{x.pausa:.2f}", str(x.sin_cerrar),
+              str(x.con_correccion)]
+             for x in totales_mensuales(anotaciones, desde, hasta)]
+    filas.sort(key=lambda f: (f[0], f[1]))
+    totales = _csv(
+        ["trabajador", "mes", "dias_con_jornada", "horas_trabajadas",
+         "horas_de_pausa", "jornadas_sin_cerrar", "jornadas_con_correccion"],
+        filas)
+
     libro = "".join(
         json.dumps(_anotacion_a_json(a), ensure_ascii=False, sort_keys=True) + "\n"
         for a in anotaciones)
@@ -272,6 +291,7 @@ def construir_paquete(anotaciones: list[Anotacion], empresa_id: str,
     contenido = {
         "registro.csv": registro.encode("utf-8"),
         "correcciones.csv": correcciones.encode("utf-8"),
+        "totales-mensuales.csv": totales.encode("utf-8"),
         "libro.jsonl": libro.encode("utf-8"),
         "LEEME.txt": LEEME.encode("utf-8"),
     }
