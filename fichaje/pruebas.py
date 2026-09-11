@@ -17,7 +17,7 @@ from .caracterizacion import (
     PACO,
     h,
 )
-from .jornada import horas_del_mes, jornadas_de
+from .jornada import horas_del_mes, jornadas_de, jornadas_por_trabajador
 from .organizacion import Centro, Empresa, Trabajador, ZonaInvalida, nuevo_id
 from .registro import (
     VERSION_ACTUAL,
@@ -310,6 +310,64 @@ comprobar("20.000 anotaciones: salen las 500 jornadas de una persona",
 comprobar(f"Y en menos de un segundo (ha tardado {tardanza:.2f} s)",
           tardanza < 1.0, True)
 
+# ------------------------------- y pedirlas de todos a la vez da lo mismo
+
+# `jornadas_por_trabajador` existe por rendimiento, no por gusto, y un cambio
+# hecho por rendimiento que además cambia los resultados es un desastre con
+# buena prensa. Así que se comprueba lo único que importa: que dé exactamente lo
+# mismo, campo por campo, para las diez personas del libro de veinte mil.
+arranque = time.perf_counter()
+una_a_una = {t: jornadas_de(libro.anotaciones, t) for t in trabajadores}
+en_bucle = time.perf_counter() - arranque
+
+arranque = time.perf_counter()
+de_golpe = jornadas_por_trabajador(libro.anotaciones)
+de_una_pasada = time.perf_counter() - arranque
+
+comprobar("Salen las mismas personas", set(de_golpe), set(una_a_una))
+iguales = all(
+    [(j.dia, j.entrada, j.salida, j.pausas, j.horas, j.corregida,
+      j.retroactiva, j.incidencias) for j in de_golpe[t]] ==
+    [(j.dia, j.entrada, j.salida, j.pausas, j.horas, j.corregida,
+      j.retroactiva, j.incidencias) for j in una_a_una[t]]
+    for t in trabajadores)
+comprobar("Y las jornadas son idénticas campo por campo", iguales, True)
+
+# Y que de verdad sea más rápido, no solo distinto. Se compara con el método
+# viejo en la misma máquina y en el mismo momento, que es la única comparación
+# que no depende de lo rápido que sea el ordenador donde corra esto.
+comprobar(f"Una sola pasada es más rápida que diez ({de_una_pasada:.2f} s "
+          f"frente a {en_bucle:.2f} s)", de_una_pasada < en_bucle, True)
+
+# Lo que de verdad se arregló: las correcciones se resolvían una vez POR
+# PERSONA. Contarlas es determinista; cronometrar, no.
+from . import jornada as _jornada  # noqa: E402
+
+_veces = 0
+_original = _jornada.correcciones_vigentes
+
+
+def _contando(anotaciones):
+    global _veces
+    _veces += 1
+    return _original(anotaciones)
+
+
+_jornada.correcciones_vigentes = _contando
+_veces = 0
+jornadas_por_trabajador(libro.anotaciones)
+de_golpe_veces = _veces
+_veces = 0
+for t in trabajadores:
+    jornadas_de(libro.anotaciones, t)
+en_bucle_veces = _veces
+_jornada.correcciones_vigentes = _original
+
+comprobar("De una pasada, las correcciones se resuelven UNA vez",
+          de_golpe_veces, 1)
+comprobar("En bucle se resolvían una vez por persona", en_bucle_veces,
+          len(trabajadores))
+
 # ======================================= caracterización: la vara de medir
 
 canonico = carac.libro_canonico()
@@ -334,6 +392,15 @@ comprobar("Los fichajes retroactivos son los que son",
 comprobar("Y las incidencias de Jose",
           [j.incidencias for j in jornadas_de(canonico.anotaciones, JOSE)],
           carac.INCIDENCIAS_JOSE)
+# El canónico lleva correcciones aceptadas y fichajes retroactivos, que es donde
+# un reparto por persona mal hecho se notaría.
+_todas = jornadas_por_trabajador(canonico.anotaciones)
+comprobar("En el libro canónico, las horas de Lucía también salen de una pasada",
+          [j.horas for j in _todas[LUCIA]], carac.HORAS_LUCIA)
+comprobar("Y las de Jose", [j.horas for j in _todas[JOSE]], carac.HORAS_JOSE)
+comprobar("Con sus mismas incidencias",
+          [j.incidencias for j in _todas[JOSE]], carac.INCIDENCIAS_JOSE)
+
 comprobar("Construirlo dos veces da exactamente el mismo libro",
           [a.huella for a in carac.libro_canonico().anotaciones],
           [a.huella for a in canonico.anotaciones])

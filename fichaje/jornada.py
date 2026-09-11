@@ -76,6 +76,49 @@ def _fichajes_vigentes(anotaciones: list[Anotacion], trabajador_id: str):
 
 
 def jornadas_de(anotaciones: list[Anotacion], trabajador_id: str) -> list[Jornada]:
+    """Las jornadas de UNA persona.
+
+    Para varias personas del mismo libro, `jornadas_por_trabajador` en vez de
+    llamar aquí en un bucle: esta función resuelve las correcciones del libro
+    entero cada vez que se la llama, y hacerlo una vez por persona es el mismo
+    error que ya costó doce segundos una vez.
+    """
+    return _construir(trabajador_id, _fichajes_vigentes(anotaciones, trabajador_id))
+
+
+def jornadas_por_trabajador(
+        anotaciones: list[Anotacion]) -> dict[str, list[Jornada]]:
+    """Las jornadas de TODO EL MUNDO, en una sola pasada por el libro.
+
+    Llamar a `jornadas_de` dentro de un bucle de personas parece inofensivo y no
+    lo es: cada llamada resuelve las correcciones del libro completo, así que el
+    trabajo crece con el número de personas MULTIPLICADO por el tamaño del
+    libro. Medido en el portal con un mes de una fábrica: 75 personas 0,24 s,
+    150 personas 0,66 s, 300 personas 1,74 s. Doblar la plantilla casi triplica
+    el tiempo, y eso no se arregla comprando una máquina más grande.
+
+    Aquí las correcciones se resuelven una vez y los fichajes se reparten por
+    persona en la misma pasada.
+    """
+    correcciones = correcciones_vigentes(anotaciones)
+    por_persona: dict[str, list] = {}
+    for a in anotaciones:
+        if a.tipo not in FICHAJES:
+            continue
+        vigente = correcciones.get(a.numero, a.momento)
+        por_persona.setdefault(a.trabajador_id, []).append(
+            (vigente, a.tipo, vigente != a.momento, a.retroactiva, a.zona_horaria))
+    return {trabajador: _construir(trabajador, sorted(fichajes, key=lambda f: f[0]))
+            for trabajador, fichajes in por_persona.items()}
+
+
+def _construir(trabajador_id: str, fichajes) -> list[Jornada]:
+    """La máquina de estados: de fichajes en orden a jornadas.
+
+    Estaba dentro de `jornadas_de`. Se saca para que las dos formas de pedir
+    jornadas —una persona o todas— compartan exactamente este código, y no haya
+    dos sitios donde decidir qué es una pausa sin cerrar.
+    """
     jornadas: list[Jornada] = []
     actual: Jornada | None = None
     pausa_desde: datetime | None = None
@@ -87,8 +130,7 @@ def jornadas_de(anotaciones: list[Anotacion], trabajador_id: str) -> list[Jornad
     def dia_local(momento: datetime, zona: str) -> date:
         return momento.astimezone(ZoneInfo(zona)).date()
 
-    for momento, tipo, corregido, retro, zona in _fichajes_vigentes(anotaciones,
-                                                                    trabajador_id):
+    for momento, tipo, corregido, retro, zona in fichajes:
         if tipo is Tipo.ENTRADA:
             if actual is not None:
                 actual.incidencias.append("entró otra vez sin haber salido")
