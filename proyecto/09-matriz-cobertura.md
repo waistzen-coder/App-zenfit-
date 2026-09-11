@@ -18,7 +18,7 @@ problema es tenerlo y no saberlo.
 | --- | :---: | --- | --- | --- |
 | Registro **diario** de jornada | **SÍ** | `registro.py`, cada fichaje es una anotación con su instante | — | — |
 | **Horario concreto de inicio y final** | **SÍ** | tipos `entrada` y `salida`; `jornada.py` los empareja | — | — |
-| **Conservación cuatro años** | **PARCIAL** | nada borra: el libro solo admite añadir, y el rol de la aplicación no tiene `DELETE` | No hay política de retención escrita, ni archivado, ni una prueba de que a los cuatro años siga ahí. Depende de que las copias del proveedor funcionen | Definir retención y probar una restauración de un año atrás cuando haya un año atrás |
+| **Conservación cuatro años** | **PARCIAL** | nada borra: el libro solo admite añadir, el rol de la aplicación no tiene `DELETE` y el disparador lo impide hasta para el dueño del esquema. `pruebas_retencion.py` fabrica un libro de cuatro años y un día y comprueba que la anotación más vieja sigue ahí, verifica, sobrevive a copia y restauración con la misma huella, y entra en el expediente | Sigue dependiendo de que las copias del proveedor funcionen durante cuatro años naturales. Eso no es software y no se prueba con software | Restaurar de verdad cada cierto tiempo y apuntar cuándo se hizo |
 | Disponibilidad para **la persona trabajadora** | **SÍ** | `/f/<token>/mis-registros` y su descarga en CSV | — | — |
 | Disponibilidad para **sus representantes** | **SÍ** | portal propio de solo lectura (`portal.py`), con ámbito de empresa o de centro, mandato con fechas, revocación inmediata y registro de cada consulta que ven las dos partes | Sigue sin haber acceso para la Inspección, que es otra fila. El portal enseña la jornada, no el expediente firmado: para eso está la exportación | — |
 | Disponibilidad para la **Inspección** | **PARCIAL** | expediente auditable exportable desde el panel, verificable sin base de datos | La descarga la hace la gestoría, no la Inspección. No hay acceso directo ni remoto | Depende de la Orden técnica, que está en consulta |
@@ -51,11 +51,13 @@ problema es tenerlo y no saberlo.
 
 ## Huecos, ordenados por lo que importan
 
-1. **Retención de cuatro años, sin probar.** Nada borra, pero eso no es lo mismo
-   que haber demostrado que dentro de cuatro años sigue estando y se puede leer.
-   El portal ya recorta a cuatro años lo que enseña, que es la mitad fácil del
-   asunto; la difícil —restaurar un libro de hace años— sigue sin poderse
-   probar porque no hay libros de hace años.
+1. **Retención de cuatro años: probado el software, no el proveedor.** Ya no
+   hace falta esperar cuatro años para saber si el programa aguanta: se fabrica
+   un libro que abarca cuatro años y un día y se le pregunta todo lo que se le
+   preguntaría el día que llegue una inspección. Lo que sigue sin demostrarse, y
+   no se demuestra con software, es que las copias del proveedor aguanten cuatro
+   años naturales. Eso se prueba restaurando de verdad, cada cierto tiempo, y
+   apuntando cuándo se hizo.
 2. **Anclaje externo.** Sin él no se detecta que a un libro le falten las últimas
    anotaciones. Está escrito en el LEEME de cada expediente.
 3. **Totalización mensual, calculada pero no enseñada.**

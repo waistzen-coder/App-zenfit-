@@ -96,5 +96,8 @@ jobs:
       - name: El portal de representantes y su aislamiento
         run: python3 -m fichaje.pruebas_representantes
 
+      - name: Los cuatro años de conservación
+        run: python3 -m fichaje.pruebas_retencion
+
       - name: Copia de seguridad y restauración de verdad
         run: python3 -m fichaje.copia comprobar
