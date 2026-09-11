@@ -49,7 +49,12 @@ from .credenciales import (
     comprobar_contrasena,
     huella_de_token,
 )
-from .jornada import COMO_SE_LLAMA, Estado, jornadas_de
+from .jornada import (
+    COMO_SE_LLAMA,
+    Estado,
+    jornadas_de,
+    jornadas_por_trabajador,
+)
 from .organizacion import ZonaInvalida, nuevo_id
 from .postgres import LibroPostgres, conectar
 from .registro import FICHAJES, AnotacionInvalida, Parte, verificar_cadena
@@ -513,10 +518,17 @@ def crear_panel(cadena_bd: str | None = None) -> Flask:
             dia = datetime.now(ZoneInfo("Europe/Madrid")).date()
         anotaciones = LibroPostgres(empresa_id, bd()).anotaciones()
         gente, _ = G.trabajadores_de(bd(), usuario, empresa_id, por_pagina=500)
+        # El cálculo es del dominio. Aquí no se suman horas a mano.
+        #
+        # Y se pide de una vez para toda la plantilla. Esto era lo peor de los
+        # tres sitios que tenían el mismo bucle: carga el libro ENTERO de la
+        # empresa —sin recorte de fechas, porque una jornada puede empezar el
+        # día anterior— y antes lo recorría una vez por cada una de hasta 500
+        # personas. Con tres años de historia eso no se aguanta.
+        por_persona = jornadas_por_trabajador(anotaciones)
         filas = []
         for persona in gente:
-            # El cálculo es del dominio. Aquí no se suman horas a mano.
-            for j in jornadas_de(anotaciones, persona["id"]):
+            for j in por_persona.get(persona["id"], []):
                 if j.dia == dia:
                     filas.append({"persona": persona, "j": j})
         return render_template_string(JORNADA, u=usuario, e=datos, dia=dia,

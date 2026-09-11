@@ -44,7 +44,7 @@ from flask import (
 from . import representacion as R
 from .credenciales import huella_de_token
 from .exportar import fila_segura_para_hoja
-from .jornada import jornadas_de
+from .jornada import jornadas_de, jornadas_por_trabajador
 from .postgres import conectar
 
 FALLOS_ANTES_DE_BLOQUEAR = 8
@@ -221,16 +221,21 @@ def crear_portal(cadena_bd: str | None = None) -> Flask:
         desde, hasta, hoy = periodo_de(representante)
         anotaciones = R.anotaciones(bd(), representante, desde, hasta)
         gente = R.trabajadores(bd(), representante)
+        # Una sola pasada por el libro para toda la plantilla. Llamar a
+        # `jornadas_de` aquí dentro multiplicaba el trabajo por el número de
+        # personas.
+        por_persona = jornadas_por_trabajador(anotaciones)
         filas = []
         for persona in gente:
-            jornadas = jornadas_de(anotaciones, persona["id"])
+            jornadas = por_persona.get(persona["id"], [])
+            if not jornadas:
+                continue
             filas.append({
                 **persona,
                 "dias": len(jornadas),
                 "horas": round(sum(j.horas for j in jornadas), 2),
                 "abiertas": sum(1 for j in jornadas if j.abierta),
             })
-        filas = [f for f in filas if f["dias"]]
         apuntar(representante, "listado", f"{desde}..{hasta}")
         return render_template_string(
             PORTADA, r=representante, filas=filas, desde=desde, hasta=hasta,
@@ -264,13 +269,14 @@ def crear_portal(cadena_bd: str | None = None) -> Flask:
         anotaciones = R.anotaciones(bd(), representante, desde, hasta)
         quienes = {p["id"]: p for p in R.trabajadores(bd(), representante)}
 
+        por_persona = jornadas_por_trabajador(anotaciones)
         salida = io.StringIO()
         escritor = csv.writer(salida, delimiter=";", lineterminator="\r\n")
         escritor.writerow(["persona", "dia", "entrada", "salida",
                            "pausa_horas", "horas"])
         for identificador, persona_ in sorted(
                 quienes.items(), key=lambda kv: kv[1]["nombre"]):
-            for j in jornadas_de(anotaciones, identificador):
+            for j in por_persona.get(identificador, []):
                 escritor.writerow(fila_segura_para_hoja([
                     persona_["nombre"], j.dia.isoformat(),
                     j.entrada.isoformat(),
