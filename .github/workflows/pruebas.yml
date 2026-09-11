@@ -99,5 +99,8 @@ jobs:
       - name: Los cuatro años de conservación
         run: python3 -m fichaje.pruebas_retencion
 
+      - name: De extremo a extremo, cruzando los tres contextos
+        run: python3 -m fichaje.pruebas_extremo_a_extremo
+
       - name: Copia de seguridad y restauración de verdad
         run: python3 -m fichaje.copia comprobar
