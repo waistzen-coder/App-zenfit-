@@ -23,6 +23,7 @@ pidió. Con el portal, las dos partes miran el mismo apunte.
 | Ver la jornada de su ámbito | Sí |
 | Descargarla en CSV | Sí |
 | Ver quién ha consultado, incluido él | Sí |
+| Mirar sin que la plantilla sepa que puede | **No**: cada trabajador lo ve en su móvil |
 | Proponer una corrección | **No** |
 | Ver datos personales que no sean el nombre | **No** |
 | Ver otra plantilla, u otro centro fuera de su ámbito | **No** |
@@ -93,8 +94,10 @@ alguien que solo quería mirar sus horas.
 ## Lo que sigue sin estar
 
 - **Nadie confirma desde el lado de la plantilla** que quien se da de alta sea
-  de verdad su representante. El alta la hace la gestoría, queda apuntada con
-  nombre, y ahí acaba la garantía.
+  de verdad su representante. El alta la hace la gestoría y queda apuntada con
+  nombre; lo único que se ha añadido es que cada trabajador ve en su móvil quién
+  puede mirar sus horas, así que un acceso indebido se ve y se puede discutir.
+  Ver no es confirmar, y no se vende como si lo fuera.
 - **El portal enseña la jornada, no el expediente firmado.** Lo que se descarga
   es un CSV de un periodo, y un CSV de un periodo no se puede verificar contra
   la cadena: para verificar hace falta el libro entero. Se dice así en su sitio

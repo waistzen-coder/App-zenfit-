@@ -329,6 +329,26 @@ def crear_app(cadena_bd: str | None = None) -> Flask:
         anotaciones = LibroPostgres(centro["empresa_id"], bd()).anotaciones()
         return anotaciones, jornadas_de(anotaciones, trabajador["id"])
 
+    def representantes_visibles(conexion, centro, trabajador) -> list[dict]:
+        """Los representantes con acceso vigente a los registros de esta persona.
+
+        El ámbito se resuelve igual que en el portal y en el mismo sitio de la
+        consulta: o son de toda la empresa, o del centro donde esta persona
+        ficha. Si alguna vez las dos listas dejaran de coincidir, la que engaña
+        sería esta, y engañar aquí es peor que no enseñar nada.
+        """
+        filas = conexion.execute(
+            "select r.nombre, r.ambito, c.nombre, r.vigente_desde, r.vigente_hasta "
+            "from representante r left join centro c on c.id = r.centro_id "
+            "where r.empresa_id = %s and r.revocado_en is null "
+            "and r.vigente_desde <= current_date "
+            "and (r.vigente_hasta is null or r.vigente_hasta >= current_date) "
+            "and (r.ambito = 'empresa' or r.centro_id = %s) "
+            "order by r.nombre",
+            (centro["empresa_id"], centro["id"])).fetchall()
+        return [{"nombre": f[0], "ambito": f[1], "centro": f[2],
+                 "desde": f[3], "hasta": f[4]} for f in filas]
+
     @app.get("/f/<token>/mis-registros")
     def mis_registros(token: str):
         centro = centro_por_token(token)
@@ -338,8 +358,19 @@ def crear_app(cadena_bd: str | None = None) -> Flask:
         anotaciones, jornadas = libro_y_mio(centro, trabajador)
         huso = ZoneInfo(centro["zona"])
         mias = correcciones_de(anotaciones, trabajador["id"])
+        # Quién puede ver sus registros.
+        #
+        # El alta de un representante la hace la gestoría, y nadie la confirma
+        # desde el lado de la plantilla: es el riesgo más serio que tiene esa
+        # figura y está escrito en el pre-mortem. Enseñárselo a cada persona no
+        # lo resuelve —seguiría sin haber confirmación—, pero sí convierte un
+        # acceso silencioso en uno que cualquiera de la plantilla puede ver y
+        # discutir. Que alguien pueda mirar tus horas sin que tú sepas que
+        # puede es lo que no debería pasar nunca.
+        quien_me_ve = representantes_visibles(bd(), centro, trabajador)
         return render_template_string(
             REGISTROS, centro=centro, trabajador=trabajador,
+            quien_me_ve=quien_me_ve,
             nombres={t.value: n for t, n in COMO_SE_LLAMA.items()},
             jornadas=list(reversed(jornadas)), huso=huso,
             correcciones=list(reversed(mias)),
@@ -646,6 +677,23 @@ REGISTROS = BASE.replace("{% block cuerpo %}{% endblock %}", """
   — {{ autor(c.propuesta.autor_id) }}</p>
 </div>
 {% endfor %}
+{% endif %}
+
+{% if quien_me_ve %}
+<h2 style="font-size:16px;margin:24px 0 10px">Quién puede ver tus registros</h2>
+{% for r in quien_me_ve %}
+<div class="dia">
+ <p style="margin:0">{{ r.nombre }}
+  <span class="marca">{% if r.ambito == 'centro' %}{{ r.centro }}{% else %}toda la plantilla{% endif %}</span></p>
+ <p class="pie" style="margin:2px 0 0;text-align:left">Representación de la
+  plantilla, desde el {{ r.desde.strftime('%d/%m/%Y') }}{% if r.hasta %}
+  hasta el {{ r.hasta.strftime('%d/%m/%Y') }}{% endif %}. Puede consultar tus
+  horas; no puede cambiarlas.</p>
+</div>
+{% endfor %}
+<p class="pie" style="text-align:left;margin:8px 0 0">Si aquí aparece alguien
+que no representa a tu plantilla, díselo a tu empresa: el acceso se quita en el
+momento.</p>
 {% endif %}
 
 <p class="pie" style="margin-top:22px">
