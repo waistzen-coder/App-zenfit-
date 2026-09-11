@@ -125,9 +125,9 @@ comprobar("Y dice cuántas anotaciones ha comprobado",
 
 with zipfile.ZipFile(io.BytesIO(paquete)) as zf:
     dentro_nombres = set(zf.namelist())
-comprobar("Lleva los seis archivos", dentro_nombres,
+comprobar("Lleva los siete archivos", dentro_nombres,
           {"registro.csv", "correcciones.csv", "totales-mensuales.csv",
-           "libro.jsonl", "manifest.json", "LEEME.txt"})
+           "libro.jsonl", "sellos.jsonl", "manifest.json", "LEEME.txt"})
 
 manifest = json.loads(dentro("manifest.json"))
 comprobar("El manifiesto declara la versión del formato",
@@ -142,7 +142,7 @@ comprobar("Y el resultado de verificar", manifest["resultado_verificacion"]["val
 comprobar("Con la huella SHA-256 de cada archivo",
           sorted(manifest["archivos"]),
           ["LEEME.txt", "correcciones.csv", "libro.jsonl", "registro.csv",
-           "totales-mensuales.csv"])
+           "sellos.jsonl", "totales-mensuales.csv"])
 
 texto_registro = dentro("registro.csv").decode("utf-8")
 comprobar("El registro trae la hora original y la vigente",

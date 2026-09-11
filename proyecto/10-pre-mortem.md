@@ -90,10 +90,24 @@ ataca todas las rutas desde la gestoría equivocada. Cada ruta nueva entra ahí.
 
 ## INTEGRIDAD
 
-**11 · Truncar el libro por el final no se detecta.**
-Probabilidad baja · Impacto muy alto si ocurre. Escrito en el LEEME de cada
-expediente y en la documentación. **Mitigación:** anclaje externo, diseñado pero
-no implementado. Es la siguiente fase.
+**11 · Truncar el libro por el final, con los sellos también en nuestras manos.**
+Probabilidad baja · Impacto muy alto si ocurre. La cadena de huellas no detecta
+un recorte —un trozo del principio de una cadena válida también es válido— y ese
+es justo el recorte que interesa a quien quiere esconder horas extra: las de
+ayer, no las del año pasado.
+
+Los sellos periódicos lo detectan: cada uno dice cuántas anotaciones había un día
+dado y cuál era la última, se encadenan entre ellos, viven en otra tabla con su
+propio disparador, la aplicación no puede modificarlos ni borrarlos, y van
+dentro del expediente para que el recorte se vea también con el ZIP en la mano y
+sin acceso a nada nuestro.
+
+Lo que queda, y es lo que hace que este motivo siga aquí: **los sellos los
+generamos nosotros**. Quien tenga la base entera puede recortar el libro y
+recortar los sellos. Son dos tablas y dos disparadores en vez de uno, que es más
+caro y más ruidoso, pero no es imposible. **Mitigación pendiente:** publicar la
+huella donde no mandemos nosotros. Eso sigue sin estar y sigue siendo la
+siguiente fase de verdad.
 
 **12 · Quien controle la aplicación y la base puede rehacer la historia.**
 Probabilidad baja · Impacto muy alto. Misma mitigación, mismo estado.

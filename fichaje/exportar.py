@@ -143,6 +143,12 @@ libro.jsonl        El libro tal como se firmó, una anotación por línea y en s
                    orden exacto. Es el archivo que permite comprobar que nada se
                    ha tocado.
 
+sellos.jsonl       Los sellos periódicos. Cada uno dice cuántas anotaciones
+                   tenía el libro un día dado y cuál era la última. Sirven para
+                   detectar que se hayan BORRADO las últimas, cosa que la cadena
+                   por sí sola no detecta: un trozo del principio de una cadena
+                   válida también es una cadena válida.
+
 manifest.json      Qué contiene el paquete y la huella SHA-256 de cada archivo.
 
 Cómo se comprueba
@@ -192,7 +198,7 @@ def construir_paquete(anotaciones: list[Anotacion], empresa_id: str,
                       empresa: str, nombres: dict[str, str],
                       centros: dict[str, str], autores: dict[str, str],
                       desde: date | None = None, hasta: date | None = None,
-                      commit: str | None = None) -> bytes:
+                      commit: str | None = None, sellos: list | None = None) -> bytes:
     """El ZIP entero, en memoria, listo para descargar.
 
     Recibe los nombres ya resueltos en vez de una conexión: así se puede
@@ -263,6 +269,17 @@ def construir_paquete(anotaciones: list[Anotacion], empresa_id: str,
         json.dumps(_anotacion_a_json(a), ensure_ascii=False, sort_keys=True) + "\n"
         for a in anotaciones)
 
+    # Los sellos. Sin ellos, un libro al que le hayan quitado las últimas
+    # anotaciones se exporta como un paquete impecable: la cadena de un prefijo
+    # de una cadena válida también es válida. Con ellos, cualquiera que tenga el
+    # ZIP puede ver que el día tal había más anotaciones de las que hay.
+    from .sello import a_json as _sello_a_json
+
+    sellos = sellos or []
+    sellos_jsonl = "".join(
+        json.dumps(_sello_a_json(s), ensure_ascii=False, sort_keys=True) + "\n"
+        for s in sellos)
+
     veredicto = verificar_cadena(anotaciones, empresa_id)
     manifest = {
         "version_formato_exportacion": VERSION_FORMATO,
@@ -272,6 +289,7 @@ def construir_paquete(anotaciones: list[Anotacion], empresa_id: str,
         "periodo_solicitado": {"desde": str(desde) if desde else None,
                                "hasta": str(hasta) if hasta else None},
         "numero_anotaciones": len(anotaciones),
+        "numero_sellos": len(sellos),
         "primera_anotacion": anotaciones[0].numero if anotaciones else None,
         "ultima_anotacion": anotaciones[-1].numero if anotaciones else None,
         "primera_huella": anotaciones[0].huella if anotaciones else None,
@@ -293,6 +311,7 @@ def construir_paquete(anotaciones: list[Anotacion], empresa_id: str,
         "correcciones.csv": correcciones.encode("utf-8"),
         "totales-mensuales.csv": totales.encode("utf-8"),
         "libro.jsonl": libro.encode("utf-8"),
+        "sellos.jsonl": sellos_jsonl.encode("utf-8"),
         "LEEME.txt": LEEME.encode("utf-8"),
     }
     for nombre, datos in contenido.items():
@@ -319,7 +338,10 @@ def paquete_de_empresa(conexion, empresa_id: str, empresa: str,
     """El paquete de una empresa, resolviendo los nombres desde la base."""
     from .postgres import LibroPostgres
 
+    from .sello import sellos_de
+
     anotaciones = LibroPostgres(empresa_id, conexion).anotaciones()
+    sellos = sellos_de(conexion, empresa_id)
     nombres = dict(conexion.execute(
         "select id::text, nombre from trabajador where empresa_id = %s",
         (empresa_id,)).fetchall())
@@ -332,4 +354,4 @@ def paquete_de_empresa(conexion, empresa_id: str, empresa: str,
         "join gestoria g on g.id = u.gestoria_id join empresa e on "
         "e.gestoria_id = g.id where e.id = %s", (empresa_id,)).fetchall()))
     return construir_paquete(anotaciones, empresa_id, empresa, nombres, centros,
-                             autores, desde, hasta)
+                             autores, desde, hasta, sellos=sellos)

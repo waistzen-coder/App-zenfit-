@@ -23,7 +23,7 @@ from .exportar import json_a_anotacion
 from .registro import verificar_cadena
 
 ARCHIVOS_ESPERADOS = {"registro.csv", "correcciones.csv", "libro.jsonl",
-                      "totales-mensuales.csv",
+                      "totales-mensuales.csv", "sellos.jsonl",
                       "LEEME.txt", "manifest.json"}
 
 
@@ -74,6 +74,7 @@ def verificar(ruta: str) -> Resultado:
                             f"huella que declara el manifiesto")
 
             lineas = zf.read("libro.jsonl").decode("utf-8").splitlines()
+            lineas_sellos = zf.read("sellos.jsonl").decode("utf-8").splitlines()
     except (zipfile.BadZipFile, KeyError, json.JSONDecodeError, OSError) as fallo:
         return Resultado(False, motivo=f"no se puede leer el paquete: {fallo}",
                          detalles=detalles)
@@ -105,6 +106,44 @@ def verificar(ruta: str) -> Resultado:
         detalles.append("la primera y la última huella coinciden con el manifiesto")
 
     detalles.append(f"{len(anotaciones)} anotaciones encadenadas sin un hueco")
+
+    # Y los sellos, que son lo único que detecta un recorte.
+    #
+    # Todo lo de arriba pasa igual con un libro al que le hayan quitado las diez
+    # últimas anotaciones: un trozo del principio de una cadena válida también
+    # es una cadena válida, y el manifiesto lo genera quien recorta. Los sellos
+    # son la única parte del paquete que puede decir «el día tal aquí había
+    # más».
+    from .sello import de_json as _sello_de_json
+    from .sello import verificar_sellos
+
+    try:
+        sellos = [_sello_de_json(json.loads(l), manifest.get("empresa_id", ""))
+                  for l in lineas_sellos if l.strip()]
+    except (json.JSONDecodeError, KeyError, ValueError) as fallo:
+        return Resultado(False, motivo=f"sellos.jsonl no se entiende: {fallo}",
+                         detalles=detalles)
+
+    declarados = manifest.get("numero_sellos")
+    if declarados is not None and declarados != len(sellos):
+        return Resultado(False, motivo=f"el manifiesto declara {declarados} "
+                                       f"sellos y el paquete trae {len(sellos)}",
+                         detalles=detalles)
+
+    sellado = verificar_sellos(sellos, anotaciones, manifest.get("empresa_id", ""))
+    if not sellado.valido:
+        return Resultado(False, veredicto.comprobadas,
+                         motivo=f"los sellos no cuadran: {sellado.motivo}",
+                         detalles=detalles)
+    if sellos:
+        detalles.append(f"{len(sellos)} sellos encadenados, y el libro sigue "
+                        f"conteniendo lo que sellaron")
+    else:
+        # Que no haya sellos no hace inválido el paquete, pero sí es una
+        # ausencia que quien lo reciba tiene derecho a ver, no a deducir.
+        detalles.append("SIN SELLOS: nada demuestra que no se hayan borrado las "
+                        "últimas anotaciones")
+
     return Resultado(True, veredicto.comprobadas, detalles=detalles)
 
 
