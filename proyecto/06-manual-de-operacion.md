@@ -103,6 +103,11 @@ El **código** (1042) no es secreto: es como se identifica. El **PIN** sí, y
 tiene que ser de seis cifras o más. Nadie puede recuperarlo, ni tú: si se
 olvida, se le pone uno nuevo con el mismo comando.
 
+Poner un PIN nuevo **cierra las sesiones que esa persona tuviera abiertas**. Es
+lo que hace falta cuando se resetea porque alguien lo ha visto: si no, quien lo
+sabía seguiría fichando desde su móvil doce horas más. La persona tendrá que
+volver a identificarse, y eso es todo lo que cuesta.
+
 ## Imprimir el cartel del QR
 
 ```bash
@@ -327,6 +332,10 @@ Se desbloquea solo al cuarto de hora. Para cambiarle la contraseña:
 ```bash
 python3 -m fichaje.admin contrasena <usuario>
 ```
+
+Cambiar la contraseña **cierra sus sesiones abiertas**, por lo mismo: se cambia
+casi siempre porque se sospecha que alguien la sabe, y dejar viva la sesión que
+esa persona ya tiene sería cambiarla a medias.
 
 ## Lo que el panel NO puede hacer, y es a propósito
 

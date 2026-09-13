@@ -382,7 +382,10 @@ for variable, valor in guardadas.items():
 
 # ==================== limpiar lo efímero, y NO limpiar lo que es prueba
 
-from .admin import EFIMERAS, SESIONES, limpiar  # noqa: E402
+# Con otro nombre: aquí ya hay un `limpiar` que vacía las tablas de intentos
+# entre bloques de pruebas, y la colisión rompía todo lo que viniera después.
+from .admin import EFIMERAS, SESIONES  # noqa: E402
+from .admin import limpiar as limpiar_lo_efimero  # noqa: E402
 
 # Se fabrica rastro viejo: intentos y sesiones de hace dos meses.
 admin.execute("insert into intento_panel (email, origen, momento, acertado) "
@@ -402,7 +405,7 @@ admin.execute("update acceso_representante set momento = now() - interval '400 d
 accesos_antes = len(R.accesos_de_empresa(admin, EMPRESA))
 anotaciones_antes = admin.execute("select count(*) from anotacion").fetchone()[0]
 
-borradas = limpiar(admin, dias=30)
+borradas = limpiar_lo_efimero(admin, dias=30)
 
 comprobar("Se borra el intento viejo", borradas["intento_panel"], 1)
 comprobar("Y queda el reciente",
@@ -429,10 +432,79 @@ comprobar("Ni el registro administrativo del panel",
 # Y no se deja limpiar con un margen tan corto que borre la prueba de un ataque
 # del fin de semana antes de que nadie la mire el lunes.
 try:
-    limpiar(admin, dias=1)
+    limpiar_lo_efimero(admin, dias=1)
     comprobar("Un día de margen se rechaza", "aceptó", "rechazó")
 except ValueError:
     comprobar("Un día de margen se rechaza", True, True)
+
+# ============ cambiar una credencial cierra las sesiones que ya había
+
+# El escenario: alguien ve el PIN de Lucía por encima del hombro y se lo apunta.
+# Lucía lo cuenta, la gestoría le pone uno nuevo. Si la sesión que el otro ya
+# tiene abierta en su móvil siguiera valiendo, seguiría fichando en nombre de
+# Lucía doce horas más, y Lucía se quedaría tranquila creyendo que ya está.
+#
+# Es el mismo fallo que se arregló al revocar a un representante, en otros dos
+# sitios. Y pasó desapercibido porque para el panel el código que cierra
+# sesiones ya existía: simplemente no se llamaba desde el cambio de contraseña.
+from .admin import poner_pin  # noqa: E402
+
+el_otro = web.test_client()
+portada = el_otro.get(f"/f/{TOKEN_A}",
+                      environ_base={"REMOTE_ADDR": PROXY}).get_data(as_text=True)
+el_otro.post(f"/f/{TOKEN_A}/entrar",
+             data={"codigo": "1042", "pin": "482913", "csrf": campo(portada, "csrf")},
+             environ_base={"REMOTE_ADDR": PROXY})
+comprobar("Quien tiene el PIN entra y ve los registros de Lucía",
+          el_otro.get(f"/f/{TOKEN_A}/mis-registros").status_code, 200)
+
+# Se mira la base, no el número que devuelve la función: comprobar el valor
+# devuelto deja pasar una implementación que devuelva el número correcto sin
+# cerrar nada. Y no se compara con 1 porque las pruebas de arriba dejaron más
+# sesiones abiertas de Lucía; lo que importa es que no quede NINGUNA.
+abiertas_antes = admin.execute(
+    "select count(*) from sesion where trabajador_id = %s and cerrada_en is null",
+    (LUCIA,)).fetchone()[0]
+comprobar("Lucía tenía alguna sesión abierta", abiertas_antes >= 1, True)
+cerradas = poner_pin(admin, LUCIA, "990011")
+comprobar("Resetear el PIN dice haberlas cerrado", cerradas, abiertas_antes)
+comprobar("Y en la base no le queda ninguna abierta",
+          admin.execute("select count(*) from sesion where trabajador_id = %s "
+                        "and cerrada_en is null", (LUCIA,)).fetchone()[0], 0)
+r = el_otro.get(f"/f/{TOKEN_A}/mis-registros", follow_redirects=False)
+comprobar("Y esa sesión deja de servir en el acto", r.status_code, 302)
+comprobar("Con el PIN viejo ya no se entra",
+          fichar_entrar(TOKEN_A, "1042", "482913"), 401)
+limpiar()
+comprobar("Y con el nuevo sí", fichar_entrar(TOKEN_A, "1042", "990011"), 302)
+
+# Lo mismo en el panel.
+c_ana = panel.test_client()
+c_ana.get("/panel/entrar", environ_base={"REMOTE_ADDR": PROXY})
+with c_ana.session_transaction() as s:
+    csrf = s["csrf"]
+c_ana.post("/panel/entrar",
+           data={"email": "ana@perez.es", "contrasena": "una-frase-larga-de-ana",
+                 "csrf": csrf}, environ_base={"REMOTE_ADDR": PROXY})
+comprobar("Ana está dentro del panel", c_ana.get("/panel/").status_code, 200)
+
+abiertas_antes = admin.execute(
+    "select count(*) from sesion_panel where usuario_id = %s and cerrada_en is null",
+    (ANA,)).fetchone()[0]
+comprobar("Ana tenía alguna sesión abierta", abiertas_antes >= 1, True)
+cerradas = G.cambiar_contrasena(admin, ANA, "una-contrasena-nueva-larga")
+comprobar("Cambiar la contraseña dice haberlas cerrado", cerradas, abiertas_antes)
+comprobar("Y no le queda ninguna abierta",
+          admin.execute("select count(*) from sesion_panel where usuario_id = %s "
+                        "and cerrada_en is null", (ANA,)).fetchone()[0], 0)
+comprobar("Y deja de valer en el acto",
+          c_ana.get("/panel/", follow_redirects=False).status_code, 302)
+limpiar()
+comprobar("Con la contraseña vieja ya no se entra",
+          panel_entrar("ana@perez.es", "una-frase-larga-de-ana"), 401)
+limpiar()
+comprobar("Y con la nueva sí",
+          panel_entrar("ana@perez.es", "una-contrasena-nueva-larga"), 302)
 
 admin.close()
 
