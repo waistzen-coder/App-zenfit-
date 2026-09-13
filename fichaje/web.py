@@ -44,7 +44,7 @@ from .correcciones import (
     responder,
 )
 from .credenciales import comprobar, huella_de_token, nuevo_token
-from .exportar import fila_segura_para_hoja
+from .exportar import escribir_csv
 from . import red
 from .jornada import COMO_SE_LLAMA, acciones_posibles, estado_actual, jornadas_de, ultimo_fichaje
 from .postgres import LibroPostgres, conectar
@@ -477,18 +477,17 @@ def crear_app(cadena_bd: str | None = None) -> Flask:
             return redirect(url_for("portada", token=token, e="SESION_CADUCADA"))
         _, jornadas = libro_y_mio(centro, trabajador)
         huso = ZoneInfo(centro["zona"])
-        lineas = ["dia,entrada,salida,pausas_minutos,horas,incidencias"]
-        for j in jornadas:
-            lineas.append(",".join(fila_segura_para_hoja([
-                str(j.dia),
-                j.entrada.astimezone(huso).strftime("%H:%M:%S"),
-                j.salida.astimezone(huso).strftime("%H:%M:%S") if j.salida else "",
-                str(int(j.pausas.total_seconds() // 60)),
-                f"{j.horas:.2f}",
-                "; ".join(j.incidencias),
-            ])))
+        filas = [[
+            str(j.dia),
+            j.entrada.astimezone(huso).strftime("%H:%M:%S"),
+            j.salida.astimezone(huso).strftime("%H:%M:%S") if j.salida else "",
+            str(int(j.pausas.total_seconds() // 60)),
+            f"{j.horas:.2f}",
+            "; ".join(j.incidencias),
+        ] for j in jornadas]
         return Response(
-            "\ufeff" + "\r\n".join(lineas),
+            escribir_csv(["dia", "entrada", "salida", "pausas_minutos", "horas",
+                          "incidencias"], filas).encode("utf-8"),
             mimetype="text/csv; charset=utf-8",
             headers={"Content-Disposition":
                      'attachment; filename="mis-registros.csv"'})

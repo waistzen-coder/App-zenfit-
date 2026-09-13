@@ -23,8 +23,6 @@ propia. Que sean tres procesos distintos significa que un fallo en uno no da
 acceso a los otros dos.
 """
 
-import csv
-import io
 import os
 import secrets
 from datetime import date, datetime, timedelta, timezone
@@ -44,7 +42,7 @@ from flask import (
 from . import red
 from . import representacion as R
 from .credenciales import huella_de_token
-from .exportar import fila_segura_para_hoja
+from .exportar import escribir_csv
 from .jornada import jornadas_de, jornadas_por_trabajador
 from .postgres import conectar
 
@@ -275,21 +273,20 @@ def crear_portal(cadena_bd: str | None = None) -> Flask:
         quienes = {p["id"]: p for p in R.trabajadores(bd(), representante)}
 
         por_persona = jornadas_por_trabajador(anotaciones)
-        salida = io.StringIO()
-        escritor = csv.writer(salida, delimiter=";", lineterminator="\r\n")
-        escritor.writerow(["persona", "dia", "entrada", "salida",
-                           "pausa_horas", "horas"])
+        filas = []
         for identificador, persona_ in sorted(
                 quienes.items(), key=lambda kv: kv[1]["nombre"]):
             for j in por_persona.get(identificador, []):
-                escritor.writerow(fila_segura_para_hoja([
+                filas.append([
                     persona_["nombre"], j.dia.isoformat(),
                     j.entrada.isoformat(),
                     j.salida.isoformat() if j.salida else "",
-                    f"{j.pausas.total_seconds() / 3600:.2f}", f"{j.horas:.2f}"]))
+                    f"{j.pausas.total_seconds() / 3600:.2f}", f"{j.horas:.2f}"])
+        texto = escribir_csv(
+            ["persona", "dia", "entrada", "salida", "pausa_horas", "horas"], filas)
         apuntar(representante, "descarga", f"{desde}..{hasta}")
         return Response(
-            salida.getvalue().encode("utf-8-sig"), mimetype="text/csv",
+            texto.encode("utf-8"), mimetype="text/csv; charset=utf-8",
             headers={"Content-Disposition":
                      f'attachment; filename="jornadas-{desde}-{hasta}.csv"'})
 

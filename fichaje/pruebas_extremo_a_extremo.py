@@ -43,7 +43,7 @@ from .despliegue import (  # noqa: E402
     dsn_aplicacion,
     dsn_portal,
 )
-from .exportar import paquete_de_empresa  # noqa: E402
+from .exportar import SEPARADOR, paquete_de_empresa  # noqa: E402
 from .jornada import jornadas_de  # noqa: E402
 from .migrar import aplicar  # noqa: E402
 from .panel import crear_panel  # noqa: E402
@@ -212,7 +212,8 @@ comprobar("Marcada como corregida, para que no parezca que siempre fue así",
 # --- el CSV que se descarga del portal
 r = c_portal.get(f"/rep/descargar.csv?mes={mes}")
 csv_texto = r.data.decode("utf-8-sig")
-comprobar("El CSV del portal también dice siete", ";7.00" in csv_texto, True)
+comprobar("El CSV del portal también dice siete",
+          f"{SEPARADOR}7.00" in csv_texto, True)
 
 # --- el expediente que iría a una inspección
 paquete = paquete_de_empresa(admin, EMPRESA, "Bar Casa Paco")
@@ -234,7 +235,8 @@ comprobar("No las nueve de antes de corregir", b"<b>9.00</b>" in r.data, False)
 
 with zipfile.ZipFile(io.BytesIO(paquete)) as z:
     totales_csv = z.read("totales-mensuales.csv").decode("utf-8-sig")
-filas_csv = [l.split(",") for l in totales_csv.splitlines()[1:] if l.strip()]
+filas_csv = [l.split(SEPARADOR) for l in totales_csv.splitlines()[1:]
+             if l.strip()]
 comprobar("El expediente trae una fila para Lucía en ese mes",
           [f for f in filas_csv if f[0] == "Lucía García" and f[1] == mes_de_ayer]
           != [], True)

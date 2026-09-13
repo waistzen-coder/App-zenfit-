@@ -192,10 +192,14 @@ libro_lineas = dentro("libro.jsonl").decode("utf-8").splitlines()
 # se recalcula aquí desde las jornadas y tiene que coincidir a la coma.
 import csv as _csv_mod  # noqa: E402
 
+from .exportar import SEPARADOR, escribir_csv  # noqa: E402
 from .jornada import jornadas_por_trabajador  # noqa: E402
 
+# El separador sale del módulo, no escrito a mano: si algún día cambia, estas
+# pruebas siguen leyendo lo que de verdad se escribe.
 filas_totales = list(_csv_mod.reader(
-    io.StringIO(dentro("totales-mensuales.csv").decode("utf-8-sig"))))
+    io.StringIO(dentro("totales-mensuales.csv").decode("utf-8-sig")),
+    delimiter=SEPARADOR))
 cabecera_totales, filas_totales = filas_totales[0], filas_totales[1:]
 comprobar("La cabecera de los totales", cabecera_totales[:4],
           ["trabajador", "mes", "dias_con_jornada", "horas_trabajadas"])
@@ -265,7 +269,8 @@ if len(dias_con_jornada) > 1:
                                    desde=solo_el_primero, hasta=solo_el_primero)
     with zipfile.ZipFile(io.BytesIO(recortado)) as zf:
         filas_recortadas = list(_csv_mod.reader(io.StringIO(
-            zf.read("totales-mensuales.csv").decode("utf-8-sig"))))[1:]
+            zf.read("totales-mensuales.csv").decode("utf-8-sig")),
+            delimiter=SEPARADOR))[1:]
         registro_recortado = zf.read("registro.csv").decode("utf-8-sig")
 
     dias_esperados = {
@@ -279,6 +284,55 @@ if len(dias_con_jornada) > 1:
     comprobar("El detalle del mismo paquete tampoco trae otros días",
               str(dias_con_jornada[-1]) in registro_recortado
               if dias_con_jornada[-1] != solo_el_primero else False, False)
+
+# ==================== un CSV que de verdad se pueda abrir en España
+
+# Dos cosas que estuvieron mal a la vez y las dos se veían solo al abrir el
+# archivo, no al leer el código.
+#
+# La primera: el separador era la coma. Excel usa el de la configuración
+# regional, y en España es el punto y coma, así que el expediente se abría en
+# una sola columna con todo dentro. El LEEME prometía «se abre con cualquier
+# hoja de cálculo»: se abría, sí, pero ilegible.
+#
+# La segunda: `celda_segura_para_hoja` escapaba la fórmula Y entrecomillaba, y
+# el portal le pasaba el resultado a un escritor de CSV de verdad, que volvía a
+# entrecomillar. El nombre llegaba con comillas literales dentro.
+nombres_bd_peligroso = [n for n in dict(admin.execute(
+    "select id::text, nombre from trabajador where empresa_id = %s",
+    (EMPRESA,)).fetchall()).values() if n.startswith("=")][0]
+crudo = dentro("totales-mensuales.csv").decode("utf-8-sig")
+comprobar("El separador es el punto y coma", SEPARADOR, ";")
+comprobar("Y el archivo lo usa", crudo.splitlines()[0].count(SEPARADOR), 6)
+comprobar("Lleva la marca de orden de bytes, o Excel se come los acentos",
+          dentro("totales-mensuales.csv").startswith("\ufeff".encode()), True)
+
+# Y lo que importa: que al leerlo con un lector de CSV salga EXACTAMENTE el
+# nombre que se guardó, apóstrofo delante y nada más.
+leidas = list(_csv_mod.reader(io.StringIO(crudo), delimiter=SEPARADOR))[1:]
+peligrosos = [f[0] for f in leidas if f[0].startswith("'")]
+comprobar("Hay un nombre peligroso en los datos, si no esto no probaría nada",
+          len(peligrosos), 1)
+comprobar("Y sale con el apóstrofo y sin comillas de más",
+          peligrosos[0], "'" + nombres_bd_peligroso)
+
+# La comprobación directa de las dos funciones, por separado.
+from .exportar import celda_segura_para_hoja as _celda  # noqa: E402
+
+comprobar("Escapar una celda solo antepone el apóstrofo, no entrecomilla",
+          _celda('=1+1'), "'=1+1")
+comprobar("Y no toca lo que no empieza por un carácter peligroso",
+          _celda("Lucía García"), "Lucía García")
+doble = list(_csv_mod.reader(
+    io.StringIO(escribir_csv(["x"], [['=HYPERLINK("a","b")']])),
+    delimiter=SEPARADOR))[1][0]
+comprobar("Un nombre con comillas sobrevive al viaje de ida y vuelta",
+          doble, '\'=HYPERLINK("a","b")')
+con_separador = list(_csv_mod.reader(
+    io.StringIO(escribir_csv(["x"], [["Apellido; Nombre"]])),
+    delimiter=SEPARADOR))[1][0]
+comprobar("Y uno que lleva el separador dentro, también",
+          con_separador, "Apellido; Nombre")
 
 ataques = {
     "cambiar una hora en el libro": rehacer({
