@@ -88,6 +88,19 @@ Probabilidad media · Impacto muy alto. Es el riesgo permanente del panel.
 **Mitigación:** las consultas llevan la frontera dentro, y el banco de pruebas
 ataca todas las rutas desde la gestoría equivocada. Cada ruta nueva entra ahí.
 
+**10b · Apagar el producto sin saber ninguna contraseña.**
+Probabilidad alta mientras estuvo · Impacto muy alto. Encontrado y arreglado, y
+se deja escrito porque el error es fácil de repetir. `request.remote_addr` es
+quien abre la conexión TCP; detrás del proxy inverso que el propio manual manda
+poner, eso es siempre el proxy. El límite de intentos contaba «fallos de esta
+cuenta o de esta dirección» con un umbral de persona, así que ocho intentos
+fallidos de un desconocido, contra una cuenta que ni existía, dejaban fuera a
+todos los usuarios del panel. **Mitigación aplicada:** `FICHAJE_PROXIES` para
+leer la dirección real —solo tantos saltos como se declaren, nunca por
+defecto— y, sobre todo, dos contadores separados con umbrales distintos, para
+que el día que alguien se olvide de configurarlo el daño sea que una red vaya
+lenta y no que el producto se apague.
+
 ## INTEGRIDAD
 
 **11 · Truncar el libro por el final, con los sellos también en nuestras manos.**
