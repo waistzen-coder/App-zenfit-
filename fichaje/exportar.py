@@ -201,6 +201,49 @@ Con la aplicación:
 
 No hace falta base de datos ni conexión: se comprueba con lo que hay en el ZIP.
 
+Y sin la aplicación, que es lo que de verdad importa
+----------------------------------------------------
+Comprobarlo solo con nuestro programa sería fiarse de nosotros, así que aquí va
+la receta entera para que cualquiera escriba la suya en un rato.
+
+La huella de una anotación es el SHA-256, en hexadecimal minúscula, de estos
+dieciséis valores puestos en un ARRAY JSON, en este orden exacto:
+
+    version, empresa_id, centro_id, trabajador_id, numero, tipo,
+    momento, anotado_en, zona_horaria, autor_id, parte, origen,
+    motivo, corrige, momento_propuesto, huella_anterior
+
+Son los mismos nombres y el mismo orden que tienen en libro.jsonl, quitando el
+último campo del archivo, «huella», que es el resultado y no entra.
+
+Reglas de la serialización, que aquí no son un detalle:
+
+  - Un array, no un objeto. Así el orden es explícito y no depende de cómo
+    ordene las claves cada lenguaje.
+  - Sin espacios: separadores exactamente "," y ":".
+  - Sin escapar los acentos: los caracteres no ASCII van tal cual, en UTF-8.
+  - Las fechas, en UTC y en formato ISO 8601 tal como aparecen en libro.jsonl.
+  - Los campos vacíos son null, no "".
+  - La primera anotación tiene huella_anterior con sesenta y cuatro ceros.
+
+En Python son dos líneas:
+
+    cuerpo = json.dumps(los_dieciseis_valores, ensure_ascii=False,
+                        separators=(",", ":")).encode("utf-8")
+    huella = hashlib.sha256(cuerpo).hexdigest()
+
+Y la cadena cuadra si, para cada anotación, su huella sale de ese cálculo y su
+huella_anterior es la huella de la anotación anterior.
+
+Los sellos de sellos.jsonl se comprueban igual, con estos ocho valores en un
+array y las mismas reglas:
+
+    version, empresa_id, numero, hasta_numero, hasta_huella,
+    anotaciones, sellado_en, huella_anterior
+
+donde empresa_id es el del manifiesto y sellado_en lleva microsegundos y
+termina en Z.
+
 Original, corregido y discrepancia
 ----------------------------------
 Un fichaje nunca se modifica. Si una hora estaba mal, se añade una PROPUESTA de
@@ -218,17 +261,21 @@ Qué NO demuestra este paquete
 Que la cadena cuadre demuestra que el libro no se ha modificado por dentro
 después de escribirse, y que este paquete no se ha tocado después de generarse.
 
-NO demuestra que no falten anotaciones al final. Si alguien con acceso total a
-la base de datos hubiera borrado las últimas antes de generar el paquete, lo que
-queda sería una cadena impecable, solo que más corta: dentro del libro no hay
-nada que diga cuántas anotaciones debería haber.
+Sobre que falten anotaciones al final: la cadena por sí sola no lo detectaría,
+porque un trozo del principio de una cadena válida también es válido. Lo
+detectan los sellos de sellos.jsonl, que dicen cuántas anotaciones había cada
+día. Si este paquete NO trae sellos, el verificador lo avisa en voz alta, y
+entonces esa garantía no existe.
 
-NO demuestra que alguien con control simultáneo de la aplicación y de la base de
-datos no haya rehecho una historia entera y vuelto a encadenarla.
+Y lo que sigue sin demostrarse ni con sellos: los sellos los generamos nosotros
+y viven en nuestra base de datos. Quien tuviera control total de la base podría
+recortar el libro y recortar también los sellos. Son dos tablas distintas con
+dos disparadores distintos, más caro y más ruidoso que tocar una sola, pero no
+imposible.
 
-Las dos cosas se cierran guardando periódicamente en un tercero la última huella
-y el número de anotaciones. Eso todavía no está hecho, y por eso se dice aquí en
-vez de dejar que alguien lo dé por supuesto.
+Eso se cierra publicando periódicamente la última huella donde no mandemos
+nosotros. No está hecho, y se dice aquí en vez de dejar que alguien lo dé por
+supuesto.
 """
 
 

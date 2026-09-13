@@ -85,6 +85,12 @@ proponer(libro, G.nuevo_id(), 6, BASE + timedelta(days=1, hours=6), "Se fue ante
 responder(libro, G.nuevo_id(), 23, False, LUCIA, Parte.TRABAJADOR,
           BASE + timedelta(days=7))
 
+# Se sella antes de exportar: sin esto el paquete no llevaría sellos y toda la
+# parte del expediente que los comprueba se saltaría en silencio, que es la
+# forma más común de que una prueba deje de probar.
+from .sello import sellar  # noqa: E402
+
+sellar(admin, EMPRESA)
 paquete = paquete_de_empresa(admin, EMPRESA, "Bar Casa Paco")
 
 
@@ -333,6 +339,84 @@ con_separador = list(_csv_mod.reader(
     delimiter=SEPARADOR))[1][0]
 comprobar("Y uno que lleva el separador dentro, también",
           con_separador, "Apellido; Nombre")
+
+# ========= la receta del LEEME, seguida a ciegas por un tercero
+
+# El LEEME promete que el paquete se puede comprobar «sin fiarse de nosotros».
+# Esa promesa es falsa si la única forma de comprobarlo es con nuestro programa,
+# así que el LEEME explica el cálculo entero. Y esta prueba es lo que hace que
+# esa explicación siga siendo cierta: rehace las huellas siguiendo SOLO lo que
+# está escrito ahí, sin importar nada de `fichaje`, y tienen que salir iguales.
+#
+# Si algún día alguien cambia el orden de los campos o la serialización y se
+# olvida del LEEME, esto salta. Que es justo el día en que el expediente
+# dejaría de ser verificable por nadie más que nosotros, sin que se notara.
+import hashlib as _hashlib  # noqa: E402
+import json as _json_suelto  # noqa: E402
+
+CAMPOS_DEL_LEEME = [
+    "version", "empresa_id", "centro_id", "trabajador_id", "numero", "tipo",
+    "momento", "anotado_en", "zona_horaria", "autor_id", "parte", "origen",
+    "motivo", "corrige", "momento_propuesto", "huella_anterior",
+]
+
+
+def huella_de_un_tercero(anotacion: dict) -> str:
+    """Lo que escribiría alguien leyendo el LEEME y nada más."""
+    cuerpo = _json_suelto.dumps([anotacion[c] for c in CAMPOS_DEL_LEEME],
+                                ensure_ascii=False,
+                                separators=(",", ":")).encode("utf-8")
+    return _hashlib.sha256(cuerpo).hexdigest()
+
+
+del_libro = [_json_suelto.loads(l) for l in
+             dentro("libro.jsonl").decode("utf-8").splitlines() if l.strip()]
+comprobar("Hay libro que comprobar", len(del_libro) > 5, True)
+comprobar("Un tercero rehace TODAS las huellas siguiendo solo el LEEME",
+          [huella_de_un_tercero(a) for a in del_libro],
+          [a["huella"] for a in del_libro])
+comprobar("Y el encadenado también le cuadra",
+          all(a["huella_anterior"] == del_libro[i - 1]["huella"]
+              for i, a in enumerate(del_libro) if i > 0), True)
+comprobar("Con la primera colgando de sesenta y cuatro ceros",
+          del_libro[0]["huella_anterior"], "0" * 64)
+
+# Hay acentos y caracteres no ASCII en los datos, que es donde se nota si la
+# regla de «no escapar los acentos» está bien escrita: con ensure_ascii=True
+# saldrían otras huellas.
+comprobar("Y hay acentos de verdad en el libro, si no esto no probaría la regla",
+          any(any(ord(c) > 127 for c in str(a.get("motivo") or ""))
+              or any(ord(c) > 127 for c in str(a.get("zona_horaria") or ""))
+              for a in del_libro)
+          or "í" in dentro("registro.csv").decode("utf-8-sig"), True)
+mal = _hashlib.sha256(_json_suelto.dumps(
+    [del_libro[0][c] for c in CAMPOS_DEL_LEEME],
+    ensure_ascii=True, separators=(",", ":")).encode("utf-8")).hexdigest()
+comprobar("Escapando los acentos saldría otra huella, así que la regla importa",
+          mal != del_libro[0]["huella"] or all(
+              all(ord(c) < 128 for c in str(v)) for v in
+              [del_libro[0][c] for c in CAMPOS_DEL_LEEME] if v), True)
+
+# Y los sellos, con su propia lista de ocho.
+CAMPOS_SELLO_DEL_LEEME = [
+    "version", "empresa_id", "numero", "hasta_numero", "hasta_huella",
+    "anotaciones", "sellado_en", "huella_anterior",
+]
+manifiesto = _json_suelto.loads(dentro("manifest.json"))
+sellos_del_zip = [_json_suelto.loads(l) for l in
+                  dentro("sellos.jsonl").decode("utf-8").splitlines() if l.strip()]
+if sellos_del_zip:
+    def huella_de_sello(s):
+        valores = [s["version"], manifiesto["empresa_id"], s["numero"],
+                   s["hasta_numero"], s["hasta_huella"], s["anotaciones"],
+                   s["sellado_en"], s["huella_anterior"]]
+        return _hashlib.sha256(_json_suelto.dumps(
+            valores, ensure_ascii=False,
+            separators=(",", ":")).encode("utf-8")).hexdigest()
+
+    comprobar("Y un tercero rehace también las huellas de los sellos",
+              [huella_de_sello(s) for s in sellos_del_zip],
+              [s["huella"] for s in sellos_del_zip])
 
 ataques = {
     "cambiar una hora en el libro": rehacer({
