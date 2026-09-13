@@ -19,6 +19,7 @@ misma que se firmó. Por eso `verificar_exportacion` puede rehacer la cadena
 entera sin tocar la base de datos.
 """
 
+import csv
 import hashlib
 import io
 import json
@@ -36,6 +37,18 @@ VERSION_FORMATO = "1.0"
 PELIGROSOS = ("=", "+", "-", "@", "\t", "\r")
 
 
+# Punto y coma, no coma.
+#
+# Excel usa como separador el de la configuración regional, y en España es el
+# punto y coma. Un CSV separado por comas se abre ahí en una sola columna con
+# todo dentro, y el LEEME prometía «se abre con cualquier hoja de cálculo». Se
+# abría, sí, pero ilegible, que es lo mismo que no abrirse.
+#
+# Lo legible por máquinas es `libro.jsonl`, que no depende de esto. Los CSV son
+# para personas, y las personas de este producto usan Excel en español.
+SEPARADOR = ";"
+
+
 def celda_segura_para_hoja(valor: str) -> str:
     """Una celda que no se convierte en fórmula al abrir el archivo.
 
@@ -44,12 +57,16 @@ def celda_segura_para_hoja(valor: str) -> str:
     una curiosidad y pasa a ser una forma de sacar datos del ordenador de quien
     abre el archivo. Se antepone un apóstrofo, que las hojas de cálculo entienden
     como «esto es texto» y no muestran.
+
+    **Solo hace eso.** Antes entrecomillaba además la celda, y eso la dejaba
+    inservible en cuanto se le pasaba a un escritor de CSV de verdad: el escritor
+    volvía a entrecomillar lo ya entrecomillado y el nombre llegaba destrozado,
+    con comillas literales dentro. Escapar una fórmula y escribir un CSV son dos
+    trabajos distintos, y ahora los hacen dos funciones distintas.
     """
     texto = "" if valor is None else str(valor)
     if texto and texto[0] in PELIGROSOS:
         texto = "'" + texto
-    if any(c in texto for c in (',', '"', "\n", "\r")):
-        texto = '"' + texto.replace('"', '""') + '"'
     return texto
 
 
@@ -57,10 +74,24 @@ def fila_segura_para_hoja(valores: list[str]) -> list[str]:
     return [celda_segura_para_hoja(v) for v in valores]
 
 
+def escribir_csv(cabecera: list[str], filas) -> str:
+    """El único sitio donde se escribe un CSV en todo el proyecto.
+
+    Con el separador de aquí, la marca de orden de bytes que hace que Excel
+    entienda los acentos, y el salto de línea que espera. Las tres aplicaciones
+    lo usan: había tres implementaciones, con dos separadores distintos y una de
+    ellas con el escapado aplicado dos veces.
+    """
+    salida = io.StringIO()
+    escritor = csv.writer(salida, delimiter=SEPARADOR, lineterminator="\r\n")
+    escritor.writerow(cabecera)
+    for fila in filas:
+        escritor.writerow(fila_segura_para_hoja(fila))
+    return "\ufeff" + salida.getvalue()
+
+
 def _csv(cabecera: list[str], filas: list[list[str]]) -> str:
-    lineas = [",".join(cabecera)]
-    lineas += [",".join(fila_segura_para_hoja(f)) for f in filas]
-    return "﻿" + "\r\n".join(lineas) + "\r\n"
+    return escribir_csv(cabecera, filas)
 
 
 def _local(momento: datetime, zona: str) -> str:
@@ -128,7 +159,14 @@ pensado para que se entienda y se verifique.
 Qué hay dentro
 --------------
 registro.csv       Los fichajes: quién, dónde, cuándo, y si la hora se corrigió.
-                   Se abre con cualquier hoja de cálculo.
+
+Los .csv están separados por PUNTO Y COMA y en UTF-8 con marca de orden de
+bytes, que es lo que Excel en español espera: se abren haciendo doble clic, con
+sus acentos y cada dato en su columna. En un Excel configurado en inglés hay que
+importarlos indicando el punto y coma como separador.
+
+Lo que no depende de ninguna configuración es libro.jsonl, que es el archivo con
+el que se comprueba que nada se ha tocado.
 
 correcciones.csv   Cada cambio de hora que se pidió: quién lo pidió, por qué,
                    qué hora proponía, y qué contestó la otra parte.

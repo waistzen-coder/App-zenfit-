@@ -418,13 +418,19 @@ Desde el panel, en la ficha de la empresa: **Exportar registro**. Sale un ZIP.
 
 | | |
 | --- | --- |
-| `registro.csv` | Los fichajes, con la hora original y la vigente. Se abre en Excel |
+| `registro.csv` | Los fichajes, con la hora original y la vigente |
 | `correcciones.csv` | Cada cambio pedido: motivo, quién lo pidió, qué contestaron |
 | `totales-mensuales.csv` | Horas por persona y mes, ya con las correcciones aplicadas |
 | `libro.jsonl` | El libro tal como se firmó, para poder comprobarlo |
 | `sellos.jsonl` | Los sellos: cuántas anotaciones había cada día. Detecta recortes |
 | `manifest.json` | Qué hay dentro y la huella de cada archivo |
 | `LEEME.txt` | Qué significa todo, y qué **no** demuestra |
+
+Los `.csv` van separados por **punto y coma** y en UTF-8 con marca de orden de
+bytes: es lo que espera Excel en español, así que se abren con doble clic, con
+los acentos bien y cada dato en su columna. Con coma se abrían en una sola
+columna con todo dentro, que es técnicamente «abrirse» y en la práctica no
+sirve.
 
 ## Comprobarlo
 
