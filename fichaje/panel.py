@@ -33,6 +33,7 @@ from flask import (
 )
 
 from . import gestoria as G
+from . import red
 from . import representacion as Rep
 from .admin import cartel, crear_centro, crear_trabajador, poner_pin, rotar_token
 from .correcciones import (
@@ -60,8 +61,9 @@ from .organizacion import ZonaInvalida, nuevo_id
 from .postgres import LibroPostgres, conectar
 from .registro import FICHAJES, AnotacionInvalida, Parte, verificar_cadena
 
-FALLOS_ANTES_DE_BLOQUEAR = 5
-VENTANA_BLOQUEO = timedelta(minutes=15)
+# Los umbrales y la ventana viven en `red.py`, uno para todas las aplicaciones:
+# tres copias con tres valores distintos era la forma segura de que algún día
+# uno se quedara atrás.
 
 ERRORES = {
     "NO_AUTORIZADO": "No tienes permiso para hacer eso.",
@@ -94,6 +96,7 @@ def crear_panel(cadena_bd: str | None = None) -> Flask:
         SESSION_COOKIE_SECURE=os.environ.get("FICHAJE_HTTPS", "") == "1",
         BD=cadena_bd,
     )
+    red.detras_de_proxy(app)
 
     def bd():
         if "bd" not in g:
@@ -105,6 +108,25 @@ def crear_panel(cadena_bd: str | None = None) -> Flask:
         conexion = g.pop("bd", None)
         if conexion is not None:
             conexion.close()
+
+    @app.after_request
+    def cabeceras(respuesta):
+        """Las mismas que el portal, que era el único que las ponía.
+
+        El panel es más viejo y maneja bastante más: credenciales de la
+        gestoría, PIN de trabajadores y la jornada de todas sus empresas. Que la
+        aplicación nueva estuviera mejor protegida que la que más datos toca era
+        justo al revés de como tiene que ser.
+
+        Aquí sí hace falta permitir estilos y formularios propios, pero ni un
+        script: no hay ninguno en todo el panel, así que se prohíben todos.
+        """
+        respuesta.headers["Content-Security-Policy"] = (
+            "default-src 'none'; style-src 'unsafe-inline'; img-src 'self' data:; "
+            "form-action 'self'; base-uri 'none'; frame-ancestors 'none'")
+        respuesta.headers["X-Content-Type-Options"] = "nosniff"
+        respuesta.headers["Referrer-Policy"] = "same-origin"
+        return respuesta
 
     # ----------------------------------------------------------------- CSRF
 
@@ -164,13 +186,21 @@ def crear_panel(cadena_bd: str | None = None) -> Flask:
         comprobar_csrf()
         email = (request.form.get("email") or "").strip().lower()
         contrasena = request.form.get("contrasena") or ""
-        origen = (request.remote_addr or "")[:45]
-        desde = datetime.now(timezone.utc) - VENTANA_BLOQUEO
+        origen = red.origen()
+        desde = datetime.now(timezone.utc) - red.VENTANA_BLOQUEO
 
-        fallos = bd().execute(
-            "select count(*) from intento_panel where (email = %s or origen = %s) "
-            "and not acertado and momento > %s", (email, origen, desde)).fetchone()[0]
-        if fallos >= FALLOS_ANTES_DE_BLOQUEAR:
+        # Dos contadores, no uno. Estaban unidos por un «or» con el umbral de la
+        # cuenta, y detrás de un proxy inverso todo el tráfico comparte
+        # dirección: cinco fallos de un desconocido dejaban fuera al panel
+        # entero. Reproducido antes de arreglarlo.
+        por_cuenta = bd().execute(
+            "select count(*) from intento_panel where email = %s "
+            "and not acertado and momento > %s", (email, desde)).fetchone()[0]
+        por_origen = bd().execute(
+            "select count(*) from intento_panel where origen = %s "
+            "and not acertado and momento > %s", (origen, desde)).fetchone()[0]
+        if (por_cuenta >= red.FALLOS_POR_CUENTA
+                or por_origen >= red.FALLOS_POR_ORIGEN):
             return render_template_string(
                 ACCESO, email=email,
                 aviso="Demasiados intentos. Espera un cuarto de hora."), 429

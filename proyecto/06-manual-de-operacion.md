@@ -25,7 +25,23 @@ export FICHAJE_PANEL_SECRETO="$(python3 -c 'import secrets;print(secrets.token_h
 export FICHAJE_PORTAL_SECRETO="$(python3 -c 'import secrets;print(secrets.token_hex(32))')"
 export FICHAJE_URL='https://tu-dominio'      # lo que se codifica en el QR
 export FICHAJE_HTTPS=1                        # solo en producción
+export FICHAJE_PROXIES=1                      # ¡IMPORTANTE! ver abajo
 ```
+
+**`FICHAJE_PROXIES` no es opcional si hay un proxy delante.** Es el número
+de proxies inversos entre internet y la aplicación: 1 si tienes un nginx, 0
+si la aplicación recibe las conexiones directamente.
+
+Sin esta variable, la aplicación cree que todas las peticiones vienen del
+proxy, porque técnicamente así es. Y como el límite de intentos cuenta
+también por dirección, unos pocos fallos de cualquiera contarían contra todo
+el mundo. Estuvo así durante toda la construcción y se midió: **ocho intentos
+fallidos de un desconocido, contra una cuenta que ni existía, dejaban fuera a
+todos los usuarios del panel.** Ahora los dos contadores van por separado, así
+que olvidarse ya no apaga el producto; pero sigue siendo lo correcto ponerla.
+
+Y no se pone a ciegas: dice cuántos saltos creer. Poner 3 cuando solo hay uno
+deja que cualquiera se invente su dirección escribiendo la cabecera a mano.
 
 Son tres secretos distintos y tres contraseñas porque son **tres aplicaciones
 distintas**: el fichaje, el panel y el portal de la representación. Compartir
@@ -136,6 +152,7 @@ python3 -m fichaje.pruebas_representantes    # el portal de la representación
 python3 -m fichaje.pruebas_retencion         # los cuatro años
 python3 -m fichaje.pruebas_extremo_a_extremo # los tres contextos, de punta a punta
 python3 -m fichaje.pruebas_sellos            # el recorte del libro
+python3 -m fichaje.pruebas_red               # el límite de intentos y el proxy
 python3 -m fichaje.pruebas_lenguaje          # lo que afirmamos sobre la ley
 python3 -m fichaje.copia comprobar           # copia, restauración y cadena
 ```

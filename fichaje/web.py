@@ -45,6 +45,7 @@ from .correcciones import (
 )
 from .credenciales import comprobar, huella_de_token, nuevo_token
 from .exportar import fila_segura_para_hoja
+from . import red
 from .jornada import COMO_SE_LLAMA, acciones_posibles, estado_actual, jornadas_de, ultimo_fichaje
 from .postgres import LibroPostgres, conectar
 from .registro import FICHAJES, AnotacionInvalida, IntegridadRota, Parte, Tipo
@@ -54,9 +55,7 @@ from .registro import FICHAJES, AnotacionInvalida, IntegridadRota, Parte, Tipo
 DURACION_SESION = timedelta(hours=12)      # un turno largo, y no más
 FICHAJES_WEB = FICHAJES          # los tipos que el trabajador puede corregir
 
-FALLOS_POR_CODIGO = 5                      # antes de bloquear a esa persona
-FALLOS_POR_ORIGEN = 20                     # antes de bloquear a esa red
-VENTANA_BLOQUEO = timedelta(minutes=15)
+# Los umbrales están en `red.py`, compartidos por las tres aplicaciones.
 
 # Lo que ve el usuario y lo que se apunta por dentro. Nunca una traza de error.
 ERRORES = {
@@ -102,11 +101,35 @@ def crear_app(cadena_bd: str | None = None) -> Flask:
     app = Flask(__name__)
     app.config.update(
         SECRET_KEY=os.environ.get("FICHAJE_SECRETO") or secrets.token_hex(32),
+        # La cookie del fichaje lleva el nombre por defecto de Flask. Se le pone
+        # uno propio, como al panel y al portal: tres aplicaciones que pueden
+        # acabar en el mismo dominio no pueden compartir el nombre de la cookie,
+        # porque entonces la última que se escribe pisa a las otras dos.
+        SESSION_COOKIE_NAME="fichaje_trabajador",
         SESSION_COOKIE_HTTPONLY=True,
         SESSION_COOKIE_SAMESITE="Lax",
         SESSION_COOKIE_SECURE=os.environ.get("FICHAJE_HTTPS", "") == "1",
         BD=cadena_bd,
     )
+    red.detras_de_proxy(app)
+
+    @app.after_request
+    def cabeceras(respuesta):
+        """Lo mismo que el portal y el panel.
+
+        El QR se escanea con el navegador del móvil de cada persona, que es el
+        entorno menos controlado de los tres: cualquier cosa puede estar abierta
+        en otra pestaña. `frame-ancestors 'none'` impide que alguien meta esta
+        pantalla dentro de una suya para que la gente teclee ahí su PIN.
+
+        Se permiten imágenes `data:` porque el QR del cartel se pinta así.
+        """
+        respuesta.headers["Content-Security-Policy"] = (
+            "default-src 'none'; style-src 'unsafe-inline'; img-src 'self' data:; "
+            "form-action 'self'; base-uri 'none'; frame-ancestors 'none'")
+        respuesta.headers["X-Content-Type-Options"] = "nosniff"
+        respuesta.headers["Referrer-Policy"] = "same-origin"
+        return respuesta
 
     # ------------------------------------------------------------- conexión
 
@@ -149,15 +172,22 @@ def crear_app(cadena_bd: str | None = None) -> Flask:
         return dict(zip(("id", "empresa_id", "nombre", "zona"), fila))
 
     def bloqueado(centro_id: str, codigo: str, origen: str) -> bool:
-        desde = datetime.now(timezone.utc) - VENTANA_BLOQUEO
+        desde = datetime.now(timezone.utc) - red.VENTANA_BLOQUEO
         por_codigo = bd().execute(
             "select count(*) from intento_acceso where centro_id = %s and "
             "codigo = %s and not acertado and momento > %s",
             (centro_id, codigo, desde)).fetchone()[0]
+        # El conteo por dirección va acotado AL CENTRO. Antes era global: los
+        # fallos de la gente de un bar contaban contra la puerta de otro bar de
+        # otra empresa, que no tienen nada que ver. Y detrás de un proxy inverso
+        # eso significaba que unos pocos errores de PIN en cualquier sitio
+        # dejaban sin fichar a todo el mundo.
         por_origen = bd().execute(
             "select count(*) from intento_acceso where origen = %s and "
-            "not acertado and momento > %s", (origen, desde)).fetchone()[0]
-        return por_codigo >= FALLOS_POR_CODIGO or por_origen >= FALLOS_POR_ORIGEN
+            "centro_id = %s and not acertado and momento > %s",
+            (origen, centro_id, desde)).fetchone()[0]
+        return (por_codigo >= red.FALLOS_POR_CUENTA
+                or por_origen >= red.FALLOS_POR_ORIGEN)
 
     def apuntar_intento(centro_id: str, codigo: str, origen: str, acertado: bool):
         bd().execute(
@@ -216,7 +246,7 @@ def crear_app(cadena_bd: str | None = None) -> Flask:
         centro = centro_por_token(token)
         codigo = (request.form.get("codigo") or "").strip()
         pin = request.form.get("pin") or ""
-        origen = (request.remote_addr or "")[:45]
+        origen = red.origen()
 
         if bloqueado(centro["id"], codigo, origen):
             apuntar_intento(centro["id"], codigo, origen, False)

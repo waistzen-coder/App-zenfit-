@@ -105,5 +105,8 @@ jobs:
       - name: Los sellos y el recorte del libro
         run: python3 -m fichaje.pruebas_sellos
 
+      - name: El límite de intentos y el origen de las peticiones
+        run: python3 -m fichaje.pruebas_red
+
       - name: Copia de seguridad y restauración de verdad
         run: python3 -m fichaje.copia comprobar

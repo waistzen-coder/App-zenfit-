@@ -41,14 +41,13 @@ from flask import (
     url_for,
 )
 
+from . import red
 from . import representacion as R
 from .credenciales import huella_de_token
 from .exportar import fila_segura_para_hoja
 from .jornada import jornadas_de, jornadas_por_trabajador
 from .postgres import conectar
 
-FALLOS_ANTES_DE_BLOQUEAR = 8
-MINUTOS_BLOQUEO = 15
 
 
 def _mes(cadena: str | None, hoy: date) -> tuple[date, date]:
@@ -74,6 +73,7 @@ def crear_portal(cadena_bd: str | None = None) -> Flask:
         SESSION_COOKIE_SECURE=os.environ.get("FICHAJE_HTTPS", "") == "1",
         BD=cadena_bd,
     )
+    red.detras_de_proxy(app)
 
     def bd():
         if "bd" not in g:
@@ -128,8 +128,7 @@ def crear_portal(cadena_bd: str | None = None) -> Flask:
         return representante
 
     def apuntar(representante, accion, detalle=""):
-        R.apuntar(bd(), representante, accion, detalle,
-                  (request.remote_addr or "")[:45])
+        R.apuntar(bd(), representante, accion, detalle, red.origen())
 
     @app.errorhandler(401)
     def sin_sesion(_):
@@ -168,14 +167,20 @@ def crear_portal(cadena_bd: str | None = None) -> Flask:
         comprobar_csrf()
         email = (request.form.get("email") or "").strip().lower()
         contrasena = request.form.get("contrasena") or ""
-        origen = (request.remote_addr or "")[:45]
+        origen = red.origen()
+        desde = datetime.now(timezone.utc) - red.VENTANA_BLOQUEO
 
-        fallos = bd().execute(
-            "select count(*) from intento_representante "
-            "where (email = %s or origen = %s) and not acertado "
-            "and momento > now() - interval '%s minutes'",
-            (email, origen, MINUTOS_BLOQUEO)).fetchone()[0]
-        if fallos >= FALLOS_ANTES_DE_BLOQUEAR:
+        # Dos contadores separados, por lo mismo que en el panel: unidos por un
+        # «or», detrás de un proxy inverso unos pocos fallos de un desconocido
+        # cerraban el portal a toda la representación.
+        por_cuenta = bd().execute(
+            "select count(*) from intento_representante where email = %s "
+            "and not acertado and momento > %s", (email, desde)).fetchone()[0]
+        por_origen = bd().execute(
+            "select count(*) from intento_representante where origen = %s "
+            "and not acertado and momento > %s", (origen, desde)).fetchone()[0]
+        if (por_cuenta >= red.FALLOS_POR_CUENTA
+                or por_origen >= red.FALLOS_POR_ORIGEN):
             return render_template_string(
                 ACCESO, email=email,
                 aviso="Demasiados intentos. Espera un cuarto de hora."), 429
