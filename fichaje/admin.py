@@ -167,6 +167,61 @@ def cartel(conexion, centro_id: str, destino: str | None = None) -> str:
     return url
 
 
+# Lo que se puede tirar cuando envejece, y lo que NO se toca jamás.
+#
+# La lista de abajo es corta a propósito y la de arriba de este comentario
+# también: aquí lo peligroso no es olvidarse de limpiar algo, es limpiar de más.
+#
+# **Nunca se borra:** `anotacion`, que es el libro; `sello`, que es lo que
+# permite saber si al libro le falta algo; `acceso_representante`, que es la
+# constancia de quién consultó el registro de una plantilla;
+# `registro_administrativo`, que es quién hizo qué en el panel; y ninguna
+# entidad —empresas, centros, personas, representantes—, porque una persona que
+# se fue sigue teniendo jornadas que a alguien le pueden hacer falta.
+#
+# Lo que sí se tira es rastro de funcionamiento: intentos de acceso, sesiones
+# caducadas y claves de peticiones ya atendidas. Nada de eso es prueba de nada
+# pasados unos días, y crece con cada visita hasta que un día la tabla pesa más
+# que el libro.
+EFIMERAS = [
+    ("intento_acceso", "momento"),
+    ("intento_panel", "momento"),
+    ("intento_representante", "momento"),
+    ("peticion_fichaje", "creada_en"),
+]
+
+# Las sesiones se miran por cuándo caducan, no por cuándo se crearon.
+SESIONES = ["sesion", "sesion_panel", "sesion_representante"]
+
+
+def limpiar(conexion, dias: int = 30) -> dict[str, int]:
+    """Tira el rastro de funcionamiento más viejo que `dias`.
+
+    El límite de intentos solo mira un cuarto de hora hacia atrás, así que
+    treinta días es de sobra: se guardan por si algún día hay que mirar quién
+    estuvo probando, no porque el programa los necesite.
+    """
+    if dias < 7:
+        raise ValueError(
+            "Menos de siete días no. El margen no es por el programa —con un día "
+            "bastaría— sino para que quede rastro si alguien estuvo probando "
+            "contraseñas el fin de semana y no se mira hasta el lunes.")
+    from psycopg import sql
+
+    borradas = {}
+    for tabla, columna in EFIMERAS:
+        borradas[tabla] = conexion.execute(
+            sql.SQL("delete from {} where {} < now() - make_interval(days => %s)")
+            .format(sql.Identifier(tabla), sql.Identifier(columna)),
+            (dias,)).rowcount
+    for tabla in SESIONES:
+        borradas[tabla] = conexion.execute(
+            sql.SQL("delete from {} where expira_en < now() - "
+                    "make_interval(days => %s)").format(sql.Identifier(tabla)),
+            (dias,)).rowcount
+    return borradas
+
+
 ORDENES = {
     "gestoria": lambda c, a: print(G.crear_gestoria(c, a[0])),
     "empresa": lambda c, a: print(crear_empresa(c, a[0], a[1] if len(a) > 1 else None)),
@@ -183,6 +238,9 @@ ORDENES = {
     "rotar-qr": lambda c, a: print(url_del_centro(rotar_token(c, a[0]))),
     "desbloquear": lambda c, a: print(f"{desbloquear(c, a[0], a[1])} intentos borrados"),
     "verificar": lambda c, a: verificar_todo(c),
+    "limpiar": lambda c, a: print("\n".join(
+        f"  {tabla:<24} {cuantas} filas"
+        for tabla, cuantas in limpiar(c, int(a[0]) if a else 30).items())),
 }
 
 

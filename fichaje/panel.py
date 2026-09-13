@@ -45,6 +45,7 @@ from .correcciones import (
 )
 from .exportar import paquete_de_empresa
 from .credenciales import (
+    clave_de_sesion,
     ContrasenaInvalida,
     PinInvalido,
     comprobar_contrasena,
@@ -89,7 +90,7 @@ ERRORES = {
 def crear_panel(cadena_bd: str | None = None) -> Flask:
     app = Flask(__name__)
     app.config.update(
-        SECRET_KEY=os.environ.get("FICHAJE_PANEL_SECRETO") or secrets.token_hex(32),
+        SECRET_KEY=clave_de_sesion("FICHAJE_PANEL_SECRETO"),
         SESSION_COOKIE_NAME="panel_gestoria",   # distinta de la del trabajador
         SESSION_COOKIE_HTTPONLY=True,
         SESSION_COOKIE_SAMESITE="Lax",
