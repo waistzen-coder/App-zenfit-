@@ -92,13 +92,31 @@ def crear_trabajador(conexion, empresa_id: str, nombre: str, codigo: str) -> str
     return identificador
 
 
-def poner_pin(conexion, trabajador_id: str, pin: str) -> None:
+def cerrar_sesiones_de_trabajador(conexion, trabajador_id: str) -> int:
+    """Cierra las sesiones abiertas en el móvil de una persona."""
+    return conexion.execute(
+        "update sesion set cerrada_en = now() where trabajador_id = %s "
+        "and cerrada_en is null", (trabajador_id,)).rowcount
+
+
+def poner_pin(conexion, trabajador_id: str, pin: str) -> int:
+    """Pone un PIN nuevo y CIERRA las sesiones abiertas de esa persona.
+
+    Un PIN se resetea casi siempre por uno de dos motivos: se ha olvidado, o
+    alguien lo ha visto. En el segundo caso, dejar viva la sesión que ese
+    alguien ya tiene abierta en su móvil significa que sigue fichando en nombre
+    de otro durante doce horas más, mientras quien lo reseteó se queda tranquilo
+    creyendo que ya está.
+
+    Devuelve cuántas sesiones se cerraron.
+    """
     validar(pin)
     filas = conexion.execute(
         "update trabajador set pin_derivado = %s, pin_actualizado_en = now() "
         "where id = %s returning id", (derivar(pin), trabajador_id)).fetchall()
     if not filas:
         raise SystemExit(f"No existe el trabajador {trabajador_id}")
+    return cerrar_sesiones_de_trabajador(conexion, trabajador_id)
 
 
 def cambiar_actividad(conexion, trabajador_id: str, activo: bool) -> None:
@@ -229,7 +247,8 @@ ORDENES = {
         c, a[0], a[1], a[2],
         pedir_contrasena(),
         G.Rol.ADMIN if len(a) > 3 and a[3] == "admin" else G.Rol.USUARIO)),
-    "contrasena": lambda c, a: (G.cambiar_contrasena(c, a[0], pedir_contrasena()),
+    "contrasena": lambda c, a: (print(f"{G.cambiar_contrasena(c, a[0], pedir_contrasena())} "
+                                      f"sesiones abiertas cerradas"),
                                 print("Contraseña cambiada"))[1],
     "trabajador": lambda c, a: print(crear_trabajador(c, a[0], a[1], a[2])),
     "pin": lambda c, a: (poner_pin(c, a[0], a[1]), print("PIN actualizado"))[1],

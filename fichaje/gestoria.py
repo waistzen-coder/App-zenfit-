@@ -142,11 +142,26 @@ def crear_usuario(conexion, gestoria_id: str, email: str, nombre: str,
     return identificador
 
 
-def cambiar_contrasena(conexion, usuario_id: str, contrasena: str) -> None:
+def cambiar_contrasena(conexion, usuario_id: str, contrasena: str) -> int:
+    """Cambia la contraseña y CIERRA las sesiones abiertas de esa persona.
+
+    Lo segundo no es un extra. Una contraseña se cambia casi siempre por un
+    motivo: se sospecha que alguien la sabe. Si las sesiones abiertas siguieran
+    valiendo, quien la supiera seguiría dentro ocho horas más, y la persona que
+    la cambió se quedaría tranquila creyendo que ya está.
+
+    Es el mismo fallo que se arregló al revocar a un representante: marcar la
+    fila y dejar viva la sesión es revocar a medias, que es lo mismo que no
+    revocar. Aquí estaba igual y pasó desapercibido porque el código que cierra
+    sesiones ya existía; simplemente no se llamaba desde aquí.
+
+    Devuelve cuántas sesiones se cerraron, para poder decírselo a quien lo hace.
+    """
     conexion.execute(
         "update usuario_gestoria set contrasena_derivada = %s, "
         "contrasena_cambiada_en = now() where id = %s",
         (derivar_contrasena(contrasena), usuario_id))
+    return cerrar_sesiones_de(conexion, usuario_id)
 
 
 def usuario_por_email(conexion, email: str) -> tuple | None:
