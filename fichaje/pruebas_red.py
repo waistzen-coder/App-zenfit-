@@ -345,6 +345,95 @@ libro = LibroPostgres(EMPRESA, admin).anotaciones()
 comprobar("Y queda un libro en la base", len(libro) >= 1, True)
 comprobar("Que verifica", bool(verificar_cadena(libro, EMPRESA)), True)
 
+# ==================== la clave con la que se firman las cookies
+
+# Si la variable no está puesta, cada proceso genera la suya. En desarrollo no
+# se nota: hay uno solo. En producción se arranca con varios trabajadores y la
+# cookie que firma uno no la reconocen los otros, así que la gente se sale sola
+# en la mayoría de las peticiones, sin ningún error en el registro y sin nada
+# que mirar. Es de los fallos más caros de diagnosticar que existen.
+from .credenciales import ClaveDeSesionAusente, clave_de_sesion  # noqa: E402
+
+guardadas = {v: os.environ.get(v) for v in ("FICHAJE_SECRETO", "FICHAJE_HTTPS")}
+os.environ.pop("FICHAJE_SECRETO", None)
+
+os.environ["FICHAJE_HTTPS"] = "1"
+try:
+    clave_de_sesion("FICHAJE_SECRETO")
+    comprobar("En producción NO se arranca sin la clave", "arrancó", "se negó")
+except ClaveDeSesionAusente as fallo:
+    comprobar("En producción no se arranca sin la clave", True, True)
+    comprobar("Y el mensaje dice cómo generarla",
+              "secrets.token_hex" in str(fallo), True)
+    comprobar("Y avisa de que cambiarla cierra las sesiones",
+              "se cierran todas las sesiones" in str(fallo), True)
+
+os.environ["FICHAJE_HTTPS"] = "0"
+generada = clave_de_sesion("FICHAJE_SECRETO")
+comprobar("Fuera de producción sí arranca", len(generada), 64)
+os.environ["FICHAJE_SECRETO"] = "la-de-verdad"
+comprobar("Y con la variable puesta se usa esa, no otra",
+          clave_de_sesion("FICHAJE_SECRETO"), "la-de-verdad")
+for variable, valor in guardadas.items():
+    if valor is None:
+        os.environ.pop(variable, None)
+    else:
+        os.environ[variable] = valor
+
+# ==================== limpiar lo efímero, y NO limpiar lo que es prueba
+
+from .admin import EFIMERAS, SESIONES, limpiar  # noqa: E402
+
+# Se fabrica rastro viejo: intentos y sesiones de hace dos meses.
+admin.execute("insert into intento_panel (email, origen, momento, acertado) "
+              "values ('viejo@x.es', '1.2.3.4', now() - interval '60 days', false)")
+admin.execute("insert into intento_panel (email, origen, momento, acertado) "
+              "values ('nuevo@x.es', '1.2.3.4', now(), false)")
+admin.execute("insert into sesion_panel (id, usuario_id, expira_en) "
+              "values ('vieja', %s, now() - interval '60 days')", (ANA,))
+admin.execute("insert into sesion_panel (id, usuario_id, expira_en) "
+              "values ('viva', %s, now() + interval '8 hours')", (ANA,))
+
+# Y prueba que NO se puede tocar: una consulta de un representante.
+fila = R.por_email(admin, "carmen@plantilla.es")
+carmen = R.Representante(*fila[:11])
+R.apuntar(admin, carmen, "listado", "de hace mucho")
+admin.execute("update acceso_representante set momento = now() - interval '400 days'")
+accesos_antes = len(R.accesos_de_empresa(admin, EMPRESA))
+anotaciones_antes = admin.execute("select count(*) from anotacion").fetchone()[0]
+
+borradas = limpiar(admin, dias=30)
+
+comprobar("Se borra el intento viejo", borradas["intento_panel"], 1)
+comprobar("Y queda el reciente",
+          admin.execute("select count(*) from intento_panel").fetchone()[0], 1)
+comprobar("Se borra la sesión caducada hace meses", borradas["sesion_panel"], 1)
+comprobar("Y la que sigue viva no se toca",
+          admin.execute("select count(*) from sesion_panel where id = 'viva'"
+                        ).fetchone()[0], 1)
+
+# Lo importante de todo esto:
+comprobar("El registro de quién consultó NO se borra, ni con 400 días",
+          len(R.accesos_de_empresa(admin, EMPRESA)), accesos_antes)
+comprobar("Ni una sola anotación del libro",
+          admin.execute("select count(*) from anotacion").fetchone()[0],
+          anotaciones_antes)
+comprobar("La lista de lo borrable no incluye el libro",
+          "anotacion" in [x[0] for x in EFIMERAS] + SESIONES, False)
+comprobar("Ni los sellos", "sello" in [x[0] for x in EFIMERAS] + SESIONES, False)
+comprobar("Ni la constancia de los accesos",
+          "acceso_representante" in [x[0] for x in EFIMERAS] + SESIONES, False)
+comprobar("Ni el registro administrativo del panel",
+          "registro_administrativo" in [x[0] for x in EFIMERAS] + SESIONES, False)
+
+# Y no se deja limpiar con un margen tan corto que borre la prueba de un ataque
+# del fin de semana antes de que nadie la mire el lunes.
+try:
+    limpiar(admin, dias=1)
+    comprobar("Un día de margen se rechaza", "aceptó", "rechazó")
+except ValueError:
+    comprobar("Un día de margen se rechaza", True, True)
+
 admin.close()
 
 if fallos:

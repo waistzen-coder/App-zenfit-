@@ -24,6 +24,7 @@ autenticación, y son dos cosas distintas.
 
 import base64
 import hashlib
+import os
 import secrets
 
 ALGORITMO = "scrypt"
@@ -92,6 +93,44 @@ def comprobar(pin: str, guardado: str | None) -> bool:
     except (ValueError, TypeError):
         return False
     return secrets.compare_digest(candidata, base64.b64decode(clave64))
+
+
+class ClaveDeSesionAusente(Exception):
+    """Falta la clave con la que se firman las cookies de sesión."""
+
+
+def clave_de_sesion(variable: str) -> str:
+    """La clave con la que se firman las cookies, o un aviso muy visible.
+
+    Esto parece una comodidad y es una trampa. Si la variable no está puesta y
+    se genera una al vuelo, en desarrollo no se nota: hay un solo proceso y todo
+    funciona. En producción se arranca con varios trabajadores —`gunicorn -w 4`
+    es lo normal— y **cada uno genera la suya**. La cookie que firma uno no la
+    reconoce ninguno de los otros tres, así que la gente se sale sola en tres de
+    cada cuatro peticiones, sin ningún error en el registro y sin nada que
+    mirar. Y con un solo proceso tampoco se salva: al reiniciar para desplegar,
+    todo el mundo fuera.
+
+    Así que en producción no se arranca sin ella. Se reconoce que es producción
+    porque `FICHAJE_HTTPS=1`, que es lo que el manual manda poner ahí y solo
+    ahí. Fuera de producción se genera una y se dice en voz alta, porque una
+    advertencia que nadie lee sigue siendo mejor que un fallo invisible.
+    """
+    clave = os.environ.get(variable)
+    if clave:
+        return clave
+    if os.environ.get("FICHAJE_HTTPS", "") == "1":
+        raise ClaveDeSesionAusente(
+            f"Falta {variable}. Sin ella cada proceso firma las cookies con una "
+            f"clave distinta y la gente se sale sola. Genérala una vez con\n"
+            f"    export {variable}=\"$(python3 -c 'import secrets;"
+            f"print(secrets.token_hex(32))')\"\n"
+            f"y guárdala: si cambia, se cierran todas las sesiones abiertas."
+        )
+    print(f"AVISO: {variable} no está puesta. Se usa una clave de usar y tirar, "
+          f"así que las sesiones se pierden al reiniciar y no valen entre "
+          f"procesos. Para producción es obligatoria.")
+    return secrets.token_hex(32)
 
 
 def nuevo_token(bytes_de_azar: int = 24) -> str:

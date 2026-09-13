@@ -41,7 +41,7 @@ from flask import (
 
 from . import red
 from . import representacion as R
-from .credenciales import huella_de_token
+from .credenciales import clave_de_sesion, huella_de_token
 from .exportar import escribir_csv
 from .jornada import jornadas_de, jornadas_por_trabajador
 from .postgres import conectar
@@ -62,7 +62,7 @@ def _mes(cadena: str | None, hoy: date) -> tuple[date, date]:
 def crear_portal(cadena_bd: str | None = None) -> Flask:
     app = Flask(__name__)
     app.config.update(
-        SECRET_KEY=os.environ.get("FICHAJE_PORTAL_SECRETO") or secrets.token_hex(32),
+        SECRET_KEY=clave_de_sesion("FICHAJE_PORTAL_SECRETO"),
         # La tercera cookie con el tercer nombre. Compartirlo con el panel o con
         # el fichaje haría que un testigo de uno viajara al otro.
         SESSION_COOKIE_NAME="portal_representante",

@@ -28,6 +28,16 @@ export FICHAJE_HTTPS=1                        # solo en producción
 export FICHAJE_PROXIES=1                      # ¡IMPORTANTE! ver abajo
 ```
 
+**Los tres secretos no son opcionales en producción, y ahora la aplicación se
+niega a arrancar sin ellos.** Antes, si faltaban, se generaba uno al vuelo: en
+desarrollo no se notaba porque hay un solo proceso, y en producción, donde se
+arranca con varios, cada uno firmaba las cookies con una clave distinta y la
+gente se salía sola en la mayoría de las peticiones, sin ningún error en el
+registro y sin nada que mirar.
+
+Genéralos una vez y guárdalos. Si cambian, se cierran todas las sesiones
+abiertas: no es grave, pero la gente tendrá que volver a identificarse.
+
 **`FICHAJE_PROXIES` no es opcional si hay un proxy delante.** Es el número
 de proxies inversos entre internet y la aplicación: 1 si tienes un nginx, 0
 si la aplicación recibe las conexiones directamente.
@@ -254,7 +264,24 @@ Conviene dejarlo en una tarea programada nocturna, junto al sellado y la copia.
 python3 -m fichaje.admin verificar   # ¿cuadra cada cadena?
 python3 -m fichaje.sello sellar      # deja constancia de cuántas hay hoy
 python3 -m fichaje.copia comprobar   # copia, restaura y vuelve a verificar
+python3 -m fichaje.admin limpiar     # tira el rastro de más de 30 días
 ```
+
+## Qué borra `limpiar`, y sobre todo qué no
+
+Borra rastro de funcionamiento: intentos de acceso, sesiones caducadas y claves
+de peticiones ya atendidas. Nada de eso demuestra nada pasados unos días y crece
+con cada visita hasta que un día esas tablas pesan más que el libro.
+
+**No borra nunca** los fichajes, los sellos, la constancia de quién consultó el
+registro de una plantilla, el registro de quién hizo qué en el panel, ni ninguna
+empresa, centro, persona o representante. Una persona que se fue sigue teniendo
+jornadas que a alguien le pueden hacer falta durante cuatro años.
+
+`limpiar 90` para guardar noventa días en vez de treinta. Menos de siete no se
+admite: el margen no es por el programa —con un día bastaría— sino para que
+quede rastro si alguien estuvo probando contraseñas el fin de semana y no se
+mira hasta el lunes.
 
 El orden importa poco salvo en una cosa: sellar después de verificar evita
 sellar un libro que ya sabes que está roto. Si alguna empresa sale mal,

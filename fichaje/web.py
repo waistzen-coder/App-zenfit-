@@ -43,7 +43,7 @@ from .correcciones import (
     proponer,
     responder,
 )
-from .credenciales import comprobar, huella_de_token, nuevo_token
+from .credenciales import clave_de_sesion, comprobar, huella_de_token, nuevo_token
 from .exportar import escribir_csv
 from . import red
 from .jornada import COMO_SE_LLAMA, acciones_posibles, estado_actual, jornadas_de, ultimo_fichaje
@@ -100,7 +100,7 @@ def _hora_pedida(texto: str | None, original, zona: str) -> datetime | None:
 def crear_app(cadena_bd: str | None = None) -> Flask:
     app = Flask(__name__)
     app.config.update(
-        SECRET_KEY=os.environ.get("FICHAJE_SECRETO") or secrets.token_hex(32),
+        SECRET_KEY=clave_de_sesion("FICHAJE_SECRETO"),
         # La cookie del fichaje lleva el nombre por defecto de Flask. Se le pone
         # uno propio, como al panel y al portal: tres aplicaciones que pueden
         # acabar en el mismo dominio no pueden compartir el nombre de la cookie,
