@@ -1,0 +1,9 @@
+{%- comment -%}
+  Carga el sistema visual "Calmia".
+  Se incluye desde cada sección calmia-*; el navegador descarga la hoja una sola vez.
+{%- endcomment -%}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700&family=Jost:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&display=swap" media="all">
+{{ 'calmia.css' | asset_url | stylesheet_tag }}
+{{ 'calmia-mobile.css' | asset_url | stylesheet_tag }}

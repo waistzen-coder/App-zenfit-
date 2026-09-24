@@ -1,0 +1,210 @@
+/* ==========================================================================
+   Calmia design system — ReliefPath™ / Waistzen
+   Sistema visual compartido por todas las secciones "calmia-*".
+   ========================================================================== */
+
+:root {
+  --cal-bg: #fceaee;
+  --cal-bg-2: #fff4f6;
+  --cal-bg-3: #fdf1f3;
+  --cal-ink: #1f1b1c;
+  --cal-ink-2: #4c4243;
+  --cal-ink-3: #8b7d80;
+  --cal-pink: #d4687f;
+  --cal-pink-2: #e79aa9;
+  --cal-pink-3: #f3ccd4;
+  --cal-pink-4: #fbe6eb;
+  --cal-green: #2f7d52;
+  --cal-card: #ffffff;
+  --cal-line: #f0d7dd;
+  --cal-r-sm: 12px;
+  --cal-r: 18px;
+  --cal-r-lg: 26px;
+  --cal-serif: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --cal-sans: 'Jost', 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --cal-shadow: 0 18px 46px rgba(180, 110, 128, 0.16);
+  --cal-shadow-sm: 0 8px 24px rgba(180, 110, 128, 0.1);
+  --cal-max: 1180px;
+}
+
+/* --- Base ---------------------------------------------------------------- */
+.cal {
+  font-family: var(--cal-sans);
+  color: var(--cal-ink);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.55;
+}
+.cal *,
+.cal *::before,
+.cal *::after { box-sizing: border-box; }
+.cal img { max-width: 100%; display: block; }
+.cal a { color: inherit; }
+.cal p { margin: 0 0 12px; }
+.cal p:last-child { margin-bottom: 0; }
+
+.cal-wrap {
+  width: 100%;
+  max-width: var(--cal-max);
+  margin: 0 auto;
+  padding: 0 20px;
+}
+.cal-sec { padding: 54px 0; background: var(--cal-bg-3); }
+.cal-sec--tight { padding: 30px 0; }
+.cal-sec--flat { padding: 0; }
+.cal-sec--soft { background: var(--cal-bg-2); }
+.cal-sec--pink { background: var(--cal-bg); }
+
+/* --- Tipografía ---------------------------------------------------------- */
+.cal-h1 {
+  font-family: var(--cal-serif);
+  font-weight: 800;
+  font-size: clamp(34px, 8.2vw, 58px);
+  line-height: 1.02;
+  letter-spacing: -0.015em;
+  margin: 0;
+  color: var(--cal-ink);
+}
+.cal-h1 em {
+  display: block;
+  font-style: italic;
+  font-weight: 500;
+  color: var(--cal-pink-2);
+}
+.cal-h2 {
+  font-family: var(--cal-serif);
+  font-weight: 700;
+  font-size: clamp(28px, 6.4vw, 44px);
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+  margin: 0 0 10px;
+  text-align: center;
+}
+.cal-h2 em { font-style: italic; color: var(--cal-pink-2); font-weight: 600; }
+.cal-h3 {
+  font-family: var(--cal-serif);
+  font-weight: 700;
+  font-size: clamp(20px, 4.4vw, 26px);
+  line-height: 1.2;
+  margin: 0 0 8px;
+}
+.cal-lead {
+  font-size: clamp(15px, 3.9vw, 18px);
+  color: var(--cal-ink-2);
+  margin: 14px 0 0;
+  max-width: 62ch;
+}
+.cal-sub {
+  text-align: center;
+  color: var(--cal-ink-2);
+  font-size: clamp(14px, 3.6vw, 17px);
+  margin: 0 auto 30px;
+  max-width: 60ch;
+}
+.cal-eyebrow {
+  font-size: clamp(11px, 2.9vw, 13px);
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--cal-pink-2);
+  font-weight: 500;
+  margin: 0 0 10px;
+}
+
+/* --- Piezas -------------------------------------------------------------- */
+.cal-card {
+  background: var(--cal-card);
+  border-radius: var(--cal-r-lg);
+  box-shadow: var(--cal-shadow);
+  padding: 20px;
+}
+
+.cal-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 999px;
+  padding: 9px 18px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: #fff;
+  border: 1px solid var(--cal-line);
+  color: var(--cal-ink-2);
+}
+.cal-pill--pink {
+  background: var(--cal-pink-2);
+  border-color: var(--cal-pink-2);
+  color: #fff;
+  letter-spacing: 0.02em;
+  font-size: 14px;
+}
+
+.cal-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  width: 100%;
+  border: 0;
+  cursor: pointer;
+  border-radius: var(--cal-r);
+  padding: 19px 22px;
+  font-family: var(--cal-sans);
+  font-size: clamp(18px, 4.6vw, 22px);
+  font-weight: 700;
+  color: #fff;
+  text-decoration: none;
+  background: linear-gradient(135deg, #eda4b3 0%, #d4687f 100%);
+  box-shadow: 0 12px 26px rgba(212, 104, 127, 0.36);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+}
+.cal-btn:hover { filter: brightness(1.04); box-shadow: 0 16px 32px rgba(212, 104, 127, 0.44); }
+.cal-btn:active { transform: translateY(1px); }
+.cal-btn[disabled] { filter: grayscale(0.55); opacity: 0.65; cursor: not-allowed; }
+.cal-btn svg { flex: 0 0 auto; }
+.cal-btn .cal-btn__sep { opacity: 0.7; font-weight: 400; }
+
+.cal-stars { display: inline-flex; gap: 2px; color: #f0b429; line-height: 1; }
+.cal-stars svg { width: 19px; height: 19px; }
+.cal-stars--sm svg { width: 14px; height: 14px; }
+
+.cal-check {
+  display: grid;
+  grid-template-columns: 30px 1fr;
+  gap: 12px;
+  align-items: start;
+  margin: 0 0 14px;
+  font-size: clamp(15px, 3.9vw, 17px);
+  color: var(--cal-ink);
+}
+.cal-check:last-child { margin-bottom: 0; }
+.cal-check i {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--cal-pink-4);
+  display: grid;
+  place-items: center;
+  color: var(--cal-pink);
+  font-style: normal;
+}
+.cal-check i svg { width: 15px; height: 15px; }
+.cal-check b { font-weight: 700; }
+.cal-check--green i { background: #2f7d52; color: #fff; }
+
+/* --- Grids --------------------------------------------------------------- */
+.cal-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.cal-grid-3 { display: grid; grid-template-columns: 1fr; gap: 16px; }
+.cal-grid-4 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+@media (min-width: 750px) {
+  .cal-grid-3 { grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .cal-grid-4 { grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .cal-grid-2 { gap: 22px; }
+}
+
+@media (min-width: 900px) {
+  .cal-sec { padding: 76px 0; }
+  .cal-sec--tight { padding: 44px 0; }
+  .cal-wrap { padding: 0 28px; }
+}
