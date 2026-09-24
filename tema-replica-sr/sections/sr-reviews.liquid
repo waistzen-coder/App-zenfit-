@@ -1,0 +1,65 @@
+{%- comment -%}
+  Opiniones. Solo pinta lo que se añade a mano como bloque (reseñas reales, con permiso
+  del cliente) o el bloque de una app de reseñas (Judge.me, Loox...). Sin bloques no sale
+  nada en la tienda: nunca rellena con texto inventado.
+{%- endcomment -%}
+{%- if section.blocks.size > 0 -%}
+{% render 'sr-head' %}
+<section class="sr sr-sec sr-rev-sec" style="background:{{ section.settings.bg }}">
+  <div class="sr-w">
+    <div class="sr-head sr-center">
+      {%- if section.settings.eyebrow != blank -%}<p class="sr-eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+      <h2 class="sr-h2">{{ section.settings.heading }}{% if section.settings.heading_accent != blank %} <span class="sr-accent">{{ section.settings.heading_accent }}</span>{% endif %}</h2>
+    </div>
+    <div class="sr-rev__grid">
+      {%- for b in section.blocks -%}
+        {%- case b.type -%}
+          {%- when '@app' -%}
+            <div style="grid-column:1/-1">{% render b %}</div>
+          {%- when 'review' -%}
+            <article class="sr-rev" {{ b.shopify_attributes }}>
+              {%- if b.settings.image != blank -%}{% render 'sr-photo', image: b.settings.image, ratio: 'land', sizes: '(min-width: 750px) 33vw, 100vw' %}{%- endif -%}
+              <span class="sr-stars" aria-label="{{ b.settings.rating }} de 5">{% for i in (1..b.settings.rating) %}{% render 'sr-icon', name: 'star' %}{% endfor %}</span>
+              {%- if b.settings.title != blank -%}<h3 class="sr-h3">{{ b.settings.title }}</h3>{%- endif -%}
+              <p>{{ b.settings.text }}</p>
+              <div class="sr-rev__who"><b>{{ b.settings.name }}</b>{% if b.settings.meta != blank %}<span>· {{ b.settings.meta }}</span>{% endif %}{% if b.settings.verified %}<span class="sr-rev__ver">{% render 'sr-icon', name: 'check-circle' %}Compra verificada</span>{% endif %}</div>
+            </article>
+        {%- endcase -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+{%- elsif request.design_mode -%}
+<div style="padding:24px;text-align:center;font:14px/1.4 system-ui;background:#fff8e6;color:#6b4e00">Opiniones: añade reseñas reales (con permiso del cliente) o el bloque de tu app de reseñas. Sin bloques, esta sección no se muestra en la tienda.</div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "SR · Opiniones",
+  "tag": "div",
+  "settings": [
+    { "type": "paragraph", "content": "Usa solo reseñas reales y con permiso. Sin bloques, la sección no aparece en la tienda." },
+    { "type": "text", "id": "eyebrow", "label": "Antetítulo", "default": "Opiniones" },
+    { "type": "text", "id": "heading", "label": "Título", "default": "Lo que cuentan" },
+    { "type": "text", "id": "heading_accent", "label": "Título (parte en color)", "default": "quienes ya lo usan" },
+    { "type": "color", "id": "bg", "label": "Fondo", "default": "#f1f6fb" }
+  ],
+  "blocks": [
+    { "type": "@app" },
+    {
+      "type": "review",
+      "name": "Reseña real",
+      "settings": [
+        { "type": "range", "id": "rating", "label": "Estrellas", "min": 1, "max": 5, "step": 1, "default": 5 },
+        { "type": "text", "id": "title", "label": "Titular" },
+        { "type": "textarea", "id": "text", "label": "Texto" },
+        { "type": "text", "id": "name", "label": "Nombre" },
+        { "type": "text", "id": "meta", "label": "Detalle (ej.: opositora a Justicia)" },
+        { "type": "checkbox", "id": "verified", "label": "Compra verificada", "default": false },
+        { "type": "image_picker", "id": "image", "label": "Foto del cliente (opcional)" }
+      ]
+    }
+  ],
+  "presets": [ { "name": "SR · Opiniones" } ]
+}
+{% endschema %}

@@ -1,0 +1,577 @@
+{
+  "sections": {
+    "anuncio": {
+      "type": "sr-announce",
+      "settings": {
+        "bg": "#0f2640",
+        "color": "#ffffff",
+        "speed": 4
+      },
+      "blocks": {
+        "ms1": {
+          "type": "msg",
+          "settings": {
+            "icon": "truck",
+            "text": "Envío estándar gratis en España",
+            "link": ""
+          }
+        },
+        "ms2": {
+          "type": "msg",
+          "settings": {
+            "icon": "cash",
+            "text": "Paga al recibirlo: contrareembolso +5 €",
+            "link": ""
+          }
+        },
+        "ms3": {
+          "type": "msg",
+          "settings": {
+            "icon": "refresh",
+            "text": "30 días para solicitar la devolución",
+            "link": "/policies/refund-policy"
+          }
+        }
+      },
+      "block_order": [
+        "ms1",
+        "ms2",
+        "ms3"
+      ]
+    },
+    "hero": {
+      "type": "sr-hero",
+      "settings": {
+        "product": "juego-de-ventosa-electrica-con-cable",
+        "eyebrow": "Método Pausa · para opositores",
+        "heading": "Tu temario puede esperar.",
+        "heading_accent": "Tu pausa, no.",
+        "text": "<p>ReliefPath™ reúne ventosas eléctricas, calor y luz roja en un aparato para casa. Pensado para que las pausas entre bloques de estudio sean un momento de verdad para ti.</p>",
+        "cta_text": "Descubre ReliefPath",
+        "cta_link": "/products/juego-de-ventosa-electrica-con-cable",
+        "cta2_text": "Cómo funciona",
+        "cta2_link": "#shopify-section-metodo",
+        "under": "Envío estándar gratis en España · Contrareembolso +5 € · 30 días para solicitar la devolución",
+        "image": "shopify://shop_images/reliefpath-pausa-estudio-landing-20260911.png",
+        "ratio": "tall",
+        "tag": "Para opositores",
+        "pins": "",
+        "caption": ""
+      },
+      "blocks": {
+        "ch39": {
+          "type": "check",
+          "settings": {
+            "text": "<strong>Tres funciones</strong> en un solo aparato"
+          }
+        },
+        "ch40": {
+          "type": "check",
+          "settings": {
+            "text": "<strong>En tu silla o en el sofá</strong>, sin citas ni desplazamientos"
+          }
+        },
+        "ch41": {
+          "type": "check",
+          "settings": {
+            "text": "<strong>Paga al recibirlo</strong> si lo prefieres"
+          }
+        }
+      },
+      "block_order": [
+        "ch39",
+        "ch40",
+        "ch41"
+      ]
+    },
+    "confianza": {
+      "type": "sr-trust",
+      "settings": {},
+      "blocks": {
+        "it4": {
+          "type": "item",
+          "settings": {
+            "icon": "truck",
+            "title": "Envío estándar gratis",
+            "text": "Direcciones de España admitidas en el checkout"
+          }
+        },
+        "it5": {
+          "type": "item",
+          "settings": {
+            "icon": "cash",
+            "title": "Contrareembolso",
+            "text": "Pagas al repartidor, +5 € por pedido"
+          }
+        },
+        "it6": {
+          "type": "item",
+          "settings": {
+            "icon": "refresh",
+            "title": "30 días",
+            "text": "Para solicitar la devolución, según la política"
+          }
+        },
+        "it7": {
+          "type": "item",
+          "settings": {
+            "icon": "chat",
+            "title": "Atención en español",
+            "text": "waistzen@gmail.com · Motril, Granada"
+          }
+        }
+      },
+      "block_order": [
+        "it4",
+        "it5",
+        "it6",
+        "it7"
+      ]
+    },
+    "ciclo": {
+      "type": "sr-cycle",
+      "settings": {
+        "eyebrow": "Lo que nadie cuenta de opositar",
+        "heading": "El ciclo del",
+        "heading_accent": "temario",
+        "text": "Horas de silla, bloques de estudio y pausas que no cuentan como pausa. Si te suena, no eres el único.",
+        "break_text": "<p><strong>El Método Pausa rompe el paso 2.</strong> Cuando suena el temporizador, dejas el móvil y los apuntes y te dedicas un rato a ti con ReliefPath: calor, succión regulable y luz roja, sin salir de casa.</p>",
+        "bg": "#ffffff"
+      },
+      "blocks": {
+        "st8": {
+          "type": "step",
+          "settings": {
+            "title": "Horas de silla",
+            "text": "Bloques largos frente a los apuntes, los hombros adelantados y la espalda quieta."
+          }
+        },
+        "st9": {
+          "type": "step",
+          "settings": {
+            "title": "Pausas que no descansan",
+            "text": "Suena el temporizador, abres el móvil y vuelves a la mesa con la misma sensación."
+          }
+        },
+        "st10": {
+          "type": "step",
+          "settings": {
+            "title": "La carga se acumula",
+            "text": "Al final del día notas el peso de la jornada en cuello, hombros y espalda."
+          }
+        },
+        "st11": {
+          "type": "step",
+          "settings": {
+            "title": "Y mañana, otra vez",
+            "text": "Nuevo día, nuevo tema. La rutina se repite sin un momento de verdad para ti."
+          }
+        }
+      },
+      "block_order": [
+        "st8",
+        "st9",
+        "st10",
+        "st11"
+      ]
+    },
+    "metodo": {
+      "type": "sr-method",
+      "settings": {
+        "eyebrow": "El Método Pausa",
+        "heading": "Dos momentos al día.",
+        "heading_accent": "Un solo aparato.",
+        "text": "Si estudias muchas horas, la clave no es parar más, sino parar mejor. ReliefPath le da a cada pausa un principio y un final.",
+        "cta_text": "",
+        "cta_link": "",
+        "note": "ReliefPath™ es un aparato de bienestar para uso doméstico. Consulta el manual del fabricante antes de usarlo.",
+        "bg": "#f1f6fb"
+      },
+      "blocks": {
+        "pa12": {
+          "type": "part",
+          "settings": {
+            "image": "shopify://shop_images/reliefpath-escritorio-renovado-20260911.png",
+            "tag": "Entre bloques",
+            "tag_icon": "timer",
+            "pins": "",
+            "title": "La pausa que sí es pausa",
+            "text": "Suena el temporizador y sueltas el bolígrafo. En vez de abrir el móvil, un rato para ti con ReliefPath, desde tu propia silla.",
+            "points": "Sin desplazamientos ni citas\nSin pantalla: la pausa es para ti\nCalor, succión y luz roja a tu medida, según el manual"
+          }
+        },
+        "pa13": {
+          "type": "part",
+          "settings": {
+            "image": "shopify://shop_images/reliefpath-descanso-renovado-20260911.png",
+            "tag": "Al cerrar el día",
+            "tag_icon": "moon",
+            "pins": "",
+            "title": "Tu ritual para cerrar los apuntes",
+            "text": "Apuntes cerrados, sofá y ReliefPath. Una señal clara para tu cabeza de que la jornada de estudio ha terminado.",
+            "points": "Separa el estudio del descanso\nUn hábito fácil de mantener\nTu momento, a la hora que tú decidas"
+          }
+        }
+      },
+      "block_order": [
+        "pa12",
+        "pa13"
+      ]
+    },
+    "producto": {
+      "type": "sr-featured",
+      "settings": {
+        "product": "juego-de-ventosa-electrica-con-cable",
+        "eyebrow": "El aparato",
+        "heading": "Conoce",
+        "heading_accent": "ReliefPath™",
+        "image": "shopify://shop_images/waistzen-reliefpath-hero-20260906.png",
+        "fit": "cover",
+        "tag": "3 en 1",
+        "pins": "",
+        "title": "",
+        "points": "Ventosas eléctricas con succión regulable\nFunción de calor y luz roja en la copa\n−20 % desde 2 unidades · −30 % desde 3",
+        "cta_text": "Ver ReliefPath",
+        "trust": "Envío estándar gratis en España · Contrareembolso +5 € · 30 días para solicitar la devolución",
+        "bg": "#f1f6fb"
+      }
+    },
+    "pasos": {
+      "type": "sr-steps",
+      "settings": {
+        "eyebrow": "Cómo funciona",
+        "heading": "Tres pasos.",
+        "heading_accent": "Cero complicaciones.",
+        "text": "",
+        "note": "Respeta siempre la duración, las zonas, la intensidad y las precauciones que indica el manual del fabricante.",
+        "bg": "#ffffff"
+      },
+      "blocks": {
+        "st14": {
+          "type": "step",
+          "settings": {
+            "image": "shopify://shop_images/reliefpath-consulta-manual-20260923.png",
+            "tag": "Paso 1",
+            "pins": "",
+            "title": "Lee el manual",
+            "text": "Antes del primer uso, repasa los ajustes, las zonas permitidas y las precauciones de tu modelo."
+          }
+        },
+        "st15": {
+          "type": "step",
+          "settings": {
+            "image": "shopify://shop_images/waistzen-reliefpath-controls-20260906.png",
+            "tag": "Paso 2",
+            "pins": "",
+            "title": "Elige tus ajustes",
+            "text": "Succión, calor y luz roja en un mismo aparato. Tú decides cómo combinarlos, dentro de lo que indica el fabricante."
+          }
+        },
+        "st16": {
+          "type": "step",
+          "settings": {
+            "image": "shopify://shop_images/reliefpath-pausa-sofa-20260923.png",
+            "tag": "Paso 3",
+            "pins": "",
+            "title": "Haz tu pausa",
+            "text": "Aparta el temario y el móvil. Ese rato es tuyo; después vuelves a la mesa o cierras el día."
+          }
+        }
+      },
+      "block_order": [
+        "st14",
+        "st15",
+        "st16"
+      ]
+    },
+    "comparativa": {
+      "type": "sr-compare",
+      "settings": {
+        "eyebrow": "Compáralo",
+        "heading": "¿Cómo te tomas",
+        "heading_accent": "tus pausas?",
+        "text": "Lo que ofrece cada opción cuando llevas horas delante del temario.",
+        "col_us": "ReliefPath™",
+        "col_a": "Pausa con el móvil",
+        "col_b": "Cita de masaje",
+        "col_c": "",
+        "note": "Comparativa orientativa de opciones de descanso. ReliefPath™ no sustituye la fisioterapia ni un tratamiento profesional.",
+        "bg": "#f1f6fb"
+      },
+      "blocks": {
+        "ro21": {
+          "type": "row",
+          "settings": {
+            "feature": "Sin salir de casa",
+            "us": "si",
+            "a": "si",
+            "b": "no",
+            "c": ""
+          }
+        },
+        "ro22": {
+          "type": "row",
+          "settings": {
+            "feature": "Sin pedir cita",
+            "us": "si",
+            "a": "si",
+            "b": "no",
+            "c": ""
+          }
+        },
+        "ro23": {
+          "type": "row",
+          "settings": {
+            "feature": "Te aleja de las pantallas",
+            "us": "si",
+            "a": "no",
+            "b": "si",
+            "c": ""
+          }
+        },
+        "ro24": {
+          "type": "row",
+          "settings": {
+            "feature": "Calor, succión y luz roja",
+            "us": "si",
+            "a": "no",
+            "b": "Depende",
+            "c": ""
+          }
+        },
+        "ro25": {
+          "type": "row",
+          "settings": {
+            "feature": "Cuando tú quieras",
+            "us": "si",
+            "a": "si",
+            "b": "no",
+            "c": ""
+          }
+        },
+        "ro26": {
+          "type": "row",
+          "settings": {
+            "feature": "Pago",
+            "us": "Una vez",
+            "a": "—",
+            "b": "Por sesión",
+            "c": ""
+          }
+        }
+      },
+      "block_order": [
+        "ro21",
+        "ro22",
+        "ro23",
+        "ro24",
+        "ro25",
+        "ro26"
+      ]
+    },
+    "tiempo": {
+      "type": "sr-timeline",
+      "settings": {
+        "eyebrow": "Tu primer mes",
+        "heading": "De aparato nuevo",
+        "heading_accent": "a hábito de estudio",
+        "text": "Así se construye la rutina del Método Pausa semana a semana.",
+        "note": "Describe cómo convertir la pausa en hábito; no es una promesa de resultados. Cada persona es distinta.",
+        "bg": "#ffffff"
+      },
+      "blocks": {
+        "we27": {
+          "type": "week",
+          "settings": {
+            "label": "Semana 1",
+            "title": "Lo conoces",
+            "text": "Lees el manual, pruebas los ajustes y eliges tus dos momentos del día."
+          }
+        },
+        "we28": {
+          "type": "week",
+          "settings": {
+            "label": "Semana 2",
+            "title": "Lo encajas",
+            "text": "La pausa entra en tu planificación, junto al temporizador y los bloques."
+          }
+        },
+        "we29": {
+          "type": "week",
+          "settings": {
+            "label": "Semana 3",
+            "title": "Lo repites",
+            "text": "Ya no lo piensas: suena el temporizador y sabes qué toca."
+          }
+        },
+        "we30": {
+          "type": "week",
+          "settings": {
+            "label": "Semana 4",
+            "title": "Es tuyo",
+            "text": "La pausa forma parte de tu día de estudio, como el café de media mañana."
+          }
+        }
+      },
+      "block_order": [
+        "we27",
+        "we28",
+        "we29",
+        "we30"
+      ]
+    },
+    "historia": {
+      "type": "sr-story",
+      "settings": {
+        "image": "shopify://shop_images/reliefpath-atencion-20260923.png",
+        "tag": "Motril, Granada",
+        "caption": "",
+        "eyebrow": "Quiénes somos",
+        "heading": "Una tienda pequeña,",
+        "heading_accent": "una idea concreta",
+        "text": "<p>Somos Waistzen, una tienda de Motril (Granada). Elegimos ReliefPath™ pensando en una rutina que se repite en muchas casas: días enteros de silla, temario y temporizador.</p><p>No te prometemos aprobar ni quitarte ningún dolor. Te proponemos algo más sencillo: tomarte las pausas en serio, con un aparato que te espera en la mesa.</p>",
+        "quote": "Estudiar muchas horas es parte de opositar. Descansar bien, también.",
+        "name": "El equipo de Waistzen",
+        "role": "Atención en español · waistzen@gmail.com",
+        "cta_text": "",
+        "cta_link": "",
+        "bg": "#ffffff"
+      }
+    },
+    "opiniones": {
+      "type": "sr-reviews",
+      "settings": {
+        "eyebrow": "Opiniones",
+        "heading": "Lo que cuentan",
+        "heading_accent": "quienes ya lo usan",
+        "bg": "#f1f6fb"
+      }
+    },
+    "garantia": {
+      "type": "sr-guarantee",
+      "settings": {
+        "number": "30",
+        "number_label": "días para solicitarla",
+        "eyebrow": "Compra tranquila",
+        "heading": "Si no es para ti, puedes devolverlo",
+        "text": "<p>Tienes 30 días desde que lo recibes para solicitar la devolución, además de tu derecho legal de desistimiento de 14 días. Consulta las condiciones en la <a href=\"/policies/refund-policy\">política de devoluciones</a>.</p>",
+        "cta_text": "",
+        "cta_link": "",
+        "bg": "#ffffff"
+      }
+    },
+    "faq": {
+      "type": "sr-faq",
+      "settings": {
+        "eyebrow": "Dudas",
+        "heading": "Preguntas",
+        "heading_accent": "frecuentes",
+        "open_first": true,
+        "help": "<p>¿Te queda alguna duda? Escríbenos a <a href=\"mailto:waistzen@gmail.com\">waistzen@gmail.com</a> antes de comprar.</p>",
+        "schema": true,
+        "bg": "#f1f6fb"
+      },
+      "blocks": {
+        "q31": {
+          "type": "q",
+          "settings": {
+            "question": "¿Qué es ReliefPath™?",
+            "answer": "<p>Un aparato de bienestar para casa que reúne ventosas eléctricas, calor y luz roja. No es un tratamiento médico ni garantiza alivio, mejor descanso ni rendimiento en el estudio.</p>"
+          }
+        },
+        "q32": {
+          "type": "q",
+          "settings": {
+            "question": "¿Por qué habláis de opositores?",
+            "answer": "<p>Porque pasan muchas horas sentados y organizan el día en bloques. El Método Pausa es una forma de usar esos cortes para dedicarte un rato, en vez de pasarlos con el móvil.</p>"
+          }
+        },
+        "q33": {
+          "type": "q",
+          "settings": {
+            "question": "¿Cómo se usa y cuánto dura una sesión?",
+            "answer": "<p>Sigue el manual del fabricante: duración, frecuencia, intensidad, zonas y contraindicaciones. Esta página no establece un protocolo de uso. Si no tienes el manual, pídelo a <a href=\"mailto:waistzen@gmail.com\">waistzen@gmail.com</a>.</p>"
+          }
+        },
+        "q34": {
+          "type": "q",
+          "settings": {
+            "question": "¿Cuánto cuesta el envío?",
+            "answer": "<p>El envío estándar es gratis para las direcciones de España admitidas en el checkout, sin importe mínimo. Si eliges contrareembolso se suman 5 € por pedido. Para confirmar el plazo de tu dirección, escríbenos antes de comprar.</p>"
+          }
+        },
+        "q35": {
+          "type": "q",
+          "settings": {
+            "question": "¿Puedo pagar al recibirlo?",
+            "answer": "<p>Sí, con contrareembolso (+5 € por pedido), según la cobertura de tu dirección. No está disponible en Canarias, Ceuta y Melilla. En el checkout, elige «Pago contra entrega».</p>"
+          }
+        },
+        "q36": {
+          "type": "q",
+          "settings": {
+            "question": "¿Puedo devolverlo?",
+            "answer": "<p>Tienes 30 días desde la recepción para solicitar la devolución, según la política publicada, además del desistimiento legal de 14 días. Los gastos de devolución corren de tu cuenta salvo defecto o error nuestro. Consulta la <a href=\"/policies/refund-policy\">política de devoluciones</a>.</p>"
+          }
+        },
+        "q37": {
+          "type": "q",
+          "settings": {
+            "question": "¿Hay descuento si compro más de uno?",
+            "answer": "<p>Sí: −20 % a partir de 2 unidades y −30 % a partir de 3, aplicado automáticamente. El código de bienvenida no se acumula con los packs.</p>"
+          }
+        },
+        "q38": {
+          "type": "q",
+          "settings": {
+            "question": "¿Qué precauciones debo tener?",
+            "answer": "<p>Lee todas las advertencias del manual. Ante dolor, una lesión o una reacción inesperada, deja de usarlo y consulta a un profesional sanitario.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "q31",
+        "q32",
+        "q33",
+        "q34",
+        "q35",
+        "q36",
+        "q37",
+        "q38"
+      ]
+    },
+    "cierre": {
+      "type": "sr-cta",
+      "settings": {
+        "product": "juego-de-ventosa-electrica-con-cable",
+        "image": "shopify://shop_images/reliefpath-cierre-20260923.png",
+        "tag": "Fin de la jornada",
+        "pins": "",
+        "eyebrow": "Empieza hoy",
+        "heading": "Tu próxima pausa",
+        "heading_accent": "empieza aquí",
+        "text": "Elige tu pack, paga como prefieras y recíbelo en casa.",
+        "show_price": true,
+        "cta_text": "Quiero mi ReliefPath",
+        "cta_link": "/products/juego-de-ventosa-electrica-con-cable",
+        "trust": "Envío estándar gratis en España · Contrareembolso +5 € · 30 días para solicitar la devolución"
+      }
+    }
+  },
+  "order": [
+    "anuncio",
+    "hero",
+    "confianza",
+    "ciclo",
+    "metodo",
+    "producto",
+    "pasos",
+    "comparativa",
+    "tiempo",
+    "historia",
+    "opiniones",
+    "garantia",
+    "faq",
+    "cierre"
+  ]
+}

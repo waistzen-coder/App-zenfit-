@@ -1,0 +1,65 @@
+{% render 'sr-head' %}
+{%- liquid
+  assign p = section.settings.product
+  if p != blank
+    assign v = p.selected_or_first_available_variant
+  endif
+-%}
+<section class="sr sr-sec sr-feat" style="background:{{ section.settings.bg }}">
+  <div class="sr-w">
+    {%- if section.settings.heading != blank -%}
+      <div class="sr-head sr-center">
+        {%- if section.settings.eyebrow != blank -%}<p class="sr-eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+        <h2 class="sr-h2">{{ section.settings.heading }}{% if section.settings.heading_accent != blank %} <span class="sr-accent">{{ section.settings.heading_accent }}</span>{% endif %}</h2>
+      </div>
+    {%- endif -%}
+    <div class="sr-feat__card">
+      <a href="{{ p.url | default: '#' }}" aria-label="{{ p.title | escape }}">
+        {%- assign img = section.settings.image | default: p.featured_image -%}
+        {% render 'sr-photo', image: img, ratio: 'sq', fit: section.settings.fit, tag: section.settings.tag, tag_icon: 'spark', pins: section.settings.pins, sizes: '(min-width: 990px) 50vw, 100vw' %}
+      </a>
+      <div class="sr-feat__body">
+        <h3 class="sr-h2" style="font-size:clamp(24px,4.4vw,34px)">{{ section.settings.title | default: p.title }}</h3>
+        {%- assign rv = p.metafields.reviews.rating.value -%}
+        {%- if rv and rv.rating -%}
+          <div class="sr-rating" style="margin-top:10px"><span class="sr-stars">{% for i in (1..5) %}{% render 'sr-icon', name: 'star' %}{% endfor %}</span><strong>{{ rv.rating | round: 1 }}</strong> · {{ p.metafields.reviews.rating_count.value }} reseñas</div>
+        {%- endif -%}
+        {%- if v != blank -%}
+          <div class="sr-price">
+            <span class="sr-price__now">{{ v.price | money }}</span>
+            {%- if v.compare_at_price > v.price -%}<span class="sr-price__was">{{ v.compare_at_price | money }}</span><span class="sr-price__off">−{{ v.compare_at_price | minus: v.price | times: 100 | divided_by: v.compare_at_price }} %</span>{%- endif -%}
+          </div>
+        {%- endif -%}
+        {%- if section.settings.points != blank -%}
+          {%- assign pts = section.settings.points | newline_to_br | split: '<br />' -%}
+          <ul class="sr-checks">{%- for x in pts -%}{%- assign t = x | strip -%}{%- if t != blank -%}<li>{% render 'sr-icon', name: 'check-circle' %}<span>{{ t }}</span></li>{%- endif -%}{%- endfor -%}</ul>
+        {%- endif -%}
+        <a class="sr-btn sr-btn--block" style="margin-top:22px" href="{{ p.url | default: '#' }}">{{ section.settings.cta_text }}{% render 'sr-icon', name: 'arrow' %}</a>
+        {%- if section.settings.trust != blank -%}<p class="sr-cta__trust sr-center">{{ section.settings.trust }}</p>{%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "SR · Producto destacado",
+  "tag": "div",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Producto" },
+    { "type": "text", "id": "eyebrow", "label": "Antetítulo" },
+    { "type": "text", "id": "heading", "label": "Título de la sección" },
+    { "type": "text", "id": "heading_accent", "label": "Título (parte en color)" },
+    { "type": "image_picker", "id": "image", "label": "Imagen (vacío = la del producto)" },
+    { "type": "select", "id": "fit", "label": "Encaje", "default": "cover", "options": [ { "value": "cover", "label": "Llenar" }, { "value": "contain", "label": "Producto entero" } ] },
+    { "type": "text", "id": "tag", "label": "Etiqueta de la foto" },
+    { "type": "text", "id": "pins", "label": "Llamadas sobre la foto", "info": "x,y,texto | x,y,texto" },
+    { "type": "text", "id": "title", "label": "Nombre a mostrar (vacío = el del producto)" },
+    { "type": "textarea", "id": "points", "label": "Puntos (uno por línea)" },
+    { "type": "text", "id": "cta_text", "label": "Botón", "default": "Ver ReliefPath" },
+    { "type": "text", "id": "trust", "label": "Línea de confianza" },
+    { "type": "color", "id": "bg", "label": "Fondo", "default": "#f1f6fb" }
+  ],
+  "presets": [ { "name": "SR · Producto destacado" } ]
+}
+{% endschema %}

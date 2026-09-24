@@ -1,0 +1,19 @@
+{%- comment -%} Fuentes y estilos comunes de las secciones sr-*. Cada sección lo llama; el navegador solo los descarga una vez. {%- endcomment -%}
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+{{ 'sr.css' | asset_url | stylesheet_tag }}
+{%- comment -%}
+  En las plantillas JSON el contenedor de cada sección se llama
+  «shopify-section-template--123__contrareembolso», no «shopify-section-contrareembolso».
+  Este guardián hace que los enlaces cortos (#shopify-section-contrareembolso) encuentren
+  su sección igualmente, incluidos los de la barra fija y el cierre.
+{%- endcomment -%}
+<script>
+if(!window.__srAnchors){window.__srAnchors=1;
+  var srFind=function(h){ if(!h||h.charAt(0)!=='#'||h.length<2) return null; var id=decodeURIComponent(h.slice(1)), t=document.getElementById(id);
+    if(!t && id.indexOf('shopify-section-')===0){ t=document.querySelector('[id$="__'+id.slice(16)+'"]'); } return t; };
+  document.addEventListener('click',function(e){ var a=e.target.closest&&e.target.closest('a[href^="#"]'); if(!a) return;
+    var t=srFind(a.getAttribute('href')); if(!t) return; e.preventDefault(); t.scrollIntoView({behavior:'smooth',block:'start'}); });
+  window.addEventListener('load',function(){ var t=srFind(location.hash); if(t) t.scrollIntoView(); });
+}
+</script>

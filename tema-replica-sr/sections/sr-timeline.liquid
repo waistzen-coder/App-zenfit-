@@ -1,0 +1,43 @@
+{% render 'sr-head' %}
+<section class="sr sr-sec sr-time" style="background:{{ section.settings.bg }}">
+  <div class="sr-w">
+    <div class="sr-head sr-center">
+      {%- if section.settings.eyebrow != blank -%}<p class="sr-eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+      <h2 class="sr-h2">{{ section.settings.heading }}{% if section.settings.heading_accent != blank %} <span class="sr-accent">{{ section.settings.heading_accent }}</span>{% endif %}</h2>
+      {%- if section.settings.text != blank -%}<p class="sr-lead">{{ section.settings.text }}</p>{%- endif -%}
+    </div>
+    <ol class="sr-time__list">
+      {%- assign total = section.blocks.size -%}
+      {%- for b in section.blocks -%}
+        {%- assign pct = forloop.index | times: 100 | divided_by: total -%}
+        <li class="sr-time__it" {{ b.shopify_attributes }}>
+          <span class="sr-time__lab">{{ b.settings.label }}</span>
+          <h3 class="sr-h3">{{ b.settings.title }}</h3>
+          <p>{{ b.settings.text }}</p>
+          <div class="sr-time__bar" aria-hidden="true"><i style="width:{{ pct }}%"></i></div>
+        </li>
+      {%- endfor -%}
+    </ol>
+    {%- if section.settings.note != blank -%}<p class="sr-note sr-center">{{ section.settings.note }}</p>{%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "SR · Línea de tiempo",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Antetítulo", "default": "Tu primer mes" },
+    { "type": "text", "id": "heading", "label": "Título", "default": "De aparato nuevo" },
+    { "type": "text", "id": "heading_accent", "label": "Título (parte en color)", "default": "a hábito" },
+    { "type": "textarea", "id": "text", "label": "Texto" },
+    { "type": "text", "id": "note", "label": "Nota al pie" },
+    { "type": "color", "id": "bg", "label": "Fondo", "default": "#ffffff" }
+  ],
+  "blocks": [
+    { "type": "week", "name": "Etapa", "settings": [ { "type": "text", "id": "label", "label": "Etiqueta", "default": "Semana 1" }, { "type": "text", "id": "title", "label": "Título" }, { "type": "textarea", "id": "text", "label": "Texto" } ] }
+  ],
+  "max_blocks": 4,
+  "presets": [ { "name": "SR · Línea de tiempo", "blocks": [ { "type": "week" }, { "type": "week" }, { "type": "week" }, { "type": "week" } ] } ]
+}
+{% endschema %}

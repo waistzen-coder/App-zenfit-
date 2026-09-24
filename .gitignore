@@ -1,3 +1,7 @@
 pruebas/cod.html
 pruebas/node_modules/
 pruebas/package*.json
+
+# Salidas de la vista previa local
+tema-replica-sr/preview/*.html
+tema-replica-sr/preview/*.png

@@ -1,0 +1,41 @@
+{% render 'sr-head' %}
+<section class="sr sr-sec sr-cycle" style="background:{{ section.settings.bg }}">
+  <div class="sr-w">
+    <div class="sr-head sr-center">
+      {%- if section.settings.eyebrow != blank -%}<p class="sr-eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+      <h2 class="sr-h2">{{ section.settings.heading }}{% if section.settings.heading_accent != blank %} <span class="sr-accent">{{ section.settings.heading_accent }}</span>{% endif %}</h2>
+      {%- if section.settings.text != blank -%}<p class="sr-lead">{{ section.settings.text }}</p>{%- endif -%}
+    </div>
+    <ol class="sr-cycle__ring" style="list-style:none;margin:0;padding:0">
+      {%- for b in section.blocks -%}
+        <li class="sr-cycle__step" {{ b.shopify_attributes }}>
+          <h3 class="sr-h3">{{ b.settings.title }}</h3>
+          <p>{{ b.settings.text }}</p>
+        </li>
+      {%- endfor -%}
+    </ol>
+    {%- if section.settings.break_text != blank -%}
+      <div class="sr-cycle__break">{% render 'sr-icon', name: 'loop' %}<div class="sr-rte">{{ section.settings.break_text }}</div></div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "SR · El ciclo",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Antetítulo", "default": "El problema" },
+    { "type": "text", "id": "heading", "label": "Título", "default": "El ciclo del" },
+    { "type": "text", "id": "heading_accent", "label": "Título (parte en color)", "default": "opositor" },
+    { "type": "textarea", "id": "text", "label": "Texto" },
+    { "type": "richtext", "id": "break_text", "label": "Cómo se rompe el ciclo" },
+    { "type": "color", "id": "bg", "label": "Fondo", "default": "#ffffff" }
+  ],
+  "blocks": [
+    { "type": "step", "name": "Paso", "settings": [ { "type": "text", "id": "title", "label": "Título" }, { "type": "textarea", "id": "text", "label": "Texto" } ] }
+  ],
+  "max_blocks": 4,
+  "presets": [ { "name": "SR · El ciclo", "blocks": [ { "type": "step" }, { "type": "step" }, { "type": "step" }, { "type": "step" } ] } ]
+}
+{% endschema %}

@@ -1,0 +1,35 @@
+{%- comment -%}
+  Marco de foto común: mismo fondo, esquinas, etiqueta y llamadas en todas las imágenes.
+  Parámetros: image, ratio (sq | land | tall), fit ('contain'), tag, tag_icon, tag_light,
+  pins ("x,y,texto|x,y,texto" en % desde arriba a la izquierda), caption, alt, eager, sizes.
+{%- endcomment -%}
+<div class="sr-photo sr-photo--{{ ratio | default: 'sq' }}{% if fit == 'contain' %} sr-photo--contain{% endif %}">
+  {%- if image != blank -%}
+    {%- liquid
+      assign a = alt | default: image.alt
+      if eager
+        assign ld = 'eager'
+      else
+        assign ld = 'lazy'
+      endif
+      assign sz = sizes | default: '(min-width: 990px) 50vw, 100vw'
+    -%}
+    {{ image | image_url: width: 1400 | image_tag: loading: ld, alt: a, sizes: sz, widths: '400,600,800,1000,1200,1400' }}
+  {%- else -%}
+    {{ 'image' | placeholder_svg_tag: 'sr-ph' }}
+  {%- endif -%}
+  {%- if tag and tag != blank -%}<span class="sr-tag{% if tag_light %} sr-tag--light{% endif %}">{% if tag_icon and tag_icon != blank %}{% render 'sr-icon', name: tag_icon %}{% endif %}{{ tag }}</span>{%- endif -%}
+  {%- if pins and pins != blank -%}
+    {%- assign pl = pins | split: '|' -%}
+    {%- for pn in pl -%}
+      {%- assign parts = pn | split: ',' -%}
+      {%- if parts.size >= 3 -%}
+        {%- assign px = parts[0] | strip | plus: 0 -%}
+        {%- assign py = parts[1] | strip | plus: 0 -%}
+        {%- assign label = pn | remove_first: parts[0] | remove_first: ',' | remove_first: parts[1] | remove_first: ',' | strip -%}
+        <span class="sr-pin{% if px > 60 %} sr-pin--left{% endif %}" style="left:{{ px }}%;top:{{ py }}%"><span class="sr-pin__dot"></span><span class="sr-pin__label">{{ label }}</span></span>
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endif -%}
+  {%- if caption and caption != blank -%}<span class="sr-caption">{{ caption }}</span>{%- endif -%}
+</div>
