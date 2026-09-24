@@ -1,0 +1,35 @@
+{% render 'sr-head' %}
+<div class="sr sr-trust">
+  <div class="sr-w sr-trust__grid">
+    {%- for b in section.blocks -%}
+      <div class="sr-trust__it" {{ b.shopify_attributes }}>
+        <span class="sr-trust__ic">{% render 'sr-icon', name: b.settings.icon %}</span>
+        <div><b>{{ b.settings.title }}</b>{% if b.settings.text != blank %}<span>{{ b.settings.text }}</span>{% endif %}</div>
+      </div>
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "SR · Franja de confianza",
+  "tag": "div",
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Ventaja",
+      "settings": [
+        { "type": "select", "id": "icon", "label": "Icono", "default": "truck", "options": [
+          { "value": "truck", "label": "Envío" }, { "value": "cash", "label": "Efectivo" }, { "value": "refresh", "label": "Devolución" },
+          { "value": "shield", "label": "Escudo" }, { "value": "chat", "label": "Chat" }, { "value": "lock", "label": "Candado" },
+          { "value": "pin", "label": "Ubicación" }, { "value": "book", "label": "Estudio" }, { "value": "spark", "label": "Destello" }, { "value": "box", "label": "Caja" }
+        ] },
+        { "type": "text", "id": "title", "label": "Título", "default": "Envío gratis" },
+        { "type": "text", "id": "text", "label": "Texto" }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets": [ { "name": "SR · Franja de confianza", "blocks": [ { "type": "item" }, { "type": "item" } ] } ]
+}
+{% endschema %}

@@ -1,0 +1,219 @@
+{% render 'sr-head' %}
+{%- liquid
+  assign p = section.settings.product | default: product
+  if p != blank
+    assign v = p.selected_or_first_available_variant
+  endif
+  assign gal = section.blocks | where: 'type', 'image'
+  assign bullets = section.blocks | where: 'type', 'bullet'
+  assign seals = section.blocks | where: 'type', 'seal'
+  assign accs = section.blocks | where: 'type', 'accordion'
+-%}
+{%- if p != blank -%}
+<section class="sr sr-pdp" id="sr-pdp-{{ section.id }}" data-sr-pdp>
+  <div class="sr-w sr-pdp__grid">
+
+    <div class="sr-pdp__gal">
+      <div class="sr-gal__track" data-sr-track>
+        {%- if gal.size > 0 -%}
+          {%- for b in gal -%}
+            <div class="sr-gal__slide" {{ b.shopify_attributes }}>
+              {%- if forloop.first -%}
+                {% render 'sr-photo', image: b.settings.image, ratio: 'sq', fit: b.settings.fit, tag: b.settings.tag, tag_icon: b.settings.tag_icon, pins: b.settings.pins, alt: b.settings.image.alt, eager: true, sizes: '(min-width: 990px) 55vw, 100vw' %}
+              {%- else -%}
+                {% render 'sr-photo', image: b.settings.image, ratio: 'sq', fit: b.settings.fit, tag: b.settings.tag, tag_icon: b.settings.tag_icon, pins: b.settings.pins, alt: b.settings.image.alt, sizes: '(min-width: 990px) 55vw, 100vw' %}
+              {%- endif -%}
+            </div>
+          {%- endfor -%}
+        {%- else -%}
+          {%- for m in p.media -%}{%- if m.media_type == 'image' -%}
+            <div class="sr-gal__slide">
+              {%- if forloop.first -%}
+                {% render 'sr-photo', image: m.preview_image, ratio: 'sq', alt: m.alt, eager: true, sizes: '(min-width: 990px) 55vw, 100vw' %}
+              {%- else -%}
+                {% render 'sr-photo', image: m.preview_image, ratio: 'sq', alt: m.alt, sizes: '(min-width: 990px) 55vw, 100vw' %}
+              {%- endif -%}
+            </div>
+          {%- endif -%}{%- endfor -%}
+        {%- endif -%}
+      </div>
+      <div class="sr-gal__dots" data-sr-dots></div>
+      <div class="sr-gal__thumbs" data-sr-thumbs>
+        {%- if gal.size > 0 -%}
+          {%- for b in gal -%}{%- if b.settings.image != blank -%}
+            <button type="button" aria-label="Ver imagen {{ forloop.index }}"{% if forloop.first %} class="is-on"{% endif %}>{{ b.settings.image | image_url: width: 180 | image_tag: loading: 'lazy', alt: '' }}</button>
+          {%- endif -%}{%- endfor -%}
+        {%- else -%}
+          {%- for m in p.media -%}{%- if m.media_type == 'image' -%}
+            <button type="button" aria-label="Ver imagen {{ forloop.index }}"{% if forloop.first %} class="is-on"{% endif %}>{{ m.preview_image | image_url: width: 180 | image_tag: loading: 'lazy', alt: '' }}</button>
+          {%- endif -%}{%- endfor -%}
+        {%- endif -%}
+      </div>
+    </div>
+
+    <div class="sr-pdp__info">
+      {%- if section.settings.badges != blank -%}
+        <div class="sr-badges">{%- assign bs = section.settings.badges | split: '|' -%}{%- for x in bs -%}<span class="sr-badge">{{ x | strip }}</span>{%- endfor -%}</div>
+      {%- endif -%}
+      <h1 class="sr-h1">{{ section.settings.heading | default: p.title }}</h1>
+      {%- assign rv = p.metafields.reviews.rating.value -%}
+      {%- if rv and rv.rating -%}
+        <div class="sr-rating"><span class="sr-stars">{% for i in (1..5) %}{% render 'sr-icon', name: 'star' %}{% endfor %}</span><strong>{{ rv.rating | round: 1 }}</strong> · {{ p.metafields.reviews.rating_count.value }} reseñas</div>
+      {%- endif -%}
+      {%- if section.settings.sub != blank -%}<p class="sr-pdp__sub">{{ section.settings.sub }}</p>{%- endif -%}
+
+      <div class="sr-price">
+        <span class="sr-price__now">{{ v.price | money }}</span>
+        {%- if v.compare_at_price > v.price -%}
+          <span class="sr-price__was">{{ v.compare_at_price | money }}</span>
+          <span class="sr-price__off">−{{ v.compare_at_price | minus: v.price | times: 100 | divided_by: v.compare_at_price }} %</span>
+        {%- endif -%}
+      </div>
+      {%- if v.compare_at_price > v.price and section.settings.save_label != blank -%}
+        <p class="sr-pdp__save">{{ section.settings.save_label }} {{ v.compare_at_price | minus: v.price | money }}</p>
+      {%- endif -%}
+      {%- if section.settings.price_note != blank -%}<p class="sr-note" style="margin-top:6px">{{ section.settings.price_note }}</p>{%- endif -%}
+
+      {%- if bullets.size > 0 -%}
+        <ul class="sr-checks">
+          {%- for b in bullets -%}<li {{ b.shopify_attributes }}>{% render 'sr-icon', name: 'check-circle' %}<span>{{ b.settings.text }}</span></li>{%- endfor -%}
+        </ul>
+      {%- endif -%}
+
+      <div class="sr-pdp__cta">
+        {%- if v.available -%}
+          {%- if section.settings.cta_mode == 'anchor' -%}
+            <a class="sr-btn sr-btn--block" href="{{ section.settings.cta_anchor }}" data-sr-scroll>{{ section.settings.cta_text }}{% render 'sr-icon', name: 'down' %}</a>
+          {%- else -%}
+            <button type="button" class="sr-btn sr-btn--block" data-sr-buy data-variant="{{ v.id }}">{% render 'sr-icon', name: 'lock' %}<span>{{ section.settings.cta_text }}</span></button>
+            <p class="sr-note" data-sr-err hidden>No hemos podido añadirlo. Recarga la página o escríbenos.</p>
+          {%- endif -%}
+        {%- else -%}
+          <button type="button" class="sr-btn sr-btn--block" disabled>{{ section.settings.soldout_text }}</button>
+        {%- endif -%}
+        {%- if section.settings.under != blank -%}<p class="sr-pdp__under">{{ section.settings.under }}</p>{%- endif -%}
+        {%- if section.settings.alt_text != blank -%}<a class="sr-pdp__alt sr-link" href="{{ section.settings.alt_link }}" data-sr-scroll>{{ section.settings.alt_text }}</a>{%- endif -%}
+      </div>
+
+      {%- if seals.size > 0 -%}
+        <div class="sr-seals">
+          {%- for b in seals -%}<div {{ b.shopify_attributes }}>{% render 'sr-icon', name: b.settings.icon %}<span>{{ b.settings.text }}</span></div>{%- endfor -%}
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.show_payment -%}
+        <div class="sr-pay" aria-label="Formas de pago">{%- for t in shop.enabled_payment_types -%}{{ t | payment_type_svg_tag }}{%- endfor -%}</div>
+      {%- endif -%}
+
+      {%- if accs.size > 0 -%}
+        <div class="sr-acc">
+          {%- for b in accs -%}
+            <details {{ b.shopify_attributes }}>
+              <summary>{% render 'sr-icon', name: b.settings.icon %}<span>{{ b.settings.title }}</span>{% render 'sr-icon', name: 'plus' %}</summary>
+              <div class="sr-acc__c sr-rte">{{ b.settings.content }}</div>
+            </details>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{%- if section.settings.show_schema -%}
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Product","name":{{ p.title | json }},"url":{{ request.origin | append: p.url | json }},{% if p.featured_image %}"image":[{{ p.featured_image | image_url: width: 1200 | prepend: 'https:' | json }}],{% endif %}"description":{{ p.description | strip_html | truncatewords: 60 | json }},"brand":{"@type":"Brand","name":{{ p.vendor | json }}},"sku":{{ v.sku | json }},"offers":{"@type":"Offer","priceCurrency":{{ cart.currency.iso_code | json }},"price":{{ v.price | divided_by: 100.0 | json }},"availability":"https://schema.org/{% if v.available %}InStock{% else %}OutOfStock{% endif %}","url":{{ request.origin | append: p.url | json }}}}
+</script>
+{%- endif -%}
+
+<script>
+(function(){
+  var root=document.getElementById('sr-pdp-{{ section.id }}'); if(!root) return;
+  var track=root.querySelector('[data-sr-track]'),slides=track?track.children:[],dots=root.querySelector('[data-sr-dots]'),thumbs=root.querySelectorAll('[data-sr-thumbs] button');
+  function go(i){ if(!slides[i]) return; track.scrollTo({left:slides[i].offsetLeft-track.offsetLeft,behavior:'smooth'}); }
+  if(dots && slides.length>1){ for(var i=0;i<slides.length;i++){ (function(i){ var b=document.createElement('button'); b.type='button'; b.setAttribute('aria-label','Imagen '+(i+1)); if(i===0) b.className='is-on'; b.addEventListener('click',function(){go(i)}); dots.appendChild(b); })(i); } }
+  thumbs.forEach(function(t,i){ t.addEventListener('click',function(){ go(i); }); });
+  var tick;
+  if(track) track.addEventListener('scroll',function(){ clearTimeout(tick); tick=setTimeout(function(){
+    var i=Math.round(track.scrollLeft/track.clientWidth);
+    if(dots) Array.prototype.forEach.call(dots.children,function(d,k){ d.classList.toggle('is-on',k===i); });
+    thumbs.forEach(function(t,k){ t.classList.toggle('is-on',k===i); });
+  },60); },{passive:true});
+  var buy=root.querySelector('[data-sr-buy]');
+  if(buy){ buy.addEventListener('click',function(){
+    buy.disabled=true;
+    fetch('/cart/add.js',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({items:[{id:+buy.dataset.variant,quantity:1}]})})
+      .then(function(r){ if(!r.ok) throw 0; window.location.href='/checkout'; })
+      .catch(function(){ buy.disabled=false; var e=root.querySelector('[data-sr-err]'); if(e) e.hidden=false; });
+  }); }
+})();
+</script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "SR · Ficha de producto",
+  "tag": "div",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Producto (vacío = el de la página)" },
+    { "type": "text", "id": "badges", "label": "Etiquetas (separadas por |)", "default": "Método Pausa|Para opositores" },
+    { "type": "text", "id": "heading", "label": "Título (vacío = nombre del producto)" },
+    { "type": "textarea", "id": "sub", "label": "Subtítulo" },
+    { "type": "text", "id": "save_label", "label": "Texto de ahorro", "default": "Ahorras" },
+    { "type": "text", "id": "price_note", "label": "Nota bajo el precio" },
+    { "type": "header", "content": "Botón" },
+    { "type": "select", "id": "cta_mode", "label": "Qué hace el botón", "default": "anchor", "options": [
+      { "value": "anchor", "label": "Bajar a la caja de compra" },
+      { "value": "checkout", "label": "Ir directo al pago con 1 unidad" }
+    ] },
+    { "type": "text", "id": "cta_text", "label": "Texto del botón", "default": "Elegir pack y forma de pago" },
+    { "type": "text", "id": "cta_anchor", "label": "Ancla de la caja de compra", "default": "#shopify-section-contrareembolso" },
+    { "type": "text", "id": "soldout_text", "label": "Agotado", "default": "Agotado" },
+    { "type": "text", "id": "under", "label": "Texto bajo el botón" },
+    { "type": "text", "id": "alt_text", "label": "Enlace secundario" },
+    { "type": "text", "id": "alt_link", "label": "Destino del enlace secundario", "default": "#shopify-section-contrareembolso" },
+    { "type": "checkbox", "id": "show_payment", "label": "Mostrar formas de pago", "default": true },
+    { "type": "checkbox", "id": "show_schema", "label": "Datos estructurados de producto", "default": true }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Foto de galería",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Imagen" },
+        { "type": "select", "id": "fit", "label": "Encaje", "default": "cover", "options": [ { "value": "cover", "label": "Llenar" }, { "value": "contain", "label": "Producto entero" } ] },
+        { "type": "text", "id": "tag", "label": "Etiqueta" },
+        { "type": "select", "id": "tag_icon", "label": "Icono de la etiqueta", "default": "spark", "options": [
+          { "value": "spark", "label": "Destello" }, { "value": "sun", "label": "Luz" }, { "value": "flame", "label": "Calor" }, { "value": "wave", "label": "Succión" },
+          { "value": "timer", "label": "Temporizador" }, { "value": "moon", "label": "Luna" }, { "value": "book", "label": "Libro" }, { "value": "box", "label": "Caja" }, { "value": "truck", "label": "Envío" }
+        ] },
+        { "type": "text", "id": "pins", "label": "Llamadas", "info": "x,y,texto | x,y,texto" }
+      ]
+    },
+    { "type": "bullet", "name": "Viñeta", "settings": [ { "type": "text", "id": "text", "label": "Texto" } ] },
+    {
+      "type": "seal",
+      "name": "Sello",
+      "settings": [
+        { "type": "select", "id": "icon", "label": "Icono", "default": "truck", "options": [
+          { "value": "truck", "label": "Envío" }, { "value": "cash", "label": "Efectivo" }, { "value": "refresh", "label": "Devolución" },
+          { "value": "shield", "label": "Escudo" }, { "value": "chat", "label": "Chat" }, { "value": "lock", "label": "Candado" }
+        ] },
+        { "type": "text", "id": "text", "label": "Texto" }
+      ]
+    },
+    {
+      "type": "accordion",
+      "name": "Desplegable",
+      "settings": [
+        { "type": "select", "id": "icon", "label": "Icono", "default": "info", "options": [
+          { "value": "info", "label": "Información" }, { "value": "truck", "label": "Envío" }, { "value": "refresh", "label": "Devolución" },
+          { "value": "box", "label": "Caja" }, { "value": "book", "label": "Manual" }, { "value": "shield", "label": "Escudo" }
+        ] },
+        { "type": "text", "id": "title", "label": "Título" },
+        { "type": "richtext", "id": "content", "label": "Contenido" }
+      ]
+    }
+  ],
+  "presets": [ { "name": "SR · Ficha de producto" } ]
+}
+{% endschema %}

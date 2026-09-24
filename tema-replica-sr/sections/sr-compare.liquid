@@ -1,0 +1,79 @@
+{% render 'sr-head' %}
+{%- comment -%} En cada celda: "si" pinta un check, "no" una cruz, y cualquier otro texto se escribe tal cual. {%- endcomment -%}
+<section class="sr sr-sec sr-compare" style="background:{{ section.settings.bg }}">
+  <div class="sr-w">
+    <div class="sr-head sr-center">
+      {%- if section.settings.eyebrow != blank -%}<p class="sr-eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+      <h2 class="sr-h2">{{ section.settings.heading }}{% if section.settings.heading_accent != blank %} <span class="sr-accent">{{ section.settings.heading_accent }}</span>{% endif %}</h2>
+      {%- if section.settings.text != blank -%}<p class="sr-lead">{{ section.settings.text }}</p>{%- endif -%}
+    </div>
+    <div class="sr-table-wrap">
+      <table class="sr-table">
+        <thead>
+          <tr>
+            <th scope="col"><span class="visually-hidden">Característica</span></th>
+            <th scope="col" class="is-us">{{ section.settings.col_us }}</th>
+            {%- if section.settings.col_a != blank -%}<th scope="col">{{ section.settings.col_a }}</th>{%- endif -%}
+            {%- if section.settings.col_b != blank -%}<th scope="col">{{ section.settings.col_b }}</th>{%- endif -%}
+            {%- if section.settings.col_c != blank -%}<th scope="col">{{ section.settings.col_c }}</th>{%- endif -%}
+          </tr>
+        </thead>
+        <tbody>
+          {%- for b in section.blocks -%}
+            <tr {{ b.shopify_attributes }}>
+              <th scope="row">{{ b.settings.feature }}</th>
+              {%- assign cells = 'us,a,b,c' | split: ',' -%}
+              {%- for c in cells -%}
+                {%- assign colkey = 'col_' | append: c -%}
+                {%- if c == 'us' or section.settings[colkey] != blank -%}
+                  {%- assign v = b.settings[c] | strip -%}
+                  {%- assign vd = v | downcase -%}
+                  <td{% if c == 'us' %} class="is-us"{% endif %}>
+                    {%- if vd == 'si' or vd == 'sí' -%}{% render 'sr-icon', name: 'check-circle', class: 'sr-ic--ok' %}<span class="visually-hidden">Sí</span>
+                    {%- elsif vd == 'no' -%}{% render 'sr-icon', name: 'x', class: 'sr-ic--no' %}<span class="visually-hidden">No</span>
+                    {%- else -%}{{ v }}{%- endif -%}
+                  </td>
+                {%- endif -%}
+              {%- endfor -%}
+            </tr>
+          {%- endfor -%}
+        </tbody>
+      </table>
+    </div>
+    {%- if section.settings.note != blank -%}<p class="sr-note sr-center">{{ section.settings.note }}</p>{%- endif -%}
+  </div>
+</section>
+<style>.sr .visually-hidden{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}</style>
+
+{% schema %}
+{
+  "name": "SR · Comparativa",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Antetítulo", "default": "Compáralo" },
+    { "type": "text", "id": "heading", "label": "Título", "default": "¿Cómo te tomas" },
+    { "type": "text", "id": "heading_accent", "label": "Título (parte en color)", "default": "tus pausas?" },
+    { "type": "textarea", "id": "text", "label": "Texto" },
+    { "type": "text", "id": "col_us", "label": "Columna destacada", "default": "ReliefPath™" },
+    { "type": "text", "id": "col_a", "label": "Columna 2", "default": "Pausa con el móvil" },
+    { "type": "text", "id": "col_b", "label": "Columna 3", "default": "Cita de masaje" },
+    { "type": "text", "id": "col_c", "label": "Columna 4 (opcional)" },
+    { "type": "text", "id": "note", "label": "Nota al pie" },
+    { "type": "color", "id": "bg", "label": "Fondo", "default": "#f1f6fb" }
+  ],
+  "blocks": [
+    {
+      "type": "row",
+      "name": "Fila",
+      "settings": [
+        { "type": "text", "id": "feature", "label": "Característica" },
+        { "type": "text", "id": "us", "label": "Destacada", "default": "si", "info": "si = check · no = cruz · otro texto = se escribe tal cual" },
+        { "type": "text", "id": "a", "label": "Columna 2", "default": "no" },
+        { "type": "text", "id": "b", "label": "Columna 3", "default": "no" },
+        { "type": "text", "id": "c", "label": "Columna 4", "default": "no" }
+      ]
+    }
+  ],
+  "presets": [ { "name": "SR · Comparativa", "blocks": [ { "type": "row" }, { "type": "row" }, { "type": "row" } ] } ]
+}
+{% endschema %}

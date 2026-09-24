@@ -1,0 +1,65 @@
+{% render 'sr-head' %}
+<section class="sr sr-sec sr-method" style="background:{{ section.settings.bg }}">
+  <div class="sr-w">
+    <div class="sr-head sr-center">
+      {%- if section.settings.eyebrow != blank -%}<p class="sr-eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+      <h2 class="sr-h2">{{ section.settings.heading }}{% if section.settings.heading_accent != blank %} <span class="sr-accent">{{ section.settings.heading_accent }}</span>{% endif %}</h2>
+      {%- if section.settings.text != blank -%}<p class="sr-lead">{{ section.settings.text }}</p>{%- endif -%}
+    </div>
+    <div class="sr-method__grid">
+      {%- for b in section.blocks -%}
+        <article class="sr-part" {{ b.shopify_attributes }}>
+          {% render 'sr-photo', image: b.settings.image, ratio: 'land', tag: b.settings.tag, tag_icon: b.settings.tag_icon, pins: b.settings.pins, sizes: '(min-width: 990px) 50vw, 100vw' %}
+          <div class="sr-part__body">
+            <h3 class="sr-h3" style="font-size:22px">{{ b.settings.title }}</h3>
+            {%- if b.settings.text != blank -%}<p>{{ b.settings.text }}</p>{%- endif -%}
+            {%- if b.settings.points != blank -%}
+              {%- assign pts = b.settings.points | newline_to_br | split: '<br />' -%}
+              <ul class="sr-checks">
+                {%- for x in pts -%}{%- assign t = x | strip -%}{%- if t != blank -%}<li>{% render 'sr-icon', name: 'check-circle' %}<span>{{ t }}</span></li>{%- endif -%}{%- endfor -%}
+              </ul>
+            {%- endif -%}
+          </div>
+        </article>
+      {%- endfor -%}
+    </div>
+    {%- if section.settings.cta_text != blank -%}
+      <div class="sr-method__plus"><a class="sr-btn" href="{{ section.settings.cta_link }}">{{ section.settings.cta_text }}{% render 'sr-icon', name: 'arrow' %}</a></div>
+    {%- endif -%}
+    {%- if section.settings.note != blank -%}<p class="sr-note sr-center">{{ section.settings.note }}</p>{%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "SR · Método 2 momentos",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Antetítulo", "default": "El Método Pausa" },
+    { "type": "text", "id": "heading", "label": "Título", "default": "Dos momentos." },
+    { "type": "text", "id": "heading_accent", "label": "Título (parte en color)", "default": "Un solo aparato." },
+    { "type": "textarea", "id": "text", "label": "Texto" },
+    { "type": "text", "id": "cta_text", "label": "Botón" },
+    { "type": "url", "id": "cta_link", "label": "Enlace del botón" },
+    { "type": "text", "id": "note", "label": "Nota al pie" },
+    { "type": "color", "id": "bg", "label": "Fondo", "default": "#f1f6fb" }
+  ],
+  "blocks": [
+    {
+      "type": "part",
+      "name": "Momento",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Imagen" },
+        { "type": "text", "id": "tag", "label": "Etiqueta de la foto", "default": "Entre bloques" },
+        { "type": "select", "id": "tag_icon", "label": "Icono de la etiqueta", "default": "timer", "options": [ { "value": "timer", "label": "Temporizador" }, { "value": "moon", "label": "Luna" }, { "value": "sun", "label": "Sol" }, { "value": "book", "label": "Libro" } ] },
+        { "type": "text", "id": "pins", "label": "Llamadas sobre la foto", "info": "x,y,texto | x,y,texto" },
+        { "type": "text", "id": "title", "label": "Título" },
+        { "type": "textarea", "id": "text", "label": "Texto" },
+        { "type": "textarea", "id": "points", "label": "Puntos (uno por línea)" }
+      ]
+    }
+  ],
+  "max_blocks": 3,
+  "presets": [ { "name": "SR · Método 2 momentos", "blocks": [ { "type": "part" }, { "type": "part" } ] } ]
+}
+{% endschema %}

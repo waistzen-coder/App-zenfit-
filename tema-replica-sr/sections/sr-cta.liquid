@@ -1,0 +1,54 @@
+{% render 'sr-head' %}
+{%- liquid
+  assign p = section.settings.product | default: product
+  if p != blank
+    assign v = p.selected_or_first_available_variant
+  endif
+  assign link = section.settings.cta_link
+  if link == blank and p != blank
+    assign link = p.url
+  endif
+-%}
+<section class="sr sr-sec sr-cta">
+  <div class="sr-w sr-cta__grid">
+    <div>{% render 'sr-photo', image: section.settings.image, ratio: 'land', tag: section.settings.tag, tag_icon: 'moon', pins: section.settings.pins, sizes: '(min-width: 990px) 50vw, 100vw' %}</div>
+    <div>
+      {%- if section.settings.eyebrow != blank -%}<p class="sr-eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+      <h2 class="sr-h2">{{ section.settings.heading }}{% if section.settings.heading_accent != blank %} <span class="sr-accent">{{ section.settings.heading_accent }}</span>{% endif %}</h2>
+      {%- if section.settings.text != blank -%}<p class="sr-lead">{{ section.settings.text }}</p>{%- endif -%}
+      {%- if v != blank and section.settings.show_price -%}
+        <div class="sr-price">
+          <span class="sr-price__now">{{ v.price | money }}</span>
+          {%- if v.compare_at_price > v.price -%}
+            <span class="sr-price__was">{{ v.compare_at_price | money }}</span>
+            <span class="sr-price__off">−{{ v.compare_at_price | minus: v.price | times: 100 | divided_by: v.compare_at_price }} %</span>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+      <a class="sr-btn sr-cta__btn" href="{{ link }}">{{ section.settings.cta_text }}{% render 'sr-icon', name: 'arrow' %}</a>
+      {%- if section.settings.trust != blank -%}<p class="sr-cta__trust">{{ section.settings.trust }}</p>{%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "SR · Cierre",
+  "tag": "div",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Producto (vacío = el de la página)" },
+    { "type": "image_picker", "id": "image", "label": "Imagen" },
+    { "type": "text", "id": "tag", "label": "Etiqueta de la foto" },
+    { "type": "text", "id": "pins", "label": "Llamadas sobre la foto", "info": "x,y,texto | x,y,texto" },
+    { "type": "text", "id": "eyebrow", "label": "Antetítulo" },
+    { "type": "text", "id": "heading", "label": "Título", "default": "Tu próxima pausa" },
+    { "type": "text", "id": "heading_accent", "label": "Título (parte en color)", "default": "empieza aquí" },
+    { "type": "textarea", "id": "text", "label": "Texto" },
+    { "type": "checkbox", "id": "show_price", "label": "Mostrar precio", "default": true },
+    { "type": "text", "id": "cta_text", "label": "Botón", "default": "Quiero mi ReliefPath" },
+    { "type": "text", "id": "cta_link", "label": "Enlace del botón", "info": "Vacío = página del producto. En la ficha, usa #shopify-section-contrareembolso para bajar a la caja de compra." },
+    { "type": "text", "id": "trust", "label": "Línea de confianza" }
+  ],
+  "presets": [ { "name": "SR · Cierre" } ]
+}
+{% endschema %}

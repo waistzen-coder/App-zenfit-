@@ -1,0 +1,53 @@
+{% render 'sr-head' %}
+<section class="sr sr-sec sr-box" style="background:{{ section.settings.bg }}">
+  <div class="sr-w sr-box__grid">
+    <div>
+      {% render 'sr-photo', image: section.settings.image, ratio: 'sq', fit: section.settings.fit, tag: section.settings.tag, tag_icon: 'box', pins: section.settings.pins, sizes: '(min-width: 990px) 50vw, 100vw' %}
+    </div>
+    <div>
+      {%- if section.settings.eyebrow != blank -%}<p class="sr-eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+      <h2 class="sr-h2">{{ section.settings.heading }}{% if section.settings.heading_accent != blank %} <span class="sr-accent">{{ section.settings.heading_accent }}</span>{% endif %}</h2>
+      {%- if section.settings.text != blank -%}<p class="sr-lead">{{ section.settings.text }}</p>{%- endif -%}
+      <ul class="sr-box__list">
+        {%- for b in section.blocks -%}
+          <li {{ b.shopify_attributes }}><span class="sr-trust__ic">{% render 'sr-icon', name: b.settings.icon %}</span><div><b>{{ b.settings.title }}</b>{% if b.settings.text != blank %}<span>{{ b.settings.text }}</span>{% endif %}</div></li>
+        {%- endfor -%}
+      </ul>
+      {%- if section.settings.note != blank -%}<p class="sr-note">{{ section.settings.note }}</p>{%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "SR · Qué incluye",
+  "tag": "div",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Imagen" },
+    { "type": "select", "id": "fit", "label": "Encaje de la imagen", "default": "cover", "options": [ { "value": "cover", "label": "Llenar" }, { "value": "contain", "label": "Producto entero" } ] },
+    { "type": "text", "id": "tag", "label": "Etiqueta de la foto", "default": "En tu pedido" },
+    { "type": "text", "id": "pins", "label": "Llamadas sobre la foto", "info": "x,y,texto | x,y,texto" },
+    { "type": "text", "id": "eyebrow", "label": "Antetítulo", "default": "Qué incluye" },
+    { "type": "text", "id": "heading", "label": "Título", "default": "Todo lo que llega" },
+    { "type": "text", "id": "heading_accent", "label": "Título (parte en color)", "default": "a tu casa" },
+    { "type": "textarea", "id": "text", "label": "Texto" },
+    { "type": "text", "id": "note", "label": "Nota" },
+    { "type": "color", "id": "bg", "label": "Fondo", "default": "#ffffff" }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Elemento",
+      "settings": [
+        { "type": "select", "id": "icon", "label": "Icono", "default": "check-circle", "options": [
+          { "value": "check-circle", "label": "Check" }, { "value": "wave", "label": "Succión" }, { "value": "flame", "label": "Calor" }, { "value": "sun", "label": "Luz" },
+          { "value": "book", "label": "Manual" }, { "value": "box", "label": "Caja" }, { "value": "chat", "label": "Chat" }, { "value": "spark", "label": "Destello" }
+        ] },
+        { "type": "text", "id": "title", "label": "Título" },
+        { "type": "text", "id": "text", "label": "Texto" }
+      ]
+    }
+  ],
+  "presets": [ { "name": "SR · Qué incluye", "blocks": [ { "type": "item" }, { "type": "item" }, { "type": "item" } ] } ]
+}
+{% endschema %}

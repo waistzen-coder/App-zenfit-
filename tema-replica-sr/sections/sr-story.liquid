@@ -1,0 +1,41 @@
+{% render 'sr-head' %}
+<section class="sr sr-sec sr-story" style="background:{{ section.settings.bg }}">
+  <div class="sr-w sr-story__grid">
+    <div>
+      {% render 'sr-photo', image: section.settings.image, ratio: 'tall', tag: section.settings.tag, tag_icon: 'pin', tag_light: true, caption: section.settings.caption, sizes: '(min-width: 990px) 45vw, 100vw' %}
+    </div>
+    <div>
+      {%- if section.settings.eyebrow != blank -%}<p class="sr-eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+      <h2 class="sr-h2">{{ section.settings.heading }}{% if section.settings.heading_accent != blank %} <span class="sr-accent">{{ section.settings.heading_accent }}</span>{% endif %}</h2>
+      {%- if section.settings.text != blank -%}<div class="sr-lead sr-rte">{{ section.settings.text }}</div>{%- endif -%}
+      {%- if section.settings.quote != blank -%}<blockquote class="sr-quote">{{ section.settings.quote }}</blockquote>{%- endif -%}
+      {%- if section.settings.name != blank -%}
+        <div class="sr-story__sign"><b>{{ section.settings.name }}</b>{% if section.settings.role != blank %}<span>{{ section.settings.role }}</span>{% endif %}</div>
+      {%- endif -%}
+      {%- if section.settings.cta_text != blank -%}<a class="sr-btn sr-btn--ghost" style="margin-top:24px" href="{{ section.settings.cta_link }}">{{ section.settings.cta_text }}</a>{%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "SR · Nuestra historia",
+  "tag": "div",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Imagen" },
+    { "type": "text", "id": "tag", "label": "Etiqueta de la foto" },
+    { "type": "text", "id": "caption", "label": "Pie de foto" },
+    { "type": "text", "id": "eyebrow", "label": "Antetítulo", "default": "Quiénes somos" },
+    { "type": "text", "id": "heading", "label": "Título" },
+    { "type": "text", "id": "heading_accent", "label": "Título (parte en color)" },
+    { "type": "richtext", "id": "text", "label": "Texto" },
+    { "type": "text", "id": "quote", "label": "Frase destacada" },
+    { "type": "text", "id": "name", "label": "Firma" },
+    { "type": "text", "id": "role", "label": "Cargo / lugar" },
+    { "type": "text", "id": "cta_text", "label": "Botón" },
+    { "type": "url", "id": "cta_link", "label": "Enlace del botón" },
+    { "type": "color", "id": "bg", "label": "Fondo", "default": "#ffffff" }
+  ],
+  "presets": [ { "name": "SR · Nuestra historia" } ]
+}
+{% endschema %}
