@@ -1,0 +1,223 @@
+/* ==========================================================================
+   Calmia — ajuste móvil
+   Se carga después de calmia.css y de los <style> de cada sección.
+   Corrige el desbordamiento horizontal (que hacía que iOS reescalara la
+   página entera) y afina tamaños en pantallas pequeñas.
+   ========================================================================== */
+
+/* Nada del sistema puede ensanchar el documento */
+.cal { max-width: 100%; }
+
+@media (max-width: 989px) {
+  /* clip (y no hidden) para no crear contenedor de scroll ni romper sticky */
+  .cal { overflow-x: clip; }
+}
+
+/* Los hijos de rejilla y flex deben poder encoger por debajo de su contenido
+   mínimo; sin esto, la tira de miniaturas ensanchaba toda la columna. */
+.cal .calmia-hero__grid > *,
+.cal .calmia-gallery,
+.cal .calmia-buy,
+.cal .calmia-gift__body,
+.cal .calmia-sticky__info,
+.cal .calmia-reviews__head > *,
+.cal .calmia-band__item > *,
+.cal .calmia-feature__row > *,
+.cal .calmia-acc__item summary > *,
+.cal .cal-check > span { min-width: 0; }
+
+.cal h1,
+.cal h2,
+.cal h3,
+.cal p,
+.cal li,
+.cal td,
+.cal th { overflow-wrap: break-word; }
+
+/* --- Galería: sin recortes ni estirados ---------------------------------- */
+.cal .calmia-gallery__main { background: #fff; }
+.cal .calmia-gallery__main img {
+  width: 100%;
+  height: auto;
+  /* proporción real de la imagen; el segundo valor solo reserva sitio
+     mientras carga, para que no salte el layout */
+  aspect-ratio: auto 1 / 1;
+  object-fit: contain;
+  /* En tráfico de pago el precio y los packs tienen que entrar pronto: con
+     78vh la galería se comía la primera pantalla entera y el botón quedaba a
+     dos scrolls. 60vh deja ver el arranque de la caja de compra sin recortar
+     la foto (sigue siendo object-fit: contain). */
+  max-height: 60vh;
+}
+.cal .calmia-gallery__thumbs { max-width: 100%; }
+
+/* --- Contenedores que se desplazan por dentro ---------------------------- */
+.cal .calmia-compare__scroll,
+.cal .calmia-ugc__rail { max-width: 100%; }
+
+/* --- Mini reseña de la caja de compra: dos columnas, no tres ------------- */
+.cal .calmia-quote {
+  grid-template-columns: 42px 1fr;
+  align-items: start;
+  row-gap: 4px;
+  column-gap: 12px;
+}
+.cal .calmia-quote__avatar { grid-column: 1; grid-row: 1 / span 2; }
+.cal .calmia-quote .cal-stars { grid-column: 2; grid-row: 1; }
+.cal .calmia-quote__text { grid-column: 2; grid-row: 2; }
+
+@media (min-width: 990px) {
+  /* En escritorio la galería sí lleva proporción fija para no desbordar el alto */
+  .cal .calmia-gallery__main img { aspect-ratio: 4 / 5; }
+  .cal .calmia-gallery { align-self: start; }
+}
+
+@media (max-width: 749px) {
+  /* --- La primera pantalla ------------------------------------------------
+     Objetivo: que el precio entre sin hacer scroll. En un móvil de 800 px
+     quedan ~740 útiles y por encima del titular hay dos bandas, la cabecera
+     del tema, las chapas, la foto y las miniaturas. Cada bloque de aquí
+     recorta unos pocos píxeles; juntos suben el precio por encima del corte.
+     Si la foto se te queda pequeña, sube el max-height de abajo. --------- */
+  .cal .calmia-marquee__timer { padding: 6px 14px 5px; font-size: 12.5px; }
+  .cal .calmia-marquee__clock b { padding: 1px 5px; font-size: 13px; }
+  .cal .calmia-marquee__row { padding: 7px 5px; }
+  .cal .calmia-gallery__main img { max-height: 34vh; }
+  .cal .calmia-gallery { gap: 8px; }
+
+  /* Orden de lectura en móvil.
+     En el HTML el subtítulo va entre el titular y el precio porque en
+     escritorio, con las dos columnas, ahí se lee bien. En móvil todo cae en
+     una sola columna y ese párrafo mete ~58 px justo en el punto donde el
+     precio decide si entra o no en la primera pantalla. Aquí se baja debajo
+     del precio: el cliente ve titular → precio → ahorro sin tocar nada, y el
+     párrafo sigue estando, solo que un dedo más abajo.
+     `.calmia-buy > *` lleva order alto porque lo que no se nombra abajo se
+     queda al final, no al principio (el valor por defecto es 0). */
+  .cal .calmia-buy { display: flex; flex-direction: column; }
+  .cal .calmia-buy > * { order: 10; }
+  .cal .calmia-buy > .cal-eyebrow { order: 1; }
+  .cal .calmia-buy > .cal-h1 { order: 2; }
+  .cal .calmia-buy > .calmia-rating { order: 3; }
+  .cal .calmia-buy > .calmia-price { order: 4; }
+  .cal .calmia-buy > .calmia-save { order: 5; }
+  /* El margen superior del párrafo ya no toca al titular sino al bloque de
+     ahorro, así que se iguala al aire del resto de la columna. */
+  .cal .calmia-buy > .cal-lead { order: 6; margin-top: 16px; }
+  .cal .calmia-buy > .calmia-usps { order: 7; }
+
+  .cal .cal-wrap { padding: 0 16px; }
+  .cal .cal-sec { padding: 44px 0; }
+
+  .cal .cal-h1 { font-size: 32px; line-height: 1.06; }
+  .cal .cal-h2 { font-size: 26px; }
+  .cal .cal-h3 { font-size: 19px; }
+  .cal .cal-lead { font-size: 15.5px; margin-top: 8px; }
+  .cal .cal-sub { font-size: 14.5px; margin-bottom: 22px; }
+  .cal .cal-eyebrow { font-size: 11px; letter-spacing: 0.26em; margin-bottom: 6px; }
+  .cal .cal-check { font-size: 15px; gap: 10px; grid-template-columns: 26px 1fr; }
+  .cal .cal-check i { width: 26px; height: 26px; }
+  .cal .cal-check i svg { width: 13px; height: 13px; }
+
+  .cal .calmia-hero { padding: 8px 0 34px; }
+  .cal .calmia-hero__grid { gap: 12px; }
+  .cal .calmia-hero__badges { margin-bottom: 10px; }
+  .cal .cal-pill { font-size: 11px; padding: 6px 13px; }
+  .cal .cal-pill--pink { font-size: 13px; }
+
+  .cal .calmia-gallery__thumb { width: 48px; height: 48px; border-radius: 10px; }
+  .cal .calmia-gallery__thumbs { gap: 7px; }
+
+  .cal .calmia-rating { font-size: 15px; gap: 7px; }
+  .cal .calmia-rating .cal-stars svg { width: 17px; height: 17px; }
+  .cal .calmia-price { gap: 10px; }
+  .cal .calmia-price__now { font-size: 40px; }
+  .cal .calmia-price__was { font-size: 17px; }
+  .cal .calmia-price__off { font-size: 13px; padding: 6px 12px; }
+  .cal .calmia-save { font-size: 15px; padding: 10px 16px; }
+  .cal .calmia-usps { margin-top: 18px; }
+
+  .cal .calmia-offer { padding: 14px; margin-top: 18px; }
+  .cal .calmia-offer__stock { font-size: 13.5px; padding: 8px 16px; }
+  .cal .calmia-gift { padding: 10px; }
+  .cal .calmia-gift__row { gap: 10px; }
+  .cal .calmia-gift__img { width: 52px; height: 52px; }
+  .cal .calmia-gift__title { font-size: 13.5px; }
+  .cal .calmia-gift__free { font-size: 13px; padding: 4px 10px; }
+  .cal .calmia-gift__price s { font-size: 12.5px; }
+  .cal .calmia-gift__note { font-size: 12px; }
+
+  .cal .cal-btn { font-size: 17px; padding: 16px 14px; gap: 9px; border-radius: 15px; }
+  .cal .cal-btn svg { width: 21px; height: 21px; }
+
+  .cal .calmia-quote__text { font-size: 12.5px; }
+  .cal .calmia-trustline { font-size: 12.5px; gap: 6px; }
+  .cal .calmia-pay { gap: 6px; }
+  .cal .calmia-pay__i { height: 34px; padding: 5px 8px; border-radius: 8px; }
+  .cal .calmia-pay__i svg { height: 18px; }
+
+  .cal .calmia-acc { margin-top: 20px; }
+  .cal .calmia-acc__item summary { grid-template-columns: 40px 1fr 20px; gap: 11px; padding: 15px 0; }
+  .cal .calmia-acc__icon { width: 40px; height: 40px; }
+  .cal .calmia-acc__title { font-size: 16px; }
+  .cal .calmia-acc__body { padding: 0 0 16px; font-size: 14.5px; }
+
+  .cal .calmia-social { padding: 12px; gap: 10px; margin-top: 20px; }
+  .cal .calmia-social p { font-size: 13px; }
+  .cal .calmia-social__avatars img { width: 36px; height: 36px; margin-left: -10px; }
+
+  .cal .calmia-band__item { grid-template-columns: 38px 1fr; gap: 10px; padding: 12px 10px; }
+  .cal .calmia-band__icon { width: 38px; height: 38px; border-radius: 10px; }
+  .cal .calmia-band__title { font-size: 14.5px; }
+  .cal .calmia-band__text { font-size: 12.5px; }
+
+  .cal .calmia-problems__grid { gap: 14px 10px; }
+  .cal .calmia-problems__item figcaption { font-size: 14px; margin-top: 10px; }
+  .cal .calmia-problems__closing { font-size: 16px; margin-top: 24px; }
+
+  .cal .calmia-feature__rows { gap: 26px; }
+  .cal .calmia-feature__text { font-size: 15px; }
+
+  .cal .calmia-benefits__grid { gap: 10px; }
+  .cal .calmia-benefits__item { padding: 16px 12px; }
+  .cal .calmia-benefits__icon { width: 46px; height: 46px; }
+  .cal .calmia-benefits__item h3 { font-size: 16px; }
+  .cal .calmia-benefits__item p { font-size: 13px; }
+
+  .cal .calmia-steps__grid { gap: 22px; }
+  .cal .calmia-steps__item h3 { font-size: 19px; margin-top: 13px; }
+  .cal .calmia-steps__item p { font-size: 14.5px; }
+
+  .cal .calmia-guarantee__card { padding: 20px 16px; }
+  .cal .calmia-guarantee__list .cal-check { margin-bottom: 14px; }
+
+  .cal .calmia-ugc__rail { padding: 6px 16px 16px; gap: 12px; }
+  .cal .calmia-ugc__card { flex: 0 0 78%; }
+
+  .cal .calmia-reviews__card { padding: 15px; }
+  .cal .calmia-reviews__card blockquote { font-size: 14.5px; }
+  .cal .calmia-reviews__badge { font-size: 10px; padding: 3px 7px; }
+
+  .cal .calmia-faq__item summary { padding: 15px 15px; font-size: 15px; }
+  .cal .calmia-faq__answer { padding: 0 15px 15px; font-size: 14.5px; }
+
+  .cal .calmia-final__card { padding: 22px 16px 20px; }
+  .cal .calmia-final__price span { font-size: 38px; }
+
+  .cal .calmia-sticky { padding: 8px 0 calc(8px + env(safe-area-inset-bottom)); }
+  .cal .calmia-sticky__inner { gap: 10px; padding: 0 12px; }
+  .cal .calmia-sticky__img { width: 42px; height: 42px; }
+  .cal .calmia-sticky__title { font-size: 12.5px; }
+  .cal .calmia-sticky__btn { padding: 12px 16px; font-size: 14.5px; }
+}
+
+/* Pantallas estrechas de verdad (iPhone SE y similares) */
+@media (max-width: 380px) {
+  .cal .cal-h1 { font-size: 29px; }
+  .cal .calmia-price__now { font-size: 35px; }
+  .cal .cal-btn { font-size: 15.5px; padding: 15px 10px; gap: 7px; }
+  .cal .calmia-sticky__btn { padding: 11px 13px; font-size: 13.5px; }
+  /* Estaba en 54px, más grande que los 48px de ≤749px: justo en las pantallas
+     con menos sitio las miniaturas crecían y empujaban el precio hacia abajo. */
+  .cal .calmia-gallery__thumb { width: 44px; height: 44px; }
+}
