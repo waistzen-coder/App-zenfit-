@@ -52,6 +52,9 @@ def conv(v,d):
     return v
 def page(tpl,outname):
     data=json.load(open(os.path.join(ROOT,'templates',tpl),encoding='utf-8'))
+    # La barra de anuncios vive en el grupo de cabecera: se pinta arriba del todo.
+    data['sections']['anuncio']=json.load(open(os.path.join(ROOT,'anuncio.json'),encoding='utf-8'))
+    data['order']=['anuncio']+data['order']
     parts=[]
     for sid in data['order']:
         sec=data['sections'][sid]; f=os.path.join(ROOT,'sections',sec['type']+'.liquid')

@@ -21,6 +21,11 @@
   assign packs = section.blocks | where: 'type', 'pack'
   assign seals = section.blocks | where: 'type', 'seal'
   assign accs = section.blocks | where: 'type', 'accordion'
+  assign sale_badge = ''
+  if section.settings.sale_badge and v.compare_at_price > v.price
+    assign pct = v.compare_at_price | minus: v.price | times: 100 | divided_by: v.compare_at_price
+    assign sale_badge = '−' | append: pct | append: ' %'
+  endif
   assign default_pack = 0
   for b in packs
     if b.settings.default
@@ -38,7 +43,7 @@
           {%- for b in gal -%}
             <div class="sr-gal__slide" {{ b.shopify_attributes }}>
               {%- if forloop.first -%}
-                {% render 'sr-photo', image: b.settings.image, ratio: 'sq', fit: b.settings.fit, tag: b.settings.tag, tag_icon: b.settings.tag_icon, pins: b.settings.pins, alt: b.settings.image.alt, eager: true, sizes: '(min-width: 990px) 55vw, 100vw' %}
+                {% render 'sr-photo', image: b.settings.image, ratio: 'sq', fit: b.settings.fit, tag: b.settings.tag, tag_icon: b.settings.tag_icon, pins: b.settings.pins, alt: b.settings.image.alt, eager: true, badge: sale_badge, chip: section.settings.first_chip, sizes: '(min-width: 990px) 55vw, 100vw' %}
               {%- else -%}
                 {% render 'sr-photo', image: b.settings.image, ratio: 'sq', fit: b.settings.fit, tag: b.settings.tag, tag_icon: b.settings.tag_icon, pins: b.settings.pins, alt: b.settings.image.alt, sizes: '(min-width: 990px) 55vw, 100vw' %}
               {%- endif -%}
@@ -48,7 +53,7 @@
           {%- for m in p.media -%}{%- if m.media_type == 'image' -%}
             <div class="sr-gal__slide">
               {%- if forloop.first -%}
-                {% render 'sr-photo', image: m.preview_image, ratio: 'sq', alt: m.alt, eager: true, sizes: '(min-width: 990px) 55vw, 100vw' %}
+                {% render 'sr-photo', image: m.preview_image, ratio: 'sq', alt: m.alt, eager: true, badge: sale_badge, chip: section.settings.first_chip, sizes: '(min-width: 990px) 55vw, 100vw' %}
               {%- else -%}
                 {% render 'sr-photo', image: m.preview_image, ratio: 'sq', alt: m.alt, sizes: '(min-width: 990px) 55vw, 100vw' %}
               {%- endif -%}
@@ -83,16 +88,19 @@
       {%- if rv and rv.rating -%}
         <div class="sr-rating"><span class="sr-stars">{% for i in (1..5) %}{% render 'sr-icon', name: 'star' %}{% endfor %}</span><strong>{{ rv.rating | round: 1 }}</strong> · {{ p.metafields.reviews.rating_count.value }} reseñas</div>
       {%- endif -%}
-      {%- if section.settings.sub != blank -%}<p class="sr-pdp__sub">{{ section.settings.sub }}</p>{%- endif -%}
-
       <div class="sr-price">
         <span class="sr-price__now">{{ v.price | money }}</span>
         {%- if v.compare_at_price > v.price -%}
           <span class="sr-price__was">{{ v.compare_at_price | money }}</span>
           <span class="sr-price__off">−{{ v.compare_at_price | minus: v.price | times: 100 | divided_by: v.compare_at_price }} %</span>
+          {%- if section.settings.save_label != blank -%}<span class="sr-price__save">{{ section.settings.save_label }} {{ v.compare_at_price | minus: v.price | money }}</span>{%- endif -%}
         {%- endif -%}
       </div>
       {%- if section.settings.price_note != blank -%}<p class="sr-note" style="margin-top:6px">{{ section.settings.price_note }}</p>{%- endif -%}
+      {%- if section.settings.mini_trust != blank -%}
+        <ul class="sr-mini">{%- assign mt = section.settings.mini_trust | split: '|' -%}{%- for x in mt -%}<li>{% render 'sr-icon', name: 'check' %}{{ x | strip }}</li>{%- endfor -%}</ul>
+      {%- endif -%}
+      {%- if section.settings.sub != blank -%}<p class="sr-pdp__sub">{{ section.settings.sub }}</p>{%- endif -%}
 
       {%- if bullets.size > 0 -%}
         <ul class="sr-checks">
@@ -144,7 +152,7 @@
         {%- endif -%}
 
         {%- if v.available -%}
-          <button type="button" class="sr-btn sr-btn--block sr-buy__card" data-sr-card>
+          <button type="button" class="sr-btn sr-btn--block sr-btn--pulse sr-buy__card" data-sr-card>
             {% render 'sr-icon', name: 'lock' %}<span data-sr-card-text>{{ section.settings.card_text }}</span><span class="sr-buy__amt" data-sr-card-price>{{ v.price | money }}</span>
           </button>
           {%- if fee > 0 and section.settings.cod_text != blank -%}
@@ -152,6 +160,7 @@
               {% render 'sr-icon', name: 'cash' %}<span>{{ section.settings.cod_text }}</span><span class="sr-buy__amt" data-sr-cod-price>{{ v.price | plus: fee | money }}</span>
             </button>
           {%- endif -%}
+          <p class="sr-code-line" data-sr-code-line hidden></p>
           <p class="sr-note sr-center" data-sr-err hidden>No hemos podido preparar el pedido. Recarga la página o escríbenos.</p>
         {%- else -%}
           <button type="button" class="sr-btn sr-btn--block" disabled>{{ section.settings.soldout_text }}</button>
@@ -218,12 +227,22 @@
     if(!i) return {qty:1,label:'1 unidad',card:{{ v.price | money | strip_html | json }},cod:{{ v.price | plus: fee | money | strip_html | json }}};
     return {qty:+i.value,label:i.dataset.label,card:i.dataset.card,cod:i.dataset.cod,save:i.dataset.save};
   }
+  function code(){ try{ return sessionStorage.getItem('sr_code')||''; }catch(e){ return ''; } }
+  function paintCode(pk){
+    var line=box.querySelector('[data-sr-code-line]'), c=code(); if(!line) return;
+    if(!c){ line.hidden=true; return; }
+    line.hidden=false;
+    line.textContent = pk.qty===1 ? ('Código '+c+' aplicado: −10 % al pagar con tarjeta.') : ('El código '+c+' no se suma a los packs: ya llevan su descuento.');
+    line.classList.toggle('is-ok', pk.qty===1);
+  }
+  document.addEventListener('sr:code',function(){ paintCode(current()); });
   function paint(){
     var pk=current();
     inputs.forEach(function(i){ i.closest('.sr-pack').classList.toggle('is-on',i.checked); });
     var cp=box.querySelector('[data-sr-card-price]'); if(cp) cp.textContent=pk.card;
     var dp=box.querySelector('[data-sr-cod-price]'); if(dp) dp.textContent=pk.cod;
     document.dispatchEvent(new CustomEvent('sr:pack',{detail:pk}));
+    paintCode(pk);
     return pk;
   }
 
@@ -268,6 +287,7 @@
       'attributes[Total previsto en formulario]':pk.card,
       'note':'Preferencia: pago online. Consultar método de pago, dirección y total definitivos del pedido confirmado.'
     };
+    if(code() && pk.qty===1) params['discount']=code();
     var qs=Object.keys(params).map(function(k){ return encodeURIComponent(k)+'='+encodeURIComponent(params[k]); }).join('&');
     cardBtn.disabled=true;
     var t=cardBtn.querySelector('[data-sr-card-text]'); if(t) t.textContent='Un momento…';
@@ -313,7 +333,11 @@
     { "type": "text", "id": "badges", "label": "Etiquetas (separadas por |)", "default": "Método Pausa|Para opositores" },
     { "type": "text", "id": "heading", "label": "Título (vacío = nombre del producto)" },
     { "type": "textarea", "id": "sub", "label": "Subtítulo" },
+    { "type": "text", "id": "save_label", "label": "Texto de ahorro", "default": "Ahorras" },
     { "type": "text", "id": "price_note", "label": "Nota bajo el precio" },
+    { "type": "text", "id": "mini_trust", "label": "Confianza bajo el precio (separada por |)", "default": "Envío gratis|Paga al recibirlo|30 días para devolverlo" },
+    { "type": "checkbox", "id": "sale_badge", "label": "Insignia de descuento en la primera foto", "default": true },
+    { "type": "text", "id": "first_chip", "label": "Pastilla en la primera foto", "default": "Envío gratis a España" },
     { "type": "header", "content": "Caja de compra" },
     { "type": "text", "id": "packs_title", "label": "Título de los packs", "default": "Elige tu pack" },
     { "type": "text", "id": "card_text", "label": "Botón de pago online", "default": "Comprar ahora" },

@@ -43,6 +43,8 @@ header['settings'].update({
 group['sections'] = {'anuncio': announce, 'header': header}
 group['order'] = ['anuncio', 'header']
 save(hg, group)
+os.makedirs(os.path.join(OUT, 'sections'), exist_ok=True)
+shutil.copy(hg, os.path.join(OUT, 'sections', 'header-group.json'))
 
 # Colores de la marca en los esquemas de Dawn (el cabecero, el pie, el
 # carrito y las páginas legales los usan).

@@ -1,0 +1,78 @@
+{%- comment -%}
+  Oferta de bienvenida con un código real de la tienda. Aparece una vez por
+  sesión (tras unos segundos o al bajar por la página), se puede cerrar y
+  deja una pestaña para volver a abrirla. «Aplicar» guarda el código y el
+  botón «Comprar ahora» lo manda al checkout (solo con 1 unidad, porque no se
+  suma a los descuentos de los packs).
+{%- endcomment -%}
+{% render 'sr-head' %}
+{%- if section.settings.code != blank -%}
+<div class="sr sr-offer" id="sr-offer-{{ section.id }}" data-code="{{ section.settings.code | escape }}" hidden>
+  <div class="sr-offer__card" role="dialog" aria-modal="false" aria-labelledby="sr-offer-t-{{ section.id }}">
+    <button type="button" class="sr-offer__x" data-sr-offer-close aria-label="Cerrar">{% render 'sr-icon', name: 'x' %}</button>
+    <span class="sr-offer__big">{{ section.settings.big }}</span>
+    <p class="sr-offer__t" id="sr-offer-t-{{ section.id }}">{{ section.settings.title }}</p>
+    <p class="sr-offer__p">{{ section.settings.text }}</p>
+    <div class="sr-offer__code"><span>{{ section.settings.code }}</span><button type="button" data-sr-offer-copy>Copiar</button></div>
+    <button type="button" class="sr-btn sr-btn--block sr-btn--pulse" data-sr-offer-apply>{{ section.settings.cta_text }}</button>
+    <p class="sr-offer__fine">{{ section.settings.fine }}</p>
+  </div>
+</div>
+<button type="button" class="sr sr-offer-tab" id="sr-offer-tab-{{ section.id }}" hidden>{% render 'sr-icon', name: 'spark' %}<span>{{ section.settings.tab }}</span></button>
+<script>
+(function(){
+  var box=document.getElementById('sr-offer-{{ section.id }}'), tab=document.getElementById('sr-offer-tab-{{ section.id }}');
+  if(!box) return;
+  var CODE=box.dataset.code, DELAY={{ section.settings.delay | times: 1000 }}, DEPTH={{ section.settings.depth }}/100;
+  function get(k){ try{ return sessionStorage.getItem(k); }catch(e){ return null; } }
+  function set(k,v){ try{ sessionStorage.setItem(k,v); }catch(e){} }
+  function open(){ box.hidden=false; requestAnimationFrame(function(){ box.classList.add('is-on'); }); tab.hidden=true; set('sr_offer_seen','1'); }
+  function close(){ box.classList.remove('is-on'); setTimeout(function(){ box.hidden=true; },250); tab.hidden=false; }
+  function applied(){ var b=box.querySelector('[data-sr-offer-apply]'); b.textContent='Código aplicado ✓'; b.disabled=true; }
+  if(get('sr_code')===CODE){ applied(); tab.hidden=false; tab.querySelector('span').textContent=CODE+' aplicado'; }
+  box.querySelector('[data-sr-offer-close]').addEventListener('click',close);
+  tab.addEventListener('click',open);
+  box.querySelector('[data-sr-offer-copy]').addEventListener('click',function(e){
+    try{ navigator.clipboard.writeText(CODE); e.target.textContent='Copiado'; }catch(x){}
+  });
+  box.querySelector('[data-sr-offer-apply]').addEventListener('click',function(){
+    set('sr_code',CODE); applied();
+    document.dispatchEvent(new CustomEvent('sr:code',{detail:{code:CODE}}));
+    tab.querySelector('span').textContent=CODE+' aplicado';
+    setTimeout(function(){
+      close();
+      var buy=document.querySelector('[data-sr-buy-box]');
+      if(buy) buy.scrollIntoView({behavior:'smooth',block:'center'});
+      else if({{ section.settings.fallback_url | json }}) window.location.href={{ section.settings.fallback_url | json }};
+    },700);
+  });
+  document.addEventListener('click',function(e){ var a=e.target.closest&&e.target.closest('a[href="#oferta"]'); if(a){ e.preventDefault(); open(); } });
+  if(get('sr_offer_seen')){ if(box.hidden) tab.hidden=false; return; }
+  var fired=false;
+  function maybe(){ if(fired) return; fired=true; window.removeEventListener('scroll',onScroll); open(); }
+  function onScroll(){ var h=document.documentElement; if((h.scrollTop+window.innerHeight)/h.scrollHeight>=DEPTH) maybe(); }
+  window.addEventListener('scroll',onScroll,{passive:true});
+  setTimeout(maybe,DELAY);
+})();
+</script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "SR · Oferta de bienvenida",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "code", "label": "Código de descuento (tiene que existir en Descuentos)", "default": "RELIEF10" },
+    { "type": "text", "id": "big", "label": "Cifra grande", "default": "−10 %" },
+    { "type": "text", "id": "title", "label": "Título", "default": "en tu primer pedido" },
+    { "type": "textarea", "id": "text", "label": "Texto" },
+    { "type": "text", "id": "cta_text", "label": "Botón", "default": "Aplicar a mi compra" },
+    { "type": "textarea", "id": "fine", "label": "Letra pequeña" },
+    { "type": "text", "id": "tab", "label": "Pestaña para volver a abrirla", "default": "−10 % primer pedido" },
+    { "type": "range", "id": "delay", "label": "Aparece a los (segundos)", "min": 3, "max": 90, "step": 1, "default": 25 },
+    { "type": "range", "id": "depth", "label": "…o al bajar este % de la página", "min": 10, "max": 90, "step": 5, "default": 45 },
+    { "type": "text", "id": "fallback_url", "label": "Página de compra si aquí no hay caja de compra" }
+  ],
+  "presets": [ { "name": "SR · Oferta de bienvenida" } ]
+}
+{% endschema %}

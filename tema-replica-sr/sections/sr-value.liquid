@@ -1,0 +1,56 @@
+{% render 'sr-head' %}
+{%- liquid
+  assign p = section.settings.product | default: product
+  if p != blank
+    assign v = p.selected_or_first_available_variant
+    assign weeks = section.settings.weeks | at_least: 1
+    assign per_week = v.price | divided_by: weeks
+  endif
+-%}
+{%- if p != blank -%}
+<section class="sr sr-sec sr-value">
+  <div class="sr-w sr-value__grid">
+    <div class="sr-value__num">
+      <span class="sr-value__eq">{{ v.price | money }} ÷ {{ weeks }} semanas</span>
+      <b>{{ per_week | money }}</b>
+      <span class="sr-value__unit">{{ section.settings.unit }}</span>
+    </div>
+    <div class="sr-value__txt">
+      {%- if section.settings.eyebrow != blank -%}<p class="sr-eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+      <h2 class="sr-h2">{{ section.settings.heading }}{% if section.settings.heading_accent != blank %} <span class="sr-accent">{{ section.settings.heading_accent }}</span>{% endif %}</h2>
+      {%- if section.settings.text != blank -%}<div class="sr-lead sr-rte">{{ section.settings.text }}</div>{%- endif -%}
+      {%- assign pts = section.blocks -%}
+      {%- if pts.size > 0 -%}
+        <ul class="sr-value__vs">
+          {%- for b in pts -%}<li class="{% if b.settings.good %}is-good{% endif %}" {{ b.shopify_attributes }}>{% if b.settings.good %}{% render 'sr-icon', name: 'check-circle' %}{% else %}{% render 'sr-icon', name: 'x' %}{% endif %}<span>{{ b.settings.text }}</span></li>{%- endfor -%}
+        </ul>
+      {%- endif -%}
+      {%- if section.settings.cta_text != blank -%}<a class="sr-btn sr-btn--pulse" href="{{ section.settings.cta_link }}">{{ section.settings.cta_text }}{% render 'sr-icon', name: 'arrow' %}</a>{%- endif -%}
+      {%- if section.settings.note != blank -%}<p class="sr-note">{{ section.settings.note }}</p>{%- endif -%}
+    </div>
+  </div>
+</section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "SR · Lo que cuesta",
+  "tag": "div",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Producto (vacío = el de la página)" },
+    { "type": "number", "id": "weeks", "label": "Repartir el precio entre (semanas)", "default": 52 },
+    { "type": "text", "id": "unit", "label": "Texto bajo la cifra", "default": "a la semana durante un año" },
+    { "type": "text", "id": "eyebrow", "label": "Antetítulo", "default": "Haz la cuenta" },
+    { "type": "text", "id": "heading", "label": "Título", "default": "Menos de 1 € a la semana" },
+    { "type": "text", "id": "heading_accent", "label": "Título (parte en color)", "default": "por tus pausas" },
+    { "type": "richtext", "id": "text", "label": "Texto" },
+    { "type": "text", "id": "cta_text", "label": "Botón", "default": "Comprar ahora" },
+    { "type": "text", "id": "cta_link", "label": "Enlace del botón", "default": "#comprar" },
+    { "type": "text", "id": "note", "label": "Nota" }
+  ],
+  "blocks": [
+    { "type": "point", "name": "Punto", "settings": [ { "type": "text", "id": "text", "label": "Texto" }, { "type": "checkbox", "id": "good", "label": "Es a favor (check verde)", "default": true } ] }
+  ],
+  "presets": [ { "name": "SR · Lo que cuesta" } ]
+}
+{% endschema %}

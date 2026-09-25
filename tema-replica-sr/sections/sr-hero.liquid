@@ -1,12 +1,19 @@
 {% render 'sr-head' %}
 {%- liquid
   assign p = section.settings.product
+  if p != blank
+    assign v = p.selected_or_first_available_variant
+  endif
   assign chips = section.blocks | where: 'type', 'check'
 -%}
-<section class="sr sr-hero">
+<section class="sr sr-hero{% if section.settings.mobile_overlay %} sr-hero--over{% endif %}">
   <div class="sr-w sr-hero__grid">
+    <div class="sr-hero__media">
+      {% render 'sr-photo', image: section.settings.image, ratio: section.settings.ratio, tag: section.settings.tag, tag_icon: 'book', pins: section.settings.pins, caption: section.settings.caption, focus: section.settings.focus, eager: true, sizes: '(min-width: 990px) 50vw, 100vw' %}
+      <span class="sr-hero__shade" aria-hidden="true"></span>
+    </div>
     <div class="sr-hero__text">
-      {%- if section.settings.eyebrow != blank -%}<p class="sr-eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+      {%- if section.settings.eyebrow != blank -%}<p class="sr-eyebrow sr-hero__eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
       <h1 class="sr-h1">{{ section.settings.heading }}{% if section.settings.heading_accent != blank %} <span class="sr-accent">{{ section.settings.heading_accent }}</span>{% endif %}</h1>
       {%- if p != blank -%}
         {%- assign rv = p.metafields.reviews.rating.value -%}
@@ -15,19 +22,26 @@
         {%- endif -%}
       {%- endif -%}
       {%- if section.settings.text != blank -%}<div class="sr-lead sr-rte">{{ section.settings.text }}</div>{%- endif -%}
+      {%- if v != blank and section.settings.show_price -%}
+        <div class="sr-hero__price">
+          <b>{{ v.price | money }}</b>
+          {%- if v.compare_at_price > v.price -%}
+            <s>{{ v.compare_at_price | money }}</s>
+            <em>−{{ v.compare_at_price | minus: v.price | times: 100 | divided_by: v.compare_at_price }} %</em>
+          {%- endif -%}
+          {%- if section.settings.price_note != blank -%}<span>{{ section.settings.price_note }}</span>{%- endif -%}
+        </div>
+      {%- endif -%}
       {%- if chips.size > 0 -%}
-        <ul class="sr-checks">
+        <ul class="sr-checks sr-hero__checks">
           {%- for b in chips -%}<li {{ b.shopify_attributes }}>{% render 'sr-icon', name: 'check-circle' %}<span>{{ b.settings.text }}</span></li>{%- endfor -%}
         </ul>
       {%- endif -%}
       <div class="sr-hero__cta">
-        {%- if section.settings.cta_text != blank -%}<a class="sr-btn" href="{{ section.settings.cta_link | default: p.url | default: '/collections/all' }}">{{ section.settings.cta_text }}{% render 'sr-icon', name: 'arrow' %}</a>{%- endif -%}
-        {%- if section.settings.cta2_text != blank -%}<a class="sr-btn sr-btn--ghost" href="{{ section.settings.cta2_link }}">{{ section.settings.cta2_text }}</a>{%- endif -%}
+        {%- if section.settings.cta_text != blank -%}<a class="sr-btn sr-btn--pulse" href="{{ section.settings.cta_link | default: p.url | default: '/collections/all' }}">{{ section.settings.cta_text }}{% render 'sr-icon', name: 'arrow' %}</a>{%- endif -%}
+        {%- if section.settings.cta2_text != blank -%}<a class="sr-btn sr-btn--ghost sr-hero__cta2" href="{{ section.settings.cta2_link }}">{{ section.settings.cta2_text }}</a>{%- endif -%}
       </div>
       {%- if section.settings.under != blank -%}<p class="sr-hero__under">{{ section.settings.under }}</p>{%- endif -%}
-    </div>
-    <div class="sr-hero__media">
-      {% render 'sr-photo', image: section.settings.image, ratio: section.settings.ratio, tag: section.settings.tag, tag_icon: 'book', pins: section.settings.pins, caption: section.settings.caption, eager: true, sizes: '(min-width: 990px) 50vw, 100vw' %}
     </div>
   </div>
 </section>
@@ -37,19 +51,23 @@
   "name": "SR · Hero portada",
   "tag": "div",
   "settings": [
-    { "type": "product", "id": "product", "label": "Producto (valoración y enlace)" },
+    { "type": "product", "id": "product", "label": "Producto (precio, valoración y enlace)" },
+    { "type": "checkbox", "id": "mobile_overlay", "label": "Móvil: texto sobre la foto a pantalla completa", "default": true },
     { "type": "text", "id": "eyebrow", "label": "Antetítulo", "default": "Método Pausa · para opositores" },
     { "type": "text", "id": "heading", "label": "Título", "default": "Tu temario puede esperar." },
     { "type": "text", "id": "heading_accent", "label": "Título (parte en color)", "default": "Tu pausa, no." },
     { "type": "richtext", "id": "text", "label": "Texto" },
-    { "type": "text", "id": "cta_text", "label": "Botón", "default": "Descubre ReliefPath" },
+    { "type": "checkbox", "id": "show_price", "label": "Mostrar precio", "default": true },
+    { "type": "text", "id": "price_note", "label": "Nota junto al precio" },
+    { "type": "text", "id": "cta_text", "label": "Botón", "default": "Comprar ahora" },
     { "type": "url", "id": "cta_link", "label": "Enlace del botón (vacío = el producto)" },
     { "type": "text", "id": "cta2_text", "label": "Botón secundario" },
     { "type": "url", "id": "cta2_link", "label": "Enlace secundario" },
     { "type": "text", "id": "under", "label": "Texto bajo los botones" },
     { "type": "header", "content": "Foto" },
     { "type": "image_picker", "id": "image", "label": "Imagen" },
-    { "type": "select", "id": "ratio", "label": "Formato", "default": "tall", "options": [ { "value": "sq", "label": "Cuadrado" }, { "value": "land", "label": "Horizontal" }, { "value": "tall", "label": "Vertical" } ] },
+    { "type": "select", "id": "ratio", "label": "Formato en escritorio", "default": "tall", "options": [ { "value": "sq", "label": "Cuadrado" }, { "value": "land", "label": "Horizontal" }, { "value": "tall", "label": "Vertical" } ] },
+    { "type": "text", "id": "focus", "label": "Encuadre en móvil", "default": "center", "info": "Qué parte de la foto se ve al recortarla: center, left, right, center 30%…" },
     { "type": "text", "id": "tag", "label": "Etiqueta de la foto" },
     { "type": "text", "id": "pins", "label": "Llamadas sobre la foto", "info": "Formato: x,y,texto | x,y,texto (x e y en % desde arriba a la izquierda)" },
     { "type": "text", "id": "caption", "label": "Pie de foto" }

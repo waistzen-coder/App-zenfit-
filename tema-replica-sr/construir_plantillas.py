@@ -27,11 +27,43 @@ def section(type_, settings, blocks=(), disabled=False):
     return s
 
 # ───────────────────────── piezas compartidas ─────────────────────────
-ANNOUNCE = section('sr-announce', {'bg': '#0f2640', 'color': '#ffffff', 'speed': 4}, [
+ANNOUNCE = section('sr-announce', {'bg': '#d6312b', 'color': '#ffffff', 'speed': 3}, [
+    ('msg', {'icon': 'spark', 'text': '−10 % en tu primer pedido con RELIEF10', 'link': '#oferta'}),
     ('msg', {'icon': 'truck', 'text': 'Envío estándar gratis en España', 'link': ''}),
-    ('msg', {'icon': 'cash', 'text': 'Paga al recibirlo: contrareembolso +5 €', 'link': ''}),
-    ('msg', {'icon': 'refresh', 'text': '30 días para solicitar la devolución', 'link': '/policies/refund-policy'}),
+    ('msg', {'icon': 'cash', 'text': 'Paga al recibirlo en casa', 'link': ''}),
+    ('msg', {'icon': 'refresh', 'text': '30 días para devolverlo', 'link': '/policies/refund-policy'}),
 ])
+
+MARQUEE = section('sr-marquee', {'bg': '#0f2640', 'color': '#ffffff', 'speed': 34}, [
+    ('item', {'icon': 'flame', 'text': 'Calor'}),
+    ('item', {'icon': 'wave', 'text': 'Succión regulable'}),
+    ('item', {'icon': 'sun', 'text': 'Luz roja'}),
+    ('item', {'icon': 'truck', 'text': 'Envío gratis en España'}),
+    ('item', {'icon': 'cash', 'text': 'Paga al recibirlo'}),
+    ('item', {'icon': 'refresh', 'text': '30 días para devolverlo'}),
+    ('item', {'icon': 'book', 'text': 'Pensado para opositores'}),
+])
+
+VALUE = section('sr-value', {
+    'product': PRODUCT, 'weeks': 52, 'unit': 'a la semana durante un año',
+    'eyebrow': 'Haz la cuenta', 'heading': 'Menos de 1 € a la semana', 'heading_accent': 'por tus pausas',
+    'text': '<p>ReliefPath™ se paga una sola vez. Repartido entre las semanas de un año de temario, sale a menos de un euro por semana.</p>',
+    'cta_text': 'Comprar ahora', 'cta_link': '#comprar',
+    'note': 'Cálculo orientativo: precio de una unidad dividido entre 52 semanas.',
+}, [
+    ('point', {'text': 'Un solo pago, sin cuotas ni sesiones', 'good': True}),
+    ('point', {'text': 'En casa, a la hora que tú decidas', 'good': True}),
+    ('point', {'text': 'Pedir cita, desplazarte y pagar cada vez', 'good': False}),
+])
+
+OFFER = section('sr-offer', {
+    'code': 'RELIEF10', 'big': '−10 %', 'title': 'en tu primer pedido',
+    'text': 'Pulsa «Aplicar» y se descuenta solo al pagar con tarjeta.',
+    'cta_text': 'Aplicar a mi compra',
+    'fine': 'Una vez por cliente, en 1 unidad. No se suma a los packs de 2 y 3, que ya llevan −20 % y −30 %. Si pagas al recibirlo, escribe el código en la pantalla de pago.',
+    'tab': '−10 % primer pedido', 'delay': 25, 'depth': 45,
+    'fallback_url': '/products/' + PRODUCT,
+})
 
 TRUST = section('sr-trust', {}, [
     ('item', {'icon': 'truck', 'title': 'Envío estándar gratis', 'text': 'Direcciones de España admitidas en el checkout'}),
@@ -189,8 +221,10 @@ def buy_box(product_handle, h1):
         'product': product_handle, 'fee_product': FEE, 'is_page_title': h1,
         'badges': 'Método Pausa|Para opositores',
         'heading': 'ReliefPath™ · Ventosas eléctricas con calor y luz roja',
-        'sub': 'El aparato del Método Pausa: convierte los descansos entre bloques de temario en un momento para ti.',
-        'price_note': '',
+        'sub': '',
+        'save_label': 'Ahorras', 'price_note': '',
+        'mini_trust': 'Envío gratis|Paga al recibirlo|30 días para devolverlo',
+        'sale_badge': True, 'first_chip': 'Envío gratis a España',
         'packs_title': 'Elige tu pack',
         'card_text': 'Comprar ahora', 'cod_text': 'Pagar al recibirlo en casa', 'soldout_text': 'Agotado',
         'under': 'Envío estándar gratis a España · Pago seguro · 30 días para devolverlo',
@@ -227,7 +261,10 @@ def closing(link, text):
         'trust': TRUST_LINE,
     })
 
-STICKY = section('sr-sticky', {'product': PRODUCT, 'title': 'ReliefPath™', 'cta_text': 'Comprar ahora', 'show_after': 300})
+# En la ficha la barra se ve desde el primer momento en el móvil (la caja de
+# compra queda bajo la galería); en la portada, cuando ya se ha pasado el hero.
+STICKY = section('sr-sticky', {'product': PRODUCT, 'title': 'ReliefPath™', 'cta_text': 'Comprar ahora', 'show_after': 0})
+STICKY_HOME = section('sr-sticky', {'product': PRODUCT, 'title': 'ReliefPath™', 'cta_text': 'Comprar ahora', 'show_after': 500})
 CHAT = section('calmia-chat', {
     'whatsapp': '', 'email': 'waistzen@gmail.com', 'label': 'Escríbenos',
     'prefill': 'Hola, tengo una duda sobre el ReliefPath', 'offset_mobile': 96,
@@ -241,20 +278,22 @@ index = {'sections': {
         'eyebrow': 'Método Pausa · para opositores',
         'heading': 'Tu temario puede esperar.', 'heading_accent': 'Tu pausa, no.',
         'text': '<p>ReliefPath™ reúne ventosas eléctricas, calor y luz roja en un aparato para casa. Pensado para que las pausas entre bloques de estudio sean un momento de verdad para ti.</p>',
+        'mobile_overlay': True, 'show_price': True, 'price_note': '',
         'cta_text': 'Comprar ahora', 'cta_link': '#comprar',
         'cta2_text': 'Cómo funciona', 'cta2_link': '#shopify-section-metodo',
-        'under': TRUST_LINE,
-        'image': IMG('reliefpath-pausa-estudio-landing-20260911.png'), 'ratio': 'tall',
-        'tag': 'Para opositores', 'pins': '', 'caption': '',
+        'under': 'Envío gratis · Paga al recibirlo · 30 días para devolverlo',
+        'image': IMG('reliefpath-pausa-estudio-landing-20260911.png'), 'ratio': 'tall', 'focus': 'center',
+        'tag': '', 'pins': '', 'caption': '',
     }, [
         ('check', {'text': '<strong>Tres funciones</strong> en un solo aparato'}),
         ('check', {'text': '<strong>En tu silla o en el sofá</strong>, sin citas ni desplazamientos'}),
         ('check', {'text': '<strong>Paga al recibirlo</strong> si lo prefieres'}),
     ]),
-    'confianza': TRUST,
+    'cinta': MARQUEE,
     'ciclo': CYCLE,
     'metodo': METHOD,
     'comprar': buy_box(PRODUCT, False),
+    'valor': VALUE,
     'pasos': STEPS,
     'comparativa': COMPARE,
     'tiempo': TIMELINE,
@@ -263,21 +302,23 @@ index = {'sections': {
     'garantia': GUARANTEE,
     'faq': FAQ,
     'cierre': closing('#comprar', 'Elige tu pack, paga como prefieras y recíbelo en casa.'),
-    'barra': STICKY,
+    'barra': STICKY_HOME,
     'chat': CHAT,
-}, 'order': ['hero', 'confianza', 'ciclo', 'metodo', 'comprar', 'pasos', 'comparativa',
-             'tiempo', 'historia', 'opiniones', 'garantia', 'faq', 'cierre', 'barra', 'chat']}
+    'oferta': OFFER,
+}, 'order': ['hero', 'cinta', 'ciclo', 'metodo', 'comprar', 'valor', 'pasos', 'comparativa',
+             'tiempo', 'historia', 'opiniones', 'garantia', 'faq', 'cierre', 'barra', 'chat', 'oferta']}
 
 # ────────────────────────── ficha de producto ──────────────────────────
 COD = json.load(open(os.path.join(HERE, 'contrareembolso.json'), encoding='utf-8'))
 
 product = {'sections': {
     'ficha': buy_box('', True),
-    'confianza': TRUST,
+    'cinta': MARQUEE,
     'ciclo': CYCLE,
     'metodo': METHOD,
     'pasos': STEPS,
     'comparativa': COMPARE,
+    'valor': VALUE,
     'incluye': BOX,
     'contrareembolso': COD,
     'tiempo': TIMELINE,
@@ -288,8 +329,9 @@ product = {'sections': {
     'cierre': closing('#comprar', 'Elige tu pack y cómo pagarlo. Revisas el total antes de confirmar.'),
     'barra': STICKY,
     'chat': CHAT,
-}, 'order': ['ficha', 'confianza', 'ciclo', 'metodo', 'pasos', 'comparativa', 'incluye', 'contrareembolso',
-             'tiempo', 'historia', 'opiniones', 'garantia', 'faq', 'cierre', 'barra', 'chat']}
+    'oferta': OFFER,
+}, 'order': ['ficha', 'cinta', 'ciclo', 'metodo', 'pasos', 'comparativa', 'valor', 'incluye', 'contrareembolso',
+             'tiempo', 'historia', 'opiniones', 'garantia', 'faq', 'cierre', 'barra', 'chat', 'oferta']}
 
 for name, data in [('index.json', index), ('product.reliefpatch.json', product)]:
     with open(os.path.join(HERE, 'templates', name), 'w', encoding='utf-8') as f:

@@ -15,5 +15,16 @@ if(!window.__srAnchors){window.__srAnchors=1;
   document.addEventListener('click',function(e){ var a=e.target.closest&&e.target.closest('a[href^="#"]'); if(!a) return;
     var t=srFind(a.getAttribute('href')); if(!t) return; e.preventDefault(); t.scrollIntoView({behavior:'smooth',block:'start'}); });
   window.addEventListener('load',function(){ var t=srFind(location.hash); if(t) t.scrollIntoView(); });
+  /* Aparición suave de las secciones al entrar en pantalla. Sin
+     IntersectionObserver o con movimiento reducido no se oculta nada. */
+  if('IntersectionObserver' in window && !(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) && !(window.Shopify && Shopify.designMode)){
+    document.documentElement.classList.add('sr-js');
+    var srRan=false;
+    var srIO=new IntersectionObserver(function(es){ srRan=true; es.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add('is-in'); srIO.unobserve(en.target); } }); },{rootMargin:'0px 0px -8% 0px'});
+    var srWatch=function(){ document.querySelectorAll('.sr-sec:not(.is-in)').forEach(function(el){ srIO.observe(el); }); };
+    if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',srWatch); else srWatch();
+    /* Red de seguridad: si el observador no llega a funcionar, se enseña todo. */
+    setTimeout(function(){ if(!srRan) document.querySelectorAll('.sr-sec').forEach(function(el){ el.classList.add('is-in'); }); },3000);
+  }
 }
 </script>
