@@ -1,17 +1,61 @@
-# Réplica ShoulderReliever · ReliefPath para opositores
+# Tema nuevo: réplica de ShoulderReliever para ReliefPath (opositores)
 
 La estructura de venta de `shoulderreliever.com` (portada y ficha de producto)
-aplicada a ReliefPath™, con el ángulo «Método Pausa» para opositores.
+aplicada a ReliefPath™, con el ángulo «Método Pausa» para opositores, montada
+en un **tema nuevo** sobre Dawn 15.4.1, el tema base oficial de Shopify.
 
-**En la tienda:** tema `ReliefPath · Réplica SR opositores (24-09)`
-(`gid://shopify/OnlineStoreTheme/207216509273`), **sin publicar**. Es una copia
-del tema publicado («Calmia Clone»), así que conserva cabecera, pie, carrito y
-el formulario de contrareembolso.
+**En la tienda:** `ReliefPath SR · tema nuevo (25-09)`
+(`gid://shopify/OnlineStoreTheme/207247638873`), **sin publicar**.
 
-- Portada: `https://waistzen.com/?preview_theme_id=207216509273`
-- Producto: `https://waistzen.com/products/juego-de-ventosa-electrica-con-cable?preview_theme_id=207216509273`
+- Portada: `https://waistzen.com/?preview_theme_id=207247638873`
+- Producto: `https://waistzen.com/products/juego-de-ventosa-electrica-con-cable?preview_theme_id=207247638873`
 
-Los 20 archivos `sr-*` del tema tienen el mismo md5 que los de esta carpeta.
+Todos los archivos propios del tema tienen en la tienda el mismo md5 que en
+esta carpeta.
+
+## Qué hay en el tema
+
+- **Dawn** limpio: cabecera, pie, carrito, buscador, cuentas, páginas legales.
+  Colores de la marca (azul marino y rojo) en los esquemas de Dawn.
+- **Barra de anuncios** azul encima de la cabecera (`sr-announce`, en el
+  grupo de cabecera).
+- **Secciones `sr-*`** de la réplica: hero, confianza, ciclo, método en dos
+  momentos, cómo funciona, qué incluye, comparativa, primer mes, historia,
+  opiniones, garantía, FAQ, cierre, ficha con caja de compra y barra fija.
+- **Contrareembolso** (`calmia-cod` y sus estilos), copiado byte a byte del
+  tema publicado.
+- **Textos del sistema en castellano.** El idioma principal de la tienda es
+  el inglés, así que Shopify usa `en.default.json`: lleva el castellano de
+  Dawn más los textos `waistzen_*` que usa la caja de contrareembolso.
+- **`page.tracking`**, la plantilla de «Seguir mi pedido», que Dawn no trae.
+
+Además, el **menú principal** de la tienda tiene ahora un enlace al producto
+(Inicio · ReliefPath™ · Seguir mi pedido · Contacto). El menú es de la tienda,
+no del tema: también sale en el tema publicado.
+
+## La compra (lo que más mueve la conversión)
+
+Como en la referencia, la compra está junto a la galería, sin bajar:
+
+1. **Packs** de 1, 2 y 3 unidades con −20 % y −30 % (los descuentos automáticos
+   de la tienda). Los importes se calculan con la misma fórmula que la caja de
+   contrareembolso: 49,95 € · 79,92 € · 104,91 €.
+2. **«Comprar ahora»**: va directo al checkout con el pack elegido (enlace
+   permanente de carrito, en español, con el pack en los atributos del pedido).
+3. **«Pagar al recibirlo en casa»**: abre el formulario de contrareembolso de
+   más abajo con el mismo pack ya elegido.
+
+Los dos selectores de pack (el de arriba y el de la caja de contrareembolso) se
+mantienen sincronizados en los dos sentidos.
+
+- La **portada** también tiene la caja de compra. Como allí no hay formulario
+  de contrareembolso, su botón lleva a la ficha con `?pack=N&pago=cod`, y la
+  ficha abre directamente el formulario con ese pack.
+- La **barra fija** enseña el pack y el precio elegidos, aparece al pasar la
+  caja de compra y se esconde sobre el formulario de contrareembolso para no
+  taparlo.
+- Todos los botones de la página («Quiero mi ReliefPath», cierre, barra fija)
+  llevan a la caja de compra (`#comprar`).
 
 ## De la referencia a ReliefPath
 
@@ -19,90 +63,83 @@ La web de referencia no se pudo abrir desde esta sesión (la red la bloquea).
 La estructura se reconstruyó a partir de lo que tienen indexado los buscadores
 de su portada, su ficha, su FAQ y su página «5 razones».
 
-| ShoulderReliever | Aquí | Sección |
-|---|---|---|
-| Barra superior: envío y garantía | Envío gratis · contrareembolso · 30 días | `sr-announce` |
-| Hero «Drug-Free Shoulder Pain Relief, Guaranteed» | «Tu temario puede esperar. Tu pausa, no.» | `sr-hero` |
-| Franja de confianza | Envío, contrareembolso, devolución, atención | `sr-trust` |
-| «Break the shoulder-pain cycle» | «El ciclo del temario», 4 pasos | `sr-cycle` |
-| Sistema de dos partes: de día / de noche | Método Pausa: entre bloques / al cerrar el día | `sr-method` |
-| «5 minutos al día» en 3 pasos | Cómo funciona: manual, ajustes, pausa | `sr-steps` |
-| What's in the box | Qué incluye | `sr-box` |
-| Comparativa frente a cirugía y pastillas | Frente a la pausa con el móvil y la cita de masaje | `sr-compare` |
-| «Biggest gains by day 40» | Primer mes: de aparato nuevo a hábito | `sr-timeline` |
-| Médico fundador | La tienda (Waistzen, Motril) | `sr-story` |
-| Reseñas | Solo reseñas reales o app; vacía no se muestra | `sr-reviews` |
-| Garantía de 60 días | Sello de 30 días (la política real) | `sr-guarantee` |
-| FAQ | FAQ con datos estructurados | `sr-faq` |
-| Cierre con oferta | Cierre con precio y botón | `sr-cta` |
-| Ficha con galería, precio, viñetas y sellos | Igual, y el botón baja a la caja de compra | `sr-product` |
+| ShoulderReliever | Aquí |
+|---|---|
+| Barra superior: envío y garantía | Envío gratis · contrareembolso · 30 días |
+| Hero «Drug-Free Shoulder Pain Relief, Guaranteed» | «Tu temario puede esperar. Tu pausa, no.» |
+| Compra junto a la galería | Packs + tarjeta + contrareembolso |
+| «Break the shoulder-pain cycle» | «El ciclo del temario» |
+| Sistema de dos partes: de día / de noche | Método Pausa: entre bloques / al cerrar el día |
+| «5 minutos al día» en 3 pasos | Cómo funciona: manual, ajustes, pausa |
+| What's in the box | Qué incluye |
+| Comparativa frente a cirugía y pastillas | Frente a la pausa con el móvil y la cita de masaje |
+| «Biggest gains by day 40» | Primer mes: de aparato nuevo a hábito |
+| Médico fundador | La tienda (Waistzen, Motril) |
+| Reseñas | Solo reseñas reales o app; vacía no se muestra |
+| Garantía de 60 días | 30 días (la política real) |
+| FAQ | FAQ ordenada por objeciones, con datos estructurados |
 
-En la ficha, la caja de compra sigue siendo la sección de contrareembolso
-(`calmia-cod`), justo debajo de la ficha: packs de 1/2/3 con −20 % y −30 %
-(los descuentos automáticos), tarjeta o contrareembolso. Es la única caja de
-compra, como se decidió antes. Todos los botones llevan a ella.
+### Lo que no se ha copiado, a propósito
 
-### Qué se ha cambiado respecto a la referencia, y por qué
-
-- **Sin claims de salud.** La referencia promete alivio del dolor garantizado.
-  La tienda ya pasó una auditoría que prohíbe prometer alivio, dar zonas o
-  tiempos de sesión. Aquí se vende la pausa, el ritual y el hábito, no un
-  resultado médico.
-- **Sin cifras ni reseñas inventadas.** No hay «75.000 vendidos» ni estrellas:
-  la valoración solo aparece si el producto tiene el metacampo `reviews.rating`
-  de una app de reseñas, y la sección de opiniones solo pinta bloques reales.
-- **Sin médico fundador.** Se cuenta la tienda, que es lo que existe.
-- **Sin llamadas sobre las fotos.** El marco las admite (`x,y,texto`), pero no
-  se han puesto porque desde aquí no se pueden ver las imágenes y una flecha
-  mal puesta queda peor que ninguna.
+- **Claims de salud.** La referencia promete alivio del dolor garantizado. La
+  tienda ya pasó una auditoría que prohíbe prometer alivio, dar zonas o
+  tiempos de sesión. Aquí se vende la pausa, el ritual y el hábito.
+- **Cifras y reseñas inventadas.** Nada de «75.000 vendidos». La valoración
+  solo aparece si hay una app de reseñas que rellene `reviews.rating`.
+- **Médico fundador.** Se cuenta la tienda, que es lo que existe.
 
 ## El estilo de foto
 
 Todas las imágenes pasan por el mismo marco (`snippets/sr-photo.liquid`):
-fondo azul muy claro, esquinas redondeadas, etiqueta arriba a la izquierda
-(«Entre bloques», «Al cerrar el día», «Paso 1»…) y llamadas opcionales con
-punto rojo. Así las fotos que ya hay en la tienda se leen como una sola serie.
+fondo azul muy claro, esquinas redondeadas y etiqueta arriba a la izquierda,
+para que las fotos que ya hay se lean como una sola serie. La galería abre con
+el producto y, en segundo lugar, la **foto real** del aparato en la mano.
 
-**Fotos nuevas.** Esta sesión no puede generar ni subir imágenes. Para
-completar la serie al estilo de la referencia (producto limpio en estudio +
-escenas reales en casa), faltan estas, todas con luz natural suave, fondo claro
-y el aparato rojo y negro bien visible:
+Fotos que faltan para completar la serie (luz natural, fondo claro, el aparato
+rojo y negro bien visible, sin mostrarlo aplicado en ninguna zona concreta):
 
 1. Producto solo, en estudio sobre fondo azul muy claro, vista 3/4.
 2. Producto sobre un escritorio con apuntes subrayados y un temporizador.
-3. Opositor/a de 25-35 años en su silla, apuntes cerrados, con el aparato en
-   la mesa (sin mostrarlo aplicado en ninguna zona concreta).
+3. Opositor/a de 25-35 años en su silla, apuntes cerrados, aparato en la mesa.
 4. La misma persona en el sofá al final del día, aparato en la mesa baja.
 5. Detalle del panel de control, en macro.
 6. Detalle de la copa con la luz roja encendida, fondo oscuro.
-7. Contenido de la caja, cenital, todo ordenado sobre fondo claro.
+7. Contenido de la caja, cenital, sobre fondo claro.
 
-Se suben en Contenido → Archivos y se cambian desde el editor del tema.
+## Pruebas
 
-## El ángulo: por qué opositores
+    python3 construir_plantillas.py   # genera templates/*.json y anuncio.json
+    python3 comprobar.py              # plantillas contra los schemas
+    python3 preview/render.py         # vista previa local (fotos = marcadores)
+    python3 preview/comportamiento.py # 27 comprobaciones en navegador
+    python3 preview/shots.py          # capturas a 390 y 1440 px
 
-Es el último ángulo trabajado en la tienda (imágenes de estudio del 23-09 y el
-tema «Método Opositor»). Es un océano azul: nadie vende ventosas eléctricas a
-opositores, el público está muy concentrado (academias, foros, TikTok de
-#opositores) y tiene un ritual diario —bloques de estudio con temporizador— en
-el que el producto encaja sin prometer nada médico.
+`comportamiento.py` comprueba precios de cada pack, que la caja de arriba y la
+de contrareembolso no se contradicen, el enlace de pago online (pack, idioma y
+sin recargo), la apertura del formulario de contrareembolso, la barra fija, la
+portada y la llegada con `?pack=2&pago=cod`.
 
-Si se prefiere el ángulo pádel, basta con cambiar los textos en el editor: las
-secciones no dependen del ángulo.
+Lo que no cubren: que el checkout real aplique los descuentos automáticos al
+céntimo (la caja de contrareembolso y esta usan la misma fórmula) ni cómo se
+ve con las fotos reales. Eso solo se ve en la tienda.
 
 ## Lo que falta
 
-1. **Verlo en un navegador real.** Desde aquí no se llega a `waistzen.com`.
-   La vista previa local (`preview/`) renderiza las secciones con marcadores en
-   lugar de fotos y no tiene la cabecera ni la caja de contrareembolso.
-2. **Publicar el tema** cuando esté revisado (Tienda online → Temas).
-3. **Instalar una app de reseñas** y añadir su bloque a «SR · Opiniones».
+1. **Revisarlo en el móvil** con los dos enlaces de arriba y hacer un pedido de
+   prueba con tarjeta y otro con contrareembolso.
+2. **Publicarlo** (Tienda online → Temas → Publicar).
+3. **Borrar el tema intermedio** «ReliefPath · Réplica SR opositores (24-09)»,
+   ya no hace falta.
+4. **App de reseñas** (Judge.me, Loox…) y añadir su bloque a «SR · Opiniones».
+5. **Precio tachado.** En España, si se anuncia una rebaja, el precio anterior
+   tiene que ser el más bajo de los 30 días previos. Si 99,95 € no ha sido
+   precio real de venta, conviene quitar el precio comparativo del producto.
 
 ## Archivos
 
-    construir_plantillas.py   genera templates/*.json con todos los textos
-    contrareembolso.json      ajustes de la caja de compra (copiados del tema publicado)
-    comprobar.py              comprueba plantillas contra los schemas
-    preview/render.py         vista previa local con python-liquid
-    preview/shots.py          capturas a 390 y 1440 px con Playwright
-    sections/header-group.json  cabecera con la cinta morada desactivada
+    construir_plantillas.py   textos y orden de portada y ficha
+    contrareembolso.json      ajustes de la caja de contrareembolso
+    anuncio.json              barra de anuncios (va al grupo de cabecera)
+    empaquetar.py             Dawn + todo esto → dist/reliefpath-sr.zip
+    locales-extra/            textos waistzen_* del tema publicado
+    comprobar.py, preview/    pruebas
