@@ -1,0 +1,15 @@
+{
+  "sections": {
+    "seguimiento": {
+      "type": "rich-text",
+      "blocks": {
+        "titulo": { "type": "heading", "settings": { "heading": "Seguir mi pedido", "heading_size": "h1" } },
+        "texto": { "type": "text", "settings": { "text": "<p>Para consultar tu pedido, utiliza el enlace de la confirmación de compra. Cuando haya seguimiento disponible, podrás consultar la información facilitada por el transportista.</p><p>Si no encuentras la confirmación o necesitas ayuda, escribe a <a href=\"mailto:waistzen@gmail.com\">waistzen@gmail.com</a> e indica tu número de pedido. Revisa también la carpeta de correo no deseado.</p>" } },
+        "boton": { "type": "button", "settings": { "button_label": "Consultar mis pedidos", "button_link": "/account", "button_style_secondary": false, "button_label_2": "Escribirnos", "button_link_2": "mailto:waistzen@gmail.com", "button_style_secondary_2": true } }
+      },
+      "block_order": ["titulo", "texto", "boton"],
+      "settings": { "desktop_content_position": "center", "content_alignment": "center", "color_scheme": "scheme-2", "full_width": true, "padding_top": 56, "padding_bottom": 64 }
+    }
+  },
+  "order": ["seguimiento"]
+}
