@@ -81,6 +81,21 @@ nada:
   avisa de que no se suma.
 - **Las secciones aparecen suavemente** al llegar a ellas.
 
+## Paleta «luz roja cálida»
+
+| Uso | Color | Por qué |
+|---|---|---|
+| Texto y secciones oscuras | Tinta `#1B2140` | Confianza y lectura (14:1 sobre crema) |
+| Fondos alternos | Crema `#FBF4EC`, arena `#F4E6D7` | Los neutros cálidos se sienten cercanos; los fríos, clínicos |
+| Comprar y ofertas | Rojo coral `#D92D3F` → `#B81D36` | Solo en botones de compra, «−50 %» y ofertas: así destacan más. Blanco encima, 4,8:1 |
+| Calor y detalles | Ámbar `#F5A524` | Cinta, estrellas, iconos de la barra superior y cifras en secciones oscuras |
+| Ahorro | Verde `#15803D` | «Ahorras…» y precio por unidad (5:1) |
+
+Las palabras destacadas de los titulares van en **Fraunces cursiva**. Las
+secciones oscuras llevan un brillo cálido rojo y ámbar. El pie de página es
+oscuro, y la caja de contrareembolso usa la misma paleta cambiando solo sus
+variables de color, sin tocar su código.
+
 ## De la referencia a ReliefPath
 
 La web de referencia no se pudo abrir desde esta sesión (la red la bloquea).
