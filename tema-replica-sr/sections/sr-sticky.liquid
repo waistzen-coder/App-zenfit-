@@ -31,7 +31,7 @@
   function cod(){ return document.querySelector('[data-calmia-cod]'); }
   var seenBox=true, seenCod=false;
   function update(){
-    var on=!seenBox && !seenCod && window.scrollY>{{ section.settings.show_after }};
+    var on=!seenBox && !seenCod && window.scrollY>={{ section.settings.show_after }};
     bar.classList.toggle('is-on',on); bar.setAttribute('aria-hidden',on?'false':'true'); go.tabIndex=on?0:-1;
   }
   if('IntersectionObserver' in window){

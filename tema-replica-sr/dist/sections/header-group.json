@@ -1,0 +1,75 @@
+{
+  "name": "t:sections.header.name",
+  "type": "header",
+  "sections": {
+    "anuncio": {
+      "type": "sr-announce",
+      "settings": {
+        "bg": "#d6312b",
+        "color": "#ffffff",
+        "speed": 3
+      },
+      "blocks": {
+        "ms1": {
+          "type": "msg",
+          "settings": {
+            "icon": "spark",
+            "text": "−10 % en tu primer pedido con RELIEF10",
+            "link": "#oferta"
+          }
+        },
+        "ms2": {
+          "type": "msg",
+          "settings": {
+            "icon": "truck",
+            "text": "Envío estándar gratis en España",
+            "link": ""
+          }
+        },
+        "ms3": {
+          "type": "msg",
+          "settings": {
+            "icon": "cash",
+            "text": "Paga al recibirlo en casa",
+            "link": ""
+          }
+        },
+        "ms4": {
+          "type": "msg",
+          "settings": {
+            "icon": "refresh",
+            "text": "30 días para devolverlo",
+            "link": "/policies/refund-policy"
+          }
+        }
+      },
+      "block_order": [
+        "ms1",
+        "ms2",
+        "ms3",
+        "ms4"
+      ]
+    },
+    "header": {
+      "type": "header",
+      "settings": {
+        "color_scheme": "scheme-1",
+        "logo_position": "middle-left",
+        "menu": "main-menu",
+        "menu_type_desktop": "dropdown",
+        "sticky_header_type": "on-scroll-up",
+        "show_line_separator": true,
+        "enable_country_selector": false,
+        "enable_language_selector": false,
+        "mobile_logo_position": "center",
+        "margin_bottom": 0,
+        "padding_top": 20,
+        "padding_bottom": 20
+      }
+    }
+  },
+  "order": [
+    "anuncio",
+    "header"
+  ]
+}

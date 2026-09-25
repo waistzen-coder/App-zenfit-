@@ -1,0 +1,38 @@
+{% render 'sr-head' %}
+{%- capture items -%}
+  {%- for b in section.blocks -%}<span class="sr-mq__it" {{ b.shopify_attributes }}>{% render 'sr-icon', name: b.settings.icon %}{{ b.settings.text }}</span><span class="sr-mq__sep" aria-hidden="true">✦</span>{%- endfor -%}
+{%- endcapture -%}
+<div class="sr sr-mq" style="--mq-bg:{{ section.settings.bg }};--mq-fg:{{ section.settings.color }};--mq-speed:{{ section.settings.speed }}s">
+  <div class="sr-mq__track">
+    <div class="sr-mq__row">{{ items }}</div>
+    <div class="sr-mq__row" aria-hidden="true">{{ items }}</div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "SR · Cinta en movimiento",
+  "tag": "div",
+  "settings": [
+    { "type": "color", "id": "bg", "label": "Fondo", "default": "#0f2640" },
+    { "type": "color", "id": "color", "label": "Texto", "default": "#ffffff" },
+    { "type": "range", "id": "speed", "label": "Segundos por vuelta", "min": 10, "max": 80, "step": 2, "default": 30 }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Mensaje",
+      "settings": [
+        { "type": "select", "id": "icon", "label": "Icono", "default": "check", "options": [
+          { "value": "check", "label": "Check" }, { "value": "truck", "label": "Envío" }, { "value": "cash", "label": "Efectivo" },
+          { "value": "refresh", "label": "Devolución" }, { "value": "flame", "label": "Calor" }, { "value": "wave", "label": "Succión" },
+          { "value": "sun", "label": "Luz" }, { "value": "book", "label": "Estudio" }, { "value": "timer", "label": "Temporizador" }, { "value": "spark", "label": "Destello" }
+        ] },
+        { "type": "text", "id": "text", "label": "Texto" }
+      ]
+    }
+  ],
+  "max_blocks": 10,
+  "presets": [ { "name": "SR · Cinta en movimiento", "blocks": [ { "type": "item" }, { "type": "item" }, { "type": "item" } ] } ]
+}
+{% endschema %}

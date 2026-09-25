@@ -1,12 +1,20 @@
 {
   "type": "sr-announce",
   "settings": {
-    "bg": "#0f2640",
+    "bg": "#d6312b",
     "color": "#ffffff",
-    "speed": 4
+    "speed": 3
   },
   "blocks": {
     "ms1": {
+      "type": "msg",
+      "settings": {
+        "icon": "spark",
+        "text": "−10 % en tu primer pedido con RELIEF10",
+        "link": "#oferta"
+      }
+    },
+    "ms2": {
       "type": "msg",
       "settings": {
         "icon": "truck",
@@ -14,19 +22,19 @@
         "link": ""
       }
     },
-    "ms2": {
-      "type": "msg",
-      "settings": {
-        "icon": "cash",
-        "text": "Paga al recibirlo: contrareembolso +5 €",
-        "link": ""
-      }
-    },
     "ms3": {
       "type": "msg",
       "settings": {
+        "icon": "cash",
+        "text": "Paga al recibirlo en casa",
+        "link": ""
+      }
+    },
+    "ms4": {
+      "type": "msg",
+      "settings": {
         "icon": "refresh",
-        "text": "30 días para solicitar la devolución",
+        "text": "30 días para devolverlo",
         "link": "/policies/refund-policy"
       }
     }
@@ -34,6 +42,7 @@
   "block_order": [
     "ms1",
     "ms2",
-    "ms3"
+    "ms3",
+    "ms4"
   ]
 }

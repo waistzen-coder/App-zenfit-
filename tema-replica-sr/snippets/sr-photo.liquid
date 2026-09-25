@@ -1,9 +1,11 @@
 {%- comment -%}
   Marco de foto común: mismo fondo, esquinas, etiqueta y llamadas en todas las imágenes.
   Parámetros: image, ratio (sq | land | tall), fit ('contain'), tag, tag_icon, tag_light,
-  pins ("x,y,texto|x,y,texto" en % desde arriba a la izquierda), caption, alt, eager, sizes.
+  pins ("x,y,texto|x,y,texto" en % desde arriba a la izquierda), caption, alt, eager, sizes,
+  badge (círculo rojo arriba a la derecha, p. ej. «−50 %»), chip (pastilla abajo a la izquierda),
+  focus (posición del recorte, p. ej. «center 30%»).
 {%- endcomment -%}
-<div class="sr-photo sr-photo--{{ ratio | default: 'sq' }}{% if fit == 'contain' %} sr-photo--contain{% endif %}">
+<div class="sr-photo sr-photo--{{ ratio | default: 'sq' }}{% if fit == 'contain' %} sr-photo--contain{% endif %}"{% if focus and focus != blank %} style="--sr-focus:{{ focus }}"{% endif %}>
   {%- if image != blank -%}
     {%- liquid
       assign a = alt | default: image.alt
@@ -31,5 +33,7 @@
       {%- endif -%}
     {%- endfor -%}
   {%- endif -%}
+  {%- if badge and badge != blank -%}<span class="sr-sale">{{ badge }}</span>{%- endif -%}
+  {%- if chip and chip != blank -%}<span class="sr-chip">{% render 'sr-icon', name: 'truck' %}{{ chip }}</span>{%- endif -%}
   {%- if caption and caption != blank -%}<span class="sr-caption">{{ caption }}</span>{%- endif -%}
 </div>
