@@ -227,8 +227,8 @@
     "cinta": {
       "type": "sr-marquee",
       "settings": {
-        "bg": "#0f2640",
-        "color": "#ffffff",
+        "bg": "#f5a524",
+        "color": "#1b2140",
         "speed": 34
       },
       "blocks": {
@@ -349,7 +349,7 @@
         "cta_text": "Quiero mi ReliefPath",
         "cta_link": "#comprar",
         "note": "ReliefPath™ es un aparato de bienestar para uso doméstico. Consulta el manual del fabricante antes de usarlo.",
-        "bg": "#f1f6fb"
+        "bg": "#fbf4ec"
       },
       "blocks": {
         "pa23": {
@@ -442,7 +442,7 @@
         "col_b": "Cita de masaje",
         "col_c": "",
         "note": "Comparativa orientativa de opciones de descanso. ReliefPath™ no sustituye la fisioterapia ni un tratamiento profesional.",
-        "bg": "#f1f6fb"
+        "bg": "#fbf4ec"
       },
       "blocks": {
         "ro32": {
@@ -759,7 +759,7 @@
         "delivery_min": 1,
         "delivery_max": 2,
         "hide_hero_offer": false,
-        "bg": "#f1f6fb"
+        "bg": "#fbf4ec"
       }
     },
     "tiempo": {
@@ -837,7 +837,7 @@
         "eyebrow": "Opiniones",
         "heading": "Lo que cuentan",
         "heading_accent": "quienes ya lo usan",
-        "bg": "#f1f6fb"
+        "bg": "#fbf4ec"
       }
     },
     "garantia": {
@@ -862,7 +862,7 @@
         "open_first": true,
         "help": "<p>¿Te queda alguna duda? Escríbenos a <a href=\"mailto:waistzen@gmail.com\">waistzen@gmail.com</a> antes de comprar.</p>",
         "schema": true,
-        "bg": "#f1f6fb"
+        "bg": "#fbf4ec"
       },
       "blocks": {
         "q42": {
