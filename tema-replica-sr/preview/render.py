@@ -29,22 +29,33 @@ F['strip_html']=lambda v:re.sub(r'<[^>]*>','',str(v))
 def where(seq,key,val=None): return [i for i in (seq or []) if (i.get(key)==val if val is not None else i.get(key))]
 F['where']=where
 F['truncatewords']=lambda v,n=15:' '.join(str(v).split()[:n])
+TR=json.load(open(os.path.join(ROOT,'locales-extra','waistzen.json'),encoding='utf-8'))
+def t(key,**k):
+    d=TR
+    for part in str(key).split('.'): d=d.get(part,{}) if isinstance(d,dict) else {}
+    return d if isinstance(d,str) else 'translation missing: '+key
+F['t']=t
+F['at_least']=lambda v,n: max(int(v or 0),int(n))
+F['url_encode']=lambda v: __import__('urllib.parse').parse.quote_plus(str(v))
 
-variant={'id':59286832939353,'price':4995,'compare_at_price':9995,'available':True,'sku':'dropipro-386'}
+variant={'id':59286832939353,'price':4995,'compare_at_price':9995,'available':True,'sku':'dropipro-386','inventory_management':'','inventory_policy':'continue','inventory_quantity':17}
+fee_product={'title':'Contrareembolso','selected_or_first_available_variant':{'id':59250983928153,'price':500,'available':True}}
 product={'title':'ReliefPath™ Ventosas Eléctricas con Calor y Luz Roja','url':PRODUCT_URL,'vendor':'Waistzen','description':'ReliefPath','featured_image':Img('producto.png'),
          'selected_or_first_available_variant':variant,'media':[],'metafields':{}}
 def load_schema(src):
     m=re.search(r'\{%\s*schema\s*%\}(.*?)\{%\s*endschema\s*%\}',src,re.S); return src[:m.start()],json.loads(m.group(1))
 def conv(v,d):
     if d and d['type']=='image_picker' and isinstance(v,str) and v: return Img(v.replace('shopify://shop_images/',''))
-    if d and d['type']=='product': return product if v else None
+    if d and d['type']=='product':
+        if not v: return None
+        return fee_product if 'contrareembolso' in str(v) else product
     return v
 def page(tpl,outname):
     data=json.load(open(os.path.join(ROOT,'templates',tpl),encoding='utf-8'))
     parts=[]
     for sid in data['order']:
         sec=data['sections'][sid]; f=os.path.join(ROOT,'sections',sec['type']+'.liquid')
-        if not os.path.exists(f):
+        if not os.path.exists(f) or sec['type']=='calmia-chat':
             parts.append('<div style="padding:18px;text-align:center;background:#fdf1f3;font:14px sans-serif;border:2px dashed #d4687f" id="shopify-section-template--1__%s">[%s · sección del tema existente]</div>'%(sid,sec['type'])); continue
         body,sc=load_schema(open(f,encoding='utf-8').read())
         defs={d['id']:d for d in sc.get('settings',[]) if 'id' in d}

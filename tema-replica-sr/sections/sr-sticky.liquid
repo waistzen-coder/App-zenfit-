@@ -1,0 +1,65 @@
+{% render 'sr-head' %}
+{%- liquid
+  assign p = section.settings.product | default: product
+  if p != blank
+    assign v = p.selected_or_first_available_variant
+  endif
+-%}
+{%- if p != blank -%}
+<div class="sr sr-sticky" id="sr-sticky-{{ section.id }}" aria-hidden="true">
+  <div class="sr-w sr-sticky__in">
+    <div class="sr-sticky__img">{%- if p.featured_image -%}{{ p.featured_image | image_url: width: 120 | image_tag: loading: 'lazy', alt: '' }}{%- endif -%}</div>
+    <div class="sr-sticky__txt">
+      <b>{{ section.settings.title | default: p.title }}</b>
+      <span><span data-sr-sticky-label>1 unidad</span> · <strong data-sr-sticky-price>{{ v.price | money }}</strong></span>
+    </div>
+    <a class="sr-btn" href="#comprar" data-sr-sticky-go tabindex="-1">{{ section.settings.cta_text }}</a>
+  </div>
+</div>
+<script>
+(function(){
+  var bar=document.getElementById('sr-sticky-{{ section.id }}'); if(!bar) return;
+  var go=bar.querySelector('[data-sr-sticky-go]');
+  function show(d){
+    var l=bar.querySelector('[data-sr-sticky-label]'), p=bar.querySelector('[data-sr-sticky-price]');
+    if(l && d.label) l.textContent=d.label; if(p && d.card) p.textContent=d.card;
+  }
+  document.addEventListener('sr:pack',function(e){ show(e.detail||{}); });
+  var first=document.querySelector('[data-sr-buy-box] input[name^="sr-pack-"]:checked');
+  if(first) show(first.dataset);
+  function buyBox(){ return document.querySelector('[data-sr-buy-box]'); }
+  function cod(){ return document.querySelector('[data-calmia-cod]'); }
+  var seenBox=true, seenCod=false;
+  function update(){
+    var on=!seenBox && !seenCod && window.scrollY>{{ section.settings.show_after }};
+    bar.classList.toggle('is-on',on); bar.setAttribute('aria-hidden',on?'false':'true'); go.tabIndex=on?0:-1;
+  }
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){ es.forEach(function(en){
+      if(en.target===buyBox()) seenBox=en.isIntersecting;
+      if(en.target===cod()) seenCod=en.isIntersecting;
+    }); update(); });
+    window.addEventListener('DOMContentLoaded',function(){ if(buyBox()) io.observe(buyBox()); else seenBox=false; if(cod()) io.observe(cod()); update(); });
+    window.addEventListener('scroll',update,{passive:true});
+  }
+  go.addEventListener('click',function(e){
+    var b=buyBox(); if(!b) return;
+    e.preventDefault(); b.scrollIntoView({behavior:'smooth',block:'center'});
+  });
+})();
+</script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "SR · Barra fija de compra",
+  "tag": "div",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Producto (vacío = el de la página)" },
+    { "type": "text", "id": "title", "label": "Nombre corto", "default": "ReliefPath™" },
+    { "type": "text", "id": "cta_text", "label": "Botón", "default": "Comprar ahora" },
+    { "type": "range", "id": "show_after", "label": "Aparece tras (px de scroll)", "min": 0, "max": 1500, "step": 50, "default": 300 }
+  ],
+  "presets": [ { "name": "SR · Barra fija de compra" } ]
+}
+{% endschema %}
