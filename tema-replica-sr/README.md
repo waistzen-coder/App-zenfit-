@@ -57,6 +57,30 @@ mantienen sincronizados en los dos sentidos.
 - Todos los botones de la página («Quiero mi ReliefPath», cierre, barra fija)
   llevan a la caja de compra (`#comprar`).
 
+## La primera pantalla y los reclamos
+
+Lo que hacen las tiendas de dropshipping que mejor convierten, sin inventar
+nada:
+
+- **Portada en el móvil:** el hero ocupa la pantalla con la foto de fondo,
+  el titular, el precio con el −50 % y el botón «Comprar ahora» a la vista.
+- **Ficha en el móvil:** insignia «−50 %» y pastilla «Envío gratis a España»
+  sobre la primera foto, «Ahorras 50,00 €», confianza bajo el precio y la
+  **barra fija de compra visible desde el primer momento**, para que siempre
+  haya un botón de compra en pantalla.
+- **Botón principal con brillo** (se apaga si el móvil pide menos movimiento).
+- **Barra superior roja** con el −10 % de bienvenida, envío, pago al recibir y
+  devoluciones.
+- **Cinta en movimiento** con las ventajas justo bajo la primera pantalla.
+- **«Menos de 1 € a la semana»**: el precio repartido entre 52 semanas, que se
+  calcula solo a partir del precio del producto.
+- **Oferta de bienvenida** con el código real **RELIEF10** (10 %, una vez por
+  cliente, no se suma a los packs). Aparece una vez por visita a los 25 s o al
+  bajar media página, se puede cerrar y deja una pestaña. «Aplicar» lo manda
+  solo al checkout al pagar con tarjeta, y solo con 1 unidad; con los packs
+  avisa de que no se suma.
+- **Las secciones aparecen suavemente** al llegar a ellas.
+
 ## De la referencia a ReliefPath
 
 La web de referencia no se pudo abrir desde esta sesión (la red la bloquea).
@@ -111,13 +135,14 @@ rojo y negro bien visible, sin mostrarlo aplicado en ninguna zona concreta):
     python3 construir_plantillas.py   # genera templates/*.json y anuncio.json
     python3 comprobar.py              # plantillas contra los schemas
     python3 preview/render.py         # vista previa local (fotos = marcadores)
-    python3 preview/comportamiento.py # 27 comprobaciones en navegador
+    python3 preview/comportamiento.py # 38 comprobaciones en navegador
     python3 preview/shots.py          # capturas a 390 y 1440 px
 
 `comportamiento.py` comprueba precios de cada pack, que la caja de arriba y la
 de contrareembolso no se contradicen, el enlace de pago online (pack, idioma y
 sin recargo), la apertura del formulario de contrareembolso, la barra fija, la
-portada y la llegada con `?pack=2&pago=cod`.
+portada, la llegada con `?pack=2&pago=cod`, el código de bienvenida (solo con
+1 unidad) y que ninguna sección se quede invisible con la animación.
 
 Lo que no cubren: que el checkout real aplique los descuentos automáticos al
 céntimo (la caja de contrareembolso y esta usan la misma fórmula) ni cómo se
