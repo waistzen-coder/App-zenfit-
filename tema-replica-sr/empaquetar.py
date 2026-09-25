@@ -59,6 +59,11 @@ schemes['scheme-2']['settings'].update({'background': soft, 'text': ink, 'button
                                         'button_label': '#FFFFFF', 'secondary_button_label': ink, 'shadow': ink})
 schemes['scheme-3']['settings'].update({'background': ink, 'text': '#FFFFFF', 'button': '#FFFFFF',
                                         'button_label': ink, 'secondary_button_label': '#FFFFFF'})
+# Botones y campos redondeados en las páginas de Dawn (carrito, contacto…),
+# como los de las secciones sr-*.
+current.update({'buttons_radius': 40, 'inputs_radius': 12, 'card_corner_radius': 14,
+                'media_radius': 14, 'text_boxes_radius': 14, 'popup_corner_radius': 14,
+                'sale_badge_color_scheme': 'scheme-3'})
 settings['current'] = current
 save(sd, settings)
 os.makedirs(os.path.join(OUT, 'config'), exist_ok=True)
