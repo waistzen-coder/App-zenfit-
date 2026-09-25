@@ -57,7 +57,7 @@ METHOD = section('sr-method', {
     'eyebrow': 'El Método Pausa',
     'heading': 'Dos momentos al día.', 'heading_accent': 'Un solo aparato.',
     'text': 'Si estudias muchas horas, la clave no es parar más, sino parar mejor. ReliefPath le da a cada pausa un principio y un final.',
-    'cta_text': '', 'cta_link': '',
+    'cta_text': 'Quiero mi ReliefPath', 'cta_link': '#comprar',
     'note': 'ReliefPath™ es un aparato de bienestar para uso doméstico. Consulta el manual del fabricante antes de usarlo.',
     'bg': '#f1f6fb',
 }, [
@@ -163,12 +163,14 @@ GUARANTEE = section('sr-guarantee', {
 
 FAQS = [
     ('¿Qué es ReliefPath™?', '<p>Un aparato de bienestar para casa que reúne ventosas eléctricas, calor y luz roja. No es un tratamiento médico ni garantiza alivio, mejor descanso ni rendimiento en el estudio.</p>'),
-    ('¿Por qué habláis de opositores?', '<p>Porque pasan muchas horas sentados y organizan el día en bloques. El Método Pausa es una forma de usar esos cortes para dedicarte un rato, en vez de pasarlos con el móvil.</p>'),
-    ('¿Cómo se usa y cuánto dura una sesión?', '<p>Sigue el manual del fabricante: duración, frecuencia, intensidad, zonas y contraindicaciones. Esta página no establece un protocolo de uso. Si no tienes el manual, pídelo a <a href="mailto:waistzen@gmail.com">waistzen@gmail.com</a>.</p>'),
-    ('¿Cuánto cuesta el envío?', '<p>El envío estándar es gratis para las direcciones de España admitidas en el checkout, sin importe mínimo. Si eliges contrareembolso se suman 5 € por pedido. Para confirmar el plazo de tu dirección, escríbenos antes de comprar.</p>'),
-    ('¿Puedo pagar al recibirlo?', '<p>Sí, con contrareembolso (+5 € por pedido), según la cobertura de tu dirección. No está disponible en Canarias, Ceuta y Melilla. En el checkout, elige «Pago contra entrega».</p>'),
+    ('¿Puedo pagar al recibirlo?', '<p>Sí, con contrareembolso: pagas en efectivo al repartidor, con un recargo de 5 € por pedido, según la cobertura de tu dirección. No está disponible en Canarias, Ceuta y Melilla. En el checkout, elige «Pago contra entrega».</p>'),
+    ('¿Cuánto cuesta el envío?', '<p>El envío estándar es gratis para las direcciones de España admitidas en el checkout, sin importe mínimo. Si necesitas saber el plazo para tu dirección antes de comprar, escríbenos.</p>'),
+    ('¿Y si no estoy en casa cuando llegue?', '<p>En el formulario de contrareembolso puedes indicar tu franja horaria preferida y una persona que pueda recogerlo por ti (un vecino, la portería…).</p>'),
     ('¿Puedo devolverlo?', '<p>Tienes 30 días desde la recepción para solicitar la devolución, según la política publicada, además del desistimiento legal de 14 días. Los gastos de devolución corren de tu cuenta salvo defecto o error nuestro. Consulta la <a href="/policies/refund-policy">política de devoluciones</a>.</p>'),
-    ('¿Hay descuento si compro más de uno?', '<p>Sí: −20 % a partir de 2 unidades y −30 % a partir de 3, aplicado automáticamente. El código de bienvenida no se acumula con los packs.</p>'),
+    ('¿Hay descuento si compro más de uno?', '<p>Sí: −20 % a partir de 2 unidades y −30 % a partir de 3, aplicado automáticamente en el checkout. El código de bienvenida no se acumula con los packs.</p>'),
+    ('¿Es seguro pagar con tarjeta?', '<p>El pago online se hace en el checkout de Shopify, con conexión cifrada. Nosotros no vemos ni guardamos los datos de tu tarjeta.</p>'),
+    ('¿Cómo se usa y cuánto dura una sesión?', '<p>Sigue el manual del fabricante: duración, frecuencia, intensidad, zonas y contraindicaciones. Esta página no establece un protocolo de uso. Si no tienes el manual, pídelo a <a href="mailto:waistzen@gmail.com">waistzen@gmail.com</a>.</p>'),
+    ('¿Por qué habláis de opositores?', '<p>Porque pasan muchas horas sentados y organizan el día en bloques. El Método Pausa es una forma de usar esos cortes para dedicarte un rato, en vez de pasarlos con el móvil.</p>'),
     ('¿Qué precauciones debo tener?', '<p>Lee todas las advertencias del manual. Ante dolor, una lesión o una reacción inesperada, deja de usarlo y consulta a un profesional sanitario.</p>'),
 ]
 FAQ = section('sr-faq', {
@@ -178,16 +180,68 @@ FAQ = section('sr-faq', {
 }, [('q', {'question': q, 'answer': a}) for q, a in FAQS])
 
 TRUST_LINE = 'Envío estándar gratis en España · Contrareembolso +5 € · 30 días para solicitar la devolución'
+FEE = 'contrareembolso-gastos-de-gestion'
+
+def buy_box(product_handle, h1):
+    """La ficha con la caja de compra. En la portada va con el producto
+    fijado y sin H1 (el H1 de la portada es el del hero)."""
+    return section('sr-product', {
+        'product': product_handle, 'fee_product': FEE, 'is_page_title': h1,
+        'badges': 'Método Pausa|Para opositores',
+        'heading': 'ReliefPath™ · Ventosas eléctricas con calor y luz roja',
+        'sub': 'El aparato del Método Pausa: convierte los descansos entre bloques de temario en un momento para ti.',
+        'price_note': '',
+        'packs_title': 'Elige tu pack',
+        'card_text': 'Comprar ahora', 'cod_text': 'Pagar al recibirlo en casa', 'soldout_text': 'Agotado',
+        'under': 'Envío estándar gratis a España · Pago seguro · 30 días para devolverlo',
+        'show_payment': True, 'show_schema': h1,
+    }, [
+        ('image', {'image': IMG('waistzen-reliefpath-hero-20260906.png'), 'fit': 'cover', 'tag': 'ReliefPath™', 'tag_icon': 'spark', 'pins': ''}),
+        ('image', {'image': IMG('reliefpath-video-producto-real-20260923.jpg'), 'fit': 'cover', 'tag': 'Foto real', 'tag_icon': 'check-circle', 'pins': ''}),
+        ('image', {'image': IMG('reliefpath-pausa-estudio-landing-20260911.png'), 'fit': 'cover', 'tag': 'Al cerrar los apuntes', 'tag_icon': 'book', 'pins': ''}),
+        ('image', {'image': IMG('reliefpath-funciones-landing-20260911.png'), 'fit': 'cover', 'tag': 'Funciones', 'tag_icon': 'sun', 'pins': ''}),
+        ('image', {'image': IMG('waistzen-reliefpath-controls-20260906.png'), 'fit': 'cover', 'tag': 'Ajustes', 'tag_icon': 'flame', 'pins': ''}),
+        ('image', {'image': IMG('reliefpath-escritorio-renovado-20260911.png'), 'fit': 'cover', 'tag': 'Entre bloques', 'tag_icon': 'timer', 'pins': ''}),
+        ('image', {'image': IMG('reliefpath-descanso-renovado-20260911.png'), 'fit': 'cover', 'tag': 'Al cerrar el día', 'tag_icon': 'moon', 'pins': ''}),
+        ('bullet', {'text': '<strong>3 funciones en 1:</strong> succión regulable, calor y luz roja'}),
+        ('bullet', {'text': '<strong>Tu pausa entre bloques</strong>, en la silla o en el sofá'}),
+        ('bullet', {'text': '<strong>Envío gratis a España</strong> y pago al recibirlo si lo prefieres'}),
+        ('pack', {'qty': 1, 'discount': 0, 'label': '1 unidad', 'sublabel': 'Para ti', 'tag': '', 'highlight': False, 'default': True}),
+        ('pack', {'qty': 2, 'discount': 20, 'label': '2 unidades', 'sublabel': 'Para ti y tu compañero de academia', 'tag': 'Ahorra 20 %', 'highlight': True, 'default': False}),
+        ('pack', {'qty': 3, 'discount': 30, 'label': '3 unidades', 'sublabel': 'Para tu grupo de estudio', 'tag': 'Ahorra 30 %', 'highlight': False, 'default': False}),
+        ('seal', {'icon': 'truck', 'text': 'Envío estándar gratis'}),
+        ('seal', {'icon': 'cash', 'text': 'Pago al recibirlo'}),
+        ('seal', {'icon': 'refresh', 'text': '30 días para devolverlo'}),
+        ('accordion', {'icon': 'box', 'title': 'Qué incluye', 'content': '<p>El pack contiene la cantidad de aparatos ReliefPath™ que elijas. Para confirmar accesorios y tipo de cable antes de comprar, escribe a <a href="mailto:waistzen@gmail.com">waistzen@gmail.com</a>.</p>'}),
+        ('accordion', {'icon': 'truck', 'title': 'Envío y entrega', 'content': '<p>Envío estándar gratis para las direcciones de España admitidas en el checkout, sin importe mínimo. El contrareembolso suma 5 € por pedido. Para confirmar el plazo de tu dirección, escríbenos antes de comprar.</p>'}),
+        ('accordion', {'icon': 'refresh', 'title': 'Devoluciones', 'content': '<p>Tienes 30 días desde la recepción para solicitar la devolución, además del desistimiento legal de 14 días, según la <a href="/policies/refund-policy">política de devoluciones</a>. No es un periodo de uso libre de prueba.</p>'}),
+        ('accordion', {'icon': 'book', 'title': 'Uso y precauciones', 'content': '<p>Antes del primer uso, lee las instrucciones del fabricante: zonas permitidas, duración, frecuencia, intensidad y contraindicaciones. ReliefPath™ es un aparato de bienestar y no sustituye un diagnóstico ni un tratamiento médico.</p>'}),
+    ])
+
+def closing(link, text):
+    return section('sr-cta', {
+        'product': PRODUCT, 'image': IMG('reliefpath-cierre-20260923.png'),
+        'tag': 'Fin de la jornada', 'pins': '', 'eyebrow': 'Empieza hoy',
+        'heading': 'Tu próxima pausa', 'heading_accent': 'empieza aquí',
+        'text': text, 'show_price': True, 'cta_text': 'Comprar ahora', 'cta_link': link,
+        'trust': TRUST_LINE,
+    })
+
+STICKY = section('sr-sticky', {'product': PRODUCT, 'title': 'ReliefPath™', 'cta_text': 'Comprar ahora', 'show_after': 300})
+CHAT = section('calmia-chat', {
+    'whatsapp': '', 'email': 'waistzen@gmail.com', 'label': 'Escríbenos',
+    'prefill': 'Hola, tengo una duda sobre el ReliefPath', 'offset_mobile': 96,
+    'offset_desktop': 24, 'compact_mobile': True,
+})
 
 # ───────────────────────────── portada ─────────────────────────────
 index = {'sections': {
-    'anuncio': ANNOUNCE,
     'hero': section('sr-hero', {
         'product': PRODUCT,
         'eyebrow': 'Método Pausa · para opositores',
         'heading': 'Tu temario puede esperar.', 'heading_accent': 'Tu pausa, no.',
         'text': '<p>ReliefPath™ reúne ventosas eléctricas, calor y luz roja en un aparato para casa. Pensado para que las pausas entre bloques de estudio sean un momento de verdad para ti.</p>',
-        'cta_text': 'Descubre ReliefPath', 'cta_link': '/products/' + PRODUCT,
+        'cta_text': 'Comprar ahora', 'cta_link': '#comprar',
         'cta2_text': 'Cómo funciona', 'cta2_link': '#shopify-section-metodo',
         'under': TRUST_LINE,
         'image': IMG('reliefpath-pausa-estudio-landing-20260911.png'), 'ratio': 'tall',
@@ -200,13 +254,7 @@ index = {'sections': {
     'confianza': TRUST,
     'ciclo': CYCLE,
     'metodo': METHOD,
-    'producto': section('sr-featured', {
-        'product': PRODUCT, 'eyebrow': 'El aparato', 'heading': 'Conoce', 'heading_accent': 'ReliefPath™',
-        'image': IMG('waistzen-reliefpath-hero-20260906.png'), 'fit': 'cover',
-        'tag': '3 en 1', 'pins': '', 'title': '',
-        'points': 'Ventosas eléctricas con succión regulable\nFunción de calor y luz roja en la copa\n−20 % desde 2 unidades · −30 % desde 3',
-        'cta_text': 'Ver ReliefPath', 'trust': TRUST_LINE, 'bg': '#f1f6fb',
-    }),
+    'comprar': buy_box(PRODUCT, False),
     'pasos': STEPS,
     'comparativa': COMPARE,
     'tiempo': TIMELINE,
@@ -214,85 +262,40 @@ index = {'sections': {
     'opiniones': REVIEWS,
     'garantia': GUARANTEE,
     'faq': FAQ,
-    'cierre': section('sr-cta', {
-        'product': PRODUCT, 'image': IMG('reliefpath-cierre-20260923.png'),
-        'tag': 'Fin de la jornada', 'pins': '', 'eyebrow': 'Empieza hoy',
-        'heading': 'Tu próxima pausa', 'heading_accent': 'empieza aquí',
-        'text': 'Elige tu pack, paga como prefieras y recíbelo en casa.',
-        'show_price': True, 'cta_text': 'Quiero mi ReliefPath', 'cta_link': '/products/' + PRODUCT,
-        'trust': TRUST_LINE,
-    }),
-}, 'order': ['anuncio', 'hero', 'confianza', 'ciclo', 'metodo', 'producto', 'pasos', 'comparativa',
-             'tiempo', 'historia', 'opiniones', 'garantia', 'faq', 'cierre']}
+    'cierre': closing('#comprar', 'Elige tu pack, paga como prefieras y recíbelo en casa.'),
+    'barra': STICKY,
+    'chat': CHAT,
+}, 'order': ['hero', 'confianza', 'ciclo', 'metodo', 'comprar', 'pasos', 'comparativa',
+             'tiempo', 'historia', 'opiniones', 'garantia', 'faq', 'cierre', 'barra', 'chat']}
 
 # ────────────────────────── ficha de producto ──────────────────────────
 COD = json.load(open(os.path.join(HERE, 'contrareembolso.json'), encoding='utf-8'))
 
 product = {'sections': {
-    'anuncio': ANNOUNCE,
-    'ficha': section('sr-product', {
-        'product': '', 'badges': 'Método Pausa|Para opositores', 'heading': '',
-        'sub': 'El aparato del Método Pausa: convierte los descansos entre bloques de temario en un momento para ti.',
-        'save_label': 'Ahorras', 'price_note': 'Precio por unidad. −20 % desde 2 unidades y −30 % desde 3.',
-        'cta_mode': 'anchor', 'cta_text': 'Elegir pack y forma de pago',
-        'cta_anchor': '#shopify-section-contrareembolso', 'soldout_text': 'Agotado',
-        'under': 'Tarjeta o contrareembolso · Envío estándar gratis en España',
-        'alt_text': '', 'alt_link': '#shopify-section-contrareembolso',
-        'show_payment': True, 'show_schema': True,
-    }, [
-        ('image', {'image': IMG('waistzen-reliefpath-hero-20260906.png'), 'fit': 'cover', 'tag': 'ReliefPath™', 'tag_icon': 'spark', 'pins': ''}),
-        ('image', {'image': IMG('reliefpath-producto-renovado-20260911.png'), 'fit': 'cover', 'tag': '3 en 1', 'tag_icon': 'spark', 'pins': ''}),
-        ('image', {'image': IMG('reliefpath-pausa-estudio-landing-20260911.png'), 'fit': 'cover', 'tag': 'Al cerrar los apuntes', 'tag_icon': 'book', 'pins': ''}),
-        ('image', {'image': IMG('reliefpath-funciones-landing-20260911.png'), 'fit': 'cover', 'tag': 'Funciones', 'tag_icon': 'sun', 'pins': ''}),
-        ('image', {'image': IMG('waistzen-reliefpath-controls-20260906.png'), 'fit': 'cover', 'tag': 'Ajustes', 'tag_icon': 'flame', 'pins': ''}),
-        ('image', {'image': IMG('reliefpath-escritorio-renovado-20260911.png'), 'fit': 'cover', 'tag': 'Entre bloques', 'tag_icon': 'timer', 'pins': ''}),
-        ('image', {'image': IMG('reliefpath-descanso-renovado-20260911.png'), 'fit': 'cover', 'tag': 'Al cerrar el día', 'tag_icon': 'moon', 'pins': ''}),
-        ('bullet', {'text': '<strong>Ventosas eléctricas, calor y luz roja</strong> en un solo aparato'}),
-        ('bullet', {'text': '<strong>Pensado para tus pausas de estudio</strong>, en la silla o en el sofá'}),
-        ('bullet', {'text': '<strong>Paga con tarjeta o al recibirlo</strong> (contrareembolso +5 €)'}),
-        ('bullet', {'text': '<strong>30 días</strong> para solicitar la devolución'}),
-        ('seal', {'icon': 'truck', 'text': 'Envío estándar gratis'}),
-        ('seal', {'icon': 'cash', 'text': 'Pago al recibirlo'}),
-        ('seal', {'icon': 'refresh', 'text': '30 días para devolverlo'}),
-        ('accordion', {'icon': 'box', 'title': 'Qué incluye', 'content': '<p>El pack contiene la cantidad de aparatos ReliefPath™ que elijas. Para confirmar accesorios y tipo de cable antes de comprar, escribe a <a href="mailto:waistzen@gmail.com">waistzen@gmail.com</a>.</p>'}),
-        ('accordion', {'icon': 'truck', 'title': 'Envío y entrega', 'content': '<p>Envío estándar gratis para las direcciones de España admitidas en el checkout, sin importe mínimo. El contrareembolso suma 5 € por pedido. Para confirmar el plazo de tu dirección, escríbenos antes de comprar.</p>'}),
-        ('accordion', {'icon': 'refresh', 'title': 'Devoluciones', 'content': '<p>Tienes 30 días desde la recepción para solicitar la devolución, además del desistimiento legal de 14 días, según la <a href="/policies/refund-policy">política de devoluciones</a>. No es un periodo de uso libre de prueba.</p>'}),
-        ('accordion', {'icon': 'book', 'title': 'Uso y precauciones', 'content': '<p>Antes del primer uso, lee las instrucciones del fabricante: zonas permitidas, duración, frecuencia, intensidad y contraindicaciones. ReliefPath™ es un aparato de bienestar y no sustituye un diagnóstico ni un tratamiento médico.</p>'}),
-    ]),
-    'contrareembolso': COD,
+    'ficha': buy_box('', True),
     'confianza': TRUST,
     'ciclo': CYCLE,
     'metodo': METHOD,
     'pasos': STEPS,
-    'incluye': BOX,
     'comparativa': COMPARE,
+    'incluye': BOX,
+    'contrareembolso': COD,
     'tiempo': TIMELINE,
     'historia': STORY,
     'opiniones': REVIEWS,
     'garantia': GUARANTEE,
     'faq': FAQ,
-    'cierre': section('sr-cta', {
-        'product': '', 'image': IMG('reliefpath-cierre-20260923.png'),
-        'tag': 'Fin de la jornada', 'pins': '', 'eyebrow': 'Empieza hoy',
-        'heading': 'Tu próxima pausa', 'heading_accent': 'empieza aquí',
-        'text': 'Elige tu pack y cómo pagarlo. Revisas el total antes de confirmar.',
-        'show_price': True, 'cta_text': 'Elegir mi pack', 'cta_link': '#shopify-section-contrareembolso',
-        'trust': TRUST_LINE,
-    }),
-    'barra': section('calmia-sticky-atc', {
-        'product': PRODUCT, 'short_title': 'ReliefPath™ · Método Pausa', 'cta_text': 'Elegir mi pack',
-        'cta_target': 'anchor', 'cta_anchor': '#shopify-section-contrareembolso', 'offset': 250,
-        'show_eta': False, 'eta_text': 'Pídelo hoy y lo tienes entre el', 'delivery_min': 1, 'delivery_max': 2,
-    }),
-    'chat': section('calmia-chat', {
-        'whatsapp': '', 'email': 'waistzen@gmail.com', 'label': 'Escríbenos',
-        'prefill': 'Hola, tengo una duda sobre el ReliefPath', 'offset_mobile': 116,
-        'offset_desktop': 24, 'compact_mobile': True,
-    }),
-}, 'order': ['anuncio', 'ficha', 'contrareembolso', 'confianza', 'ciclo', 'metodo', 'pasos', 'incluye',
-             'comparativa', 'tiempo', 'historia', 'opiniones', 'garantia', 'faq', 'cierre', 'barra', 'chat']}
+    'cierre': closing('#comprar', 'Elige tu pack y cómo pagarlo. Revisas el total antes de confirmar.'),
+    'barra': STICKY,
+    'chat': CHAT,
+}, 'order': ['ficha', 'confianza', 'ciclo', 'metodo', 'pasos', 'comparativa', 'incluye', 'contrareembolso',
+             'tiempo', 'historia', 'opiniones', 'garantia', 'faq', 'cierre', 'barra', 'chat']}
 
 for name, data in [('index.json', index), ('product.reliefpatch.json', product)]:
     with open(os.path.join(HERE, 'templates', name), 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
     print('ok', name)
+
+# La barra de anuncios va en el grupo de cabecera (encima del menú).
+with open(os.path.join(HERE, 'anuncio.json'), 'w', encoding='utf-8') as f:
+    json.dump(ANNOUNCE, f, ensure_ascii=False, indent=2)

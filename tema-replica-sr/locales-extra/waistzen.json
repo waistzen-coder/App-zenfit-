@@ -1,0 +1,32 @@
+{
+  "waistzen_audit": {
+    "available": "Disponible para pedir",
+    "sold_out": "Agotado",
+    "pack_unavailable": "No hay existencias suficientes para este pack. Elige una cantidad menor.",
+    "selected_total": "Total previsto",
+    "meta_title": "ReliefPath™ | Una pausa de bienestar para tus horas de estudio",
+    "meta_description": "Descubre ReliefPath™, un aparato de ventosas eléctricas con calor y luz roja. Consulta sus funciones, packs y condiciones de compra en Waistzen."
+  },
+  "waistzen_review": {
+    "product_name": "ReliefPath™ · Ventosas eléctricas con calor y luz roja",
+    "tracking_title": "Seguir mi pedido",
+    "tracking_intro": "Para consultar tu pedido, utiliza el enlace de la confirmación de compra. Cuando haya seguimiento disponible, podrás consultar la información facilitada por el transportista.",
+    "tracking_account": "Consultar mis pedidos",
+    "tracking_help": "Si no encuentras la confirmación o necesitas ayuda, escribe a waistzen@gmail.com e indica tu número de pedido. Revisa también la carpeta de correo no deseado.",
+    "shipping_title": "Envíos y entregas",
+    "returns_title": "Devoluciones y reembolsos",
+    "policy_intro": "Consulta la información de esta compra en la política correspondiente de Waistzen.",
+    "shipping_link": "Consultar la política de envíos",
+    "returns_link": "Consultar la política de devoluciones",
+    "privacy_title": "Tus opciones de privacidad",
+    "contact_help_html": "<p>Para consultas sobre ReliefPath™, pedidos o devoluciones, escribe a <a href=\"mailto:waistzen@gmail.com\">waistzen@gmail.com</a> o utiliza este formulario. Si ya has comprado, incluye el número de pedido.</p><p>Consulta cómo tratamos tus datos en la <a href=\"/policies/privacy-policy\">política de privacidad</a>.</p>",
+    "cod_privacy_html": "Usaremos estos datos para gestionar tu pedido y su entrega. Consulta la <a href=\"/policies/privacy-policy\">política de privacidad</a>.",
+    "unit_price": "Precio de una unidad",
+    "availability": "Disponibilidad",
+    "price": "Precio",
+    "fee_title": "Gastos de gestión del contrareembolso",
+    "fee_info": "Este concepto corresponde al recargo de 5 € por pedido con contrareembolso. Se añade desde el formulario de ReliefPath™ al elegir esa modalidad; no es un aparato ni un producto para comprar por separado.",
+    "choose_pack": "Elegir mi pack",
+    "contact_title": "Contacta con Waistzen"
+  }
+}

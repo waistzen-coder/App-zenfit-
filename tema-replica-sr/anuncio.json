@@ -1,0 +1,39 @@
+{
+  "type": "sr-announce",
+  "settings": {
+    "bg": "#0f2640",
+    "color": "#ffffff",
+    "speed": 4
+  },
+  "blocks": {
+    "ms1": {
+      "type": "msg",
+      "settings": {
+        "icon": "truck",
+        "text": "Envío estándar gratis en España",
+        "link": ""
+      }
+    },
+    "ms2": {
+      "type": "msg",
+      "settings": {
+        "icon": "cash",
+        "text": "Paga al recibirlo: contrareembolso +5 €",
+        "link": ""
+      }
+    },
+    "ms3": {
+      "type": "msg",
+      "settings": {
+        "icon": "refresh",
+        "text": "30 días para solicitar la devolución",
+        "link": "/policies/refund-policy"
+      }
+    }
+  },
+  "block_order": [
+    "ms1",
+    "ms2",
+    "ms3"
+  ]
+}

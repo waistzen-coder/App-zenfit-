@@ -29,14 +29,8 @@ def save(path, data):
     with open(path, 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
 
-# La barra de anuncios va encima de la cabecera, como en la referencia, y por
-# eso sale de las plantillas y entra en el grupo de cabecera.
-for t in ['index.json', 'product.reliefpatch.json']:
-    p = os.path.join(BUILD, 'templates', t)
-    data = load(p)
-    announce = data['sections'].pop('anuncio')
-    data['order'].remove('anuncio')
-    save(p, data)
+# La barra de anuncios va encima de la cabecera, como en la referencia.
+announce = load(os.path.join(HERE, 'anuncio.json'))
 
 hg = os.path.join(BUILD, 'sections', 'header-group.json')
 group = load(hg)
@@ -65,6 +59,20 @@ schemes['scheme-3']['settings'].update({'background': ink, 'text': '#FFFFFF', 'b
                                         'button_label': ink, 'secondary_button_label': '#FFFFFF'})
 settings['current'] = current
 save(sd, settings)
+
+# El idioma principal de la tienda es el inglés, así que Shopify pinta los
+# textos del tema con en.default.json. Se pone ahí el castellano de Dawn para
+# que carrito, buscador y pie salgan en español, y se añaden los textos
+# propios que usa la caja de contrareembolso (waistzen_*).
+extra = load(os.path.join(HERE, 'locales-extra', 'waistzen.json'))
+es = load(os.path.join(BUILD, 'locales', 'es.json'))
+es.update(extra)
+save(os.path.join(BUILD, 'locales', 'es.json'), es)
+save(os.path.join(BUILD, 'locales', 'en.default.json'), es)
+# Copia suelta, para poder subir solo los idiomas a un tema que ya existe.
+os.makedirs(os.path.join(OUT, 'locales'), exist_ok=True)
+for f in ['es.json', 'en.default.json']:
+    shutil.copy(os.path.join(BUILD, 'locales', f), os.path.join(OUT, 'locales', f))
 
 os.makedirs(OUT, exist_ok=True)
 zpath = os.path.join(OUT, 'reliefpath-sr.zip')

@@ -1,21 +1,79 @@
 {
   "type": "calmia-cod",
   "blocks": {
-    "pk1": { "type": "pack", "settings": { "qty": 1, "discount_pct": 0, "label": "1 unidad", "sublabel": "Para ti", "badge": "", "highlight": false } },
-    "pk2": { "type": "pack", "settings": { "qty": 2, "discount_pct": 20, "label": "2 unidades", "sublabel": "Para ti y tu compañero de academia", "badge": "", "highlight": true } },
-    "pk3": { "type": "pack", "settings": { "qty": 3, "discount_pct": 30, "label": "3 unidades", "sublabel": "Para tu grupo de estudio", "badge": "MEJOR PRECIO POR UNIDAD", "highlight": false } },
-    "c1": { "type": "point", "settings": { "icon": "truck", "title": "Envío estándar gratis", "text": "Sin mínimo para ReliefPath en las direcciones de España admitidas en el checkout." } },
-    "c2": { "type": "point", "settings": { "icon": "clock", "title": "Consulta la entrega", "text": "Escríbenos antes de comprar para confirmar preparación, transporte y plazo total de tu dirección." } },
-    "c3": { "type": "point", "settings": { "icon": "shield", "title": "Revisa antes de confirmar", "text": "El formulario te lleva al checkout. El pedido se realiza cuando lo confirmas allí." } }
+    "pk1": {
+      "type": "pack",
+      "settings": {
+        "qty": 1,
+        "discount_pct": 0,
+        "label": "1 unidad",
+        "sublabel": "Para ti",
+        "badge": "",
+        "highlight": false
+      }
+    },
+    "pk2": {
+      "type": "pack",
+      "settings": {
+        "qty": 2,
+        "discount_pct": 20,
+        "label": "2 unidades",
+        "sublabel": "Para ti y tu compañero de academia",
+        "badge": "",
+        "highlight": true
+      }
+    },
+    "pk3": {
+      "type": "pack",
+      "settings": {
+        "qty": 3,
+        "discount_pct": 30,
+        "label": "3 unidades",
+        "sublabel": "Para tu grupo de estudio",
+        "badge": "MEJOR PRECIO POR UNIDAD",
+        "highlight": false
+      }
+    },
+    "c1": {
+      "type": "point",
+      "settings": {
+        "icon": "truck",
+        "title": "Envío estándar gratis",
+        "text": "Sin mínimo para ReliefPath en las direcciones de España admitidas en el checkout."
+      }
+    },
+    "c2": {
+      "type": "point",
+      "settings": {
+        "icon": "clock",
+        "title": "Consulta la entrega",
+        "text": "Escríbenos antes de comprar para confirmar preparación, transporte y plazo total de tu dirección."
+      }
+    },
+    "c3": {
+      "type": "point",
+      "settings": {
+        "icon": "shield",
+        "title": "Revisa antes de confirmar",
+        "text": "El formulario te lleva al checkout. El pedido se realiza cuando lo confirmas allí."
+      }
+    }
   },
-  "block_order": ["pk1", "pk2", "pk3", "c1", "c2", "c3"],
+  "block_order": [
+    "pk1",
+    "pk2",
+    "pk3",
+    "c1",
+    "c2",
+    "c3"
+  ],
   "settings": {
     "product": "juego-de-ventosa-electrica-con-cable",
     "fee_product": "contrareembolso-gastos-de-gestion",
     "eyebrow": "",
-    "heading": "Elige tu pack y",
-    "heading_italic": "cómo quieres pagarlo",
-    "subheading": "Pago online o en efectivo al repartidor, con un recargo de 5 € por pedido para el contrareembolso y sujeto a cobertura.",
+    "heading": "Completa tu pedido",
+    "heading_italic": "en un minuto",
+    "subheading": "Paga con tarjeta ahora, o en efectivo al repartidor con un recargo de 5 € por pedido, sujeto a cobertura.",
     "step_pack": "Elige tu pack",
     "step_pay": "Elige cómo pagar",
     "step_form": "Dinos dónde te lo llevamos",
