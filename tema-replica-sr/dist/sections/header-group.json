@@ -5,7 +5,7 @@
     "anuncio": {
       "type": "sr-announce",
       "settings": {
-        "bg": "#d6312b",
+        "bg": "#1b2140",
         "color": "#ffffff",
         "speed": 3
       },

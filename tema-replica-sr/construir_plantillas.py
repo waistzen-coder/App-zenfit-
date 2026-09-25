@@ -27,14 +27,14 @@ def section(type_, settings, blocks=(), disabled=False):
     return s
 
 # ───────────────────────── piezas compartidas ─────────────────────────
-ANNOUNCE = section('sr-announce', {'bg': '#d6312b', 'color': '#ffffff', 'speed': 3}, [
+ANNOUNCE = section('sr-announce', {'bg': '#1b2140', 'color': '#ffffff', 'speed': 3}, [
     ('msg', {'icon': 'spark', 'text': '−10 % en tu primer pedido con RELIEF10', 'link': '#oferta'}),
     ('msg', {'icon': 'truck', 'text': 'Envío estándar gratis en España', 'link': ''}),
     ('msg', {'icon': 'cash', 'text': 'Paga al recibirlo en casa', 'link': ''}),
     ('msg', {'icon': 'refresh', 'text': '30 días para devolverlo', 'link': '/policies/refund-policy'}),
 ])
 
-MARQUEE = section('sr-marquee', {'bg': '#0f2640', 'color': '#ffffff', 'speed': 34}, [
+MARQUEE = section('sr-marquee', {'bg': '#f5a524', 'color': '#1b2140', 'speed': 34}, [
     ('item', {'icon': 'flame', 'text': 'Calor'}),
     ('item', {'icon': 'wave', 'text': 'Succión regulable'}),
     ('item', {'icon': 'sun', 'text': 'Luz roja'}),
@@ -91,7 +91,7 @@ METHOD = section('sr-method', {
     'text': 'Si estudias muchas horas, la clave no es parar más, sino parar mejor. ReliefPath le da a cada pausa un principio y un final.',
     'cta_text': 'Quiero mi ReliefPath', 'cta_link': '#comprar',
     'note': 'ReliefPath™ es un aparato de bienestar para uso doméstico. Consulta el manual del fabricante antes de usarlo.',
-    'bg': '#f1f6fb',
+    'bg': '#fbf4ec',
 }, [
     ('part', {
         'image': IMG('reliefpath-escritorio-renovado-20260911.png'),
@@ -147,7 +147,7 @@ COMPARE = section('sr-compare', {
     'text': 'Lo que ofrece cada opción cuando llevas horas delante del temario.',
     'col_us': 'ReliefPath™', 'col_a': 'Pausa con el móvil', 'col_b': 'Cita de masaje', 'col_c': '',
     'note': 'Comparativa orientativa de opciones de descanso. ReliefPath™ no sustituye la fisioterapia ni un tratamiento profesional.',
-    'bg': '#f1f6fb',
+    'bg': '#fbf4ec',
 }, [
     ('row', {'feature': 'Sin salir de casa', 'us': 'si', 'a': 'si', 'b': 'no', 'c': ''}),
     ('row', {'feature': 'Sin pedir cita', 'us': 'si', 'a': 'si', 'b': 'no', 'c': ''}),
@@ -182,7 +182,7 @@ STORY = section('sr-story', {
 })
 
 REVIEWS = section('sr-reviews', {
-    'eyebrow': 'Opiniones', 'heading': 'Lo que cuentan', 'heading_accent': 'quienes ya lo usan', 'bg': '#f1f6fb',
+    'eyebrow': 'Opiniones', 'heading': 'Lo que cuentan', 'heading_accent': 'quienes ya lo usan', 'bg': '#fbf4ec',
 })
 
 GUARANTEE = section('sr-guarantee', {
@@ -208,7 +208,7 @@ FAQS = [
 FAQ = section('sr-faq', {
     'eyebrow': 'Dudas', 'heading': 'Preguntas', 'heading_accent': 'frecuentes', 'open_first': True,
     'help': '<p>¿Te queda alguna duda? Escríbenos a <a href="mailto:waistzen@gmail.com">waistzen@gmail.com</a> antes de comprar.</p>',
-    'schema': True, 'bg': '#f1f6fb',
+    'schema': True, 'bg': '#fbf4ec',
 }, [('q', {'question': q, 'answer': a}) for q, a in FAQS])
 
 TRUST_LINE = 'Envío estándar gratis en España · Contrareembolso +5 € · 30 días para solicitar la devolución'

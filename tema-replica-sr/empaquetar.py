@@ -51,7 +51,7 @@ shutil.copy(hg, os.path.join(OUT, 'sections', 'header-group.json'))
 sd = os.path.join(BUILD, 'config', 'settings_data.json')
 settings = load(sd)
 current = json.loads(json.dumps(settings['presets']['Default']))
-ink, accent, soft = '#0F2640', '#D6312B', '#F1F6FB'
+ink, accent, soft = '#1B2140', '#D92D3F', '#FBF4EC'
 schemes = current['color_schemes']
 schemes['scheme-1']['settings'].update({'text': ink, 'button': accent, 'button_label': '#FFFFFF',
                                         'secondary_button_label': ink, 'shadow': ink})
@@ -61,6 +61,15 @@ schemes['scheme-3']['settings'].update({'background': ink, 'text': '#FFFFFF', 'b
                                         'button_label': ink, 'secondary_button_label': '#FFFFFF'})
 settings['current'] = current
 save(sd, settings)
+os.makedirs(os.path.join(OUT, 'config'), exist_ok=True)
+shutil.copy(sd, os.path.join(OUT, 'config', 'settings_data.json'))
+
+# Pie de página oscuro, a juego con las secciones en tinta.
+fg = os.path.join(BUILD, 'sections', 'footer-group.json')
+footer = load(fg)
+footer['sections']['footer']['settings']['color_scheme'] = 'scheme-3'
+save(fg, footer)
+shutil.copy(fg, os.path.join(OUT, 'sections', 'footer-group.json'))
 
 # El idioma principal de la tienda es el inglés, así que Shopify pinta los
 # textos del tema con en.default.json. Se pone ahí el castellano de Dawn para
