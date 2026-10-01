@@ -18,7 +18,7 @@
       {%- if p != blank -%}
         {%- assign rv = p.metafields.reviews.rating.value -%}
         {%- if rv and rv.rating -%}
-          <div class="sr-rating" style="margin-top:16px"><span class="sr-stars">{% for i in (1..5) %}{% render 'sr-icon', name: 'star' %}{% endfor %}</span><strong>{{ rv.rating | round: 1 }}</strong> · {{ 'sr.reviews_count' | t: count: p.metafields.reviews.rating_count.value }}</div>
+          <div class="sr-rating sr-hero__rating"><span class="sr-stars">{% for i in (1..5) %}{% render 'sr-icon', name: 'star' %}{% endfor %}</span><strong>{{ rv.rating | round: 1 }}</strong> · {{ 'sr.reviews_count' | t: count: p.metafields.reviews.rating_count.value }}</div>
         {%- endif -%}
       {%- endif -%}
       {%- if section.settings.text != blank -%}<div class="sr-lead sr-rte">{{ section.settings.text }}</div>{%- endif -%}

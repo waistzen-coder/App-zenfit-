@@ -1,6 +1,4 @@
-{%- comment -%} Fuentes y estilos comunes de las secciones sr-*. Cada sección lo llama; el navegador solo los descarga una vez. {%- endcomment -%}
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,600;1,9..144,700&family=Inter:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+{%- comment -%} Estilos comunes de las secciones sr-* (incluyen las fuentes, servidas desde el tema). Cada sección lo llama; el navegador solo los descarga una vez. {%- endcomment -%}
 {{ 'sr.css' | asset_url | stylesheet_tag }}
 {%- comment -%}
   En las plantillas JSON el contenedor de cada sección se llama
@@ -10,6 +8,15 @@
 {%- endcomment -%}
 <script>
 if(!window.__srAnchors){window.__srAnchors=1;
+  /* Medición: eventos propios «reliefpath:*» con la API de eventos de cliente de
+     Shopify. Llegan a los píxeles de la tienda (Ajustes → Eventos de cliente) y
+     Shopify aplica el consentimiento de cookies. No se lanzan eventos estándar
+     (InitiateCheckout, AddPaymentInfo…): esos los envía ya el checkout de Shopify
+     y repetirlos aquí los contaría dos veces. */
+  window.srTrack=function(name,data){ data=data||{};
+    try{ if(window.Shopify&&Shopify.analytics&&Shopify.analytics.publish){ var r=Shopify.analytics.publish('reliefpath:'+name,data); if(r&&r.catch) r.catch(function(){}); } }catch(e){}
+    try{ if(window.dataLayer){ var o={event:'reliefpath_'+name}; for(var k in data) o[k]=data[k]; window.dataLayer.push(o); } }catch(e){}
+  };
   var srFind=function(h){ if(!h||h.charAt(0)!=='#'||h.length<2) return null; var id=decodeURIComponent(h.slice(1)), t=document.getElementById(id);
     if(!t && id.indexOf('shopify-section-')===0){ t=document.querySelector('[id$="__'+id.slice(16)+'"]'); } return t; };
   document.addEventListener('click',function(e){ var a=e.target.closest&&e.target.closest('a[href^="#"]'); if(!a) return;

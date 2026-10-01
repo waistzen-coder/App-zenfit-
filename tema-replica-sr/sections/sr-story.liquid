@@ -12,7 +12,7 @@
       {%- if section.settings.name != blank -%}
         <div class="sr-story__sign"><b>{{ section.settings.name }}</b>{% if section.settings.role != blank %}<span>{{ section.settings.role }}</span>{% endif %}</div>
       {%- endif -%}
-      {%- if section.settings.cta_text != blank -%}<a class="sr-btn sr-btn--ghost" style="margin-top:24px" href="{{ section.settings.cta_link }}">{{ section.settings.cta_text }}</a>{%- endif -%}
+      {%- if section.settings.cta_text != blank -%}<a class="sr-btn sr-btn--ghost sr-story__cta" href="{{ section.settings.cta_link }}">{{ section.settings.cta_text }}</a>{%- endif -%}
     </div>
   </div>
 </section>

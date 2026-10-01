@@ -43,9 +43,9 @@
           {%- for b in gal -%}
             <div class="sr-gal__slide" {{ b.shopify_attributes }}>
               {%- if forloop.first -%}
-                {% render 'sr-photo', image: b.settings.image, ratio: 'sq', fit: b.settings.fit, tag: b.settings.tag, tag_icon: b.settings.tag_icon, pins: b.settings.pins, alt: b.settings.image.alt, eager: section.settings.is_page_title, badge: sale_badge, chip: section.settings.first_chip, sizes: '(min-width: 990px) 55vw, 100vw' %}
+                {% render 'sr-photo', image: b.settings.image, ratio: 'sq', fit: b.settings.fit, tag: b.settings.tag, tag_icon: b.settings.tag_icon, pins: b.settings.pins, alt: b.settings.image.alt, alt_fallback: p.title, eager: section.settings.is_page_title, badge: sale_badge, chip: section.settings.first_chip, sizes: '(min-width: 990px) 55vw, 100vw' %}
               {%- else -%}
-                {% render 'sr-photo', image: b.settings.image, ratio: 'sq', fit: b.settings.fit, tag: b.settings.tag, tag_icon: b.settings.tag_icon, pins: b.settings.pins, alt: b.settings.image.alt, sizes: '(min-width: 990px) 55vw, 100vw' %}
+                {% render 'sr-photo', image: b.settings.image, ratio: 'sq', fit: b.settings.fit, tag: b.settings.tag, tag_icon: b.settings.tag_icon, pins: b.settings.pins, alt: b.settings.image.alt, alt_fallback: p.title, sizes: '(min-width: 990px) 55vw, 100vw' %}
               {%- endif -%}
             </div>
           {%- endfor -%}
@@ -53,9 +53,9 @@
           {%- for m in p.media -%}{%- if m.media_type == 'image' -%}
             <div class="sr-gal__slide">
               {%- if forloop.first -%}
-                {% render 'sr-photo', image: m.preview_image, ratio: 'sq', alt: m.alt, eager: section.settings.is_page_title, badge: sale_badge, chip: section.settings.first_chip, sizes: '(min-width: 990px) 55vw, 100vw' %}
+                {% render 'sr-photo', image: m.preview_image, ratio: 'sq', alt: m.alt, alt_fallback: p.title, eager: section.settings.is_page_title, badge: sale_badge, chip: section.settings.first_chip, sizes: '(min-width: 990px) 55vw, 100vw' %}
               {%- else -%}
-                {% render 'sr-photo', image: m.preview_image, ratio: 'sq', alt: m.alt, sizes: '(min-width: 990px) 55vw, 100vw' %}
+                {% render 'sr-photo', image: m.preview_image, ratio: 'sq', alt: m.alt, alt_fallback: p.title, sizes: '(min-width: 990px) 55vw, 100vw' %}
               {%- endif -%}
             </div>
           {%- endif -%}{%- endfor -%}
@@ -96,7 +96,7 @@
           {%- if section.settings.save_label != blank -%}<span class="sr-price__save">{{ section.settings.save_label }} {{ v.compare_at_price | minus: v.price | money }}</span>{%- endif -%}
         {%- endif -%}
       </div>
-      {%- if section.settings.price_note != blank -%}<p class="sr-note" style="margin-top:6px">{{ section.settings.price_note }}</p>{%- endif -%}
+      {%- if section.settings.price_note != blank -%}<p class="sr-note sr-price__note">{{ section.settings.price_note }}</p>{%- endif -%}
       {%- if section.settings.mini_trust != blank -%}
         <ul class="sr-mini">{%- assign mt = section.settings.mini_trust | split: '|' -%}{%- for x in mt -%}<li>{% render 'sr-icon', name: 'check' %}{{ x | strip }}</li>{%- endfor -%}</ul>
       {%- endif -%}
@@ -135,6 +135,7 @@
               <label class="sr-pack{% if forloop.index0 == default_pack %} is-on{% endif %}{% if b.settings.highlight %} sr-pack--hot{% endif %}" {{ b.shopify_attributes }}>
                 <input type="radio" name="sr-pack-{{ section.id }}" value="{{ q }}"
                   data-label="{{ b.settings.label | default: q | escape }}"
+                  data-cents="{{ net }}"
                   data-card="{{ net | money | strip_html | escape }}"
                   data-cod="{{ codnet | money | strip_html | escape }}"
                   data-save="{{ save | money | strip_html | escape }}"
@@ -207,8 +208,21 @@
 </section>
 
 {%- if section.settings.show_schema -%}
+{%- liquid
+  assign ship_country = section.settings.ship_country | default: 'ES' | upcase
+  assign ret_days = section.settings.return_days
+-%}
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"Product","name":{{ p.title | json }},"url":{{ request.origin | append: p.url | json }},{% if p.featured_image %}"image":[{{ p.featured_image | image_url: width: 1200 | prepend: 'https:' | json }}],{% endif %}"description":{{ p.description | strip_html | truncatewords: 60 | json }},"brand":{"@type":"Brand","name":"ReliefPath"},"sku":{{ v.sku | json }},"offers":{"@type":"Offer","priceCurrency":{{ cart.currency.iso_code | json }},"price":{{ v.price | divided_by: 100.0 | json }},"availability":"https://schema.org/{% if v.available %}InStock{% else %}OutOfStock{% endif %}","url":{{ request.origin | append: p.url | json }}}}
+{"@context":"https://schema.org","@type":"Product","name":{{ p.title | json }},"url":{{ request.origin | append: p.url | json }},
+"image":[{%- for im in p.images limit: 8 -%}{{ im | image_url: width: 1200 | prepend: 'https:' | json }}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}],
+"description":{{ p.description | strip_html | strip | truncatewords: 60 | json }},"brand":{"@type":"Brand","name":{{ p.vendor | default: shop.name | json }}},"sku":{{ v.sku | json }},
+"offers":{"@type":"Offer","priceCurrency":{{ cart.currency.iso_code | json }},"price":{{ v.price | divided_by: 100.0 | json }},"itemCondition":"https://schema.org/NewCondition","availability":"https://schema.org/{% if v.available %}InStock{% else %}OutOfStock{% endif %}","url":{{ request.origin | append: p.url | json }}
+{%- if section.settings.free_shipping -%},"shippingDetails":{"@type":"OfferShippingDetails","shippingRate":{"@type":"MonetaryAmount","value":0,"currency":{{ cart.currency.iso_code | json }}},"shippingDestination":{"@type":"DefinedRegion","addressCountry":{{ ship_country | json }}}}{%- endif -%}
+{%- if ret_days > 0 -%},"hasMerchantReturnPolicy":{"@type":"MerchantReturnPolicy","applicableCountry":{{ ship_country | json }},"returnPolicyCategory":"https://schema.org/MerchantReturnFiniteReturnWindow","merchantReturnDays":{{ ret_days }},"returnMethod":"https://schema.org/ReturnByMail"}{%- endif -%}
+}}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":{{ 'sr.breadcrumb_home' | t | json }},"item":{{ request.origin | append: routes.root_url | json }}},{"@type":"ListItem","position":2,"name":{{ p.title | json }},"item":{{ request.origin | append: p.url | json }}}]}
 </script>
 {%- endif -%}
 
@@ -240,7 +254,7 @@
   function current(){
     var i=box.querySelector('input[name^="sr-pack-"]:checked')||inputs[0];
     if(!i) return {qty:1,label:'1 unidad',card:{{ v.price | money | strip_html | json }},cod:{{ v.price | plus: fee | money | strip_html | json }}};
-    return {qty:+i.value,label:i.dataset.label,card:i.dataset.card,cod:i.dataset.cod,save:i.dataset.save};
+    return {qty:+i.value,label:i.dataset.label,card:i.dataset.card,cod:i.dataset.cod,save:i.dataset.save,cents:+i.dataset.cents||0};
   }
   function code(){ try{ return sessionStorage.getItem('sr_code')||''; }catch(e){ return ''; } }
   function paintCode(pk){
@@ -290,9 +304,10 @@
       var c=codRoot(); try{ var cfg=JSON.parse(c.querySelector('[data-calmia-cod-config]').textContent); selectQty(+cfg.packs[+t.value].qty); }catch(x){}
     }
   });
-  inputs.forEach(function(i){ i.addEventListener('change',function(){ var pk=paint(); pushToCod(pk.qty); }); });
+  inputs.forEach(function(i){ i.addEventListener('change',function(){ var pk=paint(); pushToCod(pk.qty); fire('pack_selected',pk); }); });
 
-  function fire(name){ try{ if(window.fbq) window.fbq('track',name); if(window.dataLayer) window.dataLayer.push({event:'sr_'+name.toLowerCase()}); }catch(e){} }
+  var CUR={{ cart.currency.iso_code | json }};
+  function fire(name,pk){ pk=pk||current(); if(window.srTrack) window.srTrack(name,{product_id:{{ p.id | json }},variant_id:+root.dataset.variant,quantity:pk.qty,value:pk.cents/100,currency:CUR,place:{{ request.page_type | json }}}); }
 
   if(cardBtn) cardBtn.addEventListener('click',function(){
     var pk=current();
@@ -307,7 +322,7 @@
     var qs=Object.keys(params).map(function(k){ return encodeURIComponent(k)+'='+encodeURIComponent(params[k]); }).join('&');
     cardBtn.disabled=true;
     var t=cardBtn.querySelector('[data-sr-card-text]'); if(t) t.textContent=T.loading;
-    fire('InitiateCheckout');
+    fire('card_checkout',pk);
     window.location.href=ROOT.replace(/\/$/,'')+'/cart/'+root.dataset.variant+':'+pk.qty+'?'+qs;
     setTimeout(function(){ cardBtn.disabled=false; if(t) t.textContent=CARD_TEXT; if(err) err.hidden=false; },8000);
   });
@@ -323,7 +338,7 @@
       window.location.href=root.dataset.url+'?pack='+pk.qty+'&pago=cod#shopify-section-contrareembolso';
     }
   }
-  if(codBtn) codBtn.addEventListener('click',function(){ fire('AddPaymentInfo'); goCod(true); });
+  if(codBtn) codBtn.addEventListener('click',function(){ fire('cod_selected'); goCod(true); });
 
   /* Enlaces desde la portada: ?pack=2&pago=cod llegan con todo elegido. */
   var qp=new URLSearchParams(window.location.search);
@@ -363,7 +378,10 @@
     { "type": "checkbox", "id": "show_payment", "label": "Mostrar formas de pago", "default": true },
     { "type": "checkbox", "id": "show_express", "label": "Pago exprés (Shop Pay, Apple Pay…)", "info": "Botones de pago en un clic de Shopify. Usan la cantidad del pack elegido.", "default": true },
     { "type": "range", "id": "low_stock", "label": "Avisar de stock bajo desde", "min": 0, "max": 20, "step": 1, "unit": "ud", "default": 10, "info": "Solo con inventario de Shopify activado. Muestra las unidades reales que quedan. 0 = nunca." },
-    { "type": "checkbox", "id": "show_schema", "label": "Datos estructurados de producto", "default": true }
+    { "type": "checkbox", "id": "show_schema", "label": "Datos estructurados de producto", "default": true },
+    { "type": "checkbox", "id": "free_shipping", "label": "Datos estructurados: envío gratis", "info": "Solo si el envío es gratis de verdad en el checkout para el país de abajo.", "default": true },
+    { "type": "text", "id": "ship_country", "label": "País de envío (código de 2 letras)", "default": "ES" },
+    { "type": "range", "id": "return_days", "label": "Datos estructurados: días de devolución", "min": 0, "max": 60, "step": 1, "unit": "d", "default": 0, "info": "Pon los días de tu política de devoluciones cuando esté actualizada. 0 = no se declara." }
   ],
   "blocks": [
     {

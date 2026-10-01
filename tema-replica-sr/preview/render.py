@@ -47,7 +47,7 @@ F['url_encode']=lambda v: __import__('urllib.parse').parse.quote_plus(str(v))
 
 variant={'id':59286832939353,'price':4995,'compare_at_price':9995,'available':True,'sku':'dropipro-386','inventory_management':'','inventory_policy':'continue','inventory_quantity':17}
 fee_product={'title':'Contrareembolso','selected_or_first_available_variant':{'id':59250983928153,'price':500,'available':True}}
-product={'title':'ReliefPath™ Ventosas Eléctricas con Calor y Luz Roja','url':PRODUCT_URL,'vendor':'Waistzen','description':'ReliefPath','featured_image':Img('producto.png'),
+product={'id':10464468992345,'title':'ReliefPath™ Ventosas Eléctricas con Calor y Luz Roja','url':PRODUCT_URL,'images':[Img('producto.png'),Img('mano.png')],'vendor':'Waistzen','description':'ReliefPath','featured_image':Img('producto.png'),
          'selected_or_first_available_variant':variant,'media':[],'metafields':{}}
 def load_schema(src):
     m=re.search(r'\{%\s*schema\s*%\}(.*?)\{%\s*endschema\s*%\}',src,re.S); return src[:m.start()],json.loads(m.group(1))
@@ -78,7 +78,7 @@ def page(tpl,outname):
             bs={k:d.get('default') for k,d in bd.items()}; bs.update(b.get('settings',{}))
             blocks.append({'id':bid,'type':b['type'],'settings':{k:conv(v,bd.get(k)) for k,v in bs.items()},'shopify_attributes':''})
         ctx={'section':{'id':'template--1__'+sid,'settings':st,'blocks':blocks},'product':product if 'product' in tpl else None,
-             'shop':{'enabled_payment_types':['visa','master','paypal','apple_pay','google_pay']},'request':{'origin':'https://waistzen.com','design_mode':False},'cart':{'currency':{'iso_code':'EUR'}},'routes':{'all_products_collection_url':'/collections/all','root_url':'/'}}
+             'shop':{'enabled_payment_types':['visa','master','paypal','apple_pay','google_pay']},'request':{'origin':'https://waistzen.com','design_mode':False,'page_type':'product' if 'product' in tpl else 'index'},'cart':{'currency':{'iso_code':'EUR'}},'routes':{'all_products_collection_url':'/collections/all','root_url':'/'}}
         out=env.from_string(shopify_tags(body)).render(**ctx)
         parts.append('<div id="shopify-section-template--1__%s" class="shopify-section">%s</div>'%(sid,out))
     doc='<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>%s</title><style>body{margin:0}</style></head><body>%s</body></html>'%(outname,'\n'.join(parts))

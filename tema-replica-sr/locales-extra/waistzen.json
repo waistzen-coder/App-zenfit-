@@ -40,6 +40,10 @@
     "code_applied": "Código {{ code }} aplicado: −10 % al pagar con tarjeta.",
     "code_not_with_packs": "El código {{ code }} no se suma a los packs: ya llevan su descuento.",
     "express_label": "o compra en un clic",
-    "low_stock": "Quedan {{ count }} unidades en stock"
+    "low_stock": "Quedan {{ count }} unidades en stock",
+    "breadcrumb_home": "Inicio",
+    "offer_applied": "Código aplicado ✓",
+    "offer_applied_tab": "{{ code }} aplicado",
+    "copied": "Copiado"
   }
 }
