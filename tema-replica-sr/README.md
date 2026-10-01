@@ -4,11 +4,13 @@ La estructura de venta de `shoulderreliever.com` (portada y ficha de producto)
 aplicada a ReliefPath™, con el ángulo «Método Pausa» para opositores, montada
 en un **tema nuevo** sobre Dawn 15.4.1, el tema base oficial de Shopify.
 
-**En la tienda:** `ReliefPath SR · tema nuevo (25-09)`
-(`gid://shopify/OnlineStoreTheme/207247638873`), **sin publicar**.
+**En la tienda:** `ReliefPath SR · v3 skills (01-10)`
+(`gid://shopify/OnlineStoreTheme/207708619097`), **sin publicar**. Es una copia
+de `ReliefPath SR · tema nuevo (25-09)` (`207247638873`) con las mejoras de las
+skills de abajo; el tema anterior se queda tal cual para comparar.
 
-- Portada: `https://waistzen.com/?preview_theme_id=207247638873`
-- Producto: `https://waistzen.com/products/juego-de-ventosa-electrica-con-cable?preview_theme_id=207247638873`
+- Portada: `https://waistzen.com/?preview_theme_id=207708619097`
+- Producto: `https://waistzen.com/products/juego-de-ventosa-electrica-con-cable?preview_theme_id=207708619097`
 
 Todos los archivos propios del tema tienen en la tienda el mismo md5 que en
 esta carpeta.
@@ -32,6 +34,21 @@ esta carpeta.
 Además, el **menú principal** de la tienda tiene ahora un enlace al producto
 (Inicio · ReliefPath™ · Seguir mi pedido · Contacto). El menú es de la tienda,
 no del tema: también sale en el tema publicado.
+
+## v3: lo que han aportado las skills
+
+| Skill | Qué se ha hecho |
+|---|---|
+| shopify-cro-audit | **Pago exprés** (Shop Pay, Apple Pay, Google Pay) bajo los botones de compra, con la cantidad del pack elegido. **Aviso de stock real** («Quedan N unidades») solo si Shopify lleva el inventario y quedan 10 o menos; nunca se inventa. **Carrito lateral** en vez de aviso. |
+| shopify-theme-best-practices, review-ai-shopify-liquid | Textos de la interfaz fuera del código, en el archivo de idioma (`sr.*`), también los del JavaScript. `routes.all_products_collection_url` en vez de `/collections/all`. Los textos propios se copian a los 31 idiomas de Dawn. theme-check: 0 errores en los archivos propios (solo avisos: fuentes de Google y los 77 ajustes de la caja de contrareembolso, que se dejan así a propósito). |
+| page-cro, landing-page-optimizer | La foto principal de cada página carga con prioridad alta (`fetchpriority="high"`); la caja de compra de la portada, que está más abajo, ya no compite con el hero. |
+| product-page-conversion-review-ecommerce, copywriting | Texto de lectura a 14 px como mínimo en el móvil (notas, packs, confianza, oferta). |
+| ecom-landing-pages | La página ya sigue su estructura (hero, problema, método, prueba, oferta, garantía, FAQ, cierre); no se ha cambiado. |
+| review-objection-miner-ecommerce, review-to-faq-builder | Sin reseñas reales no hay nada que analizar. Cuando haya app de reseñas, se pueden pasar por estas skills para rehacer la FAQ. |
+
+Preguntas de compra que la ficha aún no responde, porque faltan los datos del
+proveedor: medidas y peso, batería o cable y autonomía, niveles de calor, qué
+trae la caja exactamente y plazo de entrega real.
 
 ## La compra (lo que más mueve la conversión)
 
@@ -150,7 +167,7 @@ rojo y negro bien visible, sin mostrarlo aplicado en ninguna zona concreta):
     python3 construir_plantillas.py   # genera templates/*.json y anuncio.json
     python3 comprobar.py              # plantillas contra los schemas
     python3 preview/render.py         # vista previa local (fotos = marcadores)
-    python3 preview/comportamiento.py # 38 comprobaciones en navegador
+    python3 preview/comportamiento.py # 45 comprobaciones en navegador
     python3 preview/shots.py          # capturas a 390 y 1440 px
 
 `comportamiento.py` comprueba precios de cada pack, que la caja de arriba y la
@@ -168,8 +185,8 @@ ve con las fotos reales. Eso solo se ve en la tienda.
 1. **Revisarlo en el móvil** con los dos enlaces de arriba y hacer un pedido de
    prueba con tarjeta y otro con contrareembolso.
 2. **Publicarlo** (Tienda online → Temas → Publicar).
-3. **Borrar el tema intermedio** «ReliefPath · Réplica SR opositores (24-09)»,
-   ya no hace falta.
+3. **Borrar los temas que sobran**: «ReliefPath · Réplica SR opositores (24-09)»
+   y, si te quedas con la v3, «ReliefPath SR · tema nuevo (25-09)».
 4. **App de reseñas** (Judge.me, Loox…) y añadir su bloque a «SR · Opiniones».
 5. **Precio tachado.** En España, si se anuncia una rebaja, el precio anterior
    tiene que ser el más bajo de los 30 días previos. Si 99,95 € no ha sido

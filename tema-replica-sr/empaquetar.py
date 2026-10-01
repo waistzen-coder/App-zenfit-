@@ -63,7 +63,9 @@ schemes['scheme-3']['settings'].update({'background': ink, 'text': '#FFFFFF', 'b
 # como los de las secciones sr-*.
 current.update({'buttons_radius': 40, 'inputs_radius': 12, 'card_corner_radius': 14,
                 'media_radius': 14, 'text_boxes_radius': 14, 'popup_corner_radius': 14,
-                'sale_badge_color_scheme': 'scheme-3'})
+                'sale_badge_color_scheme': 'scheme-3',
+                # Carrito lateral: añadir no saca al cliente de la página.
+                'cart_type': 'drawer'})
 settings['current'] = current
 save(sd, settings)
 os.makedirs(os.path.join(OUT, 'config'), exist_ok=True)
@@ -85,9 +87,25 @@ es = load(os.path.join(BUILD, 'locales', 'es.json'))
 es.update(extra)
 save(os.path.join(BUILD, 'locales', 'es.json'), es)
 save(os.path.join(BUILD, 'locales', 'en.default.json'), es)
+# Los demás idiomas de Dawn no llevan los textos propios (sr.*, waistzen_*):
+# se completan con el castellano para que ninguno quede sin texto y theme-check
+# no marque claves que faltan.
+def fill(dst, src):
+    for k, v in src.items():
+        if isinstance(v, dict):
+            fill(dst.setdefault(k, {}), v)
+        else:
+            dst.setdefault(k, v)
+locs = sorted(f for f in os.listdir(os.path.join(BUILD, 'locales'))
+              if f.endswith('.json') and '.schema.' not in f and f not in ('es.json', 'en.default.json'))
+for f in locs:
+    path = os.path.join(BUILD, 'locales', f)
+    data = load(path)
+    fill(data, es)
+    save(path, data)
 # Copia suelta, para poder subir solo los idiomas a un tema que ya existe.
 os.makedirs(os.path.join(OUT, 'locales'), exist_ok=True)
-for f in ['es.json', 'en.default.json']:
+for f in ['es.json', 'en.default.json'] + locs:
     shutil.copy(os.path.join(BUILD, 'locales', f), os.path.join(OUT, 'locales', f))
 
 os.makedirs(OUT, exist_ok=True)

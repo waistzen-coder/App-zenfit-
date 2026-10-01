@@ -43,7 +43,7 @@
           {%- for b in gal -%}
             <div class="sr-gal__slide" {{ b.shopify_attributes }}>
               {%- if forloop.first -%}
-                {% render 'sr-photo', image: b.settings.image, ratio: 'sq', fit: b.settings.fit, tag: b.settings.tag, tag_icon: b.settings.tag_icon, pins: b.settings.pins, alt: b.settings.image.alt, eager: true, badge: sale_badge, chip: section.settings.first_chip, sizes: '(min-width: 990px) 55vw, 100vw' %}
+                {% render 'sr-photo', image: b.settings.image, ratio: 'sq', fit: b.settings.fit, tag: b.settings.tag, tag_icon: b.settings.tag_icon, pins: b.settings.pins, alt: b.settings.image.alt, eager: section.settings.is_page_title, badge: sale_badge, chip: section.settings.first_chip, sizes: '(min-width: 990px) 55vw, 100vw' %}
               {%- else -%}
                 {% render 'sr-photo', image: b.settings.image, ratio: 'sq', fit: b.settings.fit, tag: b.settings.tag, tag_icon: b.settings.tag_icon, pins: b.settings.pins, alt: b.settings.image.alt, sizes: '(min-width: 990px) 55vw, 100vw' %}
               {%- endif -%}
@@ -53,7 +53,7 @@
           {%- for m in p.media -%}{%- if m.media_type == 'image' -%}
             <div class="sr-gal__slide">
               {%- if forloop.first -%}
-                {% render 'sr-photo', image: m.preview_image, ratio: 'sq', alt: m.alt, eager: true, badge: sale_badge, chip: section.settings.first_chip, sizes: '(min-width: 990px) 55vw, 100vw' %}
+                {% render 'sr-photo', image: m.preview_image, ratio: 'sq', alt: m.alt, eager: section.settings.is_page_title, badge: sale_badge, chip: section.settings.first_chip, sizes: '(min-width: 990px) 55vw, 100vw' %}
               {%- else -%}
                 {% render 'sr-photo', image: m.preview_image, ratio: 'sq', alt: m.alt, sizes: '(min-width: 990px) 55vw, 100vw' %}
               {%- endif -%}
@@ -65,11 +65,11 @@
       <div class="sr-gal__thumbs" data-sr-thumbs>
         {%- if gal.size > 0 -%}
           {%- for b in gal -%}{%- if b.settings.image != blank -%}
-            <button type="button" aria-label="Ver imagen {{ forloop.index }}"{% if forloop.first %} class="is-on"{% endif %}>{{ b.settings.image | image_url: width: 180 | image_tag: loading: 'lazy', alt: '' }}</button>
+            <button type="button" aria-label="{{ 'sr.view_image' | t: index: forloop.index }}"{% if forloop.first %} class="is-on"{% endif %}>{{ b.settings.image | image_url: width: 180 | image_tag: loading: 'lazy', alt: '' }}</button>
           {%- endif -%}{%- endfor -%}
         {%- else -%}
           {%- for m in p.media -%}{%- if m.media_type == 'image' -%}
-            <button type="button" aria-label="Ver imagen {{ forloop.index }}"{% if forloop.first %} class="is-on"{% endif %}>{{ m.preview_image | image_url: width: 180 | image_tag: loading: 'lazy', alt: '' }}</button>
+            <button type="button" aria-label="{{ 'sr.view_image' | t: index: forloop.index }}"{% if forloop.first %} class="is-on"{% endif %}>{{ m.preview_image | image_url: width: 180 | image_tag: loading: 'lazy', alt: '' }}</button>
           {%- endif -%}{%- endfor -%}
         {%- endif -%}
       </div>
@@ -86,7 +86,7 @@
       {%- endif -%}
       {%- assign rv = p.metafields.reviews.rating.value -%}
       {%- if rv and rv.rating -%}
-        <div class="sr-rating"><span class="sr-stars">{% for i in (1..5) %}{% render 'sr-icon', name: 'star' %}{% endfor %}</span><strong>{{ rv.rating | round: 1 }}</strong> · {{ p.metafields.reviews.rating_count.value }} reseñas</div>
+        <div class="sr-rating"><span class="sr-stars">{% for i in (1..5) %}{% render 'sr-icon', name: 'star' %}{% endfor %}</span><strong>{{ rv.rating | round: 1 }}</strong> · {{ 'sr.reviews_count' | t: count: p.metafields.reviews.rating_count.value }}</div>
       {%- endif -%}
       <div class="sr-price">
         <span class="sr-price__now">{{ v.price | money }}</span>
@@ -108,6 +108,10 @@
         </ul>
       {%- endif -%}
 
+      {%- assign low = section.settings.low_stock -%}
+      {%- if low > 0 and v.inventory_management == 'shopify' and v.inventory_quantity > 0 and v.inventory_quantity <= low -%}
+        <p class="sr-stock"><i aria-hidden="true"></i>{{ 'sr.low_stock' | t: count: v.inventory_quantity }}</p>
+      {%- endif -%}
       <div class="sr-buy" id="comprar" data-sr-buy-box>
         {%- if packs.size > 0 -%}
           <p class="sr-buy__title">{{ section.settings.packs_title }}</p>
@@ -143,7 +147,7 @@
                 <span class="sr-pack__price">
                   <b>{{ net | money }}</b>
                   {%- if cross > net -%}<s>{{ cross | money }}</s>{%- endif -%}
-                  {%- if q > 1 -%}<i>{{ unit | money }}/ud</i>{%- endif -%}
+                  {%- if q > 1 -%}<i>{{ unit | money }}{{ 'sr.per_unit' | t }}</i>{%- endif -%}
                 </span>
                 {%- if b.settings.tag != blank -%}<em class="sr-pack__tag">{{ b.settings.tag }}</em>{%- endif -%}
               </label>
@@ -160,8 +164,18 @@
               {% render 'sr-icon', name: 'cash' %}<span>{{ section.settings.cod_text }}</span><span class="sr-buy__amt" data-sr-cod-price>{{ v.price | plus: fee | money }}</span>
             </button>
           {%- endif -%}
+          {%- if section.settings.show_express -%}
+            <div class="sr-express">
+              <p class="sr-express__or"><span>{{ 'sr.express_label' | t }}</span></p>
+              {%- form 'product', p, data-sr-express: '' -%}
+                <input type="hidden" name="id" value="{{ v.id }}">
+                <input type="hidden" name="quantity" value="{{ packs[default_pack].settings.qty | default: 1 }}" data-sr-express-qty>
+                {{ form | payment_button }}
+              {%- endform -%}
+            </div>
+          {%- endif -%}
           <p class="sr-code-line" data-sr-code-line hidden></p>
-          <p class="sr-note sr-center" data-sr-err hidden>No hemos podido preparar el pedido. Recarga la página o escríbenos.</p>
+          <p class="sr-note sr-center" data-sr-err hidden>{{ 'sr.error_prepare' | t }}</p>
         {%- else -%}
           <button type="button" class="sr-btn sr-btn--block" disabled>{{ section.settings.soldout_text }}</button>
         {%- endif -%}
@@ -175,7 +189,7 @@
       {%- endif -%}
 
       {%- if section.settings.show_payment -%}
-        <div class="sr-pay" aria-label="Formas de pago">{%- for t in shop.enabled_payment_types -%}{{ t | payment_type_svg_tag }}{%- endfor -%}</div>
+        <div class="sr-pay" aria-label="{{ 'sr.payment_methods' | t | escape }}">{%- for t in shop.enabled_payment_types -%}{{ t | payment_type_svg_tag }}{%- endfor -%}</div>
       {%- endif -%}
 
       {%- if accs.size > 0 -%}
@@ -202,11 +216,12 @@
 (function(){
   var root=document.getElementById('sr-pdp-{{ section.id }}'); if(!root) return;
   var ROOT=(window.Shopify&&Shopify.routes&&Shopify.routes.root)||'/';
+  var T={image:{{ 'sr.image' | t | json }},loading:{{ 'sr.loading' | t | json }},codeOk:{{ 'sr.code_applied' | t: code: '%C' | json }},codeNo:{{ 'sr.code_not_with_packs' | t: code: '%C' | json }}};
 
   /* ---------- Galería ---------- */
   var track=root.querySelector('[data-sr-track]'),slides=track?track.children:[],dots=root.querySelector('[data-sr-dots]'),thumbs=root.querySelectorAll('[data-sr-thumbs] button');
   function go(i){ if(!slides[i]) return; track.scrollTo({left:slides[i].offsetLeft-track.offsetLeft,behavior:'smooth'}); }
-  if(dots && slides.length>1){ for(var i=0;i<slides.length;i++){ (function(i){ var b=document.createElement('button'); b.type='button'; b.setAttribute('aria-label','Imagen '+(i+1)); if(i===0) b.className='is-on'; b.addEventListener('click',function(){go(i)}); dots.appendChild(b); })(i); } }
+  if(dots && slides.length>1){ for(var i=0;i<slides.length;i++){ (function(i){ var b=document.createElement('button'); b.type='button'; b.setAttribute('aria-label',T.image+' '+(i+1)); if(i===0) b.className='is-on'; b.addEventListener('click',function(){go(i)}); dots.appendChild(b); })(i); } }
   thumbs.forEach(function(t,i){ t.addEventListener('click',function(){ go(i); }); });
   var tick;
   if(track) track.addEventListener('scroll',function(){ clearTimeout(tick); tick=setTimeout(function(){
@@ -232,7 +247,7 @@
     var line=box.querySelector('[data-sr-code-line]'), c=code(); if(!line) return;
     if(!c){ line.hidden=true; return; }
     line.hidden=false;
-    line.textContent = pk.qty===1 ? ('Código '+c+' aplicado: −10 % al pagar con tarjeta.') : ('El código '+c+' no se suma a los packs: ya llevan su descuento.');
+    line.textContent = (pk.qty===1 ? T.codeOk : T.codeNo).replace('%C',c);
     line.classList.toggle('is-ok', pk.qty===1);
   }
   document.addEventListener('sr:code',function(){ paintCode(current()); });
@@ -241,6 +256,7 @@
     inputs.forEach(function(i){ i.closest('.sr-pack').classList.toggle('is-on',i.checked); });
     var cp=box.querySelector('[data-sr-card-price]'); if(cp) cp.textContent=pk.card;
     var dp=box.querySelector('[data-sr-cod-price]'); if(dp) dp.textContent=pk.cod;
+    var eq=box.querySelector('[data-sr-express-qty]'); if(eq) eq.value=pk.qty;
     document.dispatchEvent(new CustomEvent('sr:pack',{detail:pk}));
     paintCode(pk);
     return pk;
@@ -290,7 +306,7 @@
     if(code() && pk.qty===1) params['discount']=code();
     var qs=Object.keys(params).map(function(k){ return encodeURIComponent(k)+'='+encodeURIComponent(params[k]); }).join('&');
     cardBtn.disabled=true;
-    var t=cardBtn.querySelector('[data-sr-card-text]'); if(t) t.textContent='Un momento…';
+    var t=cardBtn.querySelector('[data-sr-card-text]'); if(t) t.textContent=T.loading;
     fire('InitiateCheckout');
     window.location.href=ROOT.replace(/\/$/,'')+'/cart/'+root.dataset.variant+':'+pk.qty+'?'+qs;
     setTimeout(function(){ cardBtn.disabled=false; if(t) t.textContent=CARD_TEXT; if(err) err.hidden=false; },8000);
@@ -345,6 +361,8 @@
     { "type": "text", "id": "soldout_text", "label": "Agotado", "default": "Agotado" },
     { "type": "text", "id": "under", "label": "Texto bajo los botones" },
     { "type": "checkbox", "id": "show_payment", "label": "Mostrar formas de pago", "default": true },
+    { "type": "checkbox", "id": "show_express", "label": "Pago exprés (Shop Pay, Apple Pay…)", "info": "Botones de pago en un clic de Shopify. Usan la cantidad del pack elegido.", "default": true },
+    { "type": "range", "id": "low_stock", "label": "Avisar de stock bajo desde", "min": 0, "max": 20, "step": 1, "unit": "ud", "default": 10, "info": "Solo con inventario de Shopify activado. Muestra las unidades reales que quedan. 0 = nunca." },
     { "type": "checkbox", "id": "show_schema", "label": "Datos estructurados de producto", "default": true }
   ],
   "blocks": [

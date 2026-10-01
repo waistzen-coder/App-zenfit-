@@ -18,7 +18,7 @@
       {%- if p != blank -%}
         {%- assign rv = p.metafields.reviews.rating.value -%}
         {%- if rv and rv.rating -%}
-          <div class="sr-rating" style="margin-top:16px"><span class="sr-stars">{% for i in (1..5) %}{% render 'sr-icon', name: 'star' %}{% endfor %}</span><strong>{{ rv.rating | round: 1 }}</strong> · {{ p.metafields.reviews.rating_count.value }} reseñas</div>
+          <div class="sr-rating" style="margin-top:16px"><span class="sr-stars">{% for i in (1..5) %}{% render 'sr-icon', name: 'star' %}{% endfor %}</span><strong>{{ rv.rating | round: 1 }}</strong> · {{ 'sr.reviews_count' | t: count: p.metafields.reviews.rating_count.value }}</div>
         {%- endif -%}
       {%- endif -%}
       {%- if section.settings.text != blank -%}<div class="sr-lead sr-rte">{{ section.settings.text }}</div>{%- endif -%}
@@ -38,7 +38,7 @@
         </ul>
       {%- endif -%}
       <div class="sr-hero__cta">
-        {%- if section.settings.cta_text != blank -%}<a class="sr-btn sr-btn--pulse" href="{{ section.settings.cta_link | default: p.url | default: '/collections/all' }}">{{ section.settings.cta_text }}{% render 'sr-icon', name: 'arrow' %}</a>{%- endif -%}
+        {%- if section.settings.cta_text != blank -%}<a class="sr-btn sr-btn--pulse" href="{{ section.settings.cta_link | default: p.url | default: routes.all_products_collection_url }}">{{ section.settings.cta_text }}{% render 'sr-icon', name: 'arrow' %}</a>{%- endif -%}
         {%- if section.settings.cta2_text != blank -%}<a class="sr-btn sr-btn--ghost sr-hero__cta2" href="{{ section.settings.cta2_link }}">{{ section.settings.cta2_text }}</a>{%- endif -%}
       </div>
       {%- if section.settings.under != blank -%}<p class="sr-hero__under">{{ section.settings.under }}</p>{%- endif -%}
