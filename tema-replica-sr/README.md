@@ -35,12 +35,71 @@ Además, el **menú principal** de la tienda tiene ahora un enlace al producto
 (Inicio · ReliefPath™ · Seguir mi pedido · Contacto). El menú es de la tienda,
 no del tema: también sale en el tema publicado.
 
+## v3 · skill shopify-ecommerce-suite
+
+Auditoría con su flujo (recorrido anuncio → ficha → pack → checkout) y sus
+listas técnicas de tema, SEO y medición. Hecha con los archivos del tema, la
+vista previa local y los datos de la tienda por API; sin pedidos reales.
+
+**Veredicto:** el tema está listo para probar en el móvil. Lo que más frena
+ahora la venta no está en el tema sino en la tienda:
+
+1. **Política de envío en inglés y de Reino Unido** («Standard UK Shipping
+   3–7 business days», «costs calculated at checkout»), cuando el envío real a
+   España es gratis. Contradice la ficha justo cuando el cliente duda.
+2. **Política de devoluciones en inglés** que dice que los artículos rebajados
+   no se devuelven («we cannot accept returns on sale items»), y ReliefPath
+   está rebajado. Choca con «30 días para devolverlo».
+3. **La portada no tenía descripción para Google** (Preferencias vacías) y su
+   título era solo «Waistzen». Arreglado en el tema; mejor aún rellenarlo en
+   Preferencias.
+
+| Problema | Evidencia | Consecuencia probable | Cambio | Prioridad | Esfuerzo | Verificación |
+|---|---|---|---|---|---|---|
+| Políticas de envío y devolución contradicen la oferta | API: textos de `SHIPPING_POLICY` y `REFUND_POLICY` | Desconfianza y reclamaciones | **Tienda**: reescribirlas en castellano con lo real (envío gratis a España, plazo, 30 días, quién paga la vuelta) | Alta | 30 min | Leer /policies/* en el móvil |
+| Portada sin meta descripción y con título genérico | API: `shop.description` vacío | Peor resultado en Google | Tema: si faltan, usa `waistzen_audit.meta_*` | Alta | Hecho | Prueba de la lógica en local |
+| Fuentes de Google bloquean el pintado | `sr-head`: hoja de fonts.googleapis.com | Primera pantalla más lenta | Tema: Inter, Jakarta y Fraunces servidas desde el tema | Media | Hecho | Prueba: 0 peticiones a Google Fonts |
+| La caja de contrareembolso descargaba Playfair y Jost sin usarlas | `calmia-base` + `sr.css` cambia sus fuentes | Hoja extra que bloquea el pintado | Tema: quitada | Media | Hecho | Prueba: sin Playfair ni Jost |
+| Datos para Google incompletos | JSON-LD solo con una foto, sin envío ni migas | Menos opciones de resultado enriquecido | Tema: todas las fotos, envío gratis a ES (perfil «productos», 0 €), BreadcrumbList; devoluciones con ajuste (0 = no se declara hasta arreglar la política) | Media | Hecho | Prueba: JSON válido y campos |
+| Fotos de galería sin alt si vienen de Archivos | `sr-photo` | Accesibilidad y SEO de imágenes | Tema: alt de reserva con el nombre del producto | Baja | Hecho | Prueba: todas con alt |
+| Eventos `InitiateCheckout`/`AddPaymentInfo` desde el tema | `sr-product`: `fbq('track',…)` | Contarían dos veces con los del checkout y saltan el consentimiento | Tema: eventos propios `reliefpath:*` con `Shopify.analytics.publish` | Media | Hecho | Prueba: eventos con pack, importe y moneda; 0 llamadas a fbq |
+| Estilos en línea en 6 secciones | `style="color:#…"` | No se pueden tocar desde el editor | Tema: pasados a clases | Baja | Hecho | Vista previa igual |
+
+**Eventos que lanza el tema** (llegan a los píxeles de Ajustes → Eventos de
+cliente, con el consentimiento de cookies que aplica Shopify):
+`reliefpath:pack_selected`, `reliefpath:card_checkout`, `reliefpath:cod_selected`
+(con producto, variante, unidades, importe y moneda) y
+`reliefpath:offer_shown`, `reliefpath:offer_applied`, `reliefpath:offer_copied`.
+Para verlos en Meta o GA4 hay que crear un píxel personalizado que los
+escuche; los de compra (checkout iniciado, compra) los manda ya Shopify.
+
+**Comprobado:** Theme Check (0 errores en los archivos propios, 0 avisos de
+recursos externos), 61 pruebas en navegador, vista previa a 390 px.
+**No comprobado:** velocidad real en la tienda (hay que medirla con PageSpeed
+Insights en el enlace de vista previa antes y después de publicar), pago exprés
+en vivo y un pedido de prueba de cada tipo.
+
+### Plan de medición
+
+| | Definición |
+|---|---|
+| Métrica principal | Pedidos pagados (tarjeta) + pedidos COD **entregados y cobrados** ÷ sesiones en la ficha, por semana |
+| De control | Tasa de checkout completado, % de COD rechazados o devueltos, valor medio por pedido |
+| Embudo del tema | `pack_selected` → `card_checkout` / `cod_selected` → checkout iniciado (Shopify) → compra |
+
+Con el tráfico actual no hay muestra para un A/B fiable. Primero: publicar
+v3, medir dos semanas completas sin cambiar precio ni campañas y comparar con
+las dos anteriores, sabiendo que un antes/después no prueba causa. Cuando
+haya unas 200 compras al mes, las dos primeras pruebas (una cada vez, 50/50
+por visitante, mínimo dos semanas): pack de 2 marcado por defecto frente a
+pack de 1; y oferta de bienvenida a los 25 s frente a sin ventana.
+
 ## v3: lo que han aportado las skills
 
 | Skill | Qué se ha hecho |
 |---|---|
 | shopify-cro-audit | **Pago exprés** (Shop Pay, Apple Pay, Google Pay) bajo los botones de compra, con la cantidad del pack elegido. **Aviso de stock real** («Quedan N unidades») solo si Shopify lleva el inventario y quedan 10 o menos; nunca se inventa. **Carrito lateral** en vez de aviso. |
-| shopify-theme-best-practices, review-ai-shopify-liquid | Textos de la interfaz fuera del código, en el archivo de idioma (`sr.*`), también los del JavaScript. `routes.all_products_collection_url` en vez de `/collections/all`. Los textos propios se copian a los 31 idiomas de Dawn. theme-check: 0 errores en los archivos propios (solo avisos: fuentes de Google y los 77 ajustes de la caja de contrareembolso, que se dejan así a propósito). |
+| shopify-theme-best-practices, review-ai-shopify-liquid | Textos de la interfaz fuera del código, en el archivo de idioma (`sr.*`), también los del JavaScript. `routes.all_products_collection_url` en vez de `/collections/all`. Los textos propios se copian a los 31 idiomas de Dawn. theme-check: 0 errores en los archivos propios (solo queda el aviso de los 77 ajustes de la caja de contrareembolso, que se deja así a propósito). |
 | page-cro, landing-page-optimizer | La foto principal de cada página carga con prioridad alta (`fetchpriority="high"`); la caja de compra de la portada, que está más abajo, ya no compite con el hero. |
 | product-page-conversion-review-ecommerce, copywriting | Texto de lectura a 14 px como mínimo en el móvil (notas, packs, confianza, oferta). |
 | ecom-landing-pages | La página ya sigue su estructura (hero, problema, método, prueba, oferta, garantía, FAQ, cierre); no se ha cambiado. |
@@ -167,7 +226,7 @@ rojo y negro bien visible, sin mostrarlo aplicado en ninguna zona concreta):
     python3 construir_plantillas.py   # genera templates/*.json y anuncio.json
     python3 comprobar.py              # plantillas contra los schemas
     python3 preview/render.py         # vista previa local (fotos = marcadores)
-    python3 preview/comportamiento.py # 45 comprobaciones en navegador
+    python3 preview/comportamiento.py # 61 comprobaciones en navegador
     python3 preview/shots.py          # capturas a 390 y 1440 px
 
 `comportamiento.py` comprueba precios de cada pack, que la caja de arriba y la
@@ -187,8 +246,12 @@ ve con las fotos reales. Eso solo se ve en la tienda.
 2. **Publicarlo** (Tienda online → Temas → Publicar).
 3. **Borrar los temas que sobran**: «ReliefPath · Réplica SR opositores (24-09)»
    y, si te quedas con la v3, «ReliefPath SR · tema nuevo (25-09)».
-4. **App de reseñas** (Judge.me, Loox…) y añadir su bloque a «SR · Opiniones».
-5. **Precio tachado.** En España, si se anuncia una rebaja, el precio anterior
+4. **Reescribir las políticas de envío y devolución** en castellano y con las
+   condiciones reales; después, poner los días en «Datos estructurados: días
+   de devolución» de la ficha.
+5. **Rellenar título y descripción de la portada** en Preferencias.
+6. **App de reseñas** (Judge.me, Loox…) y añadir su bloque a «SR · Opiniones».
+7. **Precio tachado.** En España, si se anuncia una rebaja, el precio anterior
    tiene que ser el más bajo de los 30 días previos. Si 99,95 € no ha sido
    precio real de venta, conviene quitar el precio comparativo del producto.
 

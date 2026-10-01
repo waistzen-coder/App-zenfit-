@@ -23,22 +23,24 @@
 (function(){
   var box=document.getElementById('sr-offer-{{ section.id }}'), tab=document.getElementById('sr-offer-tab-{{ section.id }}');
   if(!box) return;
+  var T={applied:{{ 'sr.offer_applied' | t | json }},tab:{{ 'sr.offer_applied_tab' | t: code: '%C' | json }},copied:{{ 'sr.copied' | t | json }}};
+  function track(n){ if(window.srTrack) window.srTrack(n,{offer_code:CODE}); }
   var CODE=box.dataset.code, DELAY={{ section.settings.delay | times: 1000 }}, DEPTH={{ section.settings.depth }}/100;
   function get(k){ try{ return sessionStorage.getItem(k); }catch(e){ return null; } }
   function set(k,v){ try{ sessionStorage.setItem(k,v); }catch(e){} }
   function open(){ box.hidden=false; requestAnimationFrame(function(){ box.classList.add('is-on'); }); tab.hidden=true; set('sr_offer_seen','1'); }
   function close(){ box.classList.remove('is-on'); setTimeout(function(){ box.hidden=true; },250); tab.hidden=false; }
-  function applied(){ var b=box.querySelector('[data-sr-offer-apply]'); b.textContent='Código aplicado ✓'; b.disabled=true; }
-  if(get('sr_code')===CODE){ applied(); tab.hidden=false; tab.querySelector('span').textContent=CODE+' aplicado'; }
+  function applied(){ var b=box.querySelector('[data-sr-offer-apply]'); b.textContent=T.applied; b.disabled=true; }
+  if(get('sr_code')===CODE){ applied(); tab.hidden=false; tab.querySelector('span').textContent=T.tab.replace('%C',CODE); }
   box.querySelector('[data-sr-offer-close]').addEventListener('click',close);
   tab.addEventListener('click',open);
   box.querySelector('[data-sr-offer-copy]').addEventListener('click',function(e){
-    try{ navigator.clipboard.writeText(CODE); e.target.textContent='Copiado'; }catch(x){}
+    try{ navigator.clipboard.writeText(CODE); e.target.textContent=T.copied; track('offer_copied'); }catch(x){}
   });
   box.querySelector('[data-sr-offer-apply]').addEventListener('click',function(){
-    set('sr_code',CODE); applied();
+    set('sr_code',CODE); applied(); track('offer_applied');
     document.dispatchEvent(new CustomEvent('sr:code',{detail:{code:CODE}}));
-    tab.querySelector('span').textContent=CODE+' aplicado';
+    tab.querySelector('span').textContent=T.tab.replace('%C',CODE);
     setTimeout(function(){
       close();
       var buy=document.querySelector('[data-sr-buy-box]');
@@ -49,7 +51,7 @@
   document.addEventListener('click',function(e){ var a=e.target.closest&&e.target.closest('a[href="#oferta"]'); if(a){ e.preventDefault(); open(); } });
   if(get('sr_offer_seen')){ if(box.hidden) tab.hidden=false; return; }
   var fired=false;
-  function maybe(){ if(fired) return; fired=true; window.removeEventListener('scroll',onScroll); open(); }
+  function maybe(){ if(fired) return; fired=true; window.removeEventListener('scroll',onScroll); open(); track('offer_shown'); }
   function onScroll(){ var h=document.documentElement; if((h.scrollTop+window.innerHeight)/h.scrollHeight>=DEPTH) maybe(); }
   window.addEventListener('scroll',onScroll,{passive:true});
   setTimeout(maybe,DELAY);

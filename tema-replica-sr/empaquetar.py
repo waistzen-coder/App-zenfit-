@@ -78,6 +78,46 @@ footer['sections']['footer']['settings']['color_scheme'] = 'scheme-3'
 save(fg, footer)
 shutil.copy(fg, os.path.join(OUT, 'sections', 'footer-group.json'))
 
+# SEO de la portada: la tienda no tiene descripción en Preferencias y su título
+# es solo «Waistzen». Si faltan, se usan los textos waistzen_audit.meta_* del
+# archivo de idioma (los mismos que el tema publicado). Si un día se rellenan en
+# Preferencias, mandan esos.
+SEO = """{%- liquid
+  assign sr_title = page_title
+  assign sr_description = page_description
+  if request.page_type == 'index'
+    if page_title == nil or page_title == blank or page_title == shop.name
+      assign sr_title = 'waistzen_audit.meta_title' | t
+    endif
+    if page_description == nil or page_description == blank
+      assign sr_description = 'waistzen_audit.meta_description' | t
+    endif
+  endif
+-%}
+"""
+def patch(rel, pairs):
+    path = os.path.join(BUILD, rel)
+    s = open(path, encoding='utf-8').read()
+    for old, new in pairs:
+        assert s.count(old) == 1, (rel, old)
+        s = s.replace(old, new)
+    open(path, 'w', encoding='utf-8').write(s)
+    dst = os.path.join(OUT, os.path.dirname(rel))
+    os.makedirs(dst, exist_ok=True)
+    shutil.copy(path, os.path.join(OUT, rel))
+
+patch('layout/theme.liquid', [
+    ('    <title>\n      {{ page_title }}', SEO + '    <title>\n      {{ sr_title }}'),
+    ('{%- unless page_title contains shop.name %}', '{%- unless sr_title contains shop.name %}'),
+    ('    {% if page_description %}\n      <meta name="description" content="{{ page_description | escape }}">',
+     '    {% if sr_description and sr_description != blank %}\n      <meta name="description" content="{{ sr_description | escape }}">'),
+])
+patch('snippets/meta-tags.liquid', [
+    ('  assign og_title = page_title | default: shop.name', SEO.replace('{%- liquid\n', '').replace('\n-%}\n', '\n') + '  assign og_title = sr_title | default: shop.name'),
+    ('  assign og_description = page_description | default: shop.description | default: shop.name',
+     '  assign og_description = sr_description | default: shop.description | default: shop.name'),
+])
+
 # El idioma principal de la tienda es el inglés, así que Shopify pinta los
 # textos del tema con en.default.json. Se pone ahí el castellano de Dawn para
 # que carrito, buscador y pie salgan en español, y se añaden los textos

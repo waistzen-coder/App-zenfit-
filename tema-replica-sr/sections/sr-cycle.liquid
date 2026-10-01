@@ -6,7 +6,7 @@
       <h2 class="sr-h2">{{ section.settings.heading }}{% if section.settings.heading_accent != blank %} <span class="sr-accent">{{ section.settings.heading_accent }}</span>{% endif %}</h2>
       {%- if section.settings.text != blank -%}<p class="sr-lead">{{ section.settings.text }}</p>{%- endif -%}
     </div>
-    <ol class="sr-cycle__ring" style="list-style:none;margin:0;padding:0">
+    <ol class="sr-cycle__ring">
       {%- for b in section.blocks -%}
         <li class="sr-cycle__step" {{ b.shopify_attributes }}>
           <h3 class="sr-h3">{{ b.settings.title }}</h3>

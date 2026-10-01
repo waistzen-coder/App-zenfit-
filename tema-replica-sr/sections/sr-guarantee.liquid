@@ -4,9 +4,9 @@
     <div class="sr-guar__card">
       <div class="sr-seal"><div><b>{{ section.settings.number }}</b><span>{{ section.settings.number_label }}</span></div></div>
       <div>
-        {%- if section.settings.eyebrow != blank -%}<p class="sr-eyebrow" style="color:#ffb4ae">{{ section.settings.eyebrow }}</p>{%- endif -%}
+        {%- if section.settings.eyebrow != blank -%}<p class="sr-eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
         <h2 class="sr-h2">{{ section.settings.heading }}</h2>
-        {%- if section.settings.text != blank -%}<div class="sr-rte" style="color:#cfdae6;margin-top:10px">{{ section.settings.text }}</div>{%- endif -%}
+        {%- if section.settings.text != blank -%}<div class="sr-rte sr-guar__text">{{ section.settings.text }}</div>{%- endif -%}
       </div>
       {%- if section.settings.cta_text != blank -%}<div><a class="sr-btn" href="{{ section.settings.cta_link }}">{{ section.settings.cta_text }}</a></div>{%- endif -%}
     </div>

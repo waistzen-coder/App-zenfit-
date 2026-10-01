@@ -11,7 +11,7 @@
         <article class="sr-part" {{ b.shopify_attributes }}>
           {% render 'sr-photo', image: b.settings.image, ratio: 'land', tag: b.settings.tag, tag_icon: b.settings.tag_icon, pins: b.settings.pins, sizes: '(min-width: 990px) 50vw, 100vw' %}
           <div class="sr-part__body">
-            <h3 class="sr-h3" style="font-size:22px">{{ b.settings.title }}</h3>
+            <h3 class="sr-h3 sr-part__title">{{ b.settings.title }}</h3>
             {%- if b.settings.text != blank -%}<p>{{ b.settings.text }}</p>{%- endif -%}
             {%- if b.settings.points != blank -%}
               {%- assign pts = b.settings.points | newline_to_br | split: '<br />' -%}
