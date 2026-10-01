@@ -11,12 +11,14 @@
       assign a = alt | default: image.alt
       if eager
         assign ld = 'eager'
+        assign fp = 'high'
       else
         assign ld = 'lazy'
+        assign fp = 'auto'
       endif
       assign sz = sizes | default: '(min-width: 990px) 50vw, 100vw'
     -%}
-    {{ image | image_url: width: 1400 | image_tag: loading: ld, alt: a, sizes: sz, widths: '400,600,800,1000,1200,1400' }}
+    {{ image | image_url: width: 1400 | image_tag: loading: ld, fetchpriority: fp, alt: a, sizes: sz, widths: '400,600,800,1000,1200,1400' }}
   {%- else -%}
     {{ 'image' | placeholder_svg_tag: 'sr-ph' }}
   {%- endif -%}

@@ -17,7 +17,13 @@ def ph(fn):
 env=Environment(loader=CachingFileSystemLoader(os.path.join(ROOT,'snippets'),ext='.liquid'))
 F=env.filters
 F['image_url']=lambda v,**k: ph(str(v)) if v else ''
-F['image_tag']=lambda v,**k: '<img src="%s" alt="%s" loading="%s" width="1200" height="1200">'%(v,html.escape(str(k.get('alt',''))),'eager')
+F['image_tag']=lambda v,**k: '<img src="%s" alt="%s" loading="%s"%s width="1200" height="1200">'%(v,html.escape(str(k.get('alt',''))),k.get('loading','lazy'),' fetchpriority="%s"'%k['fetchpriority'] if k.get('fetchpriority') else '')
+# Botones de pago exprés: Shopify los pinta en la tienda; aquí, un botón de muestra.
+F['payment_button']=lambda v:'<div class="shopify-payment-button"><button type="button" class="shopify-payment-button__button shopify-payment-button__button--branded" style="width:100%;background:#5a31f4;color:#fff;border:0;font:700 16px sans-serif">Shop Pay (muestra)</button></div>'
+def shopify_tags(src):
+    # {% form 'product', p, attr: '' %} no existe en python-liquid: se cambia por un <form> normal.
+    src=re.sub(r"\{%-?\s*form\s+'product'[^%]*-?%\}",'<form method="post" action="/cart/add" data-sr-express>',src)
+    return re.sub(r"\{%-?\s*endform\s*-?%\}",'</form>',src)
 F['money']=lambda v:('%.2f'%(int(v)/100)).replace('.',',')+' €'
 F['asset_url']=lambda v:'../assets/'+v
 F['stylesheet_tag']=lambda v:'<link rel="stylesheet" href="%s">'%v
@@ -33,7 +39,8 @@ TR=json.load(open(os.path.join(ROOT,'locales-extra','waistzen.json'),encoding='u
 def t(key,**k):
     d=TR
     for part in str(key).split('.'): d=d.get(part,{}) if isinstance(d,dict) else {}
-    return d if isinstance(d,str) else 'translation missing: '+key
+    if not isinstance(d,str): return 'translation missing: '+key
+    return re.sub(r'\{\{\s*(\w+)\s*\}\}',lambda m:str(k.get(m.group(1),m.group(0))),d)
 F['t']=t
 F['at_least']=lambda v,n: max(int(v or 0),int(n))
 F['url_encode']=lambda v: __import__('urllib.parse').parse.quote_plus(str(v))
@@ -71,8 +78,8 @@ def page(tpl,outname):
             bs={k:d.get('default') for k,d in bd.items()}; bs.update(b.get('settings',{}))
             blocks.append({'id':bid,'type':b['type'],'settings':{k:conv(v,bd.get(k)) for k,v in bs.items()},'shopify_attributes':''})
         ctx={'section':{'id':'template--1__'+sid,'settings':st,'blocks':blocks},'product':product if 'product' in tpl else None,
-             'shop':{'enabled_payment_types':['visa','master','paypal','apple_pay','google_pay']},'request':{'origin':'https://waistzen.com','design_mode':False},'cart':{'currency':{'iso_code':'EUR'}}}
-        out=env.from_string(body).render(**ctx)
+             'shop':{'enabled_payment_types':['visa','master','paypal','apple_pay','google_pay']},'request':{'origin':'https://waistzen.com','design_mode':False},'cart':{'currency':{'iso_code':'EUR'}},'routes':{'all_products_collection_url':'/collections/all','root_url':'/'}}
+        out=env.from_string(shopify_tags(body)).render(**ctx)
         parts.append('<div id="shopify-section-template--1__%s" class="shopify-section">%s</div>'%(sid,out))
     doc='<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>%s</title><style>body{margin:0}</style></head><body>%s</body></html>'%(outname,'\n'.join(parts))
     open(os.path.join(HERE,outname),'w',encoding='utf-8').write(doc); print('ok',outname,len(doc))

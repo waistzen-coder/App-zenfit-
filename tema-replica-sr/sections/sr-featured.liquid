@@ -22,7 +22,7 @@
         <h3 class="sr-h2" style="font-size:clamp(24px,4.4vw,34px)">{{ section.settings.title | default: p.title }}</h3>
         {%- assign rv = p.metafields.reviews.rating.value -%}
         {%- if rv and rv.rating -%}
-          <div class="sr-rating" style="margin-top:10px"><span class="sr-stars">{% for i in (1..5) %}{% render 'sr-icon', name: 'star' %}{% endfor %}</span><strong>{{ rv.rating | round: 1 }}</strong> · {{ p.metafields.reviews.rating_count.value }} reseñas</div>
+          <div class="sr-rating" style="margin-top:10px"><span class="sr-stars">{% for i in (1..5) %}{% render 'sr-icon', name: 'star' %}{% endfor %}</span><strong>{{ rv.rating | round: 1 }}</strong> · {{ 'sr.reviews_count' | t: count: p.metafields.reviews.rating_count.value }}</div>
         {%- endif -%}
         {%- if v != blank -%}
           <div class="sr-price">

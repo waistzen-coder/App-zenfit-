@@ -568,5 +568,18 @@
     "fee_info": "Este concepto corresponde al recargo de 5 € por pedido con contrareembolso. Se añade desde el formulario de ReliefPath™ al elegir esa modalidad; no es un aparato ni un producto para comprar por separado.",
     "choose_pack": "Elegir mi pack",
     "contact_title": "Contacta con Waistzen"
+  },
+  "sr": {
+    "reviews_count": "{{ count }} reseñas",
+    "view_image": "Ver imagen {{ index }}",
+    "image": "Imagen",
+    "payment_methods": "Formas de pago",
+    "per_unit": "/ud",
+    "error_prepare": "No hemos podido preparar el pedido. Recarga la página o escríbenos.",
+    "loading": "Un momento…",
+    "code_applied": "Código {{ code }} aplicado: −10 % al pagar con tarjeta.",
+    "code_not_with_packs": "El código {{ code }} no se suma a los packs: ya llevan su descuento.",
+    "express_label": "o compra en un clic",
+    "low_stock": "Quedan {{ count }} unidades en stock"
   }
 }
