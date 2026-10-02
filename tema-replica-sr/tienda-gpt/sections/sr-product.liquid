@@ -1,0 +1,473 @@
+{% render 'sr-head' %}
+{%- liquid
+  assign p = section.settings.product | default: product
+  if p != blank
+    assign v = p.selected_or_first_available_variant
+    assign base_unit = v.price
+  endif
+  assign fee = 0
+  assign fee_p = section.settings.fee_product
+  if fee_p != blank
+    assign fee_v = fee_p.selected_or_first_available_variant
+    if fee_v.available
+      assign fee = fee_v.price
+    endif
+  endif
+  assign gal = section.blocks | where: 'type', 'image'
+  assign bullets = section.blocks | where: 'type', 'bullet'
+  assign packs = section.blocks | where: 'type', 'pack'
+  assign seals = section.blocks | where: 'type', 'seal'
+  assign accs = section.blocks | where: 'type', 'accordion'
+  assign sale_badge = ''
+  if section.settings.sale_badge and v.compare_at_price > v.price
+    assign pct = v.compare_at_price | minus: v.price | times: 100 | divided_by: v.compare_at_price
+    assign sale_badge = '−' | append: pct | append: ' %'
+  endif
+  assign default_pack = 0
+  for b in packs
+    if b.settings.default
+      assign default_pack = forloop.index0
+    endif
+  endfor
+-%}
+{%- if p != blank -%}
+<section class="sr sr-pdp" id="sr-pdp-{{ section.id }}" data-sr-pdp data-url="{{ p.url }}" data-variant="{{ v.id }}">
+  <div class="sr-w sr-pdp__grid">
+
+    <div class="sr-pdp__gal">
+      <div class="sr-gal__track" data-sr-track>
+        {%- if gal.size > 0 -%}
+          {%- for b in gal -%}
+            <div class="sr-gal__slide" {{ b.shopify_attributes }}>
+              {%- if forloop.first -%}
+                {% render 'sr-photo', image: b.settings.image, ratio: 'sq', fit: b.settings.fit, tag: b.settings.tag, tag_icon: b.settings.tag_icon, pins: b.settings.pins, alt: b.settings.image.alt, alt_fallback: p.title, eager: section.settings.is_page_title, badge: sale_badge, chip: section.settings.first_chip, sizes: '(min-width: 990px) 55vw, 100vw' %}
+              {%- else -%}
+                {% render 'sr-photo', image: b.settings.image, ratio: 'sq', fit: b.settings.fit, tag: b.settings.tag, tag_icon: b.settings.tag_icon, pins: b.settings.pins, alt: b.settings.image.alt, alt_fallback: p.title, sizes: '(min-width: 990px) 55vw, 100vw' %}
+              {%- endif -%}
+            </div>
+          {%- endfor -%}
+        {%- else -%}
+          {%- for m in p.media -%}{%- if m.media_type == 'image' -%}
+            <div class="sr-gal__slide">
+              {%- if forloop.first -%}
+                {% render 'sr-photo', image: m.preview_image, ratio: 'sq', alt: m.alt, alt_fallback: p.title, eager: section.settings.is_page_title, badge: sale_badge, chip: section.settings.first_chip, sizes: '(min-width: 990px) 55vw, 100vw' %}
+              {%- else -%}
+                {% render 'sr-photo', image: m.preview_image, ratio: 'sq', alt: m.alt, alt_fallback: p.title, sizes: '(min-width: 990px) 55vw, 100vw' %}
+              {%- endif -%}
+            </div>
+          {%- endif -%}{%- endfor -%}
+        {%- endif -%}
+      </div>
+      <div class="sr-gal__dots" data-sr-dots></div>
+      <div class="sr-gal__thumbs" data-sr-thumbs>
+        {%- if gal.size > 0 -%}
+          {%- for b in gal -%}{%- if b.settings.image != blank -%}
+            <button type="button" aria-label="{{ 'sr.view_image' | t: index: forloop.index }}"{% if forloop.first %} class="is-on"{% endif %}>{{ b.settings.image | image_url: width: 180 | image_tag: loading: 'lazy', alt: '' }}</button>
+          {%- endif -%}{%- endfor -%}
+        {%- else -%}
+          {%- for m in p.media -%}{%- if m.media_type == 'image' -%}
+            <button type="button" aria-label="{{ 'sr.view_image' | t: index: forloop.index }}"{% if forloop.first %} class="is-on"{% endif %}>{{ m.preview_image | image_url: width: 180 | image_tag: loading: 'lazy', alt: '' }}</button>
+          {%- endif -%}{%- endfor -%}
+        {%- endif -%}
+      </div>
+    </div>
+
+    <div class="sr-pdp__info">
+      {%- if section.settings.badges != blank -%}
+        <div class="sr-badges">{%- assign bs = section.settings.badges | split: '|' -%}{%- for x in bs -%}<span class="sr-badge">{{ x | strip }}</span>{%- endfor -%}</div>
+      {%- endif -%}
+      {%- if section.settings.is_page_title -%}
+        <h1 class="sr-h1">{{ section.settings.heading | default: p.title }}</h1>
+      {%- else -%}
+        <h2 class="sr-h1">{{ section.settings.heading | default: p.title }}</h2>
+      {%- endif -%}
+      {%- assign rv = p.metafields.reviews.rating.value -%}
+      {%- if rv and rv.rating -%}
+        <div class="sr-rating"><span class="sr-stars">{% for i in (1..5) %}{% render 'sr-icon', name: 'star' %}{% endfor %}</span><strong>{{ rv.rating | round: 1 }}</strong> · {{ 'sr.reviews_count' | t: count: p.metafields.reviews.rating_count.value }}</div>
+      {%- endif -%}
+      <div class="sr-price">
+        <span class="sr-price__now">{{ v.price | money }}</span>
+        {%- if v.compare_at_price > v.price -%}
+          <span class="sr-price__was">{{ v.compare_at_price | money }}</span>
+          <span class="sr-price__off">−{{ v.compare_at_price | minus: v.price | times: 100 | divided_by: v.compare_at_price }} %</span>
+          {%- if section.settings.save_label != blank -%}<span class="sr-price__save">{{ section.settings.save_label }} {{ v.compare_at_price | minus: v.price | money }}</span>{%- endif -%}
+        {%- endif -%}
+      </div>
+      {%- if section.settings.price_note != blank -%}<p class="sr-note sr-price__note">{{ section.settings.price_note }}</p>{%- endif -%}
+      {%- if section.settings.sub != blank -%}<p class="sr-pdp__sub">{{ section.settings.sub }}</p>{%- endif -%}
+
+      <div class="sr-buy" id="comprar" data-sr-buy-box>
+        {% render 'rp-stock-note', variant: v, threshold: section.settings.low_stock, class: 'rp-stock-status' %}
+        {%- if packs.size > 0 -%}
+          <p class="sr-buy__title">{{ section.settings.packs_title }}</p>
+          <div class="sr-packs" role="radiogroup" aria-label="{{ section.settings.packs_title | escape }}">
+            {%- for b in packs -%}
+              {%- liquid
+                assign q = b.settings.qty | at_least: 1
+                assign gross = v.price | times: q
+                assign unit_cut = v.price | times: b.settings.discount | divided_by: 100.0 | floor
+                assign cut = unit_cut | times: q
+                assign net = gross | minus: cut
+                assign unit = net | divided_by: q
+                assign cross = base_unit | times: q
+                assign save = cross | minus: net
+                assign codnet = net | plus: fee
+                assign off = true
+                if v.inventory_management != blank and v.inventory_policy == 'deny' and q > v.inventory_quantity
+                  assign off = false
+                endif
+              -%}
+              <label class="sr-pack{% if forloop.index0 == default_pack %} is-on{% endif %}{% if b.settings.highlight %} sr-pack--hot{% endif %}" {{ b.shopify_attributes }}>
+                <input type="radio" name="sr-pack-{{ section.id }}" value="{{ q }}"
+                  data-label="{{ b.settings.label | default: q | escape }}"
+                  data-cents="{{ net }}"
+                  data-card="{{ net | money | strip_html | escape }}"
+                  data-cod="{{ codnet | money | strip_html | escape }}"
+                  data-save="{{ save | money | strip_html | escape }}"
+                  data-pack-saving="{{ gross | minus: net | money | strip_html | escape }}"
+                  {% if forloop.index0 == default_pack %}checked{% endif %}{% unless off and v.available %} disabled{% endunless %}>
+                <span class="sr-pack__dot" aria-hidden="true"></span>
+                <span class="sr-pack__main">
+                  <b>{{ b.settings.label }}</b>
+                  {%- if b.settings.sublabel != blank -%}<span>{{ b.settings.sublabel }}</span>{%- endif -%}
+                </span>
+                <span class="sr-pack__price">
+                  <b>{{ net | money }}</b>
+                  {%- if cross > net -%}<s>{{ cross | money }}</s>{%- endif -%}
+                  {%- if q > 1 -%}<i>{{ unit | money }}{{ 'sr.per_unit' | t }}</i>{%- endif -%}
+                </span>
+                {%- if b.settings.tag != blank -%}<em class="sr-pack__tag">{{ b.settings.tag }}</em>{%- endif -%}
+              </label>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+
+        <p class="rp-pack-summary" data-rp-pack-summary hidden><span data-rp-pack-saving></span></p>
+        {%- if v.available -%}
+          <button type="button" class="sr-btn sr-btn--block sr-btn--pulse sr-buy__card" data-sr-card>
+            {% render 'sr-icon', name: 'lock' %}<span data-sr-card-text>{{ section.settings.card_text }}</span><span class="sr-buy__amt" data-sr-card-price>{{ v.price | money }}</span>
+          </button>
+          {%- if fee > 0 and section.settings.cod_text != blank -%}
+            <button type="button" class="sr-btn sr-btn--block sr-btn--cod" data-sr-cod aria-expanded="false" aria-controls="rp-cod-confirm-{{ section.id }}">
+              {% render 'sr-icon', name: 'cash' %}<span>{{ section.settings.cod_text }}</span><span class="sr-buy__amt" data-sr-cod-price>{{ v.price | plus: fee | money }}</span>
+            </button>
+          {%- endif -%}
+          {%- if fee > 0 -%}
+            <div class="rp-cod-confirm" id="rp-cod-confirm-{{ section.id }}" data-sr-cod-confirm hidden>
+              <p>{{ 'rp.cro.cod_title' | t }}</p>
+              <div class="rp-cod-confirm__fee"><span>{{ 'rp.cro.cod_fee' | t }}</span><strong>{{ fee | money }}</strong></div>
+              <div class="rp-cod-confirm__total"><span>{{ 'rp.cro.cod_total' | t }}</span><strong data-sr-cod-total>{{ v.price | plus: fee | money }}</strong></div>
+              <p>{{ 'rp.cro.cod_instruction' | t }}</p>
+              <a class="sr-btn sr-btn--block" data-sr-cod-continue href="{{ routes.cart_url }}/{{ v.id }}:1,{{ fee_v.id }}:1">{{ 'rp.cro.cod_continue' | t }}{% render 'sr-icon', name: 'arrow' %}</a>
+              <button class="rp-cod-online" type="button" data-rp-cod-online>{{ 'rp.cro.cod_online' | t }}</button>
+            </div>
+          {%- endif -%}
+          {%- if section.settings.show_express -%}
+            <div class="sr-express">
+              <p class="sr-express__or"><span>{{ 'sr.express_label' | t }}</span></p>
+              {%- form 'product', p, data-sr-express: '' -%}
+                <input type="hidden" name="id" value="{{ v.id }}">
+                <input type="hidden" name="quantity" value="{{ packs[default_pack].settings.qty | default: 1 }}" data-sr-express-qty>
+                {{ form | payment_button }}
+              {%- endform -%}
+            </div>
+          {%- endif -%}
+          <p class="sr-code-line" data-sr-code-line hidden></p>
+          <p class="sr-note sr-center" data-sr-err hidden>{{ 'sr.error_prepare' | t }}</p>
+        {%- else -%}
+          <button type="button" class="sr-btn sr-btn--block" disabled>{{ section.settings.soldout_text }}</button>
+        {%- endif -%}
+        <p class="rp-buy-reassurance">{% render 'sr-icon', name: 'lock' %}{{ 'rp.cro.purchase_reassurance' | t }}</p>
+        {%- if section.settings.under != blank -%}<p class="sr-pdp__under">{{ section.settings.under }}</p>{%- endif -%}
+      </div>
+
+      {%- if section.settings.mini_trust != blank -%}
+        <ul class="sr-mini">{%- assign mt = section.settings.mini_trust | split: '|' -%}{%- for x in mt -%}<li>{% render 'sr-icon', name: 'check' %}{{ x | strip }}</li>{%- endfor -%}</ul>
+      {%- endif -%}
+      {%- if bullets.size > 0 -%}
+        <ul class="sr-checks">
+          {%- for b in bullets -%}<li {{ b.shopify_attributes }}>{% render 'sr-icon', name: 'check-circle' %}<span>{{ b.settings.text }}</span></li>{%- endfor -%}
+        </ul>
+      {%- endif -%}
+
+      {%- if seals.size > 0 -%}
+        <div class="sr-seals">
+          {%- for b in seals -%}<div {{ b.shopify_attributes }}>{% render 'sr-icon', name: b.settings.icon %}<span>{{ b.settings.text }}</span></div>{%- endfor -%}
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.show_payment -%}
+        <div class="sr-pay" aria-label="{{ 'sr.payment_methods' | t | escape }}">{%- for t in shop.enabled_payment_types -%}{{ t | payment_type_svg_tag }}{%- endfor -%}</div>
+      {%- endif -%}
+
+      {% if section.settings.proof_image != blank %}
+        <button type="button" class="rp-gallery-proof" data-rp-photo-open>
+          {{ section.settings.proof_image | image_url: width: 360 | image_tag: loading: 'lazy', widths: '180,360', sizes: '88px', alt: section.settings.proof_image.alt }}
+          <span><strong>{{ 'rp.cro.photo_title' | t }}</strong><span>{{ 'rp.cro.photo_text' | t }}</span></span>{% render 'sr-icon', name: 'plus' %}
+        </button>
+        <dialog class="rp-photo-dialog" data-rp-photo-dialog aria-label="{{ 'rp.cro.photo_title' | t | escape }}">
+          <button type="button" class="rp-photo-dialog__close" data-rp-photo-close aria-label="{{ 'rp.cro.close' | t | escape }}">{% render 'sr-icon', name: 'x' %}</button>
+          {{ section.settings.proof_image | image_url: width: 1600 | image_tag: loading: 'lazy', widths: '600,1000,1600', sizes: '90vw', alt: section.settings.proof_image.alt }}
+          <p>{{ 'rp.cro.photo_caption' | t }}</p>
+        </dialog>
+      {% endif %}
+      {%- if accs.size > 0 -%}
+        <div class="sr-acc">
+          {%- for b in accs -%}
+            <details {{ b.shopify_attributes }}>
+              <summary>{% render 'sr-icon', name: b.settings.icon %}<span>{{ b.settings.title }}</span>{% render 'sr-icon', name: 'plus' %}</summary>
+              <div class="sr-acc__c sr-rte">{{ b.settings.content }}</div>
+            </details>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{%- if section.settings.show_schema -%}
+{%- liquid
+  assign ship_country = section.settings.ship_country | default: 'ES' | upcase
+  assign ret_days = section.settings.return_days
+-%}
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Product","name":{{ p.title | json }},"url":{{ request.origin | append: p.url | json }},
+"image":[{%- for im in p.images limit: 8 -%}{{ im | image_url: width: 1200 | prepend: 'https:' | json }}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}],
+"description":{{ p.description | strip_html | strip | truncatewords: 60 | json }},"brand":{"@type":"Brand","name":{{ p.vendor | default: shop.name | json }}},"sku":{{ v.sku | json }},
+"offers":{"@type":"Offer","priceCurrency":{{ cart.currency.iso_code | json }},"price":{{ v.price | divided_by: 100.0 | json }},"itemCondition":"https://schema.org/NewCondition","availability":"https://schema.org/{% if v.available %}InStock{% else %}OutOfStock{% endif %}","url":{{ request.origin | append: p.url | json }}
+{%- if section.settings.free_shipping -%},"shippingDetails":{"@type":"OfferShippingDetails","shippingRate":{"@type":"MonetaryAmount","value":0,"currency":{{ cart.currency.iso_code | json }}},"shippingDestination":{"@type":"DefinedRegion","addressCountry":{{ ship_country | json }}}}{%- endif -%}
+{%- if ret_days > 0 -%},"hasMerchantReturnPolicy":{"@type":"MerchantReturnPolicy","applicableCountry":{{ ship_country | json }},"returnPolicyCategory":"https://schema.org/MerchantReturnFiniteReturnWindow","merchantReturnDays":{{ ret_days }},"returnMethod":"https://schema.org/ReturnByMail"}{%- endif -%}
+}}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":{{ 'sr.breadcrumb_home' | t | json }},"item":{{ request.origin | append: routes.root_url | json }}},{"@type":"ListItem","position":2,"name":{{ p.title | json }},"item":{{ request.origin | append: p.url | json }}}]}
+</script>
+{%- endif -%}
+
+<script>
+(function(){
+  var root=document.getElementById('sr-pdp-{{ section.id }}'); if(!root) return;
+  var ROOT=(window.Shopify&&Shopify.routes&&Shopify.routes.root)||'/';
+  var T={image:{{ 'sr.image' | t | json }},loading:{{ 'sr.loading' | t | json }},codeOk:{{ 'sr.code_applied' | t: code: '%C' | json }},codeNo:{{ 'sr.code_not_with_packs' | t: code: '%C' | json }}};
+
+  /* ---------- Galería ---------- */
+  var track=root.querySelector('[data-sr-track]'),slides=track?track.children:[],dots=root.querySelector('[data-sr-dots]'),thumbs=root.querySelectorAll('[data-sr-thumbs] button');
+  function go(i){ if(!slides[i]) return; track.scrollTo({left:slides[i].offsetLeft-track.offsetLeft,behavior:'smooth'}); }
+  if(dots && slides.length>1){ for(var i=0;i<slides.length;i++){ (function(i){ var b=document.createElement('button'); b.type='button'; b.setAttribute('aria-label',T.image+' '+(i+1)); if(i===0) b.className='is-on'; b.addEventListener('click',function(){go(i)}); dots.appendChild(b); })(i); } }
+  thumbs.forEach(function(t,i){ t.addEventListener('click',function(){ go(i); }); });
+  var tick;
+  if(track) track.addEventListener('scroll',function(){ clearTimeout(tick); tick=setTimeout(function(){
+    var i=Math.round(track.scrollLeft/track.clientWidth);
+    if(dots) Array.prototype.forEach.call(dots.children,function(d,k){ d.classList.toggle('is-on',k===i); });
+    thumbs.forEach(function(t,k){ t.classList.toggle('is-on',k===i); });
+  },60); },{passive:true});
+
+  /* ---------- Caja de compra ---------- */
+  var box=root.querySelector('[data-sr-buy-box]'); if(!box) return;
+  var inputs=[].slice.call(box.querySelectorAll('input[name^="sr-pack-"]'));
+  var selected=inputs.filter(function(i){return i.checked&&!i.disabled;})[0];
+  if(!selected){var firstAvailable=inputs.filter(function(i){return !i.disabled;})[0];if(firstAvailable)firstAvailable.checked=true;}
+  var cardBtn=box.querySelector('[data-sr-card]'),codBtn=box.querySelector('[data-sr-cod]'),err=box.querySelector('[data-sr-err]');
+  var CARD_TEXT={{ section.settings.card_text | json }};
+  var syncing=false;
+
+  function current(){
+    var i=box.querySelector('input[name^="sr-pack-"]:checked')||inputs[0];
+    if(!i) return {qty:1,label:'1 unidad',card:{{ v.price | money | strip_html | json }},cod:{{ v.price | plus: fee | money | strip_html | json }}};
+    return {qty:+i.value,label:i.dataset.label,card:i.dataset.card,cod:i.dataset.cod,save:i.dataset.save,packSaving:i.dataset.packSaving,cents:+i.dataset.cents||0};
+  }
+  function code(){ try{ return sessionStorage.getItem('sr_code')||''; }catch(e){ return ''; } }
+  function paintCode(pk){
+    var line=box.querySelector('[data-sr-code-line]'), c=code(); if(!line) return;
+    if(!c){ line.hidden=true; return; }
+    line.hidden=false;
+    line.textContent = (pk.qty===1 ? T.codeOk : T.codeNo).replace('%C',c);
+    line.classList.toggle('is-ok', pk.qty===1);
+  }
+  document.addEventListener('sr:code',function(){ paintCode(current()); });
+  function paint(){
+    var pk=current();
+    inputs.forEach(function(i){ i.closest('.sr-pack').classList.toggle('is-on',i.checked); });
+    var cp=box.querySelector('[data-sr-card-price]'); if(cp) cp.textContent=pk.card;
+    var dp=box.querySelector('[data-sr-cod-price]'); if(dp) dp.textContent=pk.cod;
+    var eq=box.querySelector('[data-sr-express-qty]'); if(eq) eq.value=pk.qty;
+    document.dispatchEvent(new CustomEvent('sr:pack',{detail:pk}));
+    paintCode(pk);
+    var savings=box.querySelector('[data-rp-pack-summary]'), amount=box.querySelector('[data-rp-pack-saving]');
+    if(savings && amount){ savings.hidden=pk.qty<2; amount.textContent={{ 'rp.cro.pack_saving' | t | json }}.replace('%AMOUNT',pk.packSaving||'').replace('%QTY',pk.qty); }
+    var total=box.querySelector('[data-sr-cod-total]'); if(total) total.textContent=pk.cod;
+    var next=box.querySelector('[data-sr-cod-continue]'); if(next) next.href=codUrl(pk);
+    return pk;
+  }
+
+  /* La caja de contrareembolso de más abajo (calmia-cod) tiene su propio
+     selector de packs. Se mantienen los dos en el mismo pack, en los dos
+     sentidos, emparejándolos por número de unidades. */
+  function codRoot(){ return document.querySelector('[data-calmia-cod]'); }
+  function codIndexFor(qty){
+    var c=codRoot(); if(!c) return -1;
+    try{ var cfg=JSON.parse(c.querySelector('[data-calmia-cod-config]').textContent); for(var k=0;k<cfg.packs.length;k++){ if(+cfg.packs[k].qty===qty) return k; } }catch(e){}
+    return -1;
+  }
+  function pushToCod(qty,way){
+    var c=codRoot(); if(!c) return false;
+    if(way==='cod') c.hidden=false;
+    var idx=codIndexFor(qty);
+    syncing=true;
+    if(idx>-1){ var r=c.querySelector('input[name^="calmia-pack-"][value="'+idx+'"]'); if(r && !r.disabled && !r.checked) r.click(); }
+    if(way){ var w=c.querySelector('input[name^="calmia-way-"][value="'+way+'"]'); if(w && !w.checked) w.click(); }
+    syncing=false;
+    return true;
+  }
+  function selectQty(qty){
+    var hit=inputs.filter(function(i){ return +i.value===qty && !i.disabled; })[0];
+    if(hit){ hit.checked=true; paint(); }
+  }
+  document.addEventListener('change',function(e){
+    var t=e.target; if(syncing||!t||!t.name) return;
+    if(t.name.indexOf('calmia-pack-')===0 && t.checked){
+      var c=codRoot(); try{ var cfg=JSON.parse(c.querySelector('[data-calmia-cod-config]').textContent); selectQty(+cfg.packs[+t.value].qty); }catch(x){}
+    }
+  });
+  inputs.forEach(function(i){ i.addEventListener('change',function(){ var pk=paint(); pushToCod(pk.qty); fire('pack_selected',pk); }); });
+
+  var CUR={{ cart.currency.iso_code | json }};
+  function fire(name,pk){ pk=pk||current(); if(window.srTrack) window.srTrack(name,{product_id:{{ p.id | json }},variant_id:+root.dataset.variant,quantity:pk.qty,value:pk.cents/100,currency:CUR,place:{{ request.page_type | json }}}); }
+
+  if(cardBtn) cardBtn.addEventListener('click',function(){
+    var pk=current();
+    var params={
+      'locale':'es',
+      'attributes[Preferencia de pago del formulario]':'Pago online',
+      'attributes[Pack]':pk.label,
+      'attributes[Total previsto en formulario]':pk.card,
+      'note':'Preferencia: pago online. Consultar método de pago, dirección y total definitivos del pedido confirmado.'
+    };
+    if(code() && pk.qty===1) params['discount']=code();
+    var qs=Object.keys(params).map(function(k){ return encodeURIComponent(k)+'='+encodeURIComponent(params[k]); }).join('&');
+    cardBtn.disabled=true;
+    var t=cardBtn.querySelector('[data-sr-card-text]'); if(t) t.textContent=T.loading;
+    fire('card_checkout',pk);
+    window.location.href=ROOT.replace(/\/$/,'')+'/cart/'+root.dataset.variant+':'+pk.qty+'?'+qs;
+    setTimeout(function(){ cardBtn.disabled=false; if(t) t.textContent=CARD_TEXT; if(err) err.hidden=false; },8000);
+  });
+
+  function codUrl(pk){
+    var params={'locale':'es','attributes[Preferencia de pago del formulario]':'Contrareembolso; confirmar método en checkout','attributes[Pack]':pk.label,'note':'Preferencia: contrareembolso. Seleccionar Pago contra entrega en el checkout. El recargo de gestión se muestra como una línea del pedido.'};
+    if(code() && pk.qty===1) params.discount=code();
+    var qs=Object.keys(params).map(function(k){return encodeURIComponent(k)+'='+encodeURIComponent(params[k]);}).join('&');
+    return ROOT.replace(/\/$/,'')+'/cart/'+root.dataset.variant+':'+pk.qty+','+{{ fee_v.id | default: 0 | json }}+':1?'+qs;
+  }
+  function goCod(){
+    var panel=box.querySelector('[data-sr-cod-confirm]'); if(!panel) return;
+    panel.hidden=false; if(codBtn) codBtn.setAttribute('aria-expanded','true'); paint();
+    panel.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'nearest'});
+  }
+  if(codBtn) codBtn.addEventListener('click',function(){fire('cod_selected');goCod();});
+  var codContinue=box.querySelector('[data-sr-cod-continue]');
+  if(codContinue) codContinue.addEventListener('click',function(){fire('cod_checkout');});
+  var online=box.querySelector('[data-rp-cod-online]');
+  if(online) online.addEventListener('click',function(){box.querySelector('[data-sr-cod-confirm]').hidden=true;if(codBtn)codBtn.setAttribute('aria-expanded','false');if(cardBtn)cardBtn.click();});
+  var photo=root.querySelector('[data-rp-photo-dialog]'),open=root.querySelector('[data-rp-photo-open]'),close=root.querySelector('[data-rp-photo-close]');
+  if(photo&&open&&close){open.addEventListener('click',function(){photo.showModal();});close.addEventListener('click',function(){photo.close();});photo.addEventListener('click',function(e){if(e.target===photo)photo.close();});}
+
+  /* Enlaces desde la portada: ?pack=2&pago=cod llegan con todo elegido. */
+  var qp=new URLSearchParams(window.location.search);
+  var startQty=parseInt(qp.get('pack'),10);
+  paint();
+  window.addEventListener('load',function(){
+    if(startQty) selectQty(startQty);
+    pushToCod(current().qty, qp.get('pago')==='cod'?'cod':null);
+    if(qp.get('pago')==='cod') goCod();
+  });
+})();
+</script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "SR · Ficha de producto",
+  "tag": "div",
+  "settings": [
+    { "type": "image_picker", "id": "proof_image", "label": "Foto real ampliable" },
+    { "type": "product", "id": "product", "label": "Producto (vacío = el de la página)" },
+    { "type": "product", "id": "fee_product", "label": "Producto del recargo de contrareembolso" },
+    { "type": "checkbox", "id": "is_page_title", "label": "Es el título principal de la página (H1)", "default": true, "info": "Desmárcalo si usas esta sección en la portada." },
+    { "type": "text", "id": "badges", "label": "Etiquetas (separadas por |)", "default": "Método Pausa|Para opositores" },
+    { "type": "text", "id": "heading", "label": "Título (vacío = nombre del producto)" },
+    { "type": "textarea", "id": "sub", "label": "Subtítulo" },
+    { "type": "text", "id": "save_label", "label": "Texto de ahorro", "default": "Ahorras" },
+    { "type": "text", "id": "price_note", "label": "Nota bajo el precio" },
+    { "type": "text", "id": "mini_trust", "label": "Confianza bajo el precio (separada por |)", "default": "Envío gratis|Paga al recibirlo|30 días para devolverlo" },
+    { "type": "checkbox", "id": "sale_badge", "label": "Insignia de descuento en la primera foto", "default": true },
+    { "type": "text", "id": "first_chip", "label": "Pastilla en la primera foto", "default": "Envío gratis a España" },
+    { "type": "header", "content": "Caja de compra" },
+    { "type": "text", "id": "packs_title", "label": "Título de los packs", "default": "Elige tu pack" },
+    { "type": "text", "id": "card_text", "label": "Botón de pago online", "default": "Comprar ahora" },
+    { "type": "text", "id": "cod_text", "label": "Botón de contrareembolso", "default": "Pagar al recibirlo" },
+    { "type": "text", "id": "soldout_text", "label": "Agotado", "default": "Agotado" },
+    { "type": "text", "id": "under", "label": "Texto bajo los botones" },
+    { "type": "checkbox", "id": "show_payment", "label": "Mostrar formas de pago", "default": true },
+    { "type": "checkbox", "id": "show_express", "label": "Pago exprés (Shop Pay, Apple Pay…)", "info": "Botones de pago en un clic de Shopify. Usan la cantidad del pack elegido.", "default": true },
+    { "type": "range", "id": "low_stock", "label": "Avisar de stock bajo desde", "min": 0, "max": 20, "step": 1, "unit": "ud", "default": 10, "info": "Solo con inventario de Shopify activado. Muestra las unidades reales que quedan. 0 = nunca." },
+    { "type": "checkbox", "id": "show_schema", "label": "Datos estructurados de producto", "default": true },
+    { "type": "checkbox", "id": "free_shipping", "label": "Datos estructurados: envío gratis", "info": "Solo si el envío es gratis de verdad en el checkout para el país de abajo.", "default": true },
+    { "type": "text", "id": "ship_country", "label": "País de envío (código de 2 letras)", "default": "ES" },
+    { "type": "range", "id": "return_days", "label": "Datos estructurados: días de devolución", "min": 0, "max": 60, "step": 1, "unit": "d", "default": 0, "info": "Pon los días de tu política de devoluciones cuando esté actualizada. 0 = no se declara." }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Foto de galería",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Imagen" },
+        { "type": "select", "id": "fit", "label": "Encaje", "default": "cover", "options": [ { "value": "cover", "label": "Llenar" }, { "value": "contain", "label": "Producto entero" } ] },
+        { "type": "text", "id": "tag", "label": "Etiqueta" },
+        { "type": "select", "id": "tag_icon", "label": "Icono de la etiqueta", "default": "spark", "options": [
+          { "value": "spark", "label": "Destello" }, { "value": "sun", "label": "Luz" }, { "value": "flame", "label": "Calor" }, { "value": "wave", "label": "Succión" },
+          { "value": "timer", "label": "Temporizador" }, { "value": "moon", "label": "Luna" }, { "value": "book", "label": "Libro" }, { "value": "box", "label": "Caja" }, { "value": "truck", "label": "Envío" }, { "value": "check-circle", "label": "Check" }
+        ] },
+        { "type": "text", "id": "pins", "label": "Llamadas", "info": "x,y,texto | x,y,texto" }
+      ]
+    },
+    { "type": "bullet", "name": "Viñeta", "settings": [ { "type": "text", "id": "text", "label": "Texto" } ] },
+    {
+      "type": "pack",
+      "name": "Pack",
+      "settings": [
+        { "type": "number", "id": "qty", "label": "Unidades", "default": 1 },
+        { "type": "number", "id": "discount", "label": "Descuento %", "default": 0, "info": "Tiene que coincidir con el descuento automático de la tienda." },
+        { "type": "text", "id": "label", "label": "Nombre", "default": "1 unidad" },
+        { "type": "text", "id": "sublabel", "label": "Subtexto" },
+        { "type": "text", "id": "tag", "label": "Etiqueta" },
+        { "type": "checkbox", "id": "highlight", "label": "Destacado", "default": false },
+        { "type": "checkbox", "id": "default", "label": "Elegido al entrar", "default": false }
+      ]
+    },
+    {
+      "type": "seal",
+      "name": "Sello",
+      "settings": [
+        { "type": "select", "id": "icon", "label": "Icono", "default": "truck", "options": [
+          { "value": "truck", "label": "Envío" }, { "value": "cash", "label": "Efectivo" }, { "value": "refresh", "label": "Devolución" },
+          { "value": "shield", "label": "Escudo" }, { "value": "chat", "label": "Chat" }, { "value": "lock", "label": "Candado" }
+        ] },
+        { "type": "text", "id": "text", "label": "Texto" }
+      ]
+    },
+    {
+      "type": "accordion",
+      "name": "Desplegable",
+      "settings": [
+        { "type": "select", "id": "icon", "label": "Icono", "default": "info", "options": [
+          { "value": "info", "label": "Información" }, { "value": "truck", "label": "Envío" }, { "value": "refresh", "label": "Devolución" },
+          { "value": "box", "label": "Caja" }, { "value": "book", "label": "Manual" }, { "value": "shield", "label": "Escudo" }
+        ] },
+        { "type": "text", "id": "title", "label": "Título" },
+        { "type": "richtext", "id": "content", "label": "Contenido" }
+      ]
+    }
+  ],
+  "presets": [ { "name": "SR · Ficha de producto" } ]
+}
+{% endschema %}
