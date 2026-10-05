@@ -1,0 +1,57 @@
+{%- comment -%}
+  «En cifras»: datos reales de la oferta con contador y anillo que se dibuja.
+  La cifra final está en el HTML (se lee sin JavaScript); rp-motion.js la hace subir desde 0.
+{%- endcomment -%}
+{{ 'rp-motion.css' | asset_url | stylesheet_tag }}
+{%- if section.blocks.size > 0 -%}
+<section class="rp-stats" aria-labelledby="rp-stats-title-{{ section.id }}">
+  <div class="rp-wrap">
+    <div class="rp-stats__head">
+      {%- if section.settings.eyebrow != blank -%}<p class="rp-kicker">{{ section.settings.eyebrow | escape }}</p>{%- endif -%}
+      <h2 id="rp-stats-title-{{ section.id }}">{{ section.settings.heading | escape }} <em>{{ section.settings.accent | escape }}</em></h2>
+    </div>
+    <ul class="rp-stats__grid" role="list">
+      {%- for block in section.blocks -%}
+        {%- assign fill = block.settings.fill | divided_by: 100.0 -%}
+        <li class="rp-stat" {{ block.shopify_attributes }}>
+          <div class="rp-stat__dial" style="--rp-fill:{{ fill }}">
+            <svg viewBox="0 0 120 120" aria-hidden="true" focusable="false"><circle class="rp-stat__track" cx="60" cy="60" r="52"/><circle class="rp-stat__bar" cx="60" cy="60" r="52"/></svg>
+            <span class="rp-stat__num" data-rp-count="{{ block.settings.value }}">{{ block.settings.prefix | escape }}<span data-rp-count-value>{{ block.settings.value | replace: '.', ',' }}</span><small>{{ block.settings.suffix | escape }}</small></span>
+          </div>
+          <p class="rp-stat__label">{{ block.settings.label | escape }}</p>
+          {%- if block.settings.note != blank -%}<p class="rp-stat__note">{{ block.settings.note | escape }}</p>{%- endif -%}
+        </li>
+      {%- endfor -%}
+    </ul>
+    {%- if section.settings.foot != blank -%}<p class="rp-stats__foot">{{ section.settings.foot | escape }}</p>{%- endif -%}
+  </div>
+</section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "RP · En cifras",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Antetítulo", "default": "EN CIFRAS" },
+    { "type": "text", "id": "heading", "label": "Título", "default": "Lo que te llevas," },
+    { "type": "text", "id": "accent", "label": "Énfasis", "default": "sin letra pequeña." },
+    { "type": "text", "id": "foot", "label": "Nota al pie", "info": "Usa solo datos reales de la tienda." }
+  ],
+  "blocks": [
+    {
+      "type": "stat",
+      "name": "Cifra",
+      "settings": [
+        { "type": "text", "id": "value", "label": "Número", "default": "3", "info": "Solo el número (usa punto para decimales)." },
+        { "type": "text", "id": "prefix", "label": "Antes del número", "info": "Por ejemplo «−»." },
+        { "type": "text", "id": "suffix", "label": "Después del número", "info": "Por ejemplo « €» o « %»." },
+        { "type": "range", "id": "fill", "label": "Anillo", "min": 5, "max": 100, "step": 5, "unit": "%", "default": 100 },
+        { "type": "text", "id": "label", "label": "Qué es", "default": "Funciones en un aparato" },
+        { "type": "text", "id": "note", "label": "Detalle" }
+      ]
+    }
+  ],
+  "max_blocks": 4,
+  "presets": [ { "name": "RP · En cifras" } ]
+}
+{% endschema %}
