@@ -19,6 +19,11 @@ import { AZUL } from "./marca";
 // Efectos de la versión épica: chispas, brasas, destellos anamórficos,
 // ondas expansivas y el logo forjado. Todo es determinista (random() con
 // semilla), así que cada fotograma sale igual en cada render.
+//
+// Los resplandores se dibujan con trazos anchos y translúcidos o con
+// degradados, no con filter: blur() ni drop-shadow(): sin GPU, cada filtro
+// sobre una capa de pantalla completa cuesta cientos de milisegundos por
+// fotograma.
 
 const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
 const numero = (
@@ -72,6 +77,7 @@ const ChispasInner: React.FC<ChispasProps> = ({
   const frame = tiempo ? tiempo(fotograma) : fotograma;
   const { durationInFrames } = useVideoConfig();
   const duracion = tiempo ? tiempo(durationInFrames) : durationInFrames;
+  const halos: React.ReactNode[] = [];
   const trazos: React.ReactNode[] = [];
   const friccion = 0.93;
   const gravedad = 0.55;
@@ -94,6 +100,22 @@ const ChispasInner: React.FC<ChispasProps> = ({
     const [x1, y1] = posicion(frame, vx, vy);
     const [x0, y0] = posicion(Math.max(0, frame - 2.2), vx, vy);
     const resto = 1 - frame / vida;
+    const ancho = 1.6 + 4.4 * resto * (0.5 + r("grosor"));
+    const opacidad = Math.pow(resto, 0.5);
+    // El resplandor es el mismo trazo, ancho y translúcido, por debajo.
+    halos.push(
+      <line
+        key={i}
+        x1={x0}
+        y1={y0}
+        x2={x1}
+        y2={y1}
+        stroke="#ff7a1a"
+        strokeWidth={ancho * 4.5}
+        strokeLinecap="round"
+        opacity={opacidad * 0.2}
+      />,
+    );
     trazos.push(
       <line
         key={i}
@@ -102,9 +124,9 @@ const ChispasInner: React.FC<ChispasProps> = ({
         x2={x1}
         y2={y1}
         stroke={interpolateColors(resto, [0, 0.35, 0.7, 1], CHISPA_COLORES)}
-        strokeWidth={1.6 + 4.4 * resto * (0.5 + r("grosor"))}
+        strokeWidth={ancho}
         strokeLinecap="round"
-        opacity={Math.pow(resto, 0.5)}
+        opacity={opacidad}
       />,
     );
   }
@@ -115,12 +137,11 @@ const ChispasInner: React.FC<ChispasProps> = ({
         position: "absolute",
         inset: 0,
         mixBlendMode: "screen",
-        filter:
-          "drop-shadow(0 0 5px rgba(255, 170, 70, 0.95)) drop-shadow(0 0 16px rgba(255, 90, 20, 0.6))",
         ...style,
       }}
     >
       <svg width={1080} height={1920} viewBox="0 0 1080 1920">
+        {halos}
         {trazos}
       </svg>
     </Interactive.Div>
@@ -167,15 +188,12 @@ const BrasasInner: React.FC<BrasasProps> = ({
       r("x") * 1080 + Math.sin(frame * (0.02 + r("f") * 0.04) + r("p") * 6.3) * 26;
     const radio = 1.5 + r("r") * 3.5;
     const parpadeo = 0.35 + 0.65 * Math.abs(Math.sin(frame * (0.08 + r("b") * 0.2) + r("q") * 6.3));
+    const color = CHISPA_COLORES[1 + Math.floor(r("c") * 3)];
     puntos.push(
-      <circle
-        key={i}
-        cx={x}
-        cy={y}
-        r={radio}
-        fill={CHISPA_COLORES[1 + Math.floor(r("c") * 3)]}
-        opacity={parpadeo * intensidad}
-      />,
+      <g key={i} opacity={parpadeo * intensidad}>
+        <circle cx={x} cy={y} r={radio * 3.2} fill="#ff8c28" opacity={0.18} />
+        <circle cx={x} cy={y} r={radio} fill={color} />
+      </g>,
     );
   }
   return (
@@ -184,7 +202,6 @@ const BrasasInner: React.FC<BrasasProps> = ({
         position: "absolute",
         inset: 0,
         mixBlendMode: "screen",
-        filter: "drop-shadow(0 0 6px rgba(255, 140, 40, 0.9))",
         ...style,
       }}
     >
@@ -226,7 +243,9 @@ const AnamorficoInner: React.FC<AnamorficoProps> = ({
   const { durationInFrames } = useVideoConfig();
   const p = frame / Math.max(1, durationInFrames - 1);
   const opacidad = intensidad * Math.pow(1 - p, 1.6);
-  const raya = (alto: number, desenfoque: number, factor: number) => (
+  // Cada raya es una elipse muy alargada con un degradado radial: blanca en
+  // el centro, del color en el medio y transparente en el borde.
+  const raya = (alto: number, factor: number) => (
     <div
       style={{
         position: "absolute",
@@ -236,8 +255,7 @@ const AnamorficoInner: React.FC<AnamorficoProps> = ({
         height: alto,
         translate: "0px -50%",
         scale: `${0.7 + p * 0.6} 1`,
-        background: `linear-gradient(90deg, transparent 0%, ${color} 22%, #ffffff 50%, ${color} 78%, transparent 100%)`,
-        filter: `blur(${desenfoque}px)`,
+        background: `radial-gradient(closest-side, #ffffff 0%, ${color} 45%, transparent 100%)`,
         opacity: opacidad * factor,
       }}
     />
@@ -252,8 +270,8 @@ const AnamorficoInner: React.FC<AnamorficoProps> = ({
         ...style,
       }}
     >
-      {raya(5, 1.2, 1)}
-      {raya(46, 16, 0.45)}
+      {raya(8, 1)}
+      {raya(80, 0.45)}
       <div
         style={{
           position: "absolute",
@@ -297,7 +315,18 @@ const OndaInner: React.FC<OndaProps> = ({ x, y, color, style }) => {
   const { durationInFrames } = useVideoConfig();
   const p = frame / Math.max(1, durationInFrames - 1);
   const e = Easing.out(Easing.cubic)(Math.min(1, p));
-  const lado = 60 + e * 1900;
+  // Radio del anillo, grosor y resplandor a cada lado, en píxeles.
+  const radio = 30 + e * 950;
+  const grosor = 2 + 16 * (1 - p);
+  const halo = 45;
+  const lado = 2 * (radio + grosor / 2 + halo);
+  const anillo = [
+    `transparent ${Math.max(0, radio - grosor / 2 - halo)}px`,
+    `${color} ${radio - grosor / 2}px`,
+    `#ffffff ${radio}px`,
+    `${color} ${radio + grosor / 2}px`,
+    `transparent ${radio + grosor / 2 + halo}px`,
+  ].join(", ");
   return (
     <Interactive.Div
       style={{
@@ -307,12 +336,9 @@ const OndaInner: React.FC<OndaProps> = ({ x, y, color, style }) => {
         width: lado,
         height: lado,
         translate: "-50% -50%",
-        borderRadius: "50%",
-        border: `${2 + 16 * (1 - p)}px solid ${color}`,
-        boxShadow: `0 0 50px ${color}, inset 0 0 50px ${color}`,
+        background: `radial-gradient(circle closest-side, ${anillo})`,
         opacity: Math.pow(1 - p, 1.3),
         mixBlendMode: "screen",
-        filter: "blur(1.5px)",
         ...style,
       }}
     />
