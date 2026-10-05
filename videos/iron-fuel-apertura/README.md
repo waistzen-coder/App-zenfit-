@@ -33,7 +33,7 @@ caen en el mismo fotograma.
 | 4–12 | Montaje | «CADA ESTANTE», «CADA LUZ», «CADA DETALLE» y cuatro golpes seguidos: «PROTEÍNA», «CREATINA», «PRE-ENTRENO», «Y MUCHO MÁS» |
 | 12–16 | Revelación | La tienda entera con los metales; cuenta atrás 3, 2, 1 con ondas, y medio segundo de casi silencio con brasas |
 | 16–24 | Fachada | El golpe: el rótulo llega, se congela a 0,25× con chispas a cámara lenta y sale acelerando; melodía de trompas y «ÚLTIMOS RETOQUES» |
-| 24–30 | Cierre | El logo sale de la forja al rojo vivo y se enfría hasta el azul; «PRÓXIMA APERTURA», «MUY PRONTO» y «Síguenos y no te pierdas la inauguración» |
+| 24–30 | Cierre | El logo sale de la forja al rojo vivo y se enfría hasta el azul; «PRÓXIMA APERTURA», «MUY PRONTO» y un botón «SÍGUENOS» con campana, «y no te pierdas la inauguración» |
 
 La banda sonora (`audio/banda_sonora_epica.py`) es una orquesta de muestras
 reales de [VSCO 2 Community Edition](https://github.com/sgossner/VSCO-2-CE),
@@ -44,7 +44,10 @@ con el logo. Está mezclada a −14 LUFS, el nivel de Instagram, TikTok y
 YouTube.
 
 Los efectos nuevos están en `src/vfx.tsx` (chispas, brasas, destello
-anamórfico, onda expansiva y el logo forjado) y las escenas en `src/epico/`.
+anamórfico, onda expansiva, el logo forjado y el botón «SÍGUENOS» del final)
+y las escenas en `src/epico/`. Los planos del interior van encuadrados hacia
+el techo y las estanterías, con el suelo en sombra, porque la tienda aún
+estaba en obras cuando se grabaron.
 Los textos usan dos opciones nuevas de `<Rotulo>`: `metal` (blanco de acero
 con un reflejo que lo recorre) y `fundido` (el texto destacado sale al rojo
 blanco y se enfría hasta el naranja de la forja). El naranja se queda para el

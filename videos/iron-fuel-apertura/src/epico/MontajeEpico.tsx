@@ -1,4 +1,4 @@
-import { AbsoluteFill, useVideoConfig } from "remotion";
+import { AbsoluteFill, Interactive, useVideoConfig } from "remotion";
 import { Destello, FugaDeLuz } from "../efectos";
 import { AZUL, NEGRO } from "../marca";
 import { Plano } from "../Plano";
@@ -12,14 +12,16 @@ const PRODUCTOS = [
     palabra: "PROTEÍNA",
     tamano: 168,
     archivo: "clips/estanteria-travelling.webm",
-    inicio: 2,
+    inicio: 3,
+    zoom: [1.12, 1.2],
     origen: "50% 50%",
   },
   {
     palabra: "CREATINA",
     tamano: 168,
     archivo: "clips/interior-revelacion.webm",
-    inicio: 1,
+    inicio: 1.8,
+    zoom: [1.12, 1.2],
     origen: "40% 45%",
   },
   {
@@ -27,14 +29,16 @@ const PRODUCTOS = [
     tamano: 128,
     archivo: "clips/estanteria-rincon.webm",
     inicio: 2.6,
+    zoom: [1.12, 1.2],
     origen: "50% 40%",
   },
   {
     palabra: "Y MUCHO MÁS",
     tamano: 128,
-    archivo: "clips/estanteria-travelling.webm",
-    inicio: 5.2,
-    origen: "70% 45%",
+    archivo: "clips/interior-revelacion.webm",
+    inicio: 9.4,
+    zoom: [1.8, 1.9],
+    origen: "70% 5%",
   },
 ] as const;
 
@@ -92,19 +96,31 @@ export const MontajeEpico: React.FC = () => {
         bloom={1}
       />
       <Plano
-        name="Los paneles de LED de la entrada"
+        name="El techo de LED"
         from={90}
         durationInFrames={30}
         premountFor={fps}
-        archivo="clips/entrada-techo-led.webm"
-        inicio={4.6}
+        archivo="clips/interior-revelacion.webm"
+        inicio={8}
         velocidad={1}
-        zoomInicial={1.1}
-        zoomFinal={1.2}
-        origen="50% 25%"
+        zoomInicial={1.6}
+        zoomFinal={1.72}
+        origen="50% 5%"
         brillo={1}
         entrada="barrido-der"
-        bloom={1.2}
+        bloom={1}
+      />
+      <Interactive.Div
+        name="Sombra del suelo"
+        from={90}
+        durationInFrames={30}
+        premountFor={fps}
+        style={{
+          position: "absolute",
+          inset: 0,
+          background:
+            "linear-gradient(180deg, rgba(3, 5, 9, 0) 50%, rgba(3, 5, 9, 0.8) 76%, #030509 94%)",
+        }}
       />
       <Plano
         name="Góndola de cerca"
@@ -122,16 +138,16 @@ export const MontajeEpico: React.FC = () => {
         salida="zoom"
       />
       <Plano
-        name="Góndola con rejilla"
+        name="La pared de madera"
         from={150}
         durationInFrames={30}
         premountFor={fps}
-        archivo="clips/estanteria-rincon.webm"
+        archivo="clips/estanteria-travelling.webm"
         inicio={0.3}
         velocidad={1}
-        zoomInicial={1.06}
-        zoomFinal={1.16}
-        origen="50% 40%"
+        zoomInicial={1.15}
+        zoomFinal={1.25}
+        origen="50% 20%"
         brillo={1}
         entrada="zoom"
       />
@@ -145,8 +161,8 @@ export const MontajeEpico: React.FC = () => {
           archivo={p.archivo}
           inicio={p.inicio}
           velocidad={1}
-          zoomInicial={1.12}
-          zoomFinal={1.2}
+          zoomInicial={p.zoom[0]}
+          zoomFinal={p.zoom[1]}
           origen={p.origen}
           brillo={0.62}
           entrada={i === 2 ? "barrido-izq" : "zoom"}

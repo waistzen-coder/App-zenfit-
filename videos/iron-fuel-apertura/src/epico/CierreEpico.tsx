@@ -1,13 +1,10 @@
 import {
   AbsoluteFill,
-  Easing,
-  Interactive,
   interpolate,
   useCurrentFrame,
   useVideoConfig,
 } from "remotion";
 import { Destello, LineasDeMarca } from "../efectos";
-import { EXO } from "../fuentes";
 import { AZUL, NEGRO } from "../marca";
 import { Plano } from "../Plano";
 import { Rotulo } from "../Rotulo";
@@ -17,6 +14,7 @@ import {
   DestelloAnamorfico,
   LogoForjado,
   OndaExpansiva,
+  Siguenos,
 } from "../vfx";
 
 const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
@@ -151,35 +149,13 @@ export const CierreEpico: React.FC = () => {
         y={1175}
         color="#bfe0ff"
       />
-      <Interactive.Div
+      <Siguenos
         name="Síguenos"
-        from={110}
-        durationInFrames={70}
+        from={105}
+        durationInFrames={75}
         premountFor={fps}
-        style={{
-          position: "absolute",
-          left: 0,
-          width: "100%",
-          top: 1320,
-          textAlign: "center",
-          fontFamily: EXO,
-          fontStyle: "normal",
-          fontWeight: 600,
-          fontSize: 48,
-          lineHeight: 1.25,
-          color: "rgba(255, 255, 255, 0.9)",
-          textShadow: "0 4px 18px rgba(0, 0, 0, 0.9)",
-          opacity: interpolate(frame, [110, 122], [0, 1], clamp),
-          translate: `0px ${interpolate(frame, [110, 122], [24, 0], {
-            ...clamp,
-            easing: Easing.out(Easing.cubic),
-          })}px`,
-        }}
-      >
-        Síguenos y no te pierdas
-        <br />
-        la inauguración
-      </Interactive.Div>
+        y={1320}
+      />
       <Destello
         name="Golpe del logo"
         from={0}

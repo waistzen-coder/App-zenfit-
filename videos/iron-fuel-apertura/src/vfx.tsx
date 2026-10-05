@@ -14,6 +14,7 @@ import {
   useVideoConfig,
   type InteractivitySchema,
 } from "remotion";
+import { EXO } from "./fuentes";
 import { AZUL } from "./marca";
 
 // Efectos de la versión épica: chispas, brasas, destellos anamórficos,
@@ -423,6 +424,130 @@ export const LogoForjado = Interactive.withSchema({
   schema: {
     y: numero(0, 1920, 640, "Altura del centro"),
     ancho: numero(100, 1080, 820, "Ancho"),
+  } as const satisfies InteractivitySchema,
+  wrapInSequence: true,
+});
+
+// ------------------------------------------------------------ Síguenos
+
+type SiguenosProps = {
+  /** Altura del borde de arriba del botón, en píxeles. */
+  readonly y: number;
+  readonly style?: React.CSSProperties;
+};
+
+// La campana de notificaciones de Material Icons (licencia Apache 2.0).
+const CAMPANA =
+  "M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z";
+
+/**
+ * La llamada a la acción del final: un botón «SÍGUENOS» con la campana que
+ * entra con rebote, late con la música y lo cruza un reflejo, y debajo
+ * «y no te pierdas la inauguración».
+ */
+const SiguenosInner: React.FC<SiguenosProps> = ({ y, style }) => {
+  const frame = useCurrentFrame();
+  const entrada = interpolate(frame, [0, 10], [0, 1], {
+    ...clamp,
+    easing: Easing.out(Easing.back(1.8)),
+  });
+  // Late a 120 BPM (un golpe cada 15 fotogramas) cuando ya ha entrado.
+  const latido =
+    frame > 10 ? 1 + 0.035 * Math.pow(Math.max(0, Math.cos(((frame - 10) / 15) * Math.PI)), 8) : 1;
+  const campana = frame > 12 ? 16 * Math.sin((frame - 12) * 0.9) * Math.exp(-(frame - 12) / 14) : 0;
+  const reflejo = interpolate(frame, [14, 30], [-60, 160], clamp);
+  return (
+    <Interactive.Div
+      style={{
+        position: "absolute",
+        left: 0,
+        width: "100%",
+        top: y,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        gap: 20,
+        ...style,
+      }}
+    >
+      <div
+        style={{
+          position: "relative",
+          overflow: "hidden",
+          display: "flex",
+          alignItems: "center",
+          gap: 22,
+          padding: "16px 46px 16px 38px",
+          borderRadius: 999,
+          border: `3px solid ${AZUL}`,
+          background:
+            "linear-gradient(180deg, rgba(58, 155, 255, 0.42), rgba(18, 60, 120, 0.55))",
+          boxShadow:
+            "0 0 34px rgba(58, 155, 255, 0.65), inset 0 0 20px rgba(160, 210, 255, 0.35)",
+          opacity: interpolate(frame, [0, 4], [0, 1], clamp),
+          scale: String((0.55 + 0.45 * entrada) * latido),
+        }}
+      >
+        <svg
+          width={54}
+          height={54}
+          viewBox="0 0 24 24"
+          style={{ rotate: `${campana}deg`, transformOrigin: "50% 12%" }}
+        >
+          <path d={CAMPANA} fill="#ffffff" />
+        </svg>
+        <span
+          style={{
+            fontFamily: EXO,
+            fontWeight: 900,
+            fontStyle: "italic",
+            fontSize: 60,
+            lineHeight: 1,
+            letterSpacing: "0.02em",
+            color: "#ffffff",
+          }}
+        >
+          SÍGUENOS
+        </span>
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            bottom: 0,
+            left: `${reflejo}%`,
+            width: "28%",
+            background:
+              "linear-gradient(100deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.55) 50%, rgba(255, 255, 255, 0) 100%)",
+          }}
+        />
+      </div>
+      <div
+        style={{
+          fontFamily: EXO,
+          fontStyle: "normal",
+          fontWeight: 600,
+          fontSize: 44,
+          lineHeight: 1.2,
+          color: "rgba(255, 255, 255, 0.92)",
+          textShadow: "0 4px 18px rgba(0, 0, 0, 0.9)",
+          opacity: interpolate(frame, [8, 18], [0, 1], clamp),
+          translate: `0px ${interpolate(frame, [8, 18], [18, 0], {
+            ...clamp,
+            easing: Easing.out(Easing.cubic),
+          })}px`,
+        }}
+      >
+        y no te pierdas la inauguración
+      </div>
+    </Interactive.Div>
+  );
+};
+
+export const Siguenos = Interactive.withSchema({
+  Component: SiguenosInner,
+  componentName: "<Siguenos>",
+  schema: {
+    y: numero(0, 1920, 1320, "Altura"),
   } as const satisfies InteractivitySchema,
   wrapInSequence: true,
 });

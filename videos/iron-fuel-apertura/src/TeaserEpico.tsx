@@ -46,6 +46,14 @@ export const TeaserEpico: React.FC = () => {
           <CierreEpico />
         </Series.Sequence>
       </Series>
+      {/* Sombra abajo: asienta la imagen y deja leer el texto y los botones
+          que Reels y TikTok ponen encima. */}
+      <AbsoluteFill
+        style={{
+          background:
+            "linear-gradient(180deg, rgba(3, 5, 9, 0) 70%, rgba(3, 5, 9, 0.5) 100%)",
+        }}
+      />
       <Vineta />
       <Grano />
       <Audio
