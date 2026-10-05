@@ -32,7 +32,6 @@ export const FachadaEpica: React.FC = () => {
         salida="barrido-der"
         temblor={40}
         golpe={1.7}
-        bloom={0.7}
       />
       <Plano
         name="Las letras de cerca"
@@ -48,7 +47,6 @@ export const FachadaEpica: React.FC = () => {
         brillo={1}
         entrada="barrido-der"
         salida="barrido-izq"
-        bloom={0.6}
       />
       <Plano
         name="Foto con la escalera"
@@ -84,11 +82,11 @@ export const FachadaEpica: React.FC = () => {
       <FugaDeLuz
         name="Fuga del golpe"
         from={0}
-        durationInFrames={36}
+        durationInFrames={30}
         premountFor={fps}
         semilla={7}
-        tono={205}
-        style={{ opacity: 0.4 }}
+        tono={15}
+        style={{ opacity: 0.35 }}
       />
       <Chispas
         name="Lluvia de chispas del rótulo"
