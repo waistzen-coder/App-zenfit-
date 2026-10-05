@@ -15,9 +15,27 @@ const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
 // La cuenta atrás: un número de acero por pulso (14–15,5 s), cada uno con
 // su plano oscuro detrás, su onda y su destello.
 const CUENTA = [
-  { numero: "3", archivo: "clips/entrada-techo-led.webm", inicio: 5.4 },
-  { numero: "2", archivo: "clips/nevera-led.webm", inicio: 6.6 },
-  { numero: "1", archivo: "clips/montaje.webm", inicio: 1.2 },
+  {
+    numero: "3",
+    archivo: "clips/interior-revelacion.webm",
+    inicio: 6.5,
+    zoom: [1.6, 1.7],
+    origen: "50% 4%",
+  },
+  {
+    numero: "2",
+    archivo: "clips/nevera-led.webm",
+    inicio: 6.6,
+    zoom: [1.15, 1.25],
+    origen: "50% 45%",
+  },
+  {
+    numero: "1",
+    archivo: "clips/montaje.webm",
+    inicio: 1.2,
+    zoom: [1.15, 1.25],
+    origen: "50% 45%",
+  },
 ] as const;
 
 // 12–16 s. La tienda entera con los metales, la cuenta atrás y medio
@@ -37,9 +55,9 @@ export const RevelacionEpica: React.FC = () => {
         archivo="clips/interior-revelacion.webm"
         inicio={10.5}
         velocidad={1}
-        zoomInicial={1.14}
-        zoomFinal={1.3}
-        origen="62% 45%"
+        zoomInicial={1.4}
+        zoomFinal={1.55}
+        origen="70% 18%"
         brillo={0.9}
         entrada="zoom"
         bloom={0.9}
@@ -54,9 +72,9 @@ export const RevelacionEpica: React.FC = () => {
           archivo={c.archivo}
           inicio={c.inicio}
           velocidad={1}
-          zoomInicial={1.15}
-          zoomFinal={1.25}
-          origen="50% 45%"
+          zoomInicial={c.zoom[0]}
+          zoomFinal={c.zoom[1]}
+          origen={c.origen}
           brillo={0.45}
           entrada="zoom"
           temblor={18}

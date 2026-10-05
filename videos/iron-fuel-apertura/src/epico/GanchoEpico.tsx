@@ -1,5 +1,6 @@
 import {
   AbsoluteFill,
+  Interactive,
   interpolate,
   useCurrentFrame,
   useVideoConfig,
@@ -18,7 +19,8 @@ import {
 const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
 
 // 0–4 s. Brasas sobre negro y dos golpes de forja: «ALGO GRANDE» en acero
-// con la onda del impacto y «SE ESTÁ FORJANDO» con el yunque y una lluvia de
+// con la onda del impacto (sin fogonazo, para que el primer fotograma sea
+// negro y no gris) y «SE ESTÁ FORJANDO» con el yunque y una lluvia de
 // chispas. Entre medias, fogonazos de la tienda que casi no da tiempo a ver.
 // Después se encienden las luces del techo con su resplandor.
 export const GanchoEpico: React.FC = () => {
@@ -74,11 +76,24 @@ export const GanchoEpico: React.FC = () => {
         archivo="clips/interior-revelacion.webm"
         inicio={5}
         velocidad={1}
-        zoomInicial={1.15}
-        zoomFinal={1.32}
-        origen="50% 22%"
+        zoomInicial={1.6}
+        zoomFinal={1.75}
+        origen="50% 4%"
         brillo={encendida ? (recienEncendida ? 1.6 : 1) : 0.05}
         bloom={encendida ? (recienEncendida ? 2.2 : 1.1) : 0}
+      />
+      {/* La luz cae del techo y el suelo (todavía en obras) queda a oscuras. */}
+      <Interactive.Div
+        name="Sombra del suelo"
+        from={60}
+        durationInFrames={60}
+        premountFor={fps}
+        style={{
+          position: "absolute",
+          inset: 0,
+          background:
+            "linear-gradient(180deg, rgba(3, 5, 9, 0) 46%, rgba(3, 5, 9, 0.85) 72%, #030509 90%)",
+        }}
       />
       <DestelloAnamorfico
         name="Destello de las luces"
@@ -167,19 +182,11 @@ export const GanchoEpico: React.FC = () => {
       />
 
       <Destello
-        name="Golpe 1"
-        from={0}
-        durationInFrames={8}
-        premountFor={fps}
-        intensidad={0.55}
-        color="#ffffff"
-      />
-      <Destello
         name="Golpe 2"
         from={30}
-        durationInFrames={8}
+        durationInFrames={6}
         premountFor={fps}
-        intensidad={0.45}
+        intensidad={0.3}
         color="#ff9a4a"
       />
     </AbsoluteFill>
