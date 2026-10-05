@@ -1,0 +1,53 @@
+{%- comment -%}
+  Intro de entrada (como en las webs de producto con scroll narrativo): el aparato flota
+  sobre una línea de luz que cambia de color (succión, calor, luz roja) y la cortina sube.
+  Dura menos de 2,5 s, sale una vez por visita, se salta con un toque y no aparece con
+  «reducir movimiento», en el editor ni sin JavaScript.
+{%- endcomment -%}
+{{ 'rp-motion.css' | asset_url | stylesheet_tag }}
+{%- liquid
+  assign img = section.settings.image
+  if img == blank and section.settings.product != blank
+    assign img = section.settings.product.featured_image
+  endif
+-%}
+<div class="rp-intro" data-rp-intro hidden aria-hidden="true">
+  <div class="rp-intro__device">
+    {%- if img != blank -%}<div class="rp-intro__disc">{{ img | image_url: width: 400 | image_tag: loading: 'eager', widths: '200,300,400', sizes: '160px', alt: '' }}</div>{%- endif -%}
+    <span class="rp-intro__shadow"></span>
+  </div>
+  <span class="rp-intro__line"></span>
+  <p class="rp-intro__labels"><span>{{ section.settings.mode_1 | escape }}</span><span>{{ section.settings.mode_2 | escape }}</span><span>{{ section.settings.mode_3 | escape }}</span></p>
+  <p class="rp-intro__brand">{{ section.settings.brand | escape }}</p>
+</div>
+<script>
+(function(){
+  var el=document.currentScript.previousElementSibling; if(!el||!el.hasAttribute('data-rp-intro')) return;
+  var seen=false; try{ seen=sessionStorage.getItem('rp_intro')==='1'; }catch(e){}
+  var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(seen||reduce||(window.Shopify&&Shopify.designMode)){ el.remove(); return; }
+  try{ sessionStorage.setItem('rp_intro','1'); }catch(e){}
+  el.hidden=false; document.documentElement.classList.add('rp-intro-on');
+  var done=false;
+  function end(){ if(done) return; done=true; el.classList.add('is-out'); document.documentElement.classList.remove('rp-intro-on');
+    setTimeout(function(){ el.remove(); },700); }
+  setTimeout(end,{{ section.settings.duration | times: 100 }});
+  el.addEventListener('click',end); window.addEventListener('wheel',end,{once:true,passive:true}); window.addEventListener('touchstart',end,{once:true,passive:true}); window.addEventListener('keydown',end,{once:true});
+})();
+</script>
+
+{% schema %}
+{
+  "name": "RP · Intro de entrada",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Producto" },
+    { "type": "image_picker", "id": "image", "label": "Imagen del aparato" },
+    { "type": "text", "id": "brand", "label": "Marca", "default": "ReliefPath™" },
+    { "type": "text", "id": "mode_1", "label": "Texto 1", "default": "Succión" },
+    { "type": "text", "id": "mode_2", "label": "Texto 2", "default": "Calor" },
+    { "type": "text", "id": "mode_3", "label": "Texto 3", "default": "Luz roja" },
+    { "type": "range", "id": "duration", "label": "Duración", "min": 12, "max": 30, "step": 1, "unit": "ds", "default": 22, "info": "En décimas de segundo (22 = 2,2 s)." }
+  ],
+  "presets": [ { "name": "RP · Intro de entrada" } ]
+}
+{% endschema %}
