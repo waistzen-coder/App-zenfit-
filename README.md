@@ -214,17 +214,21 @@ Ya hecho y verificado contra la API:
 
 ## Skills de Remotion para Claude Code
 
-En `.claude/skills/remotion-*` están las doce skills del plugin oficial de
-Remotion, para hacer vídeos con React: crear el proyecto, verlo en Remotion
-Studio, renderizarlo, subtítulos, animaciones, mapas… Están copiadas tal cual
-de `remotion-dev/claude-code-plugin`, versión 4.0.533, licencia MIT.
+Las doce skills oficiales de Remotion, para hacer vídeos con React (crear el
+proyecto, verlo en Remotion Studio, renderizarlo, subtítulos, animaciones,
+mapas…), instaladas con:
 
-Van en el repositorio y no como plugin porque cada sesión en la nube arranca de
-cero y el plugin habría que reinstalarlo cada vez; las skills que están en el
-repositorio se cargan solas.
+    npx skills add remotion-dev/skills
 
-Para actualizarlas, se borran y se vuelven a copiar:
+Los archivos están en `.agents/skills/remotion-*`, la carpeta que leen también
+otros agentes (Codex, Cline, Amp…), y `.claude/skills/remotion-*` son enlaces
+a ellos para Claude Code. `skills-lock.json` apunta el origen y la versión de
+cada una.
 
-    git clone --depth 1 https://github.com/remotion-dev/claude-code-plugin /tmp/remotion
-    rm -rf .claude/skills/remotion-*
-    cp -a /tmp/remotion/skills/. .claude/skills/
+Van en el repositorio porque cada sesión en la nube arranca de cero: un plugin
+o una instalación global habría que repetirlos cada vez, y lo que está en el
+repositorio se carga solo.
+
+Para actualizarlas:
+
+    npx skills update
