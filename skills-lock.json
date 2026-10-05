@@ -1,6 +1,24 @@
 {
   "version": 1,
   "skills": {
+    "article-highlights": {
+      "source": "liamrjohnston/remotion-motion-graphics-skill",
+      "sourceType": "github",
+      "skillPath": "skills/article-highlights/SKILL.md",
+      "computedHash": "2a85a5ff3483a92be885a8d1a71c01ab72cb25af25651a6750b5fc5af143ad66"
+    },
+    "cinematic-camera": {
+      "source": "liamrjohnston/remotion-motion-graphics-skill",
+      "sourceType": "github",
+      "skillPath": "skills/cinematic-camera/SKILL.md",
+      "computedHash": "ce45405d4e80348050ba71525fc7745da117f8984d9d028858098dbcec7e763e"
+    },
+    "motion-graphics": {
+      "source": "liamrjohnston/remotion-motion-graphics-skill",
+      "sourceType": "github",
+      "skillPath": "skills/motion-graphics/SKILL.md",
+      "computedHash": "b8f77902788ba7bd1dad16fc2ccf2362d173123e88b27143357a14be5e80f093"
+    },
     "remotion-best-practices": {
       "source": "remotion-dev/skills",
       "sourceType": "github",
@@ -72,6 +90,18 @@
       "sourceType": "github",
       "skillPath": "skills/remotion-upgrade/SKILL.md",
       "computedHash": "2f9ed6073596ccf3c8d61a2da7a349ca8e7d8a95a2d3fa02fcdfd6fa8d870b59"
+    },
+    "runway-studio-skills": {
+      "source": "runwayml/runway-studio-skills",
+      "sourceType": "github",
+      "skillPath": "SKILL.md",
+      "computedHash": "f15edd2baf18d420b23c4c7381d8d9f11962623cb020b70c986601ba3f3201ac"
+    },
+    "terminal-inserts": {
+      "source": "liamrjohnston/remotion-motion-graphics-skill",
+      "sourceType": "github",
+      "skillPath": "skills/terminal-inserts/SKILL.md",
+      "computedHash": "2634050c584d5e0318be972a0fe08eb5efc144ae433cc94ea4e51f4488436d3c"
     }
   }
 }

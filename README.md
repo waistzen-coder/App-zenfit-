@@ -212,18 +212,27 @@ Ya hecho y verificado contra la API:
 3. Comprobar cómo se ve. El proxy de esta sesión no llega a `waistzen.com`,
    así que la sección no se ha visto renderizada en un navegador real.
 
-## Skills de Remotion para Claude Code
+## Skills para Claude Code
 
-Las doce skills oficiales de Remotion, para hacer vídeos con React (crear el
-proyecto, verlo en Remotion Studio, renderizarlo, subtítulos, animaciones,
-mapas…), instaladas con:
+Instaladas con `npx skills add` y apuntadas en `skills-lock.json`, que guarda el
+origen de cada una:
 
-    npx skills add remotion-dev/skills
+    npx skills add remotion-dev/skills -a claude-code -y
+    npx skills add liamrjohnston/remotion-motion-graphics-skill -a claude-code -y
+    npx skills add runwayml/runway-studio-skills
 
-Los archivos están en `.agents/skills/remotion-*`, la carpeta que leen también
-otros agentes (Codex, Cline, Amp…), y `.claude/skills/remotion-*` son enlaces
-a ellos para Claude Code. `skills-lock.json` apunta el origen y la versión de
-cada una.
+- **Remotion** (`.claude/skills/remotion-*`): las doce oficiales, para hacer
+  vídeos con React: crear el proyecto, previsualizarlo, renderizarlo,
+  subtítulos, animaciones, mapas…
+- **Motion graphics** (`article-highlights`, `cinematic-camera`,
+  `motion-graphics`, `terminal-inserts`): insertos con Remotion de Promptible,
+  con un estilo sobrio y sin neón y un control de calidad obligatorio antes de
+  entregar. Ocupan unos 21 MB, casi todo vídeos de referencia.
+- **Runway** (`runway-studio-skills`): genera vídeo, imagen y audio con la API
+  de Runway. El original está en `.agents/skills/` y en `.claude/skills/` hay
+  un enlace. Necesita la clave en la variable `RUNWAYML_API_SECRET` y que la
+  red deje pasar `api.dev.runwayml.com`; en la nube, las dos cosas se configuran
+  en los ajustes del entorno, nunca en el repositorio.
 
 Van en el repositorio porque cada sesión en la nube arranca de cero: un plugin
 o una instalación global habría que repetirlos cada vez, y lo que está en el

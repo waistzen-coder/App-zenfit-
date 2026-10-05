@@ -1,0 +1,28 @@
+{
+  "name": "runway-studio-skills",
+  "version": "0.1.0",
+  "description": "Claude/Cursor skill for generating studio-quality videos, images, and audio with the Runway API",
+  "keywords": [
+    "runway",
+    "runwayml",
+    "video-generation",
+    "ai-video",
+    "product-ads",
+    "seedance",
+    "gen4",
+    "cursor-skill",
+    "claude-skill"
+  ],
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/runwayml/runway-studio-skills"
+  },
+  "files": [
+    "SKILL.md",
+    "COOKBOOK.md",
+    "CLAUDE.md",
+    "scripts/"
+  ]
+}
