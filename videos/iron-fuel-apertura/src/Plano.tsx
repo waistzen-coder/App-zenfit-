@@ -1,5 +1,6 @@
 import { blur } from "@remotion/effects/blur";
 import { chromaticAberration } from "@remotion/effects/chromatic-aberration";
+import { glow } from "@remotion/effects/glow";
 import { zoomBlur } from "@remotion/effects/zoom-blur";
 import { Video } from "@remotion/media";
 import type React from "react";
@@ -42,6 +43,10 @@ type PlanoProps = {
   readonly salida?: Transicion;
   /** Píxeles de temblor de cámara al empezar (para los golpes). */
   readonly temblor?: number;
+  /** Multiplica el desenfoque radial y la aberración de la entrada en zoom. */
+  readonly golpe?: number;
+  /** Resplandor alrededor de las luces (0 = sin resplandor). */
+  readonly bloom?: number;
   readonly style?: React.CSSProperties;
 };
 
@@ -61,6 +66,8 @@ const PlanoInner: React.FC<PlanoProps> = ({
   entrada = "corte",
   salida = "corte",
   temblor = 0,
+  golpe = 1,
+  bloom = 0,
   style,
 }) => {
   const frame = useCurrentFrame();
@@ -82,8 +89,8 @@ const PlanoInner: React.FC<PlanoProps> = ({
       ...clamp,
       easing: Easing.out(Easing.cubic),
     });
-    radial = interpolate(frame, [0, 8], [70, 0], clamp);
-    aberracion = interpolate(frame, [0, 10], [22, 0], clamp);
+    radial = interpolate(frame, [0, 8], [70 * golpe, 0], clamp);
+    aberracion = interpolate(frame, [0, Math.max(1, 10 * golpe)], [22 * golpe, 0], clamp);
   } else if (entrada !== "corte") {
     const signo = entrada === "barrido-izq" ? 1 : -1;
     x = interpolate(frame, [0, 6], [signo * RECORRIDO, 0], {
@@ -130,6 +137,13 @@ const PlanoInner: React.FC<PlanoProps> = ({
     }),
     zoomBlur({ amount: radial, disabled: radial < 0.5 }),
     chromaticAberration({ amount: aberracion, disabled: aberracion < 0.5 }),
+    glow({
+      radius: 40,
+      intensity: bloom,
+      threshold: 0.6,
+      color: "#d8ecff",
+      disabled: bloom <= 0,
+    }),
   ];
 
   const estilo: React.CSSProperties = {
