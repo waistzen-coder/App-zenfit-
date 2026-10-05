@@ -35,6 +35,27 @@
     document.querySelectorAll('.rp-feature,.rp-ticker').forEach(function(el){ live.observe(el); });
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',watch); else watch();
+  /* Escena con scroll: avance 0-1 en --p, palabras que se encienden y modo activo */
+  function scrubs(){
+    document.querySelectorAll('[data-rp-scrub]').forEach(function(sec){
+      var words=sec.querySelectorAll('[data-rp-word]'), ticking=false, on=false;
+      function upd(){ ticking=false;
+        var r=sec.getBoundingClientRect(), total=sec.offsetHeight-innerHeight;
+        var p=total>0?Math.min(1,Math.max(0,-r.top/total)):0;
+        sec.style.setProperty('--p',p.toFixed(4));
+        var n=Math.round(Math.min(1,Math.max(0,(p-.12)/.5))*words.length);
+        for(var i=0;i<words.length;i++) words[i].classList.toggle('is-on',i<n);
+        sec.setAttribute('data-mode',p<.3?'1':(p<.55?'2':'3'));
+        sec.classList.toggle('is-final',p>.86);
+      }
+      function req(){ if(on&&!ticking){ ticking=true; requestAnimationFrame(upd); } }
+      new IntersectionObserver(function(es){ on=es[0].isIntersecting; sec.classList.toggle('is-live',on); if(on) req(); }).observe(sec);
+      addEventListener('scroll',req,{passive:true}); addEventListener('resize',req);
+      upd();
+    });
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',scrubs); else scrubs();
+
   /* Red de seguridad: si algo falla, a los 4 s se enseña todo */
   setTimeout(function(){ if(ran) return; document.querySelectorAll('[data-rp-reveal]').forEach(function(el){ el.classList.add('is-in'); el.querySelectorAll('[data-rp-count]').forEach(count); }); },4000);
 })();

@@ -1,0 +1,74 @@
+{%- comment -%}
+  «Escena» al estilo de las webs de producto con scroll narrativo: el aparato queda fijo
+  en el centro mientras pasan por detrás palabras gigantes, se revela una frase palabra a
+  palabra, el halo cambia de color (succión, calor, luz roja) y el fondo pasa a lima con
+  el titular final. rp-motion.js da el avance del scroll en --p (0 a 1).
+  Sin JavaScript o con «reducir movimiento» se ve como un bloque normal, todo visible.
+{%- endcomment -%}
+{{ 'rp-motion.css' | asset_url | stylesheet_tag }}
+{%- liquid
+  assign img = section.settings.image
+  if img == blank and section.settings.product != blank
+    assign img = section.settings.product.featured_image
+  endif
+  assign words = section.settings.statement | split: ' '
+  assign img_alt = section.settings.image_alt | default: img.alt
+-%}
+<section class="rp-show" data-rp-scrub aria-labelledby="rp-show-title-{{ section.id }}">
+  <div class="rp-show__stage">
+    <div class="rp-show__bg rp-show__bg--1" aria-hidden="true"></div>
+    <div class="rp-show__bg rp-show__bg--2" aria-hidden="true"></div>
+
+    <div class="rp-show__rows" aria-hidden="true">
+      <p class="rp-show__row rp-show__row--a">{% for i in (1..3) %}<span>{{ section.settings.row_1 | escape }}</span>{% endfor %}</p>
+      <p class="rp-show__row rp-show__row--b">{% for i in (1..3) %}<span>{{ section.settings.row_2 | escape }}</span>{% endfor %}</p>
+    </div>
+
+    <div class="rp-show__sparks" aria-hidden="true">{% for i in (1..14) %}<i style="--i:{{ i }}"></i>{% endfor %}</div>
+
+    <div class="rp-show__device">
+      <span class="rp-show__glow rp-show__glow--1" aria-hidden="true"></span>
+      <span class="rp-show__glow rp-show__glow--2" aria-hidden="true"></span>
+      <span class="rp-show__glow rp-show__glow--3" aria-hidden="true"></span>
+      <div class="rp-show__disc">
+        {%- if img != blank -%}
+          {{ img | image_url: width: 900 | image_tag: loading: 'lazy', widths: '360,540,720,900', sizes: '(min-width: 990px) 420px, 70vw', alt: img_alt }}
+        {%- endif -%}
+      </div>
+      <ul class="rp-show__modes" role="list">
+        <li class="rp-show__mode rp-show__mode--1">{% render 'sr-icon', name: 'wave' %}{{ section.settings.mode_1 | escape }}</li>
+        <li class="rp-show__mode rp-show__mode--2">{% render 'sr-icon', name: 'flame' %}{{ section.settings.mode_2 | escape }}</li>
+        <li class="rp-show__mode rp-show__mode--3">{% render 'sr-icon', name: 'sun' %}{{ section.settings.mode_3 | escape }}</li>
+      </ul>
+    </div>
+
+    <p class="rp-show__statement">{% for w in words %}<span class="rp-show__w" data-rp-word>{{ w | escape }}</span>{% unless forloop.last %}{{ " " }}{% endunless %}{% endfor %}</p>
+
+    <div class="rp-show__final">
+      <h2 class="rp-show__title" id="rp-show-title-{{ section.id }}">{{ section.settings.heading | escape }} <em>{{ section.settings.accent | escape }}</em></h2>
+      {%- if section.settings.cta != blank -%}<a class="rp-button rp-show__cta" href="{{ section.settings.cta_link | default: '#comprar' }}">{{ section.settings.cta | escape }} <span class="rp-arrow">{% render 'sr-icon', name: 'arrow' %}</span></a>{%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "RP · Escena con scroll",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Producto" },
+    { "type": "image_picker", "id": "image", "label": "Imagen del aparato", "info": "Mejor un PNG sin fondo o una foto cuadrada. Si no pones ninguna, se usa la del producto." },
+    { "type": "text", "id": "image_alt", "label": "Texto alternativo", "default": "ReliefPath, aparato de ventosas eléctricas con calor y luz roja" },
+    { "type": "text", "id": "row_1", "label": "Palabras gigantes (fila 1)", "default": "SUCCIÓN ✦ CALOR ✦ LUZ ROJA ✦ " },
+    { "type": "text", "id": "row_2", "label": "Palabras gigantes (fila 2)", "default": "TU PAUSA ✦ TU RITMO ✦ TUS REGLAS ✦ " },
+    { "type": "text", "id": "mode_1", "label": "Modo 1", "default": "Succión regulable" },
+    { "type": "text", "id": "mode_2", "label": "Modo 2", "default": "Calor" },
+    { "type": "text", "id": "mode_3", "label": "Modo 3", "default": "Luz roja" },
+    { "type": "textarea", "id": "statement", "label": "Frase que se revela", "default": "No es otro aparato para el cajón. Es tu momento: succión, calor y luz roja cuando cierras los apuntes." },
+    { "type": "text", "id": "heading", "label": "Titular final", "default": "Tu pausa." },
+    { "type": "text", "id": "accent", "label": "Énfasis final", "default": "Tus reglas." },
+    { "type": "text", "id": "cta", "label": "Botón", "default": "Elegir mi pack" },
+    { "type": "url", "id": "cta_link", "label": "Enlace del botón", "info": "Vacío = baja a la caja de compra." }
+  ],
+  "presets": [ { "name": "RP · Escena con scroll" } ]
+}
+{% endschema %}

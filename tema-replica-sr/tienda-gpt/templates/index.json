@@ -526,12 +526,44 @@
         "accent": "sin letra pequeña.",
         "foot": "Descuentos de pack aplicados automáticamente en el checkout. Contrareembolso: +5 € por pedido, según cobertura."
       }
+    },
+    "escena": {
+      "type": "rp-showcase",
+      "settings": {
+        "product": "juego-de-ventosa-electrica-con-cable",
+        "image": "shopify://shop_images/waistzen-reliefpath-hero-20260906.png",
+        "image_alt": "ReliefPath, aparato de ventosas eléctricas con calor y luz roja",
+        "row_1": "SUCCIÓN ✦ CALOR ✦ LUZ ROJA ✦ ",
+        "row_2": "TU PAUSA ✦ TU RITMO ✦ TUS REGLAS ✦ ",
+        "mode_1": "Succión regulable",
+        "mode_2": "Calor",
+        "mode_3": "Luz roja",
+        "statement": "No es otro aparato para el cajón. Es tu momento: succión, calor y luz roja cuando cierras los apuntes.",
+        "heading": "Tu pausa.",
+        "accent": "Tus reglas.",
+        "cta": "Elegir mi pack",
+        "cta_link": "#comprar"
+      }
+    },
+    "intro": {
+      "type": "rp-intro",
+      "settings": {
+        "product": "juego-de-ventosa-electrica-con-cable",
+        "image": "shopify://shop_images/waistzen-reliefpath-hero-20260906.png",
+        "brand": "ReliefPath™",
+        "mode_1": "Succión",
+        "mode_2": "Calor",
+        "mode_3": "Luz roja",
+        "duration": 22
+      }
     }
   },
   "order": [
+    "intro",
     "hero",
     "cinta",
     "comprar",
+    "escena",
     "funciones",
     "cifras",
     "ritual",

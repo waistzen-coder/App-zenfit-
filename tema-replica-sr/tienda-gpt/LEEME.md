@@ -29,3 +29,17 @@ Sobre la versión del tema del 02-10 (con el vídeo real de los controles):
 Solo se anima transform, opacity y sombras (no mueve la maqueta) y nada toca
 la foto principal. Con «reducir movimiento» del sistema, en el editor de
 Shopify o sin JavaScript, todo se ve quieto y completo.
+
+## Escena con scroll e intro (05-10, inspiradas en el vídeo de referencia)
+
+- `sections/rp-intro.liquid` «RP · Intro de entrada» (solo portada): el aparato
+  flota sobre una línea de luz que pasa de verde (succión) a naranja (calor) y
+  rojo (luz roja); la cortina sube a los 2,2 s. Una vez por visita, se salta con
+  un toque, y no sale con «reducir movimiento» ni en el editor.
+- `sections/rp-showcase.liquid` «RP · Escena con scroll» (portada tras la caja de
+  compra, ficha tras la cinta): el aparato queda fijo mientras pasan palabras
+  gigantes, la frase se enciende palabra a palabra, el halo y la pastilla del
+  modo cambian (succión → calor → luz roja) y termina en fondo lima con
+  «TU PAUSA. Tus reglas.» y el botón a la caja de compra.
+- La imagen es la del hero; con un PNG sin fondo del aparato queda más
+  parecido al vídeo (se cambia en el editor).
