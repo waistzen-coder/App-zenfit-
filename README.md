@@ -241,6 +241,21 @@ origen de cada una:
   plugin. Necesita la variable `GEMINI_API_KEY`, de un proyecto de Google AI con
   la facturación activada; la API de Gemini ya es accesible desde el entorno.
 
+Y estas, copiadas de los zips que subiste (todas con licencia MIT):
+
+- **Veo** (`veo`): genera vídeo con los modelos Veo de Google (de pago). Usa
+  `GOOGLE_API_KEY` y se ejecuta con `npx tsx`.
+- **Edición de vídeo**: `video-editing` (una guía, sin scripts) y las cinco de
+  `claude-video-skills`: `make-video`, que se ofrece para cualquier petición de
+  vídeo y reparte el trabajo, `reel-script` (guiones para reels con voz en off),
+  `motion-design-edit` (reels de motion graphics a partir de una voz en off),
+  `video-edit` (montar un vertical 9:16 ya cortado, con subtítulos y
+  rótulos) y `video-edit-longform` (lo mismo en 16:9). Usan ffmpeg y Remotion,
+  y para transcribir piden `ASSEMBLYAI_API_KEY` u `OPENAI_API_KEY`, o WhisperX
+  en local; `PEXELS_API_KEY` para vídeos de stock y `ANTHROPIC_API_KEY` para
+  pulir transcripciones, las dos opcionales. `.env` y `.venv/` están en
+  `.gitignore` para que ninguna clave acabe en el repositorio.
+
 Van en el repositorio porque cada sesión en la nube arranca de cero: un plugin
 o una instalación global habría que repetirlos cada vez, y lo que está en el
 repositorio se carga solo.
