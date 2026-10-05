@@ -7,6 +7,12 @@
       "skillPath": "skills/article-highlights/SKILL.md",
       "computedHash": "2a85a5ff3483a92be885a8d1a71c01ab72cb25af25651a6750b5fc5af143ad66"
     },
+    "banana": {
+      "source": "AgriciDaniel/banana-claude",
+      "sourceType": "github",
+      "skillPath": "skills/banana/SKILL.md",
+      "computedHash": "02b957e1023fb359ca7ba75a406421789ed5989a21e431496bf7f678898c6bc1"
+    },
     "cinematic-camera": {
       "source": "liamrjohnston/remotion-motion-graphics-skill",
       "sourceType": "github",
