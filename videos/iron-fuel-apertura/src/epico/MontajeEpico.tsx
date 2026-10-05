@@ -178,7 +178,7 @@ export const MontajeEpico: React.FC = () => {
         premountFor={fps}
         semilla={3}
         tono={200}
-        style={{ opacity: 0.7 }}
+        style={{ opacity: 0.4 }}
       />
       <Rotulo
         name="Cada estante"
