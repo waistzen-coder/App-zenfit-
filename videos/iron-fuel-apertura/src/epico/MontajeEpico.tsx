@@ -89,7 +89,7 @@ export const MontajeEpico: React.FC = () => {
         brillo={1}
         entrada="zoom"
         salida="barrido-der"
-        bloom={1.6}
+        bloom={1}
       />
       <Plano
         name="Los paneles de LED de la entrada"
@@ -134,7 +134,6 @@ export const MontajeEpico: React.FC = () => {
         origen="50% 40%"
         brillo={1}
         entrada="zoom"
-        bloom={0.8}
       />
       {PRODUCTOS.map((p, i) => (
         <Plano
@@ -163,6 +162,7 @@ export const MontajeEpico: React.FC = () => {
         premountFor={fps}
         semilla={3}
         tono={200}
+        style={{ opacity: 0.7 }}
       />
       <Rotulo
         name="Cada estante"

@@ -26,7 +26,7 @@
     "dev": "remotion studio",
     "medios": "bash preparar-medios.sh",
     "render": "remotion render Teaser out/iron-fuel-teaser.mp4 --codec=h264 --crf=17 --audio-bitrate=192k",
-    "render:epico": "remotion render TeaserEpico out/iron-fuel-teaser-epico.mp4 --codec=h264 --crf=17 --audio-bitrate=192k",
+    "render:epico": "remotion render TeaserEpico out/iron-fuel-teaser-epico.mp4 --codec=h264 --crf=17 --audio-bitrate=192k --timeout=120000",
     "build": "remotion bundle",
     "upgrade": "remotion upgrade",
     "lint": "eslint src && tsc"

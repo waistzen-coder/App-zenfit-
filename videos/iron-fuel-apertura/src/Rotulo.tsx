@@ -24,7 +24,7 @@ type RotuloProps = {
   readonly salida?: boolean;
   /** El texto blanco como acero pulido, con un reflejo que lo recorre. */
   readonly metal?: boolean;
-  /** El texto azul sale al rojo blanco y se enfría hasta el azul. */
+  /** El texto destacado, al rojo: sale blanco y se enfría hasta naranja. */
   readonly fundido?: boolean;
   readonly style?: React.CSSProperties;
 };
@@ -72,24 +72,18 @@ const RotuloInner: React.FC<RotuloProps> = ({
     filter: `drop-shadow(0 0 20px ${AZUL_RESPLANDOR}) drop-shadow(0 10px 26px rgba(0, 0, 0, 0.9))`,
   };
 
-  // El azul fundido se enfría en el 80 % de lo que dura el texto.
-  const enfriado = interpolate(frame, [2, Math.max(8, fin * 0.8)], [0, 1], clamp);
+  // El metal fundido pasa del blanco al naranja en la mitad de lo que dura
+  // el texto. Se queda en naranja: entre el naranja y el azul de la marca
+  // cualquier mezcla sale rosa.
+  const enfriado = interpolate(frame, [2, Math.max(8, fin * 0.5)], [0, 1], clamp);
   const colorDestacado = fundido
-    ? interpolateColors(
-        enfriado,
-        [0, 0.3, 0.62, 1],
-        ["#fffbe8", "#ffc061", "#ff6a1a", AZUL],
-      )
+    ? interpolateColors(enfriado, [0, 0.4, 1], ["#fffbe8", "#ffc061", "#ff7424"])
     : AZUL;
   const resplandorDestacado = fundido
     ? interpolateColors(
         enfriado,
-        [0, 0.5, 1],
-        [
-          "rgba(255, 196, 110, 0.95)",
-          "rgba(255, 96, 24, 0.95)",
-          "rgba(58, 155, 255, 0.95)",
-        ],
+        [0, 1],
+        ["rgba(255, 196, 110, 0.95)", "rgba(255, 104, 26, 0.95)"],
       )
     : "rgba(58, 155, 255, 0.95)";
 

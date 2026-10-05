@@ -130,7 +130,6 @@ export const CierreEpico: React.FC = () => {
         tamano={128}
         y={1175}
         salida={false}
-        fundido
         style={{
           scale: String(
             1 +

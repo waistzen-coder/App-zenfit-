@@ -92,7 +92,7 @@ const ChispasInner: React.FC<ChispasProps> = ({
     const vx = Math.cos(angulo) * velocidad;
     const vy = Math.sin(angulo) * velocidad;
     const [x1, y1] = posicion(frame, vx, vy);
-    const [x0, y0] = posicion(Math.max(0, frame - 1.6), vx, vy);
+    const [x0, y0] = posicion(Math.max(0, frame - 2.2), vx, vy);
     const resto = 1 - frame / vida;
     trazos.push(
       <line
@@ -102,7 +102,7 @@ const ChispasInner: React.FC<ChispasProps> = ({
         x2={x1}
         y2={y1}
         stroke={interpolateColors(resto, [0, 0.35, 0.7, 1], CHISPA_COLORES)}
-        strokeWidth={1.2 + 3.2 * resto * (0.5 + r("grosor"))}
+        strokeWidth={1.6 + 4.4 * resto * (0.5 + r("grosor"))}
         strokeLinecap="round"
         opacity={Math.pow(resto, 0.5)}
       />,
