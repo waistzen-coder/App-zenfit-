@@ -1,0 +1,528 @@
+{
+  "sections": {
+    "funciones": {
+      "type": "rp-features",
+      "settings": {
+        "eyebrow": "UN DISEÑO. TRES FUNCIONES.",
+        "heading": "ReliefPath,",
+        "accent": "de cerca.",
+        "text": "Mira el aparato real y conoce sus controles antes de elegir tu pack.",
+        "note": "Consulta los ajustes, tiempos y zonas permitidas en el manual del fabricante.",
+        "video_url": "https://cdn.shopify.com/videos/c/vp/3c25a75b83b346568fc9442e22cc9a9a/3c25a75b83b346568fc9442e22cc9a9a.SD-480p-1.5Mbps-96261622.mp4",
+        "video_poster": "shopify://shop_images/reliefpath-video-producto-real-20260923.jpg",
+        "video_title": "Los controles, en acción",
+        "video_caption": "Vídeo real del aparato · 11 segundos · sin sonido. Los controles se explican en esta sección.",
+        "controls_text": "El panel superior reúne los controles que ves en el vídeo.",
+        "controls": "Encendido y selección de modo|Ajuste de succión|Liberación de presión|Control de calor",
+        "video_cta": "Elegir mi pack"
+      },
+      "blocks": {
+        "suction": {
+          "type": "feature",
+          "settings": {
+            "icon": "wave",
+            "title": "Succión regulable",
+            "text": "La ventosa eléctrica permite ajustar la succión según las indicaciones del fabricante."
+          }
+        },
+        "heat": {
+          "type": "feature",
+          "settings": {
+            "icon": "flame",
+            "title": "Función de calor",
+            "text": "Integrada en el mismo dispositivo. Respeta los límites y precauciones del fabricante."
+          }
+        },
+        "light": {
+          "type": "feature",
+          "settings": {
+            "icon": "sun",
+            "title": "Luz roja",
+            "text": "La copa incorpora luz roja como una de sus tres funciones."
+          }
+        }
+      },
+      "block_order": [
+        "suction",
+        "heat",
+        "light"
+      ]
+    },
+    "ficha": {
+      "type": "sr-product",
+      "settings": {
+        "product": "",
+        "fee_product": "contrareembolso-gastos-de-gestion",
+        "is_page_title": true,
+        "badges": "RELIEFPATH / BIENESTAR EN CASA",
+        "heading": "ReliefPath™ · Tu pausa en casa",
+        "sub": "Succión regulable, calor y luz roja. Elige tu pack.",
+        "save_label": "Ahorras",
+        "price_note": "",
+        "mini_trust": "Pago seguro en Shopify|30 días para solicitar devolución",
+        "sale_badge": false,
+        "first_chip": "",
+        "packs_title": "Elige cuántas unidades necesitas",
+        "card_text": "Comprar ahora",
+        "cod_text": "Pagar al recibirlo (+5 €)",
+        "soldout_text": "Agotado",
+        "under": "Envío estándar gratis en España. Contrareembolso: +5 € según cobertura.",
+        "show_payment": true,
+        "show_schema": true,
+        "show_express": false,
+        "low_stock": 20,
+        "proof_image": "shopify://shop_images/reliefpath-video-producto-real-20260923.jpg"
+      },
+      "blocks": {
+        "im75": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/waistzen-reliefpath-hero-20260906.png",
+            "fit": "cover",
+            "tag": "",
+            "tag_icon": "spark",
+            "pins": ""
+          }
+        },
+        "im76": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/reliefpath-video-producto-real-20260923.jpg",
+            "fit": "cover",
+            "tag": "",
+            "tag_icon": "check-circle",
+            "pins": ""
+          }
+        },
+        "im77": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/reliefpath-pausa-estudio-landing-20260911.png",
+            "fit": "cover",
+            "tag": "",
+            "tag_icon": "book",
+            "pins": ""
+          }
+        },
+        "im79": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/waistzen-reliefpath-controls-20260906.png",
+            "fit": "cover",
+            "tag": "",
+            "tag_icon": "flame",
+            "pins": ""
+          }
+        },
+        "bu82": {
+          "type": "bullet",
+          "settings": {
+            "text": "<strong>3 funciones en 1:</strong> succión regulable, calor y luz roja"
+          }
+        },
+        "bu83": {
+          "type": "bullet",
+          "settings": {
+            "text": "En casa, entre bloques de estudio o al cerrar el día"
+          }
+        },
+        "bu84": {
+          "type": "bullet",
+          "settings": {
+            "text": "<strong>Envío gratis a España</strong> y pago al recibirlo si lo prefieres"
+          }
+        },
+        "pa85": {
+          "type": "pack",
+          "settings": {
+            "qty": 1,
+            "discount": 0,
+            "label": "1 unidad",
+            "sublabel": "Para ti",
+            "tag": "",
+            "highlight": false,
+            "default": true
+          }
+        },
+        "pa86": {
+          "type": "pack",
+          "settings": {
+            "qty": 2,
+            "discount": 20,
+            "label": "2 unidades",
+            "sublabel": "Descuento automático en el checkout",
+            "tag": "−20 % por unidad",
+            "highlight": true,
+            "default": false
+          }
+        },
+        "pa87": {
+          "type": "pack",
+          "settings": {
+            "qty": 3,
+            "discount": 30,
+            "label": "3 unidades",
+            "sublabel": "Descuento automático en el checkout",
+            "tag": "−30 % por unidad",
+            "highlight": false,
+            "default": false
+          }
+        },
+        "se88": {
+          "type": "seal",
+          "settings": {
+            "icon": "truck",
+            "text": "Envío estándar gratis"
+          }
+        },
+        "se89": {
+          "type": "seal",
+          "settings": {
+            "icon": "cash",
+            "text": "Pago al recibirlo"
+          }
+        },
+        "se90": {
+          "type": "seal",
+          "settings": {
+            "icon": "refresh",
+            "text": "30 días para solicitar devolución"
+          }
+        },
+        "ac91": {
+          "type": "accordion",
+          "settings": {
+            "icon": "box",
+            "title": "Qué incluye",
+            "content": "<p>Elige un pack de <strong>1, 2 o 3 aparatos ReliefPath™</strong>. Cada aparato reúne succión regulable, calor y luz roja. Puedes ver el dispositivo y sus controles en la <a href=\"#funciones\">demostración real</a>.</p><p>Para confirmar los accesorios y el tipo de cable de tu pedido, consulta con <a href=\"mailto:waistzen@gmail.com\">waistzen@gmail.com</a>.</p>"
+          }
+        },
+        "ac92": {
+          "type": "accordion",
+          "settings": {
+            "icon": "truck",
+            "title": "Envío y entrega",
+            "content": "<p><strong>Envío estándar gratis</strong> para las direcciones de España admitidas en el checkout, sin importe mínimo. El contrareembolso suma 5 € por pedido, según cobertura.</p><p>El plazo estimado depende del destino; consulta la estimación que se muestre al comprar o en el seguimiento. Puedes consultar el estado en <a href=\"/pages/tracking\">Seguimiento del pedido</a>. Más información en la <a href=\"/policies/shipping-policy\">política de envío</a>.</p>"
+          }
+        },
+        "ac93": {
+          "type": "accordion",
+          "settings": {
+            "icon": "refresh",
+            "title": "Devoluciones",
+            "content": "<p>Tienes 30 días desde la recepción para solicitar la devolución, además del desistimiento legal de 14 días, según la <a href=\"/policies/refund-policy\">política de devoluciones</a>. No es un periodo de uso libre de prueba.</p>"
+          }
+        },
+        "ac94": {
+          "type": "accordion",
+          "settings": {
+            "icon": "book",
+            "title": "Uso y precauciones",
+            "content": "<p>Conoce los botones en la <a href=\"#funciones\">demostración real de los controles</a>. Antes del primer uso, lee las instrucciones del fabricante: zonas permitidas, duración, frecuencia, intensidad y contraindicaciones.</p><p>ReliefPath™ es un aparato de bienestar y no sustituye un diagnóstico ni un tratamiento médico.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "im75",
+        "im76",
+        "im79",
+        "im77",
+        "bu82",
+        "bu83",
+        "bu84",
+        "pa85",
+        "pa86",
+        "pa87",
+        "se88",
+        "se89",
+        "se90",
+        "ac91",
+        "ac92",
+        "ac93",
+        "ac94"
+      ]
+    },
+    "ritual": {
+      "type": "rp-editorial",
+      "settings": {
+        "eyebrow": "EL MÉTODO PAUSA",
+        "heading": "Fuera apuntes.",
+        "accent": "Dentro tu momento.",
+        "text": "Entre bloques de estudio o al cerrar el día: aparta las pantallas y reserva un momento para ti, en casa.",
+        "image": "shopify://shop_images/reliefpath-pausa-estudio-landing-20260911.png",
+        "caption": "Una pausa con intención."
+      },
+      "blocks": {
+        "manual": {
+          "type": "step",
+          "settings": {
+            "title": "Conoce tu aparato",
+            "text": "Lee el manual: zonas permitidas, ajustes y precauciones antes del primer uso."
+          }
+        },
+        "adjust": {
+          "type": "step",
+          "settings": {
+            "title": "Elige tus ajustes",
+            "text": "Configura las funciones y respeta los tiempos que indica el fabricante."
+          }
+        },
+        "pause": {
+          "type": "step",
+          "settings": {
+            "title": "Dale espacio a tu pausa",
+            "text": "Deja a un lado apuntes y pantallas. Reserva ese rato para ti."
+          }
+        }
+      },
+      "block_order": [
+        "manual",
+        "adjust",
+        "pause"
+      ]
+    },
+    "garantia": {
+      "type": "sr-guarantee",
+      "settings": {
+        "number": "30",
+        "number_label": "días para solicitarla",
+        "eyebrow": "COMPRA CON CALMA",
+        "heading": "Tiempo para decidir.",
+        "text": "<p>Tienes 30 días desde que lo recibes para solicitar la devolución, además de tu derecho legal de desistimiento de 14 días. Consulta las condiciones en la <a href=\"/policies/refund-policy\">política de devoluciones</a>.</p>",
+        "cta_text": "",
+        "cta_link": "",
+        "bg": "#e8eadf"
+      }
+    },
+    "faq": {
+      "type": "sr-faq",
+      "settings": {
+        "eyebrow": "TODO CLARO, ANTES DE COMPRAR",
+        "heading": "Buenas preguntas.",
+        "heading_accent": "Respuestas claras.",
+        "open_first": false,
+        "help": "<p>¿Te queda alguna duda? Escríbenos a <a href=\"mailto:waistzen@gmail.com\">waistzen@gmail.com</a> antes de comprar.</p>",
+        "schema": false,
+        "bg": "#f4f2e9"
+      },
+      "blocks": {
+        "q42": {
+          "type": "q",
+          "settings": {
+            "question": "¿Qué es ReliefPath™?",
+            "answer": "<p>Un aparato de bienestar para casa que reúne ventosas eléctricas, calor y luz roja. No sustituye un diagnóstico, tratamiento médico ni fisioterapia.</p>"
+          }
+        },
+        "q43": {
+          "type": "q",
+          "settings": {
+            "question": "¿Puedo pagar al recibirlo?",
+            "answer": "<p>Sí, con contrareembolso: pagas en efectivo al repartidor, con un recargo de 5 € por pedido, según la cobertura de tu dirección. No está disponible en Canarias, Ceuta y Melilla. En el checkout, elige «Pago contra entrega».</p>"
+          }
+        },
+        "q44": {
+          "type": "q",
+          "settings": {
+            "question": "¿Cuánto cuesta el envío y cómo sigo mi pedido?",
+            "answer": "<p>El envío estándar es gratis para las direcciones de España admitidas en el checkout, sin importe mínimo. El plazo estimado depende del destino y se informa al comprar o en el seguimiento, cuando esté disponible.</p><p>Consulta el estado en <a href=\"/pages/tracking\">Seguimiento del pedido</a> y las condiciones en la <a href=\"/policies/shipping-policy\">política de envío</a>.</p>"
+          }
+        },
+        "q46": {
+          "type": "q",
+          "settings": {
+            "question": "¿Puedo devolverlo?",
+            "answer": "<p>Tienes 30 días desde la recepción para solicitar la devolución, según la política publicada, además del desistimiento legal de 14 días. Los gastos de devolución corren de tu cuenta salvo defecto o error nuestro. Consulta la <a href=\"/policies/refund-policy\">política de devoluciones</a>.</p>"
+          }
+        },
+        "q47": {
+          "type": "q",
+          "settings": {
+            "question": "¿Hay descuento si compro más de uno?",
+            "answer": "<p>Sí: −20 % a partir de 2 unidades y −30 % a partir de 3, aplicado automáticamente en el checkout. El código de bienvenida no se acumula con los packs.</p>"
+          }
+        },
+        "q48": {
+          "type": "q",
+          "settings": {
+            "question": "¿Es seguro pagar con tarjeta?",
+            "answer": "<p>El pago online se hace en el checkout de Shopify, con conexión cifrada. Nosotros no vemos ni guardamos los datos de tu tarjeta.</p>"
+          }
+        },
+        "q49": {
+          "type": "q",
+          "settings": {
+            "question": "¿Cómo funcionan los controles?",
+            "answer": "<p>La <a href=\"#funciones\">demostración real</a> muestra el encendido y la selección de modo, el ajuste de succión, la liberación de presión y el control de calor.</p><p>Para duración, frecuencia, intensidad y zonas permitidas, sigue las instrucciones del fabricante. Si no las tienes, solicítalas a <a href=\"mailto:waistzen@gmail.com\">waistzen@gmail.com</a> antes de usarlo.</p>"
+          }
+        },
+        "q51": {
+          "type": "q",
+          "settings": {
+            "question": "¿Qué precauciones debo tener?",
+            "answer": "<p>Lee todas las advertencias del manual. Ante dolor, una lesión o una reacción inesperada, deja de usarlo y consulta a un profesional sanitario.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "q42",
+        "q49",
+        "q51",
+        "q43",
+        "q44",
+        "q46",
+        "q47",
+        "q48"
+      ]
+    },
+    "cierre": {
+      "type": "rp-close",
+      "settings": {
+        "eyebrow": "EL SIGUIENTE PASO ES TUYO",
+        "heading": "Haz sitio",
+        "accent": "para tu pausa.",
+        "text": "Conoce el aparato, elige tu pack y revisa tu pedido con calma.",
+        "cta": "Comprar ReliefPath"
+      }
+    },
+    "barra": {
+      "type": "sr-sticky",
+      "settings": {
+        "product": "juego-de-ventosa-electrica-con-cable",
+        "title": "ReliefPath™",
+        "cta_text": "Comprar ahora",
+        "show_after": 200
+      }
+    },
+    "cinta": {
+      "type": "rp-ticker",
+      "blocks": {
+        "t1": {
+          "type": "item",
+          "settings": {
+            "icon": "wave",
+            "text": "Succión regulable"
+          }
+        },
+        "t2": {
+          "type": "item",
+          "settings": {
+            "icon": "flame",
+            "text": "Calor"
+          }
+        },
+        "t3": {
+          "type": "item",
+          "settings": {
+            "icon": "sun",
+            "text": "Luz roja"
+          }
+        },
+        "t4": {
+          "type": "item",
+          "settings": {
+            "icon": "truck",
+            "text": "Envío estándar gratis en España"
+          }
+        },
+        "t5": {
+          "type": "item",
+          "settings": {
+            "icon": "cash",
+            "text": "Paga al recibirlo (+5 €)"
+          }
+        },
+        "t6": {
+          "type": "item",
+          "settings": {
+            "icon": "refresh",
+            "text": "30 días para solicitar la devolución"
+          }
+        }
+      },
+      "block_order": [
+        "t1",
+        "t2",
+        "t3",
+        "t4",
+        "t5",
+        "t6"
+      ],
+      "settings": {
+        "label": "Ventajas de ReliefPath",
+        "speed": 40
+      }
+    },
+    "cifras": {
+      "type": "rp-stats",
+      "blocks": {
+        "c1": {
+          "type": "stat",
+          "settings": {
+            "value": "3",
+            "prefix": "",
+            "suffix": "",
+            "fill": 100,
+            "label": "Funciones en un aparato",
+            "note": "Succión, calor y luz roja"
+          }
+        },
+        "c2": {
+          "type": "stat",
+          "settings": {
+            "value": "0",
+            "prefix": "",
+            "suffix": " €",
+            "fill": 100,
+            "label": "Envío estándar en España",
+            "note": "Sin importe mínimo"
+          }
+        },
+        "c3": {
+          "type": "stat",
+          "settings": {
+            "value": "30",
+            "prefix": "",
+            "suffix": " días",
+            "fill": 100,
+            "label": "Para solicitar la devolución",
+            "note": "Además de tus 14 días legales"
+          }
+        },
+        "c4": {
+          "type": "stat",
+          "settings": {
+            "value": "30",
+            "prefix": "−",
+            "suffix": " %",
+            "fill": 30,
+            "label": "Por unidad en el pack de 3",
+            "note": "34,97 € cada aparato"
+          }
+        }
+      },
+      "block_order": [
+        "c1",
+        "c2",
+        "c3",
+        "c4"
+      ],
+      "settings": {
+        "eyebrow": "EN CIFRAS",
+        "heading": "Lo que te llevas,",
+        "accent": "sin letra pequeña.",
+        "foot": "Descuentos de pack aplicados automáticamente en el checkout. Contrareembolso: +5 € por pedido, según cobertura."
+      }
+    }
+  },
+  "order": [
+    "ficha",
+    "cinta",
+    "funciones",
+    "cifras",
+    "ritual",
+    "garantia",
+    "faq",
+    "cierre",
+    "barra"
+  ]
+}

@@ -1,0 +1,53 @@
+{%- comment -%} Cinta en movimiento con las ventajas. El grupo va dos veces para que el bucle no tenga saltos; el segundo se oculta a los lectores de pantalla. {%- endcomment -%}
+{{ 'rp-motion.css' | asset_url | stylesheet_tag }}
+{%- if section.blocks.size > 0 -%}
+<div class="rp-ticker" role="region" aria-label="{{ section.settings.label | escape }}" style="--rp-speed:{{ section.settings.speed }}s">
+  <div class="rp-ticker__track">
+    {%- for round in (1..2) -%}
+      <ul class="rp-ticker__group" role="list"{% if round == 2 %} aria-hidden="true"{% endif %}>
+        {%- for rep in (1..2) -%}
+          {%- for block in section.blocks -%}
+            <li class="rp-ticker__item"{% if round == 1 and rep == 1 %} {{ block.shopify_attributes }}{% endif %}{% if rep == 2 %} aria-hidden="true"{% endif %}>{% render 'sr-icon', name: block.settings.icon %}{{ block.settings.text | escape }}<span class="rp-ticker__dot" aria-hidden="true"></span></li>
+          {%- endfor -%}
+        {%- endfor -%}
+      </ul>
+    {%- endfor -%}
+  </div>
+</div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "RP · Cinta en movimiento",
+  "settings": [
+    { "type": "text", "id": "label", "label": "Nombre para lectores de pantalla", "default": "Ventajas de ReliefPath" },
+    { "type": "range", "id": "speed", "label": "Duración de una vuelta", "min": 15, "max": 90, "step": 5, "unit": "s", "default": 40 }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Ventaja",
+      "settings": [
+        { "type": "select", "id": "icon", "label": "Icono", "default": "spark", "options": [
+          { "value": "spark", "label": "Destello" }, { "value": "wave", "label": "Succión" }, { "value": "flame", "label": "Calor" },
+          { "value": "sun", "label": "Luz" }, { "value": "truck", "label": "Envío" }, { "value": "cash", "label": "Pago al recibir" },
+          { "value": "refresh", "label": "Devolución" }, { "value": "lock", "label": "Pago seguro" }, { "value": "heart", "label": "Corazón" } ] },
+        { "type": "text", "id": "text", "label": "Texto", "default": "Ventaja" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "RP · Cinta en movimiento",
+      "blocks": [
+        { "type": "item", "settings": { "icon": "wave", "text": "Succión regulable" } },
+        { "type": "item", "settings": { "icon": "flame", "text": "Calor" } },
+        { "type": "item", "settings": { "icon": "sun", "text": "Luz roja" } },
+        { "type": "item", "settings": { "icon": "truck", "text": "Envío gratis en España" } },
+        { "type": "item", "settings": { "icon": "cash", "text": "Paga al recibirlo" } },
+        { "type": "item", "settings": { "icon": "refresh", "text": "30 días para devolverlo" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
