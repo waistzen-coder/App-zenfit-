@@ -46,9 +46,11 @@ YouTube.
 Los efectos nuevos están en `src/vfx.tsx` (chispas, brasas, destello
 anamórfico, onda expansiva y el logo forjado) y las escenas en `src/epico/`.
 Los textos usan dos opciones nuevas de `<Rotulo>`: `metal` (blanco de acero
-con un reflejo que lo recorre) y `fundido` (el azul sale al rojo blanco y se
-enfría). `<Plano>` tiene `bloom` para el resplandor de las luces y `golpe`
-para reforzar la entrada en zoom.
+con un reflejo que lo recorre) y `fundido` (el texto destacado sale al rojo
+blanco y se enfría hasta el naranja de la forja). El naranja se queda para el
+calor (la forja, los productos, el «1») y el azul para la marca. `<Plano>`
+tiene `bloom` para el resplandor de las luces y `golpe` para reforzar la
+entrada en zoom.
 
 ## Rehacerlo
 
@@ -85,6 +87,10 @@ Remotion ni hay GPU, así que el render necesita dos variables:
 Ese Chromium no decodifica H.264; por eso `preparar-medios.sh` pasa los clips a
 VP9. Con H.264, Remotion reproduce los clips con `<OffthreadVideo>`, que no
 aplica los efectos.
+
+Sin GPU, algunos fotogramas de la versión épica (los del logo con todas las
+chispas) tardan más de los 30 s que Remotion espera por defecto, así que
+`npm run render:epico` espera hasta 120 s por fotograma (`--timeout=120000`).
 
 ## Dónde se cambia cada cosa
 

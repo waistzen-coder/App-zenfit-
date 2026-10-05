@@ -84,10 +84,11 @@ export const FachadaEpica: React.FC = () => {
       <FugaDeLuz
         name="Fuga del golpe"
         from={0}
-        durationInFrames={40}
+        durationInFrames={36}
         premountFor={fps}
         semilla={7}
         tono={205}
+        style={{ opacity: 0.4 }}
       />
       <Chispas
         name="Lluvia de chispas del rótulo"
