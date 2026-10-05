@@ -1,5 +1,6 @@
 import {
   AbsoluteFill,
+  Interactive,
   interpolate,
   useCurrentFrame,
   useVideoConfig,
@@ -75,11 +76,25 @@ export const RevelacionEpica: React.FC = () => {
           zoomInicial={c.zoom[0]}
           zoomFinal={c.zoom[1]}
           origen={c.origen}
-          brillo={0.45}
+          brillo={0.4}
           entrada="zoom"
           temblor={18}
         />
       ))}
+      {/* Detrás de los números, el fondo se oscurece hacia los bordes y el
+          suelo: así el número manda y no se ve la obra. */}
+      <Interactive.Div
+        name="Sombra de la cuenta atrás"
+        from={60}
+        durationInFrames={45}
+        premountFor={fps}
+        style={{
+          position: "absolute",
+          inset: 0,
+          background:
+            "radial-gradient(ellipse 70% 45% at 50% 50%, rgba(3, 5, 9, 0.15) 0%, rgba(3, 5, 9, 0.8) 100%), linear-gradient(180deg, rgba(3, 5, 9, 0) 55%, rgba(3, 5, 9, 0.85) 90%)",
+        }}
+      />
       <Brasas
         name="Brasas antes del golpe"
         from={100}
