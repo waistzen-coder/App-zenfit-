@@ -220,6 +220,7 @@ origen de cada una:
     npx skills add remotion-dev/skills -a claude-code -y
     npx skills add liamrjohnston/remotion-motion-graphics-skill -a claude-code -y
     npx skills add runwayml/runway-studio-skills
+    npx skills add AgriciDaniel/banana-claude -a claude-code -y
 
 - **Remotion** (`.claude/skills/remotion-*`): las doce oficiales, para hacer
   vídeos con React: crear el proyecto, previsualizarlo, renderizarlo,
@@ -233,6 +234,12 @@ origen de cada una:
   un enlace. Necesita la clave en la variable `RUNWAYML_API_SECRET` y que la
   red deje pasar `api.dev.runwayml.com`; en la nube, las dos cosas se configuran
   en los ajustes del entorno, nunca en el repositorio.
+- **Banana** (`banana`): genera y edita imágenes con los modelos de Gemini de
+  Google («Nano Banana»; unos 0,07 $ por imagen de 1K). Viene del plugin
+  `AgriciDaniel/banana-claude`, instalado como skill porque `/plugin` no existe
+  en las sesiones en la nube: funciona con sus scripts, sin el servidor MCP del
+  plugin. Necesita la variable `GEMINI_API_KEY`, de un proyecto de Google AI con
+  la facturación activada; la API de Gemini ya es accesible desde el entorno.
 
 Van en el repositorio porque cada sesión en la nube arranca de cero: un plugin
 o una instalación global habría que repetirlos cada vez, y lo que está en el
