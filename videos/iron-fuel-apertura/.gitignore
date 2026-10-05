@@ -13,3 +13,6 @@ public/clips
 public/fotos
 public/grano
 public/audio
+
+# Muestras de orquesta (VSCO-2-CE, CC0): preparar-medios.sh las descarga.
+audio/vsco

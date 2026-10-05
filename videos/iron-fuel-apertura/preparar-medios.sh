@@ -5,13 +5,16 @@
 #   public/clips/        clips etalonados y reescalados, en VP9
 #   public/fotos/        fotos etalonadas y el logo sacado del rótulo
 #   public/grano/        texturas de grano de película
-#   public/audio/        la banda sonora (audio/banda_sonora.py)
+#   public/audio/        las dos bandas sonoras (audio/banda_sonora.py y
+#                        audio/banda_sonora_epica.py)
+#   audio/vsco/          las muestras de orquesta de la versión épica
 #
 # Los clips van en VP9 y no en H.264 porque el Chromium de las sesiones en la
 # nube no decodifica H.264: Remotion cae entonces a <OffthreadVideo>, que
 # ignora los efectos (desenfoques de barrido, zoom radial, aberración).
 #
-# Tarda unos 15 minutos, casi todo en codificar VP9.
+# Tarda unos 25 minutos, casi todo en codificar VP9 y en interpolar la
+# cámara lenta de la fachada.
 set -euo pipefail
 cd "$(dirname "$0")"
 
@@ -41,6 +44,20 @@ clip nevera.mov "$GRADE,fps=30,format=yuv420p" 15 nevera-led.webm &
 # La fachada se grabó a 60 fps y se queda así: a media velocidad sigue fluida.
 clip fachada.mov "hqdn3d=1.5:1.5:3:3,$GRADE,scale=1080:1936:flags=lanczos,crop=1080:1920,unsharp=5:5:0.6:5:5:0,fps=60,format=yuv420p" 30 fachada-rotulo-60fps.webm &
 wait
+
+# Rampa de velocidad para el golpe de la versión épica: 3 s del rótulo que
+# llegan a velocidad normal, se frenan a 0,25× en el impacto y salen
+# acelerando hasta 2×. Se inventan los fotogramas intermedios con
+# minterpolate (de 60 a 120 fps) y después se escoge uno por cada fotograma
+# de salida. src/epico/rampa.ts repite la misma curva para las chispas.
+RAMPA=$(python3 -c '
+import numpy as np
+v = np.concatenate([np.full(10, 1.0), np.full(48, 0.25), np.linspace(0.25, 2.0, 32)])
+t = np.concatenate([[0], np.cumsum(v[:-1])]) / 30
+print("+".join(f"eq(n,{i})" for i in np.round(t * 120).astype(int)))
+')
+# shellcheck disable=SC2086
+ffmpeg -v error -y -ss 9.9 -t 2.2 -i "$O/fachada.mov" -vf "minterpolate=fps=120:mi_mode=mci:mc_mode=aobmc:me_mode=bidir:vsbmc=1,select='$RAMPA',setpts=N/30/TB,hqdn3d=1.5:1.5:3:3,$GRADE,scale=1080:1936:flags=lanczos,crop=1080:1920,unsharp=5:5:0.6:5:5:0,format=yuv420p" -r 30 $VP9 -g 15 "$P/clips/fachada-rampa.webm"
 
 ffmpeg -v error -y -i "$O/fachada.jpg" -vf "$GRADE" -q:v 2 "$P/fotos/fachada.jpg"
 ffmpeg -v error -y -i "$O/escalera.jpg" -vf "$GRADE" -q:v 2 "$P/fotos/escalera.jpg"
@@ -74,3 +91,35 @@ for i in range(6):
 '
 
 python3 audio/banda_sonora.py
+
+# Muestras de orquesta de la versión épica: VSCO 2 Community Edition, de
+# dominio público (CC0). Solo se bajan los instrumentos que usa el script
+# (unos 500 MB) y se quedan fuera del repositorio.
+if [ ! -d audio/vsco ]; then
+  git clone -q --depth 1 --filter=blob:none --no-checkout https://github.com/sgossner/VSCO-2-CE audio/vsco
+  git -C audio/vsco config core.sparseCheckout true
+  cat > audio/vsco/.git/info/sparse-checkout <<'EOF'
+/LICENSE
+/README.md
+/Strings/Cello Section/spic/
+/Strings/Viola Section/spic/
+/Strings/Violin Section/Spic/
+/Strings/Cello Section/trem/
+/Strings/Violin Section/Trem/
+/Strings/Cello Section/susvib/
+/Strings/Violin Section/susVib/
+/Brass/F Horn/sus/
+/Brass/Tenor Trombone/sus/
+/Brass/Tuba/sus/
+/Percussion/Anvil_*
+/Percussion/BDrumNewhit_*
+/Percussion/gong*
+/Percussion/cymbal-crash1_*
+/Percussion/susCymb1-cresc-*
+/Percussion/Timpani/
+/Percussion/Snare2-roll*
+/VSCO 1 Percussion/drums/other/ethnic/giant/
+EOF
+  git -C audio/vsco read-tree -mu HEAD
+fi
+python3 audio/banda_sonora_epica.py
