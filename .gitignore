@@ -1,3 +1,9 @@
 pruebas/cod.html
 pruebas/node_modules/
 pruebas/package*.json
+
+# Claves y entornos locales: el repositorio es público. Algunas skills
+# (make-video) guardan las claves en un .env en la raíz y crean un .venv.
+.env
+.env.*
+.venv/
