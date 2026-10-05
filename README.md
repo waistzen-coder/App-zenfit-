@@ -211,3 +211,20 @@ Ya hecho y verificado contra la API:
 2. **Publicar el tema**, que sigue sin publicar.
 3. Comprobar cómo se ve. El proxy de esta sesión no llega a `waistzen.com`,
    así que la sección no se ha visto renderizada en un navegador real.
+
+## Skills de Remotion para Claude Code
+
+En `.claude/skills/remotion-*` están las doce skills del plugin oficial de
+Remotion, para hacer vídeos con React: crear el proyecto, verlo en Remotion
+Studio, renderizarlo, subtítulos, animaciones, mapas… Están copiadas tal cual
+de `remotion-dev/claude-code-plugin`, versión 4.0.533, licencia MIT.
+
+Van en el repositorio y no como plugin porque cada sesión en la nube arranca de
+cero y el plugin habría que reinstalarlo cada vez; las skills que están en el
+repositorio se cargan solas.
+
+Para actualizarlas, se borran y se vuelven a copiar:
+
+    git clone --depth 1 https://github.com/remotion-dev/claude-code-plugin /tmp/remotion
+    rm -rf .claude/skills/remotion-*
+    cp -a /tmp/remotion/skills/. .claude/skills/
