@@ -1,0 +1,602 @@
+<title>Panel Mostrador</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700&family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* El libro de la tienda: resumen arriba, embudo, caja y plan debajo, con la fachada de Mostrador */
+:root{
+  --fondo:#F2F4F0;--sup:#FFFFFF;--sup-2:#F7F8F5;--tinta:#12201A;--tinta-2:#4B5B53;--linea:rgba(18,32,26,.12);
+  --marca:#0F5A43;--marca-suave:#E3EEE8;--etiqueta:#F5C518;--etiqueta-tinta:#3A2E00;
+  --ok:#12804A;--ok-suave:#DDF1E5;--aviso:#A15C00;--aviso-suave:#FCEBD2;--mal:#B4361E;--mal-suave:#F8E1DB;
+  --azul:#2457A6;--azul-suave:#E1EAF7;--teal:#0E7C86;--teal-suave:#DDF0F1;--gris-suave:#ECEEEA;
+  --f-rot:'Barlow Condensed','Arial Narrow',system-ui,sans-serif;
+  --f-txt:'Figtree',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --f-num:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --fondo:#0D1512;--sup:#14201B;--sup-2:#182620;--tinta:#E6EEE9;--tinta-2:#9DB1A7;--linea:rgba(230,238,233,.12);
+  --marca:#4CC98F;--marca-suave:#183A2D;--etiqueta:#FFD84D;--etiqueta-tinta:#2A2100;
+  --ok:#5BD08F;--ok-suave:#173A27;--aviso:#F2B55A;--aviso-suave:#3A2C12;--mal:#F08A72;--mal-suave:#3D1F18;
+  --azul:#8DB4F0;--azul-suave:#1A2A44;--teal:#6FD0D8;--teal-suave:#123437;--gris-suave:#202B26;
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --fondo:#0D1512;--sup:#14201B;--sup-2:#182620;--tinta:#E6EEE9;--tinta-2:#9DB1A7;--linea:rgba(230,238,233,.12);
+  --marca:#4CC98F;--marca-suave:#183A2D;--etiqueta:#FFD84D;--etiqueta-tinta:#2A2100;
+  --ok:#5BD08F;--ok-suave:#173A27;--aviso:#F2B55A;--aviso-suave:#3A2C12;--mal:#F08A72;--mal-suave:#3D1F18;
+  --azul:#8DB4F0;--azul-suave:#1A2A44;--teal:#6FD0D8;--teal-suave:#123437;--gris-suave:#202B26;
+  color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--fondo);color:var(--tinta);font:400 15.5px/1.55 var(--f-txt);padding-inline:16px;padding-block:0 48px}
+h1,h2,h3{margin:0;text-wrap:balance}
+p{margin:0}
+a{color:var(--marca)}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--marca);outline-offset:2px;border-radius:6px}
+.ancho{max-width:1040px;margin-inline:auto}
+.num{font-family:var(--f-num);font-variant-numeric:tabular-nums}
+
+/* Cabecera con toldo */
+.cab{margin-inline:-16px;background:var(--marca);color:#fff}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .cab{background:#0A3A2C}}
+:root[data-theme="dark"] .cab{background:#0A3A2C}
+.cab-in{max-width:1040px;margin-inline:auto;padding:18px 16px 14px;display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.cab h1{font:700 30px/1 var(--f-rot);letter-spacing:.16em;text-transform:uppercase}
+.cab p{font-size:14px;opacity:.85}
+.toldo{margin-inline:-16px;height:14px;background:repeating-linear-gradient(90deg,#0F5A43 0 28px,#fff 28px 56px);position:relative}
+.toldo::after{content:"";position:absolute;left:0;right:0;top:100%;height:10px;background:radial-gradient(circle at 14px 0,#0F5A43 9.5px,transparent 10px) 0 0/56px 10px repeat-x,radial-gradient(circle at 42px 0,#fff 9.5px,transparent 10px) 0 0/56px 10px repeat-x}
+
+/* Navegación */
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;margin-inline:-16px;padding:20px 16px 10px;background:linear-gradient(var(--fondo) 75%,transparent)}
+.nav-in{max-width:1040px;margin-inline:auto;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.nav a{flex:none;text-decoration:none;color:var(--tinta-2);font-weight:600;font-size:14px;padding:7px 14px;border-radius:999px;background:var(--sup);border:1px solid var(--linea)}
+.nav a:hover{color:var(--tinta)}
+
+section{scroll-margin-top:70px;margin-top:26px}
+.sec-cab{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.sec-cab h2{font:700 26px/1 var(--f-rot);text-transform:uppercase;letter-spacing:.02em}
+.sec-cab p{color:var(--tinta-2);font-size:14px}
+.caja-ui{background:var(--sup);border:1px solid var(--linea);border-radius:16px;padding:16px}
+
+/* Resumen */
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.kpi{background:var(--sup);border:1px solid var(--linea);border-radius:16px;padding:14px 16px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.kpi-et{font-size:12.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--tinta-2)}
+.kpi-v{font:500 26px/1.1 var(--f-num);font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.kpi-v small{font-size:.55em;color:var(--tinta-2)}
+.kpi-s{font-size:13px;color:var(--tinta-2)}
+.barra{height:8px;border-radius:99px;background:var(--gris-suave);overflow:hidden}
+.barra i{display:block;height:100%;border-radius:99px;background:var(--marca);width:0}
+.barra.amarilla i{background:var(--etiqueta)}
+.resumen-dos{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:10px;margin-top:10px}
+.embudo-graf{display:grid;gap:8px}
+.eg-fila{display:grid;grid-template-columns:118px minmax(0,1fr) 34px;gap:10px;align-items:center;font-size:14px}
+.eg-barra{height:22px;border-radius:6px;background:var(--gris-suave);overflow:hidden}
+.eg-barra i{display:block;height:100%;border-radius:6px;min-width:2px}
+.eg-n{text-align:right;font-family:var(--f-num)}
+.lista-datos{display:grid;gap:10px}
+.lista-datos div{display:flex;justify-content:space-between;gap:10px;border-bottom:1px dashed var(--linea);padding-bottom:8px}
+.lista-datos div:last-child{border-bottom:0;padding-bottom:0}
+.lista-datos dt{color:var(--tinta-2)}
+.lista-datos dd{margin:0;font-family:var(--f-num);font-variant-numeric:tabular-nums;text-align:right}
+.h3{font-weight:700;font-size:15px;margin-bottom:12px}
+
+/* Estados */
+.estado{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:3px 10px;font-size:12.5px;font-weight:650;white-space:nowrap}
+.e-propuesta{background:var(--gris-suave);color:var(--tinta-2)}
+.e-contactado{background:var(--azul-suave);color:var(--azul)}
+.e-quiere{background:var(--teal-suave);color:var(--teal)}
+.e-negociando{background:var(--aviso-suave);color:var(--aviso)}
+.e-ganado{background:var(--ok-suave);color:var(--ok)}
+.e-perdido{background:var(--mal-suave);color:var(--mal)}
+.c-propuesta{background:var(--tinta-2);opacity:.45}
+.c-contactado{background:var(--azul)}
+.c-quiere{background:var(--teal)}
+.c-negociando{background:var(--aviso)}
+.c-ganado{background:var(--ok)}
+.c-perdido{background:var(--mal)}
+
+/* Formularios */
+details.form{background:var(--sup);border:1px solid var(--linea);border-radius:16px;margin-bottom:12px}
+details.form summary{cursor:pointer;list-style:none;padding:13px 16px;font-weight:650;display:flex;justify-content:space-between;align-items:center}
+details.form summary::-webkit-details-marker{display:none}
+details.form summary::after{content:"+";font:500 20px/1 var(--f-num);color:var(--marca)}
+details.form[open] summary::after{content:"−"}
+.rejilla{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;padding:0 16px 16px}
+.campo{display:flex;flex-direction:column;gap:4px;min-width:0}
+.campo label,.campo .lbl{font-size:12.5px;font-weight:600;color:var(--tinta-2)}
+.campo.ancho2{grid-column:span 2}
+.campo.todo{grid-column:1/-1}
+input,select,textarea{width:100%;background:var(--sup-2);border:1px solid var(--linea);border-radius:10px;padding:9px 11px;min-height:42px}
+textarea{min-height:64px;resize:vertical}
+.boton{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:42px;padding:0 16px;border-radius:10px;border:1px solid transparent;background:var(--marca);color:#fff;font-weight:650;cursor:pointer}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .boton{color:#06261B}}
+:root[data-theme="dark"] .boton{color:#06261B}
+.boton.sec{background:transparent;color:var(--tinta);border-color:var(--linea)}
+.boton.peq{min-height:32px;padding:0 10px;font-size:13px;border-radius:8px}
+.boton.peligro{background:var(--mal);color:#fff}
+.boton:disabled{opacity:.5;cursor:not-allowed}
+.acciones-form{grid-column:1/-1;display:flex;gap:8px;justify-content:flex-end}
+
+/* Filtros y tarjetas del embudo */
+.filtros{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.filtros button{border:1px solid var(--linea);background:var(--sup);border-radius:999px;padding:5px 12px;font-size:13px;font-weight:600;color:var(--tinta-2);cursor:pointer}
+.filtros button[aria-pressed="true"]{background:var(--tinta);color:var(--fondo);border-color:var(--tinta)}
+.leads{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.lead{background:var(--sup);border:1px solid var(--linea);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.lead-cab{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.lead-nombre{font-weight:700;font-size:16px;overflow-wrap:anywhere}
+.lead-meta{font-size:13px;color:var(--tinta-2)}
+.lead-fila{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:14px}
+.tel{font-family:var(--f-num);user-select:all}
+.lead-nota{font-size:14px;color:var(--tinta-2);background:var(--sup-2);border-radius:10px;padding:8px 10px;overflow-wrap:anywhere}
+.lead-pie{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;border-top:1px dashed var(--linea);padding-top:10px}
+.lead select{width:auto;min-height:34px;padding:4px 8px;font-size:13.5px}
+.venta{display:flex;gap:8px;align-items:end;flex-wrap:wrap;background:var(--ok-suave);border-radius:10px;padding:10px}
+.venta .campo{flex:1 1 120px}
+.chk{display:inline-flex;align-items:center;gap:6px;font-size:13.5px;cursor:pointer}
+.chk input{width:18px;height:18px;min-height:0;accent-color:var(--marca)}
+
+/* Caja */
+.mov{display:grid;grid-template-columns:96px minmax(0,1fr) auto auto;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--linea);font-size:14px}
+.mov:last-child{border-bottom:0}
+.mov-c{overflow-wrap:anywhere}
+.mov-f{color:var(--tinta-2);font-family:var(--f-num);font-size:13px}
+.mov-i{font-family:var(--f-num);text-align:right;white-space:nowrap}
+.mov-i.mas{color:var(--ok)}
+.mov-i.menos{color:var(--mal)}
+.tipo{display:flex;gap:6px}
+.tipo label{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--linea);border-radius:10px;min-height:42px;cursor:pointer;font-weight:600;font-size:14px;background:var(--sup-2)}
+.tipo input{width:auto;min-height:0;accent-color:var(--marca)}
+
+/* Plan */
+.semanas{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:10px}
+.semana h3{font:700 19px/1.1 var(--f-rot);text-transform:uppercase;letter-spacing:.02em;display:flex;justify-content:space-between;gap:8px;margin-bottom:10px}
+.semana h3 span{font:500 13px/1.4 var(--f-num);color:var(--tinta-2);letter-spacing:0}
+.tarea{display:flex;gap:10px;align-items:flex-start;padding:7px 0;font-size:14.5px;cursor:pointer}
+.tarea input{width:18px;height:18px;min-height:0;margin-top:2px;flex:none;accent-color:var(--marca)}
+.tarea.hecha span{color:var(--tinta-2);text-decoration:line-through}
+
+/* Webs */
+.webs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.web{display:flex;flex-direction:column;gap:6px;text-decoration:none;color:var(--tinta);background:var(--sup);border:1px solid var(--linea);border-radius:16px;padding:14px;min-width:0}
+.web strong{font:700 19px/1.1 var(--f-rot);text-transform:uppercase;letter-spacing:.02em}
+.web span{font-size:13px;color:var(--tinta-2)}
+.web em{font-style:normal;color:var(--marca);font-weight:650;font-size:13.5px;margin-top:auto}
+.web.agencia{background:var(--marca);color:#fff;border-color:transparent}
+.web.agencia span,.web.agencia em{color:rgba(255,255,255,.85)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .web.agencia{background:#0A3A2C}}
+:root[data-theme="dark"] .web.agencia{background:#0A3A2C}
+
+.vacio{border:1.5px dashed var(--linea);border-radius:16px;padding:22px;text-align:center;color:var(--tinta-2);font-size:14.5px}
+.vacio strong{display:block;color:var(--tinta);font-size:15.5px;margin-bottom:4px}
+.aviso-datos{background:var(--aviso-suave);color:var(--aviso);border-radius:12px;padding:10px 14px;font-size:14px;margin-top:14px}
+.nota-pie{color:var(--tinta-2);font-size:13px;margin-top:10px}
+.aviso-toast{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));translate:-50% 0;background:var(--tinta);color:var(--fondo);padding:10px 16px;border-radius:12px;font-size:14px;z-index:20;max-width:calc(100% - 32px)}
+
+@media (max-width:860px){
+  .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .resumen-dos,.leads{grid-template-columns:1fr}
+  .webs{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .web.agencia{grid-column:1/-1}
+}
+@media (max-width:560px){
+  .rejilla{grid-template-columns:1fr}
+  .kpi-v{font-size:22px}
+  .campo.ancho2{grid-column:auto}
+  .mov{grid-template-columns:minmax(0,1fr) auto auto}
+  .mov-f{grid-column:1/-1;margin-bottom:-6px}
+  .eg-fila{grid-template-columns:96px minmax(0,1fr) 28px}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+
+<header class="cab">
+  <div class="cab-in">
+    <div>
+      <h1>Mostrador</h1>
+      <p>El negocio de los 1.000 € · webs para negocios de aquí</p>
+    </div>
+    <p id="hoy"></p>
+  </div>
+</header>
+<div class="toldo" aria-hidden="true"></div>
+
+<nav class="nav" aria-label="Secciones del panel">
+  <div class="nav-in">
+    <a href="#resumen">Resumen</a>
+    <a href="#embudo">Embudo</a>
+    <a href="#caja">Caja</a>
+    <a href="#plan">Plan</a>
+    <a href="#webs">Webs</a>
+  </div>
+</nav>
+
+<main class="ancho">
+  <p id="avisoDatos" class="aviso-datos" hidden>Para ver y guardar los datos del negocio, abre este panel desde Claude con tu cuenta. Las webs de ejemplo se ven igual.</p>
+
+  <section id="resumen">
+    <div class="sec-cab"><h2>Resumen</h2><p>Importes sin IVA · objetivo del primer mes: 4 ventas</p></div>
+    <div class="kpis">
+      <div class="kpi">
+        <span class="kpi-et">Facturado</span>
+        <span class="kpi-v" id="kFacturado">0,00 €</span>
+        <div class="barra amarilla"><i id="kRecuperadoBarra"></i></div>
+        <span class="kpi-s" id="kRecuperado">0 % de los 1.000 € invertidos</span>
+      </div>
+      <div class="kpi">
+        <span class="kpi-et">Caja del negocio</span>
+        <span class="kpi-v" id="kCaja">1.000,00 €</span>
+        <span class="kpi-s" id="kGastado">Gastado: 0,00 €</span>
+      </div>
+      <div class="kpi">
+        <span class="kpi-et">Clientes</span>
+        <span class="kpi-v" id="kClientes">0 / 4</span>
+        <div class="barra"><i id="kClientesBarra"></i></div>
+        <span class="kpi-s" id="kCierre">Tasa de cierre: sin datos</span>
+      </div>
+      <div class="kpi">
+        <span class="kpi-et">Ingreso mensual</span>
+        <span class="kpi-v" id="kRecurrente">0,00 €</span>
+        <span class="kpi-s" id="kMant">0 mantenimientos de 19 €</span>
+      </div>
+    </div>
+    <div class="resumen-dos">
+      <div class="caja-ui">
+        <p class="h3">Embudo</p>
+        <div class="embudo-graf" id="graf"></div>
+      </div>
+      <div class="caja-ui">
+        <p class="h3">Esta semana</p>
+        <dl class="lista-datos" id="semanaDatos"></dl>
+      </div>
+    </div>
+  </section>
+
+  <section id="embudo">
+    <div class="sec-cab"><h2>Embudo</h2><p id="embudoCuenta">Cada negocio, de la propuesta a la venta</p></div>
+    <details class="form" id="formLeadCaja">
+      <summary>Añadir negocio</summary>
+      <form id="formLead" class="rejilla" autocomplete="off">
+        <div class="campo ancho2"><label for="lNombre">Nombre del negocio</label><input id="lNombre" required maxlength="80" placeholder="Barbería Paco"></div>
+        <div class="campo"><label for="lSector">Sector</label>
+          <select id="lSector">
+            <option>Fontanería</option><option>Electricidad</option><option>Reformas</option><option>Cerrajería</option><option>Climatización</option><option>Taller</option><option>Barbería</option><option>Peluquería</option><option>Estética</option><option>Fisioterapia</option><option>Dental</option><option>Restaurante</option><option>Entrenador</option><option>Otro</option>
+          </select></div>
+        <div class="campo"><label for="lPueblo">Pueblo</label><input id="lPueblo" maxlength="60" placeholder="Motril"></div>
+        <div class="campo"><label for="lTelefono">Teléfono</label><input id="lTelefono" maxlength="20" inputmode="tel" placeholder="958 00 00 00"></div>
+        <div class="campo"><label for="lCanal">Cómo llegó</label>
+          <select id="lCanal"><option value="visita">Visita</option><option value="llamada">Llamada</option><option value="recomendacion">Recomendación</option><option value="alianza">Alianza</option><option value="anuncio">Anuncio</option><option value="otro">Otro</option></select></div>
+        <div class="campo todo"><label for="lDemo">Enlace a su propuesta (opcional)</label><input id="lDemo" maxlength="200" inputmode="url" placeholder="https://mostradorweb.es/demo/barberia-paco/"></div>
+        <div class="campo todo"><label for="lNota">Nota</label><textarea id="lNota" maxlength="500" placeholder="Muchas reseñas, sin web. Pasar a media mañana."></textarea></div>
+        <div class="acciones-form"><button class="boton" type="submit" id="lGuardar">Guardar negocio</button></div>
+      </form>
+    </details>
+    <div class="filtros" id="filtros" role="group" aria-label="Filtrar por estado"></div>
+    <div class="leads" id="leads">
+      <div class="vacio"><strong>Aún no hay negocios en el embudo</strong>Añade el primero arriba, o pásame una lista en el chat: los cargo yo con su propuesta hecha.</div>
+    </div>
+  </section>
+
+  <section id="caja">
+    <div class="sec-cab"><h2>Caja</h2><p>Lo que entra y sale, sin IVA</p></div>
+    <details class="form" id="formMovCaja">
+      <summary>Apuntar gasto o ingreso</summary>
+      <form id="formMov" class="rejilla" autocomplete="off">
+        <div class="campo"><label for="mFecha">Fecha</label><input id="mFecha" type="date" required></div>
+        <div class="campo ancho2"><label for="mConcepto">Concepto</label><input id="mConcepto" required maxlength="100" placeholder="Dominio mostradorweb.es"></div>
+        <div class="campo ancho2" role="radiogroup" aria-labelledby="mTipoEt"><span class="lbl" id="mTipoEt">Tipo</span>
+          <div class="tipo"><label for="mGasto"><input type="radio" name="mTipo" id="mGasto" value="gasto" checked>Gasto</label><label for="mIngreso"><input type="radio" name="mTipo" id="mIngreso" value="ingreso">Ingreso</label></div></div>
+        <div class="campo"><label for="mImporte">Importe (€)</label><input id="mImporte" type="number" min="0.01" step="0.01" required inputmode="decimal" placeholder="10,00"></div>
+        <div class="acciones-form"><button class="boton" type="submit" id="mGuardar">Apuntar</button></div>
+      </form>
+    </details>
+    <div class="caja-ui" id="movs">
+      <div class="vacio"><strong>Todavía no hay movimientos</strong>El primero será el dominio, unos 10 €. Las ventas que marques como ganadas se apuntan aquí solas.</div>
+    </div>
+  </section>
+
+  <section id="plan">
+    <div class="sec-cab"><h2>Plan</h2><p id="planCuenta">Los primeros 30 días</p></div>
+    <div class="semanas" id="semanas">
+      <div class="vacio"><strong>Cargando el plan</strong>Aparecerán las tareas de cada semana, del montaje a la cuarta.</div>
+    </div>
+  </section>
+
+  <section id="webs">
+    <div class="sec-cab"><h2>Webs</h2><p>Vista previa privada de lo que ya está fabricado</p></div>
+    <div class="webs">
+      <a class="web agencia" href="web/index.html" target="_blank" rel="noopener"><strong>Mostrador</strong><span>La web de la agencia, con precios y escaparate</span><em>Abrir →</em></a>
+      <a class="web" href="web/demo/ejemplo-fontaneria/index.html" target="_blank" rel="noopener"><strong>Fontanería</strong><span>Rótulo de furgoneta · Motril</span><em>Ver ejemplo →</em></a>
+      <a class="web" href="web/demo/ejemplo-barberia/index.html" target="_blank" rel="noopener"><strong>Barbería</strong><span>Cartel de fachada · Almuñécar</span><em>Ver ejemplo →</em></a>
+      <a class="web" href="web/demo/ejemplo-fisioterapia/index.html" target="_blank" rel="noopener"><strong>Fisioterapia</strong><span>Tarjeta de clínica · Motril</span><em>Ver ejemplo →</em></a>
+      <a class="web" href="web/demo/ejemplo-restaurante/index.html" target="_blank" rel="noopener"><strong>Restaurante</strong><span>Cartel de fachada · Motril</span><em>Ver ejemplo →</em></a>
+    </div>
+    <p class="nota-pie">Negocios inventados. La web pública irá en mostradorweb.es cuando esté publicada; el código está en la carpeta negocio/ del repositorio.</p>
+  </section>
+</main>
+
+<script>
+(function () {
+  var CAPITAL = 1000, OBJ_VENTAS = 4, OBJ_FACT = 1480, MANT = 19;
+  var ESTADOS = [
+    ['propuesta', 'Propuesta lista'], ['contactado', 'Contactado'], ['quiere', 'Quiere verla'],
+    ['negociando', 'Negociando'], ['ganado', 'Ganado'], ['perdido', 'Perdido']
+  ];
+  var NOMBRE_ESTADO = {}; ESTADOS.forEach(function (e) { NOMBRE_ESTADO[e[0]] = e[1]; });
+  var CANALES = { visita: 'Visita', llamada: 'Llamada', recomendacion: 'Recomendación', alianza: 'Alianza', anuncio: 'Anuncio', otro: 'Otro' };
+  var SEMANAS = ['Día 1 · montaje', 'Semana 1 · validar', 'Semana 2 · primeras ventas', 'Semana 3 · recuperar', 'Semana 4 · escalar'];
+
+  var st = { leads: [], caja: [], tareas: [], filtro: 'todos', ventaAbierta: null, borrar: null, db: null, puedeEscribir: true, cargado: { leads: false, caja: false, tareas: false } };
+  var pendientes = {};
+  var $ = function (id) { return document.getElementById(id); };
+  var eur = new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' });
+  var e = function (s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
+  var hoyISO = function () { var d = new Date(); return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); };
+  var fechaCorta = function (iso) { if (!iso) return ''; var p = iso.split('-'); return p[2] + '/' + p[1] + '/' + p[0].slice(2); };
+
+  $('hoy').textContent = new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' });
+  $('mFecha').value = hoyISO();
+
+  function toast(msg) {
+    var t = document.createElement('div'); t.className = 'aviso-toast'; t.setAttribute('role', 'status'); t.textContent = msg;
+    document.body.appendChild(t); setTimeout(function () { t.remove(); }, 3200);
+  }
+  function fallo(err) {
+    var code = err && err.code;
+    if (code === 'invalid_argument') { st.puedeEscribir = false; render(); toast('No tienes permiso para cambiar los datos de este panel.'); }
+    else if (code === 'quota_exceeded') toast('El panel está lleno: borra registros antiguos para añadir más.');
+    else toast('No se ha podido guardar. Prueba otra vez en un momento.');
+  }
+  function escribir(clave, fn) {
+    if (!st.db || !st.puedeEscribir) { toast('Abre el panel desde Claude para guardar cambios.'); return Promise.resolve(false); }
+    if (pendientes[clave]) return Promise.resolve(false);
+    pendientes[clave] = true;
+    return Promise.resolve().then(fn).then(function () { return true; }, function (err) { fallo(err); return false; })
+      .then(function (ok) { delete pendientes[clave]; return ok; });
+  }
+
+  // ---------- Cálculos ----------
+  function calculos() {
+    var ingresos = 0, gastos = 0;
+    st.caja.forEach(function (m) { var v = Number(m.importe) || 0; if (m.tipo === 'ingreso') ingresos += v; else gastos += v; });
+    var cuenta = {}; ESTADOS.forEach(function (x) { cuenta[x[0]] = 0; });
+    st.leads.forEach(function (l) { if (cuenta[l.estado] != null) cuenta[l.estado]++; });
+    var ganados = cuenta.ganado;
+    var contactados = st.leads.length - cuenta.propuesta;
+    var mant = st.leads.filter(function (l) { return l.estado === 'ganado' && l.mantenimiento; }).length;
+    var hace7 = Date.now() - 7 * 864e5;
+    var semana = { nuevos: 0, contactos: 0, ventas: 0, cobrado: 0 };
+    st.leads.forEach(function (l) {
+      if (l.creado && Date.parse(l.creado) >= hace7) semana.nuevos++;
+      if (l.actualizado && Date.parse(l.actualizado) >= hace7 && l.estado !== 'propuesta') semana.contactos++;
+      if (l.estado === 'ganado' && l.ganadoEn && Date.parse(l.ganadoEn) >= hace7) semana.ventas++;
+    });
+    st.caja.forEach(function (m) { if (m.tipo === 'ingreso' && m.fecha && Date.parse(m.fecha) >= hace7 - 864e5) semana.cobrado += Number(m.importe) || 0; });
+    return { ingresos: ingresos, gastos: gastos, cuenta: cuenta, ganados: ganados, contactados: contactados, mant: mant, semana: semana };
+  }
+
+  // ---------- Pintar ----------
+  function render() { renderResumen(); renderLeads(); renderCaja(); renderPlan(); }
+
+  function renderResumen() {
+    var c = calculos();
+    $('kFacturado').textContent = eur.format(c.ingresos);
+    var rec = Math.min(100, Math.round(c.ingresos / CAPITAL * 100));
+    $('kRecuperadoBarra').style.width = rec + '%';
+    $('kRecuperado').textContent = rec >= 100 ? 'Inversión recuperada' : rec + ' % de los 1.000 € invertidos';
+    $('kCaja').textContent = eur.format(CAPITAL - c.gastos + c.ingresos);
+    $('kGastado').textContent = 'Gastado: ' + eur.format(c.gastos) + ' de los 1.000 €';
+    $('kClientes').textContent = c.ganados + ' / ' + OBJ_VENTAS;
+    $('kClientesBarra').style.width = Math.min(100, c.ganados / OBJ_VENTAS * 100) + '%';
+    $('kCierre').textContent = c.contactados ? 'Tasa de cierre: ' + Math.round(c.ganados / c.contactados * 100) + ' % de ' + c.contactados + ' contactados' : 'Tasa de cierre: sin contactos aún';
+    $('kRecurrente').innerHTML = e(eur.format(c.mant * MANT)) + '<small>/mes</small>';
+    $('kMant').textContent = c.mant + (c.mant === 1 ? ' mantenimiento' : ' mantenimientos') + ' de ' + MANT + ' €';
+    var max = Math.max(1, Math.max.apply(null, ESTADOS.map(function (x) { return c.cuenta[x[0]]; })));
+    $('graf').innerHTML = ESTADOS.map(function (x) {
+      var n = c.cuenta[x[0]];
+      return '<div class="eg-fila"><span>' + x[1] + '</span><span class="eg-barra"><i class="c-' + x[0] + '" style="width:' + (n / max * 100) + '%"></i></span><span class="eg-n">' + n + '</span></div>';
+    }).join('');
+    var s = c.semana;
+    $('semanaDatos').innerHTML = [
+      ['Negocios nuevos en el embudo', s.nuevos], ['Movidos de estado', s.contactos], ['Ventas', s.ventas], ['Cobrado', eur.format(s.cobrado)],
+      ['Objetivo del mes', eur.format(OBJ_FACT)]
+    ].map(function (r) { return '<div><dt>' + r[0] + '</dt><dd>' + r[1] + '</dd></div>'; }).join('');
+  }
+
+  function renderFiltros() {
+    var c = calculos();
+    var ops = [['todos', 'Todos', st.leads.length]].concat(ESTADOS.map(function (x) { return [x[0], x[1], c.cuenta[x[0]]]; }));
+    $('filtros').innerHTML = ops.map(function (o) {
+      return '<button type="button" data-filtro="' + o[0] + '" aria-pressed="' + (st.filtro === o[0]) + '">' + o[1] + ' · ' + o[2] + '</button>';
+    }).join('');
+  }
+
+  function renderLeads() {
+    renderFiltros();
+    $('embudoCuenta').textContent = st.leads.length ? st.leads.length + (st.leads.length === 1 ? ' negocio' : ' negocios') + ' en seguimiento' : 'Cada negocio, de la propuesta a la venta';
+    var lista = st.leads.filter(function (l) { return st.filtro === 'todos' || l.estado === st.filtro; });
+    if (!st.cargado.leads && st.db) { $('leads').innerHTML = '<div class="vacio"><strong>Cargando el embudo…</strong></div>'; return; }
+    if (!lista.length) {
+      $('leads').innerHTML = st.leads.length
+        ? '<div class="vacio"><strong>Ningún negocio en este estado</strong>Cambia el filtro para ver el resto.</div>'
+        : '<div class="vacio"><strong>Aún no hay negocios en el embudo</strong>Añade el primero arriba, o pásame una lista en el chat: los cargo yo con su propuesta hecha.</div>';
+      return;
+    }
+    var dis = st.puedeEscribir && st.db ? '' : ' disabled';
+    var vImp = st.ventaAbierta && $('v-' + st.ventaAbierta) ? $('v-' + st.ventaAbierta).value : null;
+    var vMant = st.ventaAbierta && $('vm-' + st.ventaAbierta) ? $('vm-' + st.ventaAbierta).checked : null;
+    $('leads').innerHTML = lista.map(function (l) {
+      var opciones = ESTADOS.map(function (x) { return '<option value="' + x[0] + '"' + (l.estado === x[0] ? ' selected' : '') + '>' + x[1] + '</option>'; }).join('');
+      var venta = st.ventaAbierta === l.id
+        ? '<form class="venta" data-venta="' + e(l.id) + '"><div class="campo"><label for="v-' + e(l.id) + '">Importe cobrado sin IVA (€)</label><input id="v-' + e(l.id) + '" type="number" min="1" step="0.01" value="290" required></div>' +
+          '<label class="chk"><input type="checkbox" id="vm-' + e(l.id) + '">Con mantenimiento</label><button class="boton peq" type="submit">Guardar venta</button><button class="boton sec peq" type="button" data-cancelar-venta>Cancelar</button></form>'
+        : '';
+      var ganado = l.estado === 'ganado'
+        ? '<div class="lead-fila"><span class="num">' + eur.format(Number(l.importe) || 0) + '</span><label class="chk"><input type="checkbox" data-mant="' + e(l.id) + '"' + (l.mantenimiento ? ' checked' : '') + dis + '>Mantenimiento ' + MANT + ' €/mes</label></div>'
+        : '';
+      var borrar = st.borrar === l.id
+        ? '<span class="lead-fila">¿Borrar este negocio? <button class="boton peligro peq" type="button" data-borrar-si="' + e(l.id) + '">Borrar</button><button class="boton sec peq" type="button" data-borrar-no>No</button></span>'
+        : '<button class="boton sec peq" type="button" data-borrar="' + e(l.id) + '"' + dis + '>Borrar</button>';
+      return '<article class="lead">' +
+        '<div class="lead-cab"><div><p class="lead-nombre">' + e(l.nombre) + '</p><p class="lead-meta">' + e([l.sector, l.pueblo, CANALES[l.canal]].filter(Boolean).join(' · ')) + '</p></div>' +
+        '<span class="estado e-' + e(l.estado) + '">' + e(NOMBRE_ESTADO[l.estado] || l.estado) + '</span></div>' +
+        (l.telefono || l.demo ? '<div class="lead-fila">' + (l.telefono ? '<span class="tel">' + e(l.telefono) + '</span><button class="boton sec peq" type="button" data-copiar="' + e(l.telefono) + '">Copiar</button>' : '') +
+          (l.demo && /^https?:\/\//.test(l.demo) ? '<a href="' + e(l.demo) + '" target="_blank" rel="noopener">Ver propuesta →</a>' : '') + '</div>' : '') +
+        (l.nota ? '<p class="lead-nota">' + e(l.nota) + '</p>' : '') +
+        ganado + venta +
+        '<div class="lead-pie"><label class="chk" for="s-' + e(l.id) + '">Estado</label><select id="s-' + e(l.id) + '" data-estado="' + e(l.id) + '"' + dis + '>' + opciones + '</select>' + borrar + '</div>' +
+        '</article>';
+    }).join('');
+    if (vImp !== null && $('v-' + st.ventaAbierta)) $('v-' + st.ventaAbierta).value = vImp;
+    if (vMant !== null && $('vm-' + st.ventaAbierta)) $('vm-' + st.ventaAbierta).checked = vMant;
+  }
+
+  function renderCaja() {
+    if (!st.cargado.caja && st.db) { $('movs').innerHTML = '<div class="vacio"><strong>Cargando la caja…</strong></div>'; return; }
+    if (!st.caja.length) { $('movs').innerHTML = '<div class="vacio"><strong>Todavía no hay movimientos</strong>El primero será el dominio, unos 10 €. Las ventas que marques como ganadas se apuntan aquí solas.</div>'; return; }
+    var dis = st.puedeEscribir && st.db ? '' : ' disabled';
+    $('movs').innerHTML = st.caja.map(function (m) {
+      var mas = m.tipo === 'ingreso';
+      var borrar = st.borrar === 'm:' + m.id
+        ? '<span><button class="boton peligro peq" type="button" data-borrar-mov-si="' + e(m.id) + '">Borrar</button> <button class="boton sec peq" type="button" data-borrar-no>No</button></span>'
+        : '<button class="boton sec peq" type="button" data-borrar-mov="' + e(m.id) + '" aria-label="Borrar movimiento"' + dis + '>×</button>';
+      return '<div class="mov"><span class="mov-f">' + e(fechaCorta(m.fecha)) + '</span><span class="mov-c">' + e(m.concepto) + '</span><span class="mov-i ' + (mas ? 'mas' : 'menos') + '">' + (mas ? '+' : '−') + eur.format(Number(m.importe) || 0) + '</span>' + borrar + '</div>';
+    }).join('');
+  }
+
+  function renderPlan() {
+    if (!st.tareas.length) {
+      $('semanas').innerHTML = (!st.cargado.tareas && st.db)
+        ? '<div class="vacio"><strong>Cargando el plan…</strong></div>'
+        : '<div class="vacio"><strong>El plan aún no está cargado</strong>Pídemelo en el chat y lo cargo: del montaje a la cuarta semana.</div>';
+      $('planCuenta').textContent = 'Los primeros 30 días';
+      return;
+    }
+    var hechas = st.tareas.filter(function (t) { return t.hecha; }).length;
+    $('planCuenta').textContent = hechas + ' de ' + st.tareas.length + ' tareas hechas';
+    var dis = st.puedeEscribir && st.db ? '' : ' disabled';
+    $('semanas').innerHTML = SEMANAS.map(function (nombre, i) {
+      var ts = st.tareas.filter(function (t) { return Number(t.semana) === i; });
+      if (!ts.length) return '';
+      var h = ts.filter(function (t) { return t.hecha; }).length;
+      return '<div class="caja-ui semana"><h3>' + nombre + '<span>' + h + '/' + ts.length + '</span></h3>' + ts.map(function (t) {
+        return '<label class="tarea' + (t.hecha ? ' hecha' : '') + '" for="t-' + e(t.id) + '"><input type="checkbox" id="t-' + e(t.id) + '" data-tarea="' + e(t.id) + '"' + (t.hecha ? ' checked' : '') + dis + '><span>' + e(t.texto) + '</span></label>';
+      }).join('') + '</div>';
+    }).join('');
+  }
+
+  // ---------- Acciones ----------
+  document.addEventListener('click', function (ev) {
+    var b = ev.target.closest('button, [data-filtro]');
+    if (!b) return;
+    if (b.dataset.filtro) { st.filtro = b.dataset.filtro; renderLeads(); return; }
+    if (b.dataset.copiar) {
+      var txt = b.dataset.copiar;
+      try { navigator.clipboard.writeText(txt).then(function () { toast('Teléfono copiado'); }, function () { toast(txt); }); } catch (x) { toast(txt); }
+      return;
+    }
+    if (b.dataset.borrar) { st.borrar = b.dataset.borrar; renderLeads(); return; }
+    if (b.dataset.borrarMov) { st.borrar = 'm:' + b.dataset.borrarMov; renderCaja(); return; }
+    if (b.hasAttribute('data-borrar-no')) { st.borrar = null; renderLeads(); renderCaja(); return; }
+    if (b.dataset.borrarSi) {
+      var id = b.dataset.borrarSi; st.borrar = null;
+      escribir('leads/' + id, function () { return st.db.doc('leads/' + id).delete(); }).then(function (ok) { if (ok) toast('Negocio borrado'); });
+      return;
+    }
+    if (b.dataset.borrarMovSi) {
+      var mid = b.dataset.borrarMovSi; st.borrar = null;
+      escribir('caja/' + mid, function () { return st.db.doc('caja/' + mid).delete(); }).then(function (ok) { if (ok) toast('Movimiento borrado'); });
+      return;
+    }
+    if (b.hasAttribute('data-cancelar-venta')) { st.ventaAbierta = null; renderLeads(); }
+  });
+
+  document.addEventListener('change', function (ev) {
+    var t = ev.target;
+    if (t.dataset.estado) {
+      var id = t.dataset.estado, nuevo = t.value;
+      if (nuevo === 'ganado') { st.ventaAbierta = id; renderLeads(); return; }
+      st.ventaAbierta = null;
+      escribir('leads/' + id, function () { return st.db.doc('leads/' + id).update({ estado: nuevo, actualizado: new Date().toISOString() }); });
+      return;
+    }
+    if (t.dataset.mant) {
+      var lid = t.dataset.mant;
+      escribir('leads/' + lid, function () { return st.db.doc('leads/' + lid).update({ mantenimiento: t.checked, actualizado: new Date().toISOString() }); });
+      return;
+    }
+    if (t.dataset.tarea) {
+      var tid = t.dataset.tarea;
+      escribir('tareas/' + tid, function () { return st.db.doc('tareas/' + tid).update({ hecha: t.checked }); });
+    }
+  });
+
+  document.addEventListener('submit', function (ev) {
+    ev.preventDefault();
+    var f = ev.target;
+    if (f.id === 'formLead') {
+      var nombre = $('lNombre').value.trim();
+      if (!nombre) return;
+      var ahora = new Date().toISOString();
+      var datos = { nombre: nombre, sector: $('lSector').value, pueblo: $('lPueblo').value.trim(), telefono: $('lTelefono').value.trim(),
+        canal: $('lCanal').value, demo: $('lDemo').value.trim(), nota: $('lNota').value.trim(), estado: 'propuesta', mantenimiento: false, creado: ahora, actualizado: ahora };
+      escribir('nuevo-lead', function () { return st.db.collection('leads').add(datos); }).then(function (ok) {
+        if (!ok) return;
+        ['lNombre', 'lPueblo', 'lTelefono', 'lDemo', 'lNota'].forEach(function (k) { $(k).value = ''; });
+        toast('Negocio añadido');
+      });
+      return;
+    }
+    if (f.id === 'formMov') {
+      var importe = Math.round(parseFloat(String($('mImporte').value).replace(',', '.')) * 100) / 100;
+      var concepto = $('mConcepto').value.trim();
+      if (!concepto || !(importe > 0)) return;
+      var mov = { fecha: $('mFecha').value || hoyISO(), concepto: concepto, tipo: document.querySelector('input[name="mTipo"]:checked').value, importe: importe, creado: new Date().toISOString() };
+      escribir('nuevo-mov', function () { return st.db.collection('caja').add(mov); }).then(function (ok) {
+        if (!ok) return;
+        $('mConcepto').value = ''; $('mImporte').value = '';
+        toast('Apuntado en caja');
+      });
+      return;
+    }
+    if (f.dataset.venta) {
+      var id = f.dataset.venta;
+      var lead = st.leads.find(function (l) { return l.id === id; });
+      var imp = Math.round(parseFloat($('v-' + id).value) * 100) / 100;
+      var conMant = $('vm-' + id).checked;
+      if (!lead || !(imp > 0)) return;
+      var ahora2 = new Date().toISOString();
+      escribir('leads/' + id, function () {
+        return st.db.doc('leads/' + id).update({ estado: 'ganado', importe: imp, mantenimiento: conMant, ganadoEn: ahora2, actualizado: ahora2 })
+          .then(function () { return st.db.collection('caja').add({ fecha: hoyISO(), concepto: 'Web · ' + lead.nombre, tipo: 'ingreso', importe: imp, lead: id, creado: ahora2 }); });
+      }).then(function (ok) { if (ok) { st.ventaAbierta = null; toast('Venta guardada y apuntada en caja'); renderLeads(); } });
+    }
+  });
+
+  // ---------- Datos ----------
+  function suscribir(coleccion, consulta, clave) {
+    consulta.onSnapshot(function (snap) {
+      st[clave] = snap.docs.map(function (d) { var o = Object.assign({}, d.data()); o.id = d.id; return o; });
+      st.cargado[clave] = true;
+      render();
+    }, function () { st.cargado[clave] = true; render(); toast('Se ha perdido la conexión con los datos. Recarga el panel.'); });
+  }
+
+  render();
+  var usar = window.claude && window.claude.use ? window.claude.use.bind(window.claude) : null;
+  if (!usar) { $('avisoDatos').hidden = false; st.puedeEscribir = false; render(); return; }
+  usar('db').then(function (db) {
+    if (!db) { $('avisoDatos').hidden = false; st.puedeEscribir = false; render(); return; }
+    st.db = db;
+    render();
+    suscribir('leads', db.collection('leads').orderBy('actualizado', 'desc'), 'leads');
+    suscribir('caja', db.collection('caja').orderBy('fecha', 'desc'), 'caja');
+    suscribir('tareas', db.collection('tareas').orderBy('orden'), 'tareas');
+  });
+  usar('user').then(function (u) {
+    if (!u) return;
+    u.can('data.write').then(function (puede) { if (puede === false) { st.puedeEscribir = false; render(); } });
+  });
+})();
+</script>
