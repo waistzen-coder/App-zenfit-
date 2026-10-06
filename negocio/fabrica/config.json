@@ -1,0 +1,20 @@
+{
+  "agencia": {
+    "nombre": "Mostrador",
+    "lema": "Webs para negocios de aquí",
+    "web": "https://mostradorweb.es",
+    "urlDemos": "https://mostradorweb.es/demo",
+    "whatsapp": "34600000000",
+    "email": "hola@mostradorweb.es",
+    "zona": "la Costa Tropical",
+    "pueblos": ["Motril", "Salobreña", "Almuñécar", "La Herradura", "Torrenueva Costa", "Castell de Ferro"],
+    "vendedor": "[tu nombre]",
+    "precioDesde": 290,
+    "precios": { "esencial": 290, "completa": 490, "mantenimiento": 19, "renovacion": 60 },
+    "titular": {
+      "nombre": "[nombre y apellidos o razón social]",
+      "nif": "[NIF]",
+      "domicilio": "[domicilio fiscal]"
+    }
+  }
+}

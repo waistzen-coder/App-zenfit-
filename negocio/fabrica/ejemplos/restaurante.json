@@ -1,0 +1,18 @@
+{
+  "ejemplo": true,
+  "slug": "ejemplo-restaurante",
+  "nombre": "Casa Lonja",
+  "sector": "restaurante",
+  "ciudad": "Motril",
+  "provincia": "Granada",
+  "direccion": "Paseo del Puerto, 3",
+  "cp": "18613",
+  "telefono": "600 000 000",
+  "horario": {
+    "martes-jueves": "13:00-16:30",
+    "viernes-sábado": "13:00-16:30, 20:00-23:30",
+    "domingo": "13:00-17:00",
+    "lunes": "cerrado"
+  },
+  "precios": "15-30 €"
+}

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+  <title>Mostrador</title>
+  <rect width="640" height="640" fill="#0A3A2C"/>
+  <rect x="120" y="190" width="400" height="110" fill="#FFFFFF"/>
+  <g fill="#3DBE84">
+    <rect x="120" y="190" width="80" height="110"/>
+    <rect x="280" y="190" width="80" height="110"/>
+    <rect x="440" y="190" width="80" height="110"/>
+    <circle cx="160" cy="300" r="40"/>
+    <circle cx="320" cy="300" r="40"/>
+    <circle cx="480" cy="300" r="40"/>
+  </g>
+  <g fill="#FFFFFF">
+    <circle cx="240" cy="300" r="40"/>
+    <circle cx="400" cy="300" r="40"/>
+  </g>
+  <rect x="150" y="432" width="340" height="28" rx="14" fill="#FFD84D"/>
+</svg>

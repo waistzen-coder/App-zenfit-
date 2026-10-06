@@ -1,3 +1,9 @@
 pruebas/cod.html
 pruebas/node_modules/
 pruebas/package*.json
+
+# Mostrador: nada de clientes reales mientras el repositorio sea público
+negocio/privado/
+negocio/entregas/
+negocio/web/demo/*
+!negocio/web/demo/ejemplo-*/

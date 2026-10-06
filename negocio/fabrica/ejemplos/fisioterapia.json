@@ -1,0 +1,17 @@
+{
+  "ejemplo": true,
+  "slug": "ejemplo-fisioterapia",
+  "nombre": "Fisio Mareas",
+  "sector": "fisioterapia",
+  "ciudad": "Motril",
+  "provincia": "Granada",
+  "direccion": "Avenida de Salobreña, 8, bajo",
+  "cp": "18600",
+  "telefono": "600 000 000",
+  "email": "citas@ejemplo.es",
+  "horario": {
+    "lunes-viernes": "9:00-14:00, 16:00-21:00",
+    "sábado": "cerrado",
+    "domingo": "cerrado"
+  }
+}

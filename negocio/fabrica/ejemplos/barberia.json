@@ -1,0 +1,23 @@
+{
+  "ejemplo": true,
+  "slug": "ejemplo-barberia",
+  "nombre": "Barbería Tres Navajas",
+  "sector": "barberia",
+  "ciudad": "Almuñécar",
+  "provincia": "Granada",
+  "direccion": "Calle Real, 12",
+  "cp": "18690",
+  "telefono": "600 000 000",
+  "horario": {
+    "lunes-viernes": "9:30-14:00, 16:30-20:30",
+    "sábado": "9:30-14:00",
+    "domingo": "cerrado"
+  },
+  "desde": 2015,
+  "valoracion": { "nota": 4.9, "resenas": 86 },
+  "resenas": [
+    { "autor": "Javier M.", "texto": "Llevo tres años viniendo y siempre salgo como quiero. Puntuales y muy buen trato.", "estrellas": 5 },
+    { "autor": "Antonio R.", "texto": "El arreglo de barba con toalla caliente es otro nivel. Reservar por WhatsApp es comodísimo.", "estrellas": 5 },
+    { "autor": "Dani P.", "texto": "Le cortan a mi hijo con una paciencia increíble. Repetimos cada mes.", "estrellas": 5 }
+  ]
+}
