@@ -1,0 +1,16 @@
+{
+  "ejemplo": true,
+  "slug": "ejemplo-fontaneria",
+  "nombre": "Fontanería Aguaclara",
+  "sector": "fontaneria",
+  "ciudad": "Motril",
+  "provincia": "Granada",
+  "telefono": "600 000 000",
+  "zona": ["Motril", "Salobreña", "Almuñécar", "Torrenueva Costa", "Calahonda"],
+  "horario": {
+    "lunes-viernes": "8:00-14:00, 16:00-20:00",
+    "sábado": "9:00-13:00",
+    "domingo": "cerrado"
+  },
+  "desde": 2008
+}

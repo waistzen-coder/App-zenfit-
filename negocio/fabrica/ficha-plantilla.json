@@ -1,0 +1,21 @@
+{
+  "nombre": "Barbería Paco",
+  "sector": "barberia",
+  "ciudad": "Motril",
+  "provincia": "Granada",
+  "telefono": "958 00 00 00",
+  "whatsapp": "600 00 00 00",
+  "direccion": "Calle Nueva, 3",
+  "cp": "18600",
+  "email": "",
+  "horario": {
+    "lunes-viernes": "9:30-14:00, 17:00-20:30",
+    "sábado": "9:30-14:00",
+    "domingo": "cerrado"
+  },
+  "desde": 2012,
+  "valoracion": { "nota": 4.7, "resenas": 112 },
+  "enlaceGoogle": "",
+  "tieneWeb": false,
+  "contacto": "Paco"
+}
