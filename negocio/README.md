@@ -82,6 +82,23 @@ WhatsApp, horario con «abierto ahora» calculado en vivo, cómo llegar, datos
 estructurados para Google, cero cookies y aviso legal en la versión final. Todo
 en un único archivo de unos 100 KB.
 
+## El panel del negocio
+
+[**Panel Mostrador**](https://claude.ai/artifact/XxDb7akeeWoV3grGX6wa5j) (privado,
+solo lo abres tú): números, embudo de clientes, caja y plan de 30 días, con la
+web de la agencia y las demos de ejemplo. Apunta ahí cada negocio y cada euro;
+yo lo leo cuando me escribes para preparar propuestas y repasar números. Su
+código está en [`panel/panel.html`](panel/panel.html); los datos no se guardan
+en el repositorio.
+
+## Cómo trabajamos cada día
+
+1. Me escribes la lista de negocios del día (nombre y pueblo, o el enlace de
+   Google Maps).
+2. Te devuelvo sus propuestas publicadas y el mensaje para cada uno.
+3. Visitas o llamas, y apuntas en el panel cómo ha ido.
+4. Los viernes repasamos los números y decido qué cambiar.
+
 ## Lo que necesito de ti para arrancar
 
 1. **Tu nombre de pila** para los mensajes, y **un número de WhatsApp** para el
