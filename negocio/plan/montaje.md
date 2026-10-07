@@ -3,21 +3,12 @@
 Lo que hay que hacer una sola vez para que Mostrador exista. Empezamos sin
 dominio y sin gastar casi nada: el dominio propio llega con las primeras ventas.
 
-## 1. La web y las propuestas, en GitHub Pages (1 minuto tuyo)
+## 1. La web y las propuestas, en GitHub Pages (hecho)
 
-Las propuestas tienen que estar en internet para mandarlas. Las publico gratis
-en GitHub Pages, en `https://waistzen-coder.github.io`. GitHub no me deja crear
-repositorios por ti, así que ese paso es tuyo:
-
-1. Entra en [github.com/new](https://github.com/new).
-2. *Repository name*: `waistzen-coder.github.io` (exactamente así).
-3. Marca **Public** (en el plan gratuito, GitHub Pages solo sirve repositorios
-   públicos) y pulsa *Create repository*.
-4. Si la app de Claude en GitHub solo tiene acceso a algunos repositorios,
-   dale acceso a este desde
-   [github.com/apps/claude/installations/select_target](https://github.com/apps/claude/installations/select_target).
-5. Dímelo y subo la web, los ejemplos y las propuestas. A partir de ahí, cada
-   propuesta nueva la publico yo.
+La web de Mostrador y las propuestas se publican gratis en
+`https://waistzen-coder.github.io`, desde el repositorio del mismo nombre, que
+creaste tú. Cada propuesta nueva la publico yo ahí (los pasos están en
+[fabrica/README.md](../fabrica/README.md#publicar)).
 
 Las propuestas llevan la etiqueta `noindex` para que no salgan en Google, no se
 enlazan desde ningún sitio y se borran si el negocio dice que no. Ojo: ese

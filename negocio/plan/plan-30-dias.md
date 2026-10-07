@@ -26,7 +26,7 @@ sí o nos ha escrito.
 
 Todo explicado paso a paso en [montaje.md](montaje.md):
 
-- [ ] Crear el repositorio `waistzen-coder.github.io` para que publique las
+- [x] Crear el repositorio `waistzen-coder.github.io` para que publique las
       propuestas (1 minuto).
 - [ ] Línea de Mostrador con WhatsApp Business y el logo de `marca/` (unos
       5-10 €/mes).
