@@ -40,7 +40,7 @@ export const enlaceWhatsapp = (numero, texto) =>
 
 /**
  * Enlace para escribir a la agencia: WhatsApp si config.json tiene número, si no correo,
- * y null si no tiene ninguno (entonces se le contesta en el mensaje en el que llegó la propuesta).
+ * y null si no tiene ninguno (entonces se escribe por donde llegó la propuesta: el mensaje o la carta).
  */
 export function enlaceAgencia(agencia, texto, asunto) {
   if (agencia.whatsapp) return enlaceWhatsapp(agencia.whatsapp, texto);

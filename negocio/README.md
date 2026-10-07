@@ -61,8 +61,8 @@ mantenimiento y el repaso de números cada semana.
 
 **Tú, Adrián (socio comercial, unas 2 horas al día):**
 
-- Llamar a los negocios con el guion y mandar su propuesta a los que digan que
-  sí.
+- Llamar a los negocios con el guion, o mandarles la carta con su web, y
+  contestar a los que escriban (las respuestas te las dejo preparadas).
 - Cobrar y facturar (yo no puedo tener cuentas ni firmar nada).
 - Pagar los pocos gastos cuando toque: el primero, la línea de Mostrador.
 
@@ -104,8 +104,10 @@ en el repositorio.
 ## Dónde estamos
 
 Ya hecho: los **20 primeros negocios sin web** de toda España (sobre todo
-talleres y oficios), con su propuesta fabricada y cargados en el panel, y el
-[guion de llamada](ventas/guiones.md) para trabajo a distancia y sin tu número.
+talleres y oficios), con su propuesta fabricada y cargados en el panel, el
+[guion de llamada](ventas/guiones.md) para trabajo a distancia y sin tu número,
+y la alternativa sin llamar: [15 cartas en papel con su web en un QR y los
+correos para cuando contesten](ventas/cartas.md).
 
 Lo que falta, todo explicado en [plan/montaje.md](plan/montaje.md):
 

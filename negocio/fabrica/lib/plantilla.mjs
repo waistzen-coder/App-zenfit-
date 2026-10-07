@@ -274,14 +274,14 @@ function opiniones(n) {
 
 function bannerDemo(n, agencia) {
   // Los ejemplos llevan a los precios de la agencia; las propuestas reales, al canal de la agencia
-  // si config.json tiene uno, y si no, se contesta en el mensaje en el que llegó el enlace.
+  // si config.json tiene uno; si no, el texto pide escribir por donde llegó la propuesta (mensaje o carta).
   const href = n.ejemplo
     ? enlaceAgencia(agencia, 'Hola, he visto vuestras webs de ejemplo. Mi negocio se llama: ', 'Quiero ver la web de mi negocio') ?? `${agencia.web.replace(/\/$/, '')}/#precios`
     : enlaceAgencia(agencia, `Hola, he visto la propuesta de web para ${n.nombre} y me interesa.`, `Propuesta de web para ${n.nombre}`);
   const externo = /^https:\/\/wa\.me\//.test(href ?? '') ? ' target="_blank" rel="noopener"' : '';
   const accion = href
     ? `<a href="${esc(href)}"${externo}>${n.ejemplo ? 'Quiero una así' : '¿Te gusta? Hablemos'}</a>`
-    : '<span class="demo-respuesta">¿Te gusta? Contesta al mensaje con el que te la enviamos.</span>';
+    : '<span class="demo-respuesta">¿Te gusta? Escríbenos y la publicamos en 72 horas.</span>';
   return `<div class="demo" role="note">
   <div class="env demo-in">
     <p><strong>Propuesta de web para ${esc(n.nombre)}</strong>, preparada por ${esc(agencia.nombre)}. ${n.ejemplo ? 'Negocio y datos ficticios, solo para enseñar el diseño.' : 'Los textos son orientativos: los ajustamos contigo antes de publicar.'}</p>

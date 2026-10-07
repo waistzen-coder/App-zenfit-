@@ -11,10 +11,16 @@ vender, después gastar. Cada viernes miramos los números y decidimos.
 | 1,5-2 horas | Llamadas a 20-30 negocios ([guion](../ventas/guiones.md#1-la-llamada)) y envío del enlace a los que digan que sí | — |
 | 10 minutos | Apuntas cómo ha ido cada uno en el panel | Repaso el embudo y cambio lo que no funcione |
 
-Por qué llamadas y no mensajes en frío: en España mandar publicidad por WhatsApp
-o correo a quien no lo ha pedido está prohibido (art. 21 de la LSSI), también a
-empresas. Además, un minuto de voz convierte mucho más que un mensaje. El enlace
-solo se manda cuando el negocio ha dicho que sí.
+**Sin llamar:** a los negocios con dirección completa les llega una carta con su
+web en un QR ([cartas y correos](../ventas/cartas.md)) y tú solo contestas a los
+que escriben; yo te dejo las respuestas preparadas en Gmail. Es más lento (dos o
+tres días de correo) y cuesta un sello por carta, pero no hay que llamar a nadie.
+
+Por qué llamadas o cartas, y no correos en frío: en España mandar publicidad por
+WhatsApp o correo a quien no lo ha pedido está prohibido (art. 21 de la LSSI),
+también a empresas. Además, un minuto de voz o una carta con su web convierten
+mucho más que un mensaje. El enlace solo se manda cuando el negocio ha dicho que
+sí o nos ha escrito.
 
 ## Día 1: montaje (una tarde)
 

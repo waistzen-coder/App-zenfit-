@@ -246,7 +246,7 @@ ${css()}
     <p>Mándanos el nombre ${porCanal}. En uno o dos días te la enseñamos, sin compromiso.</p>
     <a class="btn ${a.whatsapp ? 'btn-wa' : 'btn-claro'} btn-grande" href="${esc(pedir)}"${externo}>${icoCanal}Quiero ver mi web</a>
     ${a.whatsapp && a.email ? `<p class="final-mail">¿Prefieres correo? <a href="mailto:${esc(a.email)}">${esc(a.email)}</a></p>` : ''}` : `<h2>¿Ya has visto tu propuesta?</h2>
-    <p>Contesta al mensaje con el que te la enviamos: afinamos contigo los detalles y la dejamos publicada en 72&nbsp;horas.</p>`}
+    <p>Escríbenos por donde te llegó: afinamos contigo los detalles y la dejamos publicada en 72&nbsp;horas.</p>`}
   </div>
 </section>
 </main>
