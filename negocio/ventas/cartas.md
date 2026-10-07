@@ -28,23 +28,36 @@ Una página por negocio, que hace la fábrica (`fabrica/cartas.mjs`):
 
 ### Cómo mandarlas
 
-1. Comprueba que las propuestas están publicadas (si no, el QR no abre nada).
-2. Imprime `negocio/privado/cartas/cartas.pdf`: A4, a una cara, tamaño real.
-   En blanco y negro también funciona.
-3. Dobla cada hoja en tres por las marcas del margen izquierdo, con la dirección
+Antes de nada, comprueba que las propuestas están publicadas: si no, el QR no
+abre nada.
+
+**Sin imprimir, desde el ordenador.** Correos tiene en su web un envío de cartas
+online: subes un PDF (de menos de 1 MB), pagas con tarjeta y ellos lo imprimen,
+lo ensobran y lo franquean por el precio del sello. Para eso están las cartas
+sueltas, una por negocio, en `negocio/privado/cartas/sueltas/`, y sus
+direcciones listas para copiar en `negocio/privado/cartas/direcciones.txt`. Hay
+que registrarse en Correos y pagar con tu tarjeta, así que ese paso es tuyo.
+
+**Imprimiéndolas tú:**
+
+1. Imprime `negocio/privado/cartas/cartas.pdf`: A4, a una cara, tamaño real. En
+   blanco y negro también funciona.
+2. Dobla cada hoja en tres por las marcas del margen izquierdo, con la dirección
    hacia fuera.
-4. Mételas en **sobres americanos con ventana a la derecha** (110 × 220 mm). Si
+3. Mételas en **sobres americanos con ventana a la derecha** (110 × 220 mm). Si
    no tienes, escribe la dirección a mano en un sobre normal.
-5. Un sello de carta ordinaria nacional por sobre (0,96 € en 2026) y al buzón.
+4. Un sello de carta ordinaria nacional por sobre (0,96 € en 2026) y al buzón.
 
 Tardan dos o tres días en llegar. Apunta en el panel el día que las mandas.
 
 ## Cuando escriben: los correos
 
-Desde aquí ya podemos escribirles, porque han escrito ellos. Cuando te llegue un
-correo de un negocio, dímelo («mira el correo») y te dejo la respuesta como
-**borrador en tu Gmail**: tú la lees y le das a enviar. Si te tutean, se les
-tutea.
+Desde aquí ya podemos escribirles, porque han escrito ellos. **Los contesto y los
+envío yo** desde tu Gmail: reviso el correo dos veces al día (a las 9:57 y a las
+17:57), contesto en el mismo hilo con estas plantillas, le pongo la etiqueta
+«Mostrador» y lo apunto en el panel. Lo que necesite una decisión tuya (un
+descuento, el cobro, los datos fiscales) te lo dejo en borrador y te aviso. Si te
+tutean, se les tutea.
 
 ### Si dice que le interesa
 
