@@ -195,7 +195,7 @@ textarea{min-height:64px;resize:vertical}
   <div class="cab-in">
     <div>
       <h1>Mostrador</h1>
-      <p>El negocio de los 1.000 € · webs para negocios de aquí</p>
+      <p>El negocio de los 1.000 € · webs para negocios de toda España</p>
     </div>
     <p id="hoy"></p>
   </div>
@@ -263,11 +263,11 @@ textarea{min-height:64px;resize:vertical}
           <select id="lSector">
             <option>Fontanería</option><option>Electricidad</option><option>Reformas</option><option>Cerrajería</option><option>Climatización</option><option>Taller</option><option>Barbería</option><option>Peluquería</option><option>Estética</option><option>Fisioterapia</option><option>Dental</option><option>Restaurante</option><option>Entrenador</option><option>Otro</option>
           </select></div>
-        <div class="campo"><label for="lPueblo">Pueblo</label><input id="lPueblo" maxlength="60" placeholder="Motril"></div>
+        <div class="campo"><label for="lPueblo">Pueblo</label><input id="lPueblo" maxlength="60" placeholder="Lorca (Murcia)"></div>
         <div class="campo"><label for="lTelefono">Teléfono</label><input id="lTelefono" maxlength="20" inputmode="tel" placeholder="958 00 00 00"></div>
         <div class="campo"><label for="lCanal">Cómo llegó</label>
           <select id="lCanal"><option value="visita">Visita</option><option value="llamada">Llamada</option><option value="recomendacion">Recomendación</option><option value="alianza">Alianza</option><option value="anuncio">Anuncio</option><option value="otro">Otro</option></select></div>
-        <div class="campo todo"><label for="lDemo">Enlace a su propuesta (opcional)</label><input id="lDemo" maxlength="200" inputmode="url" placeholder="https://mostradorweb.es/demo/barberia-paco/"></div>
+        <div class="campo todo"><label for="lDemo">Enlace a su propuesta (opcional)</label><input id="lDemo" maxlength="200" inputmode="url" placeholder="https://waistzen-coder.github.io/demo/barberia-paco/"></div>
         <div class="campo todo"><label for="lNota">Nota</label><textarea id="lNota" maxlength="500" placeholder="Muchas reseñas, sin web. Pasar a media mañana."></textarea></div>
         <div class="acciones-form"><button class="boton" type="submit" id="lGuardar">Guardar negocio</button></div>
       </form>
@@ -284,7 +284,7 @@ textarea{min-height:64px;resize:vertical}
       <summary>Apuntar gasto o ingreso</summary>
       <form id="formMov" class="rejilla" autocomplete="off">
         <div class="campo"><label for="mFecha">Fecha</label><input id="mFecha" type="date" required></div>
-        <div class="campo ancho2"><label for="mConcepto">Concepto</label><input id="mConcepto" required maxlength="100" placeholder="Dominio mostradorweb.es"></div>
+        <div class="campo ancho2"><label for="mConcepto">Concepto</label><input id="mConcepto" required maxlength="100" placeholder="Línea de Mostrador"></div>
         <div class="campo ancho2" role="radiogroup" aria-labelledby="mTipoEt"><span class="lbl" id="mTipoEt">Tipo</span>
           <div class="tipo"><label for="mGasto"><input type="radio" name="mTipo" id="mGasto" value="gasto" checked>Gasto</label><label for="mIngreso"><input type="radio" name="mTipo" id="mIngreso" value="ingreso">Ingreso</label></div></div>
         <div class="campo"><label for="mImporte">Importe (€)</label><input id="mImporte" type="number" min="0.01" step="0.01" required inputmode="decimal" placeholder="10,00"></div>
@@ -312,7 +312,7 @@ textarea{min-height:64px;resize:vertical}
       <a class="web" href="web/demo/ejemplo-fisioterapia/index.html" target="_blank" rel="noopener"><strong>Fisioterapia</strong><span>Tarjeta de clínica · Motril</span><em>Ver ejemplo →</em></a>
       <a class="web" href="web/demo/ejemplo-restaurante/index.html" target="_blank" rel="noopener"><strong>Restaurante</strong><span>Cartel de fachada · Motril</span><em>Ver ejemplo →</em></a>
     </div>
-    <p class="nota-pie">Negocios inventados. La web pública irá en mostradorweb.es cuando esté publicada; el código está en la carpeta negocio/ del repositorio.</p>
+    <p class="nota-pie">Negocios inventados, para enseñar el diseño. La web pública de Mostrador va en waistzen-coder.github.io; el código está en la carpeta negocio/ del repositorio.</p>
   </section>
 </main>
 
@@ -441,8 +441,11 @@ textarea{min-height:64px;resize:vertical}
       return '<article class="lead">' +
         '<div class="lead-cab"><div><p class="lead-nombre">' + e(l.nombre) + '</p><p class="lead-meta">' + e([l.sector, l.pueblo, CANALES[l.canal]].filter(Boolean).join(' · ')) + '</p></div>' +
         '<span class="estado e-' + e(l.estado) + '">' + e(NOMBRE_ESTADO[l.estado] || l.estado) + '</span></div>' +
-        (l.telefono || l.demo ? '<div class="lead-fila">' + (l.telefono ? '<span class="tel">' + e(l.telefono) + '</span><button class="boton sec peq" type="button" data-copiar="' + e(l.telefono) + '">Copiar</button>' : '') +
-          (l.demo && /^https?:\/\//.test(l.demo) ? '<a href="' + e(l.demo) + '" target="_blank" rel="noopener">Ver propuesta →</a>' : '') + '</div>' : '') +
+        (l.telefono ? '<div class="lead-fila"><span class="tel">' + e(l.telefono) + '</span><button class="boton sec peq" type="button" data-copiar="' + e(l.telefono) + '">Copiar</button></div>' : '') +
+        // «Vista previa»: copia privada de la propuesta dentro del panel, para las fichas que la traen (campo vista)
+        (l.vista || (l.demo && /^https?:\/\//.test(l.demo)) ? '<div class="lead-fila">' +
+          (l.vista ? '<a href="web/demo/' + e(encodeURIComponent(l.id)) + '/index.html" target="_blank" rel="noopener">Vista previa</a>' : '') +
+          (l.demo && /^https?:\/\//.test(l.demo) ? '<a href="' + e(l.demo) + '" target="_blank" rel="noopener">Enlace público →</a><button class="boton sec peq" type="button" data-copiar="' + e(l.demo) + '">Copiar enlace</button>' : '') + '</div>' : '') +
         (l.nota ? '<p class="lead-nota">' + e(l.nota) + '</p>' : '') +
         ganado + venta +
         '<div class="lead-pie"><label class="chk" for="s-' + e(l.id) + '">Estado</label><select id="s-' + e(l.id) + '" data-estado="' + e(l.id) + '"' + dis + '>' + opciones + '</select>' + borrar + '</div>' +
@@ -493,7 +496,8 @@ textarea{min-height:64px;resize:vertical}
     if (b.dataset.filtro) { st.filtro = b.dataset.filtro; renderLeads(); return; }
     if (b.dataset.copiar) {
       var txt = b.dataset.copiar;
-      try { navigator.clipboard.writeText(txt).then(function () { toast('Teléfono copiado'); }, function () { toast(txt); }); } catch (x) { toast(txt); }
+      var ok = /^https?:/.test(txt) ? 'Enlace copiado' : 'Teléfono copiado';
+      try { navigator.clipboard.writeText(txt).then(function () { toast(ok); }, function () { toast(txt); }); } catch (x) { toast(txt); }
       return;
     }
     if (b.dataset.borrar) { st.borrar = b.dataset.borrar; renderLeads(); return; }

@@ -67,8 +67,8 @@ function principal(args) {
   }
   const agencia = CONFIG.agencia;
   const avisos = [];
-  if (/^34600000000$/.test(agencia.whatsapp)) avisos.push('config.json: falta el WhatsApp de la agencia (sale 600 000 000 en el aviso de las demos)');
-  if (agencia.vendedor.startsWith('[')) avisos.push('config.json: falta tu nombre en «vendedor» (se usa en el mensaje)');
+  if (!agencia.whatsapp && !agencia.email) avisos.push('config.json: sin WhatsApp ni correo de la agencia; el aviso de las demos pide contestar al mensaje con el que llegó');
+  if (!agencia.vendedor || agencia.vendedor.startsWith('[')) avisos.push('config.json: falta tu nombre en «vendedor» (se usa en el mensaje)');
 
   let hechos;
   try {
@@ -81,7 +81,9 @@ function principal(args) {
     console.log(`\n✓ ${n.nombre}  →  ${relative(process.cwd(), join(dir, 'index.html'))}`);
     if (!final) {
       console.log(`  Enlace: ${url}`);
-      console.log(`  Mensaje (solo para quien ya te ha dicho que sí a recibirla):\n${mensajeContacto(n, url).replace(/^/gm, '    ')}`);
+      console.log(`  Mensaje (solo para quien ya te ha dicho que sí a recibirla):`);
+      console.log(`    Asunto, si va por correo: Propuesta de web para ${n.nombre}`);
+      console.log(mensajeContacto(n, url).replace(/^/gm, '    '));
     } else if (!n.dominio) {
       console.log('  Aviso: sin «dominio» en la ficha, la web no lleva enlace canónico.');
     }

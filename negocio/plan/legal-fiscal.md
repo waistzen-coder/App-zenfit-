@@ -24,10 +24,10 @@ quita dudas.
 
 | Canal | ¿Se puede? |
 | --- | --- |
-| Visitar el negocio y enseñar la propuesta en el móvil | Sí. Es el canal principal |
-| Llamar al teléfono del negocio | Sí, amparado en el interés legítimo: preséntate, sé breve y, si dicen que no, apúntalo y no vuelvas a llamar |
+| Llamar al teléfono del negocio | Sí, amparado en el interés legítimo: preséntate, sé breve y, si dicen que no, apúntalo y no vuelvas a llamar. Es el canal principal |
+| Visitar el negocio y enseñar la propuesta en el móvil | Sí, cuando está cerca de ti |
 | WhatsApp o correo **sin permiso previo** | **No.** La LSSI (art. 21) prohíbe la publicidad por medios electrónicos no solicitada, también entre empresas. Además, WhatsApp bloquea los números que reciben denuncias |
-| WhatsApp o correo **después de que digan que sí** | Sí. Por eso en la visita o la llamada siempre se pide: «¿Te la mando por WhatsApp?» |
+| WhatsApp o correo **después de que digan que sí** | Sí. Por eso en la llamada siempre se pide: «¿Te la mando? ¿Por WhatsApp o por correo?» |
 | Anuncios en redes, ficha de Google, recomendaciones, alianzas | Sí. Es el negocio quien escribe primero |
 
 ## Las propuestas (demos)
@@ -35,11 +35,21 @@ quita dudas.
 - Usan solo información pública del negocio: nombre, dirección, horario,
   teléfono.
 - Llevan un aviso arriba que dice que es una propuesta de Mostrador, no se
-  indexan en Google (etiqueta `noindex` y cabecera `X-Robots-Tag`) y no se
-  enlazan desde ningún sitio.
+  indexan en Google (etiqueta `noindex`) y no se enlazan desde ningún sitio.
+  Eso sí, están en un repositorio público de GitHub: quien lo busque allí puede
+  verlas.
 - Si el negocio no contrata en 30 días, o si lo pide, se borran.
 - No se inventan reseñas ni cifras: las reseñas solo aparecen si son reales y
   copiadas de su ficha de Google.
+
+## La web de Mostrador
+
+- Como cualquier web de un negocio, necesita su **aviso legal** (art. 10 de la
+  LSSI): nombre y apellidos, NIF, domicilio y un correo. El teléfono no es
+  obligatorio.
+- Mientras falten esos datos, la web sale sin aviso legal y con `noindex`, para
+  que no aparezca en Google. Sirve para enseñar las propuestas, pero no hay que
+  darla a conocer así.
 
 ## Las webs de los clientes
 

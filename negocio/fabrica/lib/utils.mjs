@@ -38,6 +38,16 @@ export const enlaceTelefono = (d) => `tel:+34${d}`;
 export const enlaceWhatsapp = (numero, texto) =>
   `https://wa.me/${numero}${texto ? `?text=${encodeURIComponent(texto)}` : ''}`;
 
+/**
+ * Enlace para escribir a la agencia: WhatsApp si config.json tiene número, si no correo,
+ * y null si no tiene ninguno (entonces se le contesta en el mensaje en el que llegó la propuesta).
+ */
+export function enlaceAgencia(agencia, texto, asunto) {
+  if (agencia.whatsapp) return enlaceWhatsapp(agencia.whatsapp, texto);
+  if (agencia.email) return `mailto:${agencia.email}?subject=${encodeURIComponent(asunto ?? texto)}&body=${encodeURIComponent(texto)}`;
+  return null;
+}
+
 /** Enlace de Google Maps para llegar a una dirección. */
 export const enlaceComoLlegar = (destino) =>
   `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(destino)}`;

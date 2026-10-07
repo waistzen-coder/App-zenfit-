@@ -6,9 +6,9 @@ plan, el producto ya fabricado y el kit para venderlo.
 
 ## La decisión: una agencia de webs para negocios de barrio
 
-**Mostrador** hace webs para negocios locales (fontaneros, barberías, fisios,
-restaurantes, talleres…) con un método que casi nadie usa: **primero les
-enseñamos su web ya hecha y luego deciden si la quieren**.
+**Mostrador** hace webs para negocios locales de toda España (talleres,
+fontaneros, electricistas, barberías, fisios…) con un método que casi nadie usa:
+**primero les enseñamos su web ya hecha y luego deciden si la quieren**.
 
 Lo elijo por cinco razones:
 
@@ -54,19 +54,21 @@ oferta, sector o canal antes de gastar un euro más. Ver
 
 ## Quién hace qué
 
-**Yo (dirección y fábrica):** estrategia, precios, la web de la agencia, las
-webs de propuesta de cada negocio, todos los textos y guiones, la entrega de las
-webs finales, los cambios de mantenimiento y el repaso de números cada semana.
+**Yo (dirección y fábrica):** estrategia, precios, buscar negocios sin web en
+toda España, la web de la agencia, las webs de propuesta de cada negocio, todos
+los textos y guiones, la entrega de las webs finales, los cambios de
+mantenimiento y el repaso de números cada semana.
 
-**Tú (socio comercial, unas 2 horas al día):**
+**Tú, Adrián (socio comercial, unas 2 horas al día):**
 
-- Pasarme nombres de negocios de tu zona que no tengan web (o la tengan vieja).
-- Visitarlos o llamarlos con el guion y enseñarles su propuesta.
+- Llamar a los negocios con el guion y mandar su propuesta a los que digan que
+  sí.
 - Cobrar y facturar (yo no puedo tener cuentas ni firmar nada).
-- Pagar los pocos gastos cuando toque: el primero es el dominio, unos 10 €.
+- Pagar los pocos gastos cuando toque: el primero, la línea de Mostrador.
 
-Yo no puedo llamar a puertas ni tener dinero: el dinero está siempre en tu
-cuenta y cada gasto lo apruebas tú.
+Tu número y tus datos personales no salen en ningún sitio hasta que un cliente
+acepta. Yo no puedo llamar por teléfono ni tener dinero: el dinero está siempre
+en tu cuenta y cada gasto lo apruebas tú.
 
 ## Qué hay ya hecho
 
@@ -93,28 +95,33 @@ en el repositorio.
 
 ## Cómo trabajamos cada día
 
-1. Me escribes la lista de negocios del día (nombre y pueblo, o el enlace de
-   Google Maps).
-2. Te devuelvo sus propuestas publicadas y el mensaje para cada uno.
-3. Visitas o llamas, y apuntas en el panel cómo ha ido.
-4. Los viernes repasamos los números y decido qué cambiar.
+1. Busco negocios sin web, fabrico sus propuestas y te las dejo en el panel,
+   cada una con su nota de lo que hay que confirmar.
+2. Llamas, mandas el enlace a quien diga que sí y apuntas en el panel cómo ha
+   ido.
+3. Los viernes repasamos los números y decido qué cambiar.
 
-## Lo que necesito de ti para arrancar
+## Dónde estamos
 
-1. **Tu nombre de pila** para los mensajes, y **un número de WhatsApp** para el
-   negocio (puede ser el tuyo con WhatsApp Business).
-2. **Comprar el dominio `mostradorweb.es`** (unos 10 € en cualquier registrador;
-   lo comprobé libre el 6 de octubre de 2026, pero eso puede cambiar).
-3. **Tu ciudad o zona**, si no es la Costa Tropical (lo deduje del briefing de
-   tu tienda).
-4. **Una lista de 20 negocios de tu zona sin web.** Con nombre y pueblo me
-   basta; si me pegas el teléfono y el horario de Google Maps, mejor.
+Ya hecho: los **20 primeros negocios sin web** de toda España (sobre todo
+talleres y oficios), con su propuesta fabricada y cargados en el panel, y el
+[guion de llamada](ventas/guiones.md) para trabajo a distancia y sin tu número.
 
-Con eso te devuelvo sus 20 webs de propuesta y el guion para enseñarlas.
+Lo que falta, todo explicado en [plan/montaje.md](plan/montaje.md):
+
+1. **Crear el repositorio `waistzen-coder.github.io`** en GitHub (1 minuto). Es
+   donde publico gratis la web y las propuestas; GitHub no me deja crearlo a mí.
+2. **La línea de Mostrador** con WhatsApp Business, para llamar sin enseñar tu
+   número (unos 5-10 €/mes).
+3. **Un correo de Mostrador** (un Gmail nuevo, gratis).
+4. **Tus datos para el aviso legal** de la web: nombre y apellidos, NIF y
+   domicilio. Sin teléfono.
 
 ## Una cosa sobre este repositorio
 
 El repositorio es **público**. Por eso no guardo aquí nada de clientes reales:
 las demos que no son ejemplos, las entregas y la carpeta `privado/` están en el
-`.gitignore`. Si lo pones en privado (GitHub → Settings → General → Change
-visibility), puedo guardar aquí también el trabajo con clientes reales.
+`.gitignore`. Las propuestas se publican desde el repositorio aparte
+`waistzen-coder.github.io`, que también es público (lo pide GitHub Pages
+gratis), pero solo lleva las páginas, sin notas ni datos de contacto de nadie
+más.

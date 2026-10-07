@@ -7,7 +7,7 @@ que decidir si la quieres**. No discutas; pregunta y vuelve a la web.
 | --- | --- |
 | «Es caro» | «¿Comparado con qué? Una web con un diseñador cuesta de 400 a 1.500 €. Esta ya está hecha y la ves antes de pagar. ¿Cuánto te deja un cliente nuevo? Con uno, la web está pagada.» |
 | «No lo necesito, ya tengo clientes» | «Lo sé, por eso tenéis tantas reseñas. La web es para que quien os busca por primera vez os elija a vosotros y no al de al lado.» |
-| «Tengo Facebook / Instagram» | «Perfecto, la web los enlaza. Pero cuando alguien busca "barbería en Motril" en Google, lo que sale es la web y la ficha de Maps, no tu Instagram.» |
+| «Tengo Facebook / Instagram» | «Perfecto, la web los enlaza. Pero cuando alguien busca "taller en Lorca" en Google, lo que sale es la web y la ficha de Maps, no tu Instagram.» |
 | «Con la ficha de Google me basta» | «La ficha es lo primero que ven, y la web es lo que les convence: servicios, precios, fotos. Y Google posiciona mejor una ficha que tiene web.» |
 | «Mi sobrino me hace una web» | «¡Genial! Si al final no te la hace, esta ya está aquí. ¿Te la mando para que la tengas de referencia?» |
 | «Ya tuve una web y no me trajo nada» | «¿Se veía bien en el móvil? ¿Tenía botón de llamar? Esta está pensada para eso, para que te llamen. Y tienes 14 días de garantía.» |

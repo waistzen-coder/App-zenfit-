@@ -1,20 +1,19 @@
 {
   "agencia": {
     "nombre": "Mostrador",
-    "lema": "Webs para negocios de aquí",
-    "web": "https://mostradorweb.es",
-    "urlDemos": "https://mostradorweb.es/demo",
-    "whatsapp": "34600000000",
-    "email": "hola@mostradorweb.es",
-    "zona": "la Costa Tropical",
-    "pueblos": ["Motril", "Salobreña", "Almuñécar", "La Herradura", "Torrenueva Costa", "Castell de Ferro"],
-    "vendedor": "[tu nombre]",
+    "lema": "Webs para negocios de barrio",
+    "web": "https://waistzen-coder.github.io",
+    "urlDemos": "https://waistzen-coder.github.io/demo",
+    "whatsapp": null,
+    "email": null,
+    "zona": "toda España",
+    "vendedor": "Adrián",
     "precioDesde": 290,
     "precios": { "esencial": 290, "completa": 490, "mantenimiento": 19, "renovacion": 60 },
     "titular": {
-      "nombre": "[nombre y apellidos o razón social]",
-      "nif": "[NIF]",
-      "domicilio": "[domicilio fiscal]"
+      "nombre": null,
+      "nif": null,
+      "domicilio": null
     }
   }
 }

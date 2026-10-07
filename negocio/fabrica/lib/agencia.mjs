@@ -3,17 +3,25 @@
 
 import { icono, iconoWhatsapp } from './iconos.mjs';
 import { fontFace } from './fuentes.mjs';
-import { esc, enlaceWhatsapp } from './utils.mjs';
+import { esc, enlaceAgencia } from './utils.mjs';
 
 const euros = (n) => `${n.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €`;
+
+/** El aviso legal de la agencia solo se publica con todos los datos que pide el artículo 10 de la LSSI. */
+export const avisoLegalCompleto = (a) => Boolean(a.titular?.nombre && a.titular?.nif && a.titular?.domicilio && a.email);
 
 /** `ejemplos`: [{ slug, actividad, ciudad, nombre }] de las webs de ejemplo ya generadas. */
 export function paginaAgencia(a, ejemplos) {
   const p = a.precios;
-  const wa = enlaceWhatsapp(a.whatsapp, 'Hola, quiero ver cómo quedaría la web de mi negocio. Se llama: ');
-  const waPack = (pack) => enlaceWhatsapp(a.whatsapp, `Hola, me interesa la ${pack}. Mi negocio se llama: `);
-  const zonaTexto = a.pueblos.slice(0, -1).join(', ') + ' y ' + a.pueblos[a.pueblos.length - 1];
-  const descripcion = `Te preparamos la web de tu negocio y la ves antes de pagar nada. Si te gusta, publicada en 72 horas desde ${p.esencial} €. ${zonaTexto}.`;
+  // Si config.json no tiene WhatsApp ni correo, los botones llevan a los ejemplos y los precios:
+  // quien llega aquí ya ha recibido su propuesta y contesta en ese mismo mensaje.
+  const pedir = enlaceAgencia(a, 'Hola, quiero ver cómo quedaría la web de mi negocio. Se llama: ', 'Quiero ver la web de mi negocio');
+  const pedirPack = (pack) => enlaceAgencia(a, `Hola, me interesa la ${pack}. Mi negocio se llama: `, `Me interesa la ${pack}`);
+  const icoCanal = a.whatsapp ? iconoWhatsapp() : icono('mail');
+  const externo = a.whatsapp ? ' target="_blank" rel="noopener"' : '';
+  const porCanal = a.whatsapp ? 'por WhatsApp' : 'por correo';
+  const legal = avisoLegalCompleto(a);
+  const descripcion = `Te preparamos la web de tu negocio y la ves antes de pagar nada. Si te gusta, publicada en 72 horas desde ${p.esencial} €. Para negocios de ${a.zona}.`;
 
   const ticket = ({ num, nombre, items, total, pie, cta, destacado, nota }) => `
       <div class="t-sombra${destacado ? ' t-sombra-destacada' : ''}">
@@ -31,7 +39,7 @@ export function paginaAgencia(a, ejemplos) {
           <p class="t-pie">${esc(pie)}</p>
           ${nota ? `<p class="t-nota">${esc(nota)}</p>` : ''}
           <div class="t-barras" aria-hidden="true"></div>
-          <a class="btn btn-ticket" href="${esc(cta)}" target="_blank" rel="noopener">${iconoWhatsapp()}La quiero</a>
+          ${cta ? `<a class="btn btn-ticket" href="${esc(cta)}"${externo}>${icoCanal}La quiero</a>` : ''}
         </article>
       </div>`;
 
@@ -42,7 +50,7 @@ export function paginaAgencia(a, ejemplos) {
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>${esc(a.nombre)} · Webs para negocios de ${esc(a.zona)}</title>
 <meta name="description" content="${esc(descripcion)}">
-<link rel="canonical" href="${esc(a.web.replace(/\/?$/, '/'))}">
+${legal ? '' : '<meta name="robots" content="noindex">\n'}<link rel="canonical" href="${esc(a.web.replace(/\/?$/, '/'))}">
 <meta name="theme-color" content="#0A3A2C">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="es_ES">
@@ -59,8 +67,8 @@ ${css()}
     name: a.nombre,
     description: descripcion,
     url: a.web,
-    email: a.email,
-    areaServed: a.pueblos.map((z) => ({ '@type': 'City', name: z })),
+    ...(a.email ? { email: a.email } : {}),
+    areaServed: { '@type': 'Country', name: 'España' },
     priceRange: `${p.esencial}-${p.completa} €`,
   }).replace(/</g, '\\u003c')}</script>
 </head>
@@ -74,7 +82,9 @@ ${css()}
       <a href="#precios">Precios</a>
       <a href="#preguntas">Preguntas</a>
     </nav>
-    <a class="btn-cab" href="${esc(wa)}" target="_blank" rel="noopener">${iconoWhatsapp()}<span>Pedir mi propuesta</span></a>
+    ${pedir
+    ? `<a class="btn-cab" href="${esc(pedir)}"${externo}>${icoCanal}<span>Pedir mi propuesta</span></a>`
+    : `<a class="btn-cab" href="#precios">${icono('euro')}<span>Ver precios</span></a>`}
   </div>
 </header>
 <div class="toldo" aria-hidden="true"></div>
@@ -87,8 +97,11 @@ ${css()}
       <h1>Primero ves tu web. <span>Luego decides.</span></h1>
       <p class="entradilla">Preparamos la web de tu negocio sin compromiso y te la mandamos al móvil. Si te gusta, la publicamos en 72&nbsp;horas desde ${p.esencial}&nbsp;€, con dominio incluido. Si no, no pagas nada.</p>
       <div class="botones">
-        <a class="btn btn-wa" href="${esc(wa)}" target="_blank" rel="noopener">${iconoWhatsapp()}Quiero ver mi web</a>
-        <a class="btn btn-sec" href="#ejemplos">Ver ejemplos</a>
+        ${pedir
+    ? `<a class="btn ${a.whatsapp ? 'btn-wa' : 'btn-pri'}" href="${esc(pedir)}"${externo}>${icoCanal}Quiero ver mi web</a>
+        <a class="btn btn-sec" href="#ejemplos">Ver ejemplos</a>`
+    : `<a class="btn btn-pri" href="#ejemplos">Ver ejemplos</a>
+        <a class="btn btn-sec" href="#precios">Ver precios</a>`}
       </div>
       <ul class="garantias">
         <li>${icono('check')}Sin permanencia</li>
@@ -108,7 +121,7 @@ ${css()}
     <div class="dato-in">
       <p class="cifra">7 de cada 10</p>
       <div>
-        <p class="dato-txt">negocios pequeños en España no tienen web propia. Cuando alguien busca «fontanero en Motril» en el móvil, llama al primero que le da confianza. Que ese seas tú.</p>
+        <p class="dato-txt">negocios pequeños en España no tienen web propia. Cuando alguien busca «fontanero cerca de mí» en el móvil, llama al primero que le da confianza. Que ese seas tú.</p>
         <p class="fuente">Fuente: INE, uso de TIC en empresas de menos de 10 empleados, 2025.</p>
       </div>
     </div>
@@ -125,7 +138,7 @@ ${css()}
       <li>
         <span class="num">1</span>
         <h3>Nos dices tu negocio</h3>
-        <p>Mándanos el nombre por WhatsApp. Si tienes ficha en Google Maps, sacamos de ahí el horario, la dirección y lo que haces.</p>
+        <p>${pedir ? `Mándanos el nombre ${porCanal}.` : 'Nos dices cómo se llama, y ya está.'} Si tienes ficha en Google Maps, sacamos de ahí el horario, la dirección y lo que haces.</p>
       </li>
       <li>
         <span class="num">2</span>
@@ -189,16 +202,16 @@ ${css()}
     </div>
     <div class="tickets">
       ${ticket({
-    num: '001', nombre: 'Web Esencial', total: euros(p.esencial), pie: '+ IVA · pago único', cta: waPack('Web Esencial'),
+    num: '001', nombre: 'Web Esencial', total: euros(p.esencial), pie: '+ IVA · pago único', cta: pedirPack('Web Esencial'),
     items: ['Web de una página para tu sector', 'Botones de llamada y WhatsApp', 'Horario en vivo y cómo llegar', 'Datos para Google (SEO local)', 'Aviso legal y privacidad', 'Dominio .es y alojamiento, 1.er año', 'Publicada en 72 horas'],
   })}
       ${ticket({
-    num: '002', nombre: 'Web Completa', total: euros(p.completa), pie: '+ IVA · pago único', cta: waPack('Web Completa'), destacado: true,
-    items: ['Todo lo de la Web Esencial', 'Ficha de Google Maps revisada y mejorada', 'Textos y fotos a medida, en visita o videollamada', 'Secciones extra: carta, tarifas o galería', 'Cartel con código QR para tu local', 'Dos rondas de cambios'],
+    num: '002', nombre: 'Web Completa', total: euros(p.completa), pie: '+ IVA · pago único', cta: pedirPack('Web Completa'), destacado: true,
+    items: ['Todo lo de la Web Esencial', 'Ficha de Google Maps revisada y mejorada', 'Textos y fotos a medida, por teléfono o videollamada', 'Secciones extra: carta, tarifas o galería', 'Cartel con código QR para tu local', 'Dos rondas de cambios'],
   })}
       ${ticket({
-    num: '003', nombre: 'Mantenimiento', total: `${euros(p.mantenimiento)}/mes`, pie: '+ IVA · sin permanencia', cta: waPack('opción de mantenimiento'),
-    items: ['Alojamiento y certificado de seguridad', 'Renovación del dominio', 'Cambios de horario, precios y textos', 'Copias de seguridad', 'Ayuda por WhatsApp'],
+    num: '003', nombre: 'Mantenimiento', total: `${euros(p.mantenimiento)}/mes`, pie: '+ IVA · sin permanencia', cta: pedirPack('opción de mantenimiento'),
+    items: ['Alojamiento y certificado de seguridad', 'Renovación del dominio', 'Cambios de horario, precios y textos', 'Copias de seguridad', 'Ayuda por WhatsApp o correo'],
     nota: `Si no lo quieres, desde el segundo año el alojamiento y el dominio cuestan ${p.renovacion} € al año.`,
   })}
     </div>
@@ -220,7 +233,7 @@ ${css()}
     ['Ya tengo Instagram o Facebook, ¿para qué quiero web?', 'La web los enlaza, no los sustituye. Pero cuando alguien busca lo que haces en Google, lo que aparece es tu web y tu ficha de Maps, no tu perfil de Instagram.'],
     ['¿Hay permanencia?', 'No. El mantenimiento es mes a mes y lo dejas cuando quieras.'],
     ['¿Cómo se paga?', 'Por transferencia o Bizum, con factura. Pagas cuando ves tu web terminada, antes de publicarla.'],
-    [`¿Solo trabajáis en ${a.zona}?`, 'Empezamos aquí porque nos gusta conocer a los negocios en persona, pero todo se puede hacer por WhatsApp y videollamada, estés donde estés.'],
+    [`¿Trabajáis en ${a.zona}?`, 'Sí. Todo se hace a distancia: te enseñamos tu web en el móvil, afinamos los detalles por teléfono o videollamada y la publicamos sin que tengas que moverte de tu negocio.'],
   ].map(([q, r]) => `<details><summary>${esc(q)}${icono('chevron-down')}</summary><p>${esc(r)}</p></details>`).join('\n      ')}
     </div>
   </div>
@@ -229,10 +242,11 @@ ${css()}
 <section class="final">
   <div class="toldo" aria-hidden="true"></div>
   <div class="env final-in">
-    <h2>¿Cómo quedaría la web de tu negocio?</h2>
-    <p>Mándanos el nombre por WhatsApp. En uno o dos días te la enseñamos, sin compromiso.</p>
-    <a class="btn btn-wa btn-grande" href="${esc(wa)}" target="_blank" rel="noopener">${iconoWhatsapp()}Quiero ver mi web</a>
-    <p class="final-mail">¿Prefieres correo? <a href="mailto:${esc(a.email)}">${esc(a.email)}</a></p>
+    ${pedir ? `<h2>¿Cómo quedaría la web de tu negocio?</h2>
+    <p>Mándanos el nombre ${porCanal}. En uno o dos días te la enseñamos, sin compromiso.</p>
+    <a class="btn ${a.whatsapp ? 'btn-wa' : 'btn-claro'} btn-grande" href="${esc(pedir)}"${externo}>${icoCanal}Quiero ver mi web</a>
+    ${a.whatsapp && a.email ? `<p class="final-mail">¿Prefieres correo? <a href="mailto:${esc(a.email)}">${esc(a.email)}</a></p>` : ''}` : `<h2>¿Ya has visto tu propuesta?</h2>
+    <p>Contesta al mensaje con el que te la enviamos: afinamos contigo los detalles y la dejamos publicada en 72&nbsp;horas.</p>`}
   </div>
 </section>
 </main>
@@ -241,11 +255,11 @@ ${css()}
   <div class="env pie-in">
     <div>
       <p class="marca marca-pie">${esc(a.nombre.toUpperCase())}</p>
-      <p>${esc(a.lema)}. ${esc(zonaTexto)}.</p>
+      <p>${esc(a.lema)}, en ${esc(a.zona)}.</p>
     </div>
     <div class="pie-der">
-      <p><a href="mailto:${esc(a.email)}">${esc(a.email)}</a></p>
-      <p><a href="aviso-legal/">Aviso legal y privacidad</a> · Esta web no usa cookies</p>
+      ${a.email ? `<p><a href="mailto:${esc(a.email)}">${esc(a.email)}</a></p>` : ''}
+      <p>${legal ? '<a href="aviso-legal/">Aviso legal y privacidad</a> · ' : ''}Esta web no usa cookies</p>
     </div>
   </div>
 </footer>
@@ -316,6 +330,8 @@ h1,h2,h3{margin:0;font-family:var(--f-rotulo);font-weight:700;line-height:1;text
 .btn:hover{transform:translateY(-1px)}
 .btn .i{width:21px;height:21px}
 .btn-wa{background:var(--wa);color:var(--wa-tinta)}
+.btn-pri{background:var(--toldo);color:#fff}
+.btn-claro{background:var(--etiqueta);color:var(--etiqueta-tinta)}
 .btn-sec{background:var(--papel);border-color:var(--linea);color:var(--tinta)}
 .btn-grande{min-height:64px;font-size:19px;padding:0 34px}
 .garantias{display:flex;flex-wrap:wrap;gap:8px 22px;font-size:15px;font-weight:600;color:var(--tinta-2)}

@@ -1,91 +1,76 @@
 # Guiones
 
 No hay que recitarlos: son la estructura. Lo que vende es que el dueño **vea su
-web**, así que cuanto antes llegue el móvil a sus manos, mejor.
+web**, así que el objetivo de cada llamada es uno solo: que acepte que se la
+mandes.
 
 Regla de oro legal: el enlace por WhatsApp o correo **solo a quien ha dicho que
-sí** a recibirlo (art. 21 de la LSSI). Por eso todo empieza en persona o por
-teléfono.
+sí** a recibirlo (art. 21 de la LSSI). Por eso todo empieza con una llamada.
 
-## 1. En persona: el canal principal
+## Tu número y tus datos
 
-**Antes de entrar:** su propuesta abierta en el móvil, con brillo alto. Mejor a
-media mañana (10-12 h) o a primera hora de la tarde. Nunca con el local lleno.
+Trabajamos con negocios de toda España, así que el canal es el teléfono. Tu
+número personal no lo ve nadie hasta que un cliente acepta:
 
-**Apertura** (diez segundos):
+- **Llama desde la línea de Mostrador**: una segunda línea barata (con eSIM se
+  activa en el día) que lleva también WhatsApp Business. Con número oculto
+  contestan menos y das peor imagen, así que no merece la pena.
+- **Manda los enlaces desde el correo de Mostrador** o desde el WhatsApp
+  Business de esa línea, nunca desde tu WhatsApp personal.
+- Te presentas solo como **Adrián, de Mostrador**. Si te piden tu móvil o tu
+  apellido: «Te lo paso en cuanto lo pongamos en marcha».
 
-> Hola, ¿eres el dueño? Soy [nombre], de aquí de Motril. Hago webs para
-> negocios de la zona y os he preparado una a vosotros, ya hecha. ¿Te la
-> enseño? Es un minuto.
+## 1. La llamada
 
-**Dale el móvil y calla.** Que baje él. Cuando llegue a cada parte, señala:
+**Antes de marcar:** abre el panel y la propuesta de ese negocio, y lee su nota
+(lo que hay que confirmar). Llama a media mañana (10-13 h) o a media tarde
+(16:30-19 h), nunca a la hora de comer.
 
-- «Mira, aquí pone si estáis abiertos ahora mismo.»
-- «Le dan aquí y te llaman directamente. Y aquí, por WhatsApp.»
-- «Esto es lo que vería alguien que busca barbería en Motril.»
+**Apertura** (quince segundos):
 
-**Dos preguntas** para que lo diga él:
-
-> ¿Cómo os encuentran los clientes nuevos?
->
-> ¿Os ha pasado que alguien no encuentre vuestro horario y no venga?
-
-**Precio** (cuando lo pregunte o cuando le veas con ganas):
-
-> Si te gusta, te la dejo publicada en 72 horas por 290 € más IVA, con el
-> dominio del primer año incluido. No pagas nada hasta que la veas terminada,
-> con tus fotos y tus textos.
-
-**Cierre:**
-
-> ¿Te la mando por WhatsApp para que la veas con calma? ¿A qué número?
-
-Si está convencido: «¿La ponemos en marcha?» y pasas al
-[punto 5](#5-cuando-dicen-que-sí).
+> Hola, buenos días. ¿Es [negocio]? Soy Adrián, de Mostrador. Una pregunta
+> rápida: ¿tenéis página web? Es que buscando [talleres en Lorca] no os he
+> encontrado.
 
 **Si dice que no:**
 
-> Sin problema. Te dejo la tarjeta por si un día la quieres. La propuesta la
-> borro, no queda publicada.
+> Pues os he preparado una, ya hecha, con vuestro nombre, vuestro teléfono y lo
+> que hacéis. Verla no cuesta nada ni os compromete a nada. ¿Te la mando? ¿Por
+> WhatsApp o por correo?
 
-Apunta el motivo en el panel.
-
-## 2. Por teléfono
-
-Menos de un minuto. Al número del negocio, en horario de trabajo.
-
-> Hola, buenos días. ¿Es [negocio]? Soy [nombre], de Mostrador: hacemos webs
-> para negocios de aquí de la costa. Te llamo porque he visto que no tenéis web
-> y os he preparado una propuesta ya hecha, sin compromiso. ¿Te la mando por
-> WhatsApp a este número o a otro?
+**Si dice que sí tiene web:** «Perfecto, entonces no os molesto. ¿Me dices cuál
+es, para apuntarla?». Si es vieja o no se ve en el móvil, ofrécele la propuesta
+igual; si está bien, márcalo como perdido con el motivo.
 
 | Si dice… | Responde |
 | --- | --- |
-| «Vale, mándamela» | «Perfecto, te la mando ahora. Mírala con calma y me dices.» → [mensaje 3](#3-el-mensaje-con-el-enlace) |
-| «¿Cuánto cuesta?» | «290 € más IVA, con dominio incluido, y no pagas nada hasta verla terminada. Pero mírala primero, que es lo importante.» |
-| «Ahora no puedo» | «¿A qué hora te pillo mejor?» y lo apuntas |
-| «No me interesa» | «Entendido, gracias por tu tiempo. No te vuelvo a llamar.» → Perdido, no se vuelve a llamar |
+| «Vale, mándamela» | «¿A qué número o a qué correo?». Apúntalo en el panel y manda el [mensaje 2](#2-el-mensaje-con-el-enlace) en menos de cinco minutos |
+| «¿Cuánto cuesta?» | «Desde 290 € más IVA, con el dominio del primer año incluido, y no pagas nada hasta verla terminada. Pero mírala primero, que es lo importante.» |
+| «¿De dónde sois?» | «Trabajamos a distancia con negocios de toda España: te enseño la web en el móvil y la publicamos sin que tengas que moverte del taller.» |
+| «¿Cómo tienes mis datos?» | «De vuestra ficha pública en internet: el nombre, el teléfono y la dirección del negocio. Si prefieres, la borro y no te vuelvo a llamar.» |
+| «Ahora no puedo» | «¿A qué hora te pillo mejor?», y lo apuntas en la nota |
+| «No me interesa» | «Entendido, gracias por tu tiempo. No te vuelvo a llamar.» → Perdido. No se vuelve a llamar y su propuesta se borra |
 
-## 3. El mensaje con el enlace
+Aprovecha la llamada para confirmar lo que pone en la nota del panel (dirección,
+servicios, si tienen WhatsApp) y apúntalo: lo corrijo antes de publicar.
 
-La fábrica lo imprime con el enlace ya puesto al generar cada propuesta. Guárdalo
-como respuesta rápida `/propuesta` en WhatsApp Business.
+## 2. El mensaje con el enlace
 
-**Después de una llamada:**
+La fábrica lo imprime con el enlace ya puesto al generar cada propuesta.
+Guárdalo como respuesta rápida `/propuesta` en WhatsApp Business o como
+plantilla en el correo.
 
-> Hola. Soy [tu nombre], de Mostrador, como te comentaba.
+> **Asunto** (si va por correo): Propuesta de web para [negocio]
+>
+> Hola. Soy Adrián, de Mostrador, como te comentaba.
 > Aquí tienes la propuesta de web para [negocio]: [enlace]
 > Mírala con calma desde el móvil. Si te gusta, la dejamos publicada en 72
 > horas desde 290 € + IVA, y si quieres cambiar algo, lo ajustamos. Cualquier
 > duda, me dices por aquí.
 
-**Después de una visita:**
+En el panel, pásalo a «Quiere verla».
 
-> Hola, [nombre]. Soy [tu nombre], de Mostrador; nos hemos visto esta mañana en
-> el local. Aquí tienes la web para que la veas con calma: [enlace]
-> Si quieres cambiar algo, me dices y te la ajusto.
-
-## 4. Seguimiento
+## 3. Seguimiento
 
 Solo a quien ha aceptado recibir la propuesta, y como mucho dos veces:
 
@@ -102,7 +87,7 @@ Solo a quien ha aceptado recibir la propuesta, y como mucho dos veces:
 
 Después de esto, no se insiste.
 
-## 5. Cuando dicen que sí
+## 4. Cuando dicen que sí
 
 > ¡Genial! Para dejarla lista necesito tres cosas:
 > 1. Nombre fiscal y NIF, para el aviso legal y la factura.
@@ -112,26 +97,35 @@ Después de esto, no se insiste.
 > En cuanto esté terminada te la paso para que la apruebes. Al aprobarla me
 > haces el Bizum o la transferencia de 350,90 € (290 € + IVA) y la publicamos.
 
+Ahora ya sí le das tu número y tus datos: van en la factura. Si tu gestoría te
+dice que lleva retención de IRPF, el total cambia (ver
+[lo legal y fiscal](../plan/legal-fiscal.md)).
+
 Pregunta también: dominio que prefiere (lo compruebo), número de WhatsApp para
 la web, redes sociales, y si quiere el mantenimiento. Todo eso me lo pasas a mí.
 
-## 6. Al entregar
+## 5. Al entregar
 
 > ¡Ya está publicada! [dominio]
 > Dos cosas: si te gusta cómo ha quedado, nos ayudaría mucho una reseña en
-> Google: [enlace a la ficha de Mostrador]. Y si conoces otro negocio que
-> necesite web y contrata, tienes dos meses de mantenimiento gratis.
+> Google. Y si conoces otro negocio que necesite web y contrata, tienes dos
+> meses de mantenimiento gratis.
 
 Si no tiene mantenimiento:
 
 > Por 19 € al mes me encargo de cambiarte horarios, precios o lo que necesites
 > y de renovar el dominio. Sin permanencia.
 
+## 6. Si el negocio está cerca de ti
+
+En persona se vende todavía mejor: entra con su propuesta abierta en el móvil,
+dásela y calla mientras baja. Señala lo que le importa («le dan aquí y te
+llaman directamente») y cierra igual: «¿Te la mando para que la veas con
+calma?».
+
 ## 7. Alianzas: gestorías, imprentas, rotulistas
 
-En persona:
-
-> Hola, soy [nombre], de Mostrador. Hacemos webs para negocios locales desde
-> 290 €, y la gracia es que el cliente ve su web hecha antes de pagar. Muchos
-> de vuestros clientes no tienen web. Si nos pasáis a alguno y contrata, os
-> llevamos un 15 %. ¿Os dejo unas tarjetas?
+> Hola, soy Adrián, de Mostrador. Hacemos webs para negocios desde 290 €, y la
+> gracia es que el cliente ve su web hecha antes de pagar. Muchos de vuestros
+> clientes no tienen web. Si nos pasáis a alguno y contrata, os llevamos un
+> 15 %.

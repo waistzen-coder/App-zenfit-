@@ -29,12 +29,16 @@ La fábrica tiene plantilla para todos estos y una genérica para el resto.
 
 ## Dónde buscarlos
 
-- **Google Maps**, en tu móvil: busca «fontanero Motril», «barbería Salobreña»…
-  y mira la ficha: si no tiene botón de *Sitio web*, es candidato. Fíjate en el
-  número de reseñas.
-- **Paseando**: una calle comercial da para 10-15 candidatos en media hora.
+Trabajamos con toda España, así que los busco yo: directorios de empresas y
+fichas públicas, comprobando que no tengan web propia. Tú también puedes
+pasarme los que veas:
+
+- **Google Maps**: busca «taller mecánico Lorca», «fontanero Valladolid»… y mira
+  la ficha: si no tiene botón de *Sitio web*, es candidato. Fíjate en el número
+  de reseñas.
 - **Furgonetas rotuladas**: si el rótulo lleva teléfono y no web, candidato.
-- **Locales en obras o «próxima apertura»**.
+- **Cerca de ti**: una calle comercial da para 10-15 candidatos en media hora, y
+  los locales en obras o con «próxima apertura» son de los mejores.
 - **Alianzas**: gestorías, imprentas, rotulistas y asesorías ven abrir negocios
   cada semana.
 
@@ -44,7 +48,7 @@ Con esto hago su propuesta. Lo mínimo son las tres primeras líneas.
 
 ```
 Nombre: Barbería Paco
-Pueblo: Motril
+Pueblo: Lorca (Murcia)
 Teléfono: 958 00 00 00
 Qué hace: barbería (o lo que ponga en su ficha de Google)
 Dirección: Calle Nueva 3
@@ -69,7 +73,7 @@ Lo apuntamos en el panel del negocio con uno de estos estados:
 | Estado | Qué significa |
 | --- | --- |
 | Propuesta lista | La web está hecha, falta contactar |
-| Contactado | Visita o llamada hecha, hablamos con el dueño |
+| Contactado | Llamada hecha, hemos hablado con el dueño |
 | Quiere verla | Ha dicho que sí y le hemos mandado el enlace |
 | Negociando | Ha preguntado precio o condiciones |
 | Ganado | Ha pagado |
