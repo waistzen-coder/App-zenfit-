@@ -25,6 +25,7 @@ node negocio/fabrica/construir.mjs
 node negocio/fabrica/capturas.mjs
 
 # Cartas en papel con la propuesta y un QR, en negocio/privado/cartas/cartas.pdf
+# (cada tanda en su carpeta con --salida, p. ej. negocio/privado/cartas/lote2)
 node negocio/fabrica/cartas.mjs negocio/privado/leads/*.json --correo tu@correo.es
 ```
 
@@ -42,7 +43,8 @@ propuesta nueva, con ese repositorio clonado al lado de este:
 ```sh
 node negocio/fabrica/construir.mjs
 node negocio/fabrica/generar.mjs negocio/privado/leads/*.json
-rsync -a --delete --exclude .git negocio/web/ ../waistzen-coder.github.io/
+find ../waistzen-coder.github.io -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
+cp -a negocio/web/. ../waistzen-coder.github.io/
 cd ../waistzen-coder.github.io && git add -A && git commit -m "Propuestas" && git push
 ```
 
@@ -94,7 +96,8 @@ Cualquier texto del sector se puede sobrescribir en la ficha: `titular` (con
 | --- | --- | --- |
 | `fontaneria`, `electricidad`, `cerrajeria`, `climatizacion` | Rótulo de furgoneta | Llamar |
 | `reformas` | Rótulo de furgoneta | WhatsApp |
-| `taller` | Rótulo de furgoneta | Llamar |
+| `taller`, `chapa` (chapa y pintura) | Rótulo de furgoneta | Llamar |
+| `fontaneria-gas` (fontanería, calefacción y gas), `carpinteria-metalica` | Rótulo de furgoneta | Llamar |
 | `barberia`, `peluqueria`, `estetica` | Cartel de fachada | Cita por WhatsApp |
 | `restaurante` | Cartel de fachada | Reservar mesa |
 | `fisioterapia`, `dental` | Tarjeta de clínica | Cita por WhatsApp |

@@ -103,11 +103,11 @@ en el repositorio.
 
 ## Dónde estamos
 
-Ya hecho: los **20 primeros negocios sin web** de toda España (sobre todo
-talleres y oficios), con su propuesta fabricada y cargados en el panel, el
-[guion de llamada](ventas/guiones.md) para trabajo a distancia y sin tu número,
-y la alternativa sin llamar: [15 cartas en papel con su web en un QR y los
-correos para cuando contesten](ventas/cartas.md).
+Ya hecho: **37 negocios sin web** de toda España (talleres, fontanerías,
+carpinterías metálicas y otros oficios), con su propuesta publicada y cargados
+en el panel; [32 cartas en papel con su web en un QR y los correos para cuando
+contesten](ventas/cartas.md); y el [guion de llamada](ventas/guiones.md) para
+los que no tienen dirección.
 
 Lo que falta, todo explicado en [plan/montaje.md](plan/montaje.md):
 
