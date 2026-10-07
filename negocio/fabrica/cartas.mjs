@@ -6,10 +6,12 @@
 //
 //   node negocio/fabrica/cartas.mjs negocio/privado/leads/*.json --correo tu@correo.es [--salida carpeta]
 //
-// Sale un PDF listo para imprimir en negocio/privado/cartas/cartas.pdf. La dirección cae en la
-// ventana de un sobre americano (DL, 110 × 220 mm) con ventana a la derecha, doblando el folio en
-// tres por las marcas del margen. Los negocios sin dirección completa (calle y código postal) se
-// saltan. Las propuestas tienen que estar ya generadas en negocio/web/demo/.
+// Sale un PDF listo para imprimir en negocio/privado/cartas/cartas.pdf, y además cada carta suelta
+// en sueltas/<negocio>.pdf con las direcciones en direcciones.txt, para subirlas a la carta online
+// de Correos (un PDF por envío, de menos de 1 MB). La dirección cae en la ventana de un sobre
+// americano (DL, 110 × 220 mm) con ventana a la derecha, doblando el folio en tres por las marcas
+// del margen. Los negocios sin dirección completa (calle y código postal) se saltan. Las propuestas
+// tienen que estar ya generadas en negocio/web/demo/.
 //
 // Necesita Playwright con Chromium, como capturas.mjs.
 
@@ -192,20 +194,26 @@ async function principal(args) {
       await movil.evaluate(() => document.fonts.ready);
       const jpg = await movil.screenshot({ type: 'jpeg', quality: 82 });
       const url = `${a.urlDemos}/${n.slug}/`;
-      hojas.push(carta(n, { url, correo, captura: `data:image/jpeg;base64,${jpg.toString('base64')}`, a }));
+      hojas.push({ n, html: carta(n, { url, correo, captura: `data:image/jpeg;base64,${jpg.toString('base64')}`, a }) });
       console.log(`✓ ${n.nombre} · ${n.direccion}, ${n.cp} ${n.ciudad}`);
     }
-    mkdirSync(salida, { recursive: true });
-    const html = documento(hojas);
-    writeFileSync(join(salida, 'cartas.html'), html);
+    mkdirSync(join(salida, 'sueltas'), { recursive: true });
     const pagina = await navegador.newPage();
-    await pagina.setContent(html, { waitUntil: 'load' });
-    await pagina.evaluate(() => document.fonts.ready);
-    await pagina.pdf({ path: join(salida, 'cartas.pdf'), format: 'A4', printBackground: true, preferCSSPageSize: true });
+    const imprimir = async (html, ruta) => {
+      await pagina.setContent(html, { waitUntil: 'load' });
+      await pagina.evaluate(() => document.fonts.ready);
+      await pagina.pdf({ path: ruta, format: 'A4', printBackground: true, preferCSSPageSize: true });
+    };
+    const html = documento(hojas.map((h) => h.html));
+    writeFileSync(join(salida, 'cartas.html'), html);
+    await imprimir(html, join(salida, 'cartas.pdf'));
+    for (const { n, html: hoja } of hojas) await imprimir(documento([hoja]), join(salida, 'sueltas', `${n.slug}.pdf`));
+    writeFileSync(join(salida, 'direcciones.txt'), hojas.map(({ n }) =>
+      [n.nombre, n.direccion, `${n.cp} ${n.ciudad}`, n.provincia ?? '', `Archivo: sueltas/${n.slug}.pdf`].filter(Boolean).join('\n')).join('\n\n') + '\n');
   } finally {
     await navegador.close();
   }
-  console.log(`\n${hojas.length} cartas en ${relative(process.cwd(), join(salida, 'cartas.pdf'))}`);
+  console.log(`\n${hojas.length} cartas en ${relative(process.cwd(), join(salida, 'cartas.pdf'))}, sueltas en sueltas/ y sus direcciones en direcciones.txt`);
   console.log('Antes de echarlas al buzón, comprueba que las propuestas están publicadas: el QR abre su enlace.');
 }
 
