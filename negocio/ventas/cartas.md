@@ -35,7 +35,8 @@ abre nada.
 online: subes un PDF (de menos de 1 MB), pagas con tarjeta y ellos lo imprimen,
 lo ensobran y lo franquean por el precio del sello. Para eso están las cartas
 sueltas, una por negocio, en `negocio/privado/cartas/sueltas/`, y sus
-direcciones listas para copiar en `negocio/privado/cartas/direcciones.txt`. Hay
+direcciones listas para copiar en `negocio/privado/cartas/direcciones.txt`. La
+segunda tanda está igual en `negocio/privado/cartas/lote2/`. Hay
 que registrarse en Correos y pagar con tu tarjeta, así que ese paso es tuyo.
 
 **Imprimiéndolas tú:**

@@ -38,6 +38,9 @@ const GANCHOS = {
   climatizacion: { busqueda: 'empresas de climatización', escena: 'cuando a alguien se le estropea el aire acondicionado, saca el móvil y llama a la primera empresa que le da confianza' },
   reformas: { busqueda: 'empresas de reformas', escena: 'quien piensa reformar su casa busca antes en el móvil y llama a la empresa que le da más confianza' },
   cerrajeria: { busqueda: 'cerrajeros', escena: 'cuando alguien se queda en la calle sin llaves, saca el móvil y llama al primer cerrajero que le da confianza' },
+  chapa: { busqueda: 'talleres de chapa y pintura', escena: 'cuando alguien tiene un golpe en el coche, saca el móvil y llama al primer taller que le da confianza' },
+  'fontaneria-gas': { busqueda: 'fontaneros', escena: 'cuando a alguien se le estropea la caldera o se le rompe una tubería, saca el móvil y llama al primero que le da confianza' },
+  'carpinteria-metalica': { busqueda: 'carpinterías metálicas', escena: 'quien necesita una reja, una puerta o un cerramiento busca antes en el móvil a quién encargárselo' },
   generico: { busqueda: 'negocios como el suyo', escena: 'cuando alguien necesita lo que usted hace, saca el móvil y llama al primero que le da confianza' },
 };
 
