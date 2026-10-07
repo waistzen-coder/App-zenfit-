@@ -27,6 +27,7 @@ quita dudas.
 | Llamar al teléfono del negocio | Sí, amparado en el interés legítimo: preséntate, sé breve y, si dicen que no, apúntalo y no vuelvas a llamar. Es el canal principal |
 | Visitar el negocio y enseñar la propuesta en el móvil | Sí, cuando está cerca de ti |
 | WhatsApp o correo **sin permiso previo** | **No.** La LSSI (art. 21) prohíbe la publicidad por medios electrónicos no solicitada, también entre empresas. Además, WhatsApp bloquea los números que reciben denuncias |
+| Carta por correo postal, con su propuesta en un QR | Sí. La LSSI no cubre el correo postal. Cada carta dice de dónde salen los datos y cómo pedir que se borren ([cartas](../ventas/cartas.md)) |
 | WhatsApp o correo **después de que digan que sí** | Sí. Por eso en la llamada siempre se pide: «¿Te la mando? ¿Por WhatsApp o por correo?» |
 | Anuncios en redes, ficha de Google, recomendaciones, alianzas | Sí. Es el negocio quien escribe primero |
 

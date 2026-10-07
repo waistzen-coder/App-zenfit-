@@ -266,7 +266,7 @@ textarea{min-height:64px;resize:vertical}
         <div class="campo"><label for="lPueblo">Pueblo</label><input id="lPueblo" maxlength="60" placeholder="Lorca (Murcia)"></div>
         <div class="campo"><label for="lTelefono">Teléfono</label><input id="lTelefono" maxlength="20" inputmode="tel" placeholder="958 00 00 00"></div>
         <div class="campo"><label for="lCanal">Cómo llegó</label>
-          <select id="lCanal"><option value="visita">Visita</option><option value="llamada">Llamada</option><option value="recomendacion">Recomendación</option><option value="alianza">Alianza</option><option value="anuncio">Anuncio</option><option value="otro">Otro</option></select></div>
+          <select id="lCanal"><option value="carta">Carta</option><option value="llamada">Llamada</option><option value="visita">Visita</option><option value="recomendacion">Recomendación</option><option value="alianza">Alianza</option><option value="anuncio">Anuncio</option><option value="otro">Otro</option></select></div>
         <div class="campo todo"><label for="lDemo">Enlace a su propuesta (opcional)</label><input id="lDemo" maxlength="200" inputmode="url" placeholder="https://waistzen-coder.github.io/demo/barberia-paco/"></div>
         <div class="campo todo"><label for="lNota">Nota</label><textarea id="lNota" maxlength="500" placeholder="Muchas reseñas, sin web. Pasar a media mañana."></textarea></div>
         <div class="acciones-form"><button class="boton" type="submit" id="lGuardar">Guardar negocio</button></div>
@@ -324,7 +324,7 @@ textarea{min-height:64px;resize:vertical}
     ['negociando', 'Negociando'], ['ganado', 'Ganado'], ['perdido', 'Perdido']
   ];
   var NOMBRE_ESTADO = {}; ESTADOS.forEach(function (e) { NOMBRE_ESTADO[e[0]] = e[1]; });
-  var CANALES = { visita: 'Visita', llamada: 'Llamada', recomendacion: 'Recomendación', alianza: 'Alianza', anuncio: 'Anuncio', otro: 'Otro' };
+  var CANALES = { carta: 'Carta', visita: 'Visita', llamada: 'Llamada', recomendacion: 'Recomendación', alianza: 'Alianza', anuncio: 'Anuncio', otro: 'Otro' };
   var SEMANAS = ['Día 1 · montaje', 'Semana 1 · validar', 'Semana 2 · primeras ventas', 'Semana 3 · recuperar', 'Semana 4 · escalar'];
 
   var st = { leads: [], caja: [], tareas: [], filtro: 'todos', ventaAbierta: null, borrar: null, db: null, puedeEscribir: true, cargado: { leads: false, caja: false, tareas: false } };

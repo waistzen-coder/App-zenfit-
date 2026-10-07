@@ -23,6 +23,9 @@ node negocio/fabrica/construir.mjs
 
 # Capturas de móvil de los ejemplos (necesita Playwright con Chromium)
 node negocio/fabrica/capturas.mjs
+
+# Cartas en papel con la propuesta y un QR, en negocio/privado/cartas/cartas.pdf
+node negocio/fabrica/cartas.mjs negocio/privado/leads/*.json --correo tu@correo.es
 ```
 
 Las propuestas salen en `negocio/web/demo/<nombre>/` y se publican con la web
@@ -115,6 +118,8 @@ publicar.
 | `lib/horario.mjs` | Entiende los horarios escritos a mano |
 | `lib/fuentes.mjs`, `fuentes/` | Tipografías libres incrustadas en cada página |
 | `lib/iconos.mjs` | Iconos de Lucide (ISC) y el glifo de WhatsApp (CC0) |
+| `cartas.mjs` | Las cartas en papel: una por negocio con dirección completa, con su web y un QR |
+| `lib/vendor/qrcode.mjs` | Generador de códigos QR de Kazuhiko Arase (MIT), copiado tal cual |
 | `ejemplos/` | Las fichas de los negocios inventados del escaparate |
 
 El «abierto ahora» se calcula en el navegador de quien visita la web, siempre

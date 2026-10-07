@@ -5,7 +5,8 @@ web**, así que el objetivo de cada llamada es uno solo: que acepte que se la
 mandes.
 
 Regla de oro legal: el enlace por WhatsApp o correo **solo a quien ha dicho que
-sí** a recibirlo (art. 21 de la LSSI). Por eso todo empieza con una llamada.
+sí** a recibirlo (art. 21 de la LSSI). Por eso todo empieza con una llamada o
+con una carta en papel. Si prefieres no llamar, mira [cartas y correos](cartas.md).
 
 ## Tu número y tus datos
 

@@ -11,8 +11,9 @@ está en tu cuenta; cada gasto lo apruebas tú.
 | Web de Mostrador y propuestas (GitHub Pages) | Día 1 | 0 € |
 | Correo de Mostrador (Gmail) | Día 1 | 0 € |
 | Línea de Mostrador para llamar, con WhatsApp Business | Día 1 | ~5-10 €/mes |
+| Cartas: sello de 0,96 €, sobre con ventana e impresión, si se manda la tanda de 15 | Semana 1 | ~20 € |
 | Dominio propio, cuando haya ventas | Semana 2-3 | ~10 € |
-| **Total primer mes sin anuncios** | | **~15-20 €** |
+| **Total primer mes sin anuncios** | | **~35-40 €** |
 | Prueba de anuncios en Meta, solo si ya hay ventas | Semana 4 | hasta 150 € |
 | Placas NFC de reseñas, solo si los clientes las piden | Mes 2 | ~60 € |
 | Cuota de autónomo: ya la pagas; añadir la actividad de diseño web en Hacienda no cuesta nada (ver [legal-fiscal.md](legal-fiscal.md)) | Antes de la primera factura | 0 € |
