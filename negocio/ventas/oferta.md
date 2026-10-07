@@ -14,12 +14,12 @@ en `fabrica/config.json` y se reconstruye la web.
 | Aviso legal y privacidad | ✓ | ✓ | |
 | Dominio `.es` y alojamiento el primer año | ✓ | ✓ | renovación incluida |
 | Ficha de Google Maps revisada y mejorada | | ✓ | |
-| Textos y fotos a medida (visita o videollamada) | | ✓ | |
+| Textos y fotos a medida (por teléfono o videollamada) | | ✓ | |
 | Secciones extra: carta, tarifas, galería | | ✓ | |
 | Cartel con código QR para el local | | ✓ | |
 | Rondas de cambios antes de publicar | 1 | 2 | |
 | Cambios de horario, precios y textos | | | ✓ hasta 30 min/mes |
-| Copias de seguridad y ayuda por WhatsApp | | | ✓ |
+| Copias de seguridad y ayuda por WhatsApp o correo | | | ✓ |
 
 Sin mantenimiento, desde el segundo año el alojamiento y el dominio cuestan
 **60 €/año**.
@@ -51,7 +51,7 @@ Sin mantenimiento, desde el segundo año el alojamiento y el dominio cuestan
 | --- | --- | --- |
 | Placa NFC de reseñas de Google para el mostrador | 39 € | ~2 € |
 | Puesta a punto de la ficha de Google, suelta | 99 € | tiempo |
-| Carta digital con QR en varios idiomas (hostelería de la costa) | 149 € | tiempo |
+| Carta digital con QR en varios idiomas (hostelería turística) | 149 € | tiempo |
 | Página extra (otro servicio, otro local) | 90 € | tiempo |
 
 ## Descuentos

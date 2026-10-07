@@ -8,16 +8,14 @@ está en tu cuenta; cada gasto lo apruebas tú.
 
 | Partida | Cuándo | Importe |
 | --- | --- | --- |
-| Dominio `mostradorweb.es` | Día 1 | ~10 € |
-| Hosting de la web y de las demos (Cloudflare Pages) | Día 1 | 0 € |
-| Correo `hola@mostradorweb.es` (reenvío de Cloudflare) | Día 1 | 0 € |
-| WhatsApp Business | Día 1 | 0 € |
-| Tarjetas de visita para dejar en las visitas (250 uds.) | Semana 1 | ~25 € |
-| Línea de móvil aparte para el negocio (opcional) | Semana 1 | ~6 €/mes |
-| **Total primer mes sin anuncios** | | **~40-50 €** |
+| Web de Mostrador y propuestas (GitHub Pages) | Día 1 | 0 € |
+| Correo de Mostrador (Gmail) | Día 1 | 0 € |
+| Línea de Mostrador para llamar, con WhatsApp Business | Día 1 | ~5-10 €/mes |
+| Dominio propio, cuando haya ventas | Semana 2-3 | ~10 € |
+| **Total primer mes sin anuncios** | | **~15-20 €** |
 | Prueba de anuncios en Meta, solo si ya hay ventas | Semana 4 | hasta 150 € |
 | Placas NFC de reseñas, solo si los clientes las piden | Mes 2 | ~60 € |
-| Cuota de autónomo, si aún no lo eres (ver [legal-fiscal.md](legal-fiscal.md)) | Desde la primera factura | ~89 €/mes |
+| Cuota de autónomo: ya la pagas; añadir la actividad de diseño web en Hacienda no cuesta nada (ver [legal-fiscal.md](legal-fiscal.md)) | Antes de la primera factura | 0 € |
 | **Reserva intocable** | Hasta ver resultados | **el resto** |
 
 ## Por qué se gasta tan poco
@@ -25,13 +23,13 @@ está en tu cuenta; cada gasto lo apruebas tú.
 En este negocio el coste de fabricar es casi cero: el hosting es gratis, el
 diseño lo hago yo y cada web cuesta su dominio (unos 10 € al año, que paga el
 precio de la propia web). Lo que cuesta de verdad es el tiempo de vender, y ese
-no se compra con dinero en el primer mes: se compra con visitas.
+no se compra con dinero en el primer mes: se compra con llamadas.
 
 ## Cuándo se toca la reserva
 
 - Para la cuota de autónomo, si hace falta darse de alta.
 - Para escalar algo que ya ha demostrado que funciona (más anuncios, una segunda
-  persona que visite a comisión).
+  persona que llame a comisión).
 - Nunca para tapar un canal que no vende.
 
 ## Impuestos: lo que no es tuyo

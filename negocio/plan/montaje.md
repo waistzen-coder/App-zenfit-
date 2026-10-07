@@ -1,77 +1,73 @@
-# Montaje en una tarde
+# Montaje
 
-Lo que hay que hacer una sola vez para que Mostrador exista. Todo gratis salvo
-el dominio.
+Lo que hay que hacer una sola vez para que Mostrador exista. Empezamos sin
+dominio y sin gastar casi nada: el dominio propio llega con las primeras ventas.
 
-## 1. El dominio (10 minutos, unos 10 €)
+## 1. La web y las propuestas, en GitHub Pages (1 minuto tuyo)
 
-1. Compra `mostradorweb.es` en un registrador español (DonDominio,
-   Dinahosting, IONOS…). Los `.es` piden tu NIF o NIE al registrarlos.
-2. No contrates hosting ni correo con él: no hacen falta.
+Las propuestas tienen que estar en internet para mandarlas. Las publico gratis
+en GitHub Pages, en `https://waistzen-coder.github.io`. GitHub no me deja crear
+repositorios por ti, así que ese paso es tuyo:
 
-Si estuviera cogido, alternativas que estaban libres el 6 de octubre de 2026:
-`abiertoweb.es` y `webde72h.es` (habría que cambiar el nombre en
-`fabrica/config.json`).
+1. Entra en [github.com/new](https://github.com/new).
+2. *Repository name*: `waistzen-coder.github.io` (exactamente así).
+3. Marca **Public** (en el plan gratuito, GitHub Pages solo sirve repositorios
+   públicos) y pulsa *Create repository*.
+4. Si la app de Claude en GitHub solo tiene acceso a algunos repositorios,
+   dale acceso a este desde
+   [github.com/apps/claude/installations/select_target](https://github.com/apps/claude/installations/select_target).
+5. Dímelo y subo la web, los ejemplos y las propuestas. A partir de ahí, cada
+   propuesta nueva la publico yo.
 
-## 2. WhatsApp Business (15 minutos)
+Las propuestas llevan la etiqueta `noindex` para que no salgan en Google, no se
+enlazan desde ningún sitio y se borran si el negocio dice que no. Ojo: ese
+repositorio es público, así que cualquiera que lo busque en GitHub puede verlas.
+Solo llevan datos que el negocio ya tiene publicados (nombre, teléfono y
+dirección).
 
-1. Instala **WhatsApp Business** con el número del negocio. Puede ser el tuyo;
-   una línea aparte cuesta unos 6 €/mes y separa trabajo y vida.
-2. Perfil:
+## 2. La línea de Mostrador (15 minutos, unos 5-10 €/mes)
+
+Tu número personal no se enseña hasta que un cliente acepta, así que hace falta
+una segunda línea para llamar y para WhatsApp:
+
+1. Contrata una línea barata, de prepago o de tarifa; con eSIM se activa en el
+   día.
+2. Instala **WhatsApp Business** con ese número:
    - Nombre: `Mostrador · Webs para negocios`
    - Foto: `negocio/marca/logo-whatsapp.png`
    - Categoría: Servicios profesionales
    - Descripción: `Hacemos la web de tu negocio y la ves antes de pagar nada. Publicada en 72 horas desde 290 €.`
-   - Web: `https://mostradorweb.es`
+   - Web: `https://waistzen-coder.github.io`
 3. **Respuesta rápida** `/propuesta` con el mensaje de envío del enlace
-   ([guiones](../ventas/guiones.md#3-el-mensaje-con-el-enlace)).
-4. Pásame el número para ponerlo en la web y en el aviso de las demos.
+   ([guiones](../ventas/guiones.md#2-el-mensaje-con-el-enlace)).
+4. Si quieres, pásame ese número y lo pongo en la web y en el aviso de las
+   propuestas. No es tu número personal.
 
-## 3. Publicar la web (20 minutos)
+## 3. El correo de Mostrador (5 minutos, gratis)
 
-La web y las demos se sirven desde **Cloudflare Pages**: gratis, rápido y
-permite uso comercial (Vercel en su plan gratuito no lo permite).
+Para mandar las propuestas por correo a quien lo prefiera, sin usar el tuyo:
 
-1. Crea una cuenta en `dash.cloudflare.com`.
-2. *Workers & Pages* → *Create* → *Pages* → *Connect to Git* → autoriza GitHub y
-   elige este repositorio.
-3. Configuración:
-   - Rama de producción: la rama del negocio
-     (`claude/inversion-emprendimiento-1000-w7tdns`, o `main` cuando se fusione)
-   - Framework: *None*
-   - Comando de compilación: vacío
-   - Carpeta de salida: `negocio/web`
-4. *Save and Deploy*. En un minuto tendrás una dirección `algo.pages.dev`.
-5. *Custom domains* → `mostradorweb.es`. Cloudflare te dará dos servidores de
-   nombres: ponlos en tu registrador (sección DNS o servidores de nombres). Tarda
-   entre minutos y unas horas.
+1. Crea una cuenta de Gmail nueva, por ejemplo `mostrador.webs.adrian@gmail.com`
+   (la que esté libre). Pon como nombre «Adrián · Mostrador».
+2. Pásame la dirección: la pongo en la web y la uso en el aviso legal.
 
-Desde ese momento, cada vez que yo suba cambios al repositorio la web se
-actualiza sola, también las demos nuevas.
+## 4. El aviso legal de la web de Mostrador
 
-**Importante:** mientras el repositorio sea público, las demos de negocios
-reales no se suben (están en el `.gitignore`). Para que yo pueda publicarlas
-solo, pon el repositorio en privado (GitHub → *Settings* → *General* → *Change
-visibility*) y avísame: quito esa línea y listo.
+La ley (art. 10 de la LSSI) pide que la web de la agencia diga quién está
+detrás: **nombre y apellidos, NIF, domicilio y un correo**. El teléfono no es
+obligatorio. Son los mismos datos que van en tus facturas.
 
-## 4. Correo (5 minutos)
+Hasta que me los pases, la web de Mostrador va sin aviso legal y oculta para
+Google. Funciona igual para enseñar las propuestas, pero no conviene darla a
+conocer así.
 
-En Cloudflare, dentro de `mostradorweb.es` → *Email* → *Email Routing* → crea
-`hola@mostradorweb.es` y que reenvíe a tu Gmail. Para contestar como
-`hola@mostradorweb.es` desde Gmail hace falta un servidor de envío; de momento
-basta con contestar desde tu correo.
+## 5. Más adelante
 
-## 5. Ficha de Google de Mostrador (10 minutos, y esperar la verificación)
-
-1. `business.google.com` → añade tu empresa: **Mostrador**.
-2. Categoría: *Diseñador de sitios web*.
-3. Negocio sin local abierto al público, con zona de servicio: Motril,
-   Salobreña, Almuñécar y el resto de la costa.
-4. Teléfono de WhatsApp y web `mostradorweb.es`.
-5. Verifica (suele ser por vídeo). Las reseñas de los primeros clientes irán
-   aquí.
-
-## 6. Tarjetas de visita (opcional, unos 25 €)
-
-Para dejar en las visitas. Delante: el logo y «Primero ves tu web. Luego
-decides.». Detrás: WhatsApp, `mostradorweb.es` y «Webs para negocios de aquí».
+- **Dominio propio** (unos 10 €), cuando entren las primeras ventas. Entonces
+  movemos la web a Cloudflare Pages, que es gratis y permite uso comercial (el
+  plan gratuito de Vercel no), y GitHub Pages deja de hacer falta.
+- **Ficha de Google de Mostrador** («Diseñador de sitios web»), para que los
+  primeros clientes dejen sus reseñas.
+- **Tarjetas de visita** (unos 25 €), solo si visitas negocios cerca de ti.
+- Las **webs finales de los clientes** van siempre en su propio dominio, en
+  Cloudflare Pages: GitHub Pages no está pensado para alojar webs comerciales.

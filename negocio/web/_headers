@@ -1,3 +1,0 @@
-# Cloudflare Pages: las demos nunca se indexan
-/demo/*
-  X-Robots-Tag: noindex, nofollow

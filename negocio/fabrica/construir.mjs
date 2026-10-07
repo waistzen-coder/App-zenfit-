@@ -1,19 +1,20 @@
 #!/usr/bin/env node
-// Monta la carpeta negocio/web completa, lista para subir tal cual a Cloudflare Pages:
+// Monta la carpeta negocio/web completa, lista para subir tal cual a GitHub Pages:
 //   index.html          la web de la agencia
-//   aviso-legal/        su aviso legal (datos del titular en config.json)
+//   aviso-legal/        su aviso legal, solo cuando config.json tiene todos los datos del titular
 //   demo/ejemplo-*/     las webs de ejemplo del escaparate
-//   _headers            para que ninguna demo salga en Google
+//   .nojekyll           para que GitHub Pages sirva los archivos tal cual
+// Las demos llevan su propia etiqueta noindex para no salir en Google.
 //
 //   node negocio/fabrica/construir.mjs
 //
 // Las capturas de img/ se rehacen aparte con capturas.mjs (necesita Playwright).
 
-import { writeFileSync, mkdirSync, readdirSync, existsSync } from 'node:fs';
+import { writeFileSync, mkdirSync, readdirSync, existsSync, rmSync } from 'node:fs';
 import { join, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { generar, CONFIG } from './generar.mjs';
-import { paginaAgencia, paginaAvisoLegalAgencia } from './lib/agencia.mjs';
+import { paginaAgencia, paginaAvisoLegalAgencia, avisoLegalCompleto } from './lib/agencia.mjs';
 
 const AQUI = dirname(fileURLToPath(import.meta.url));
 const WEB = resolve(AQUI, '../web');
@@ -33,18 +34,17 @@ for (const { n } of hechos) {
 const ejemplos = hechos.map(({ n }) => ({ slug: n.slug, nombre: n.nombre, actividad: n.actividad, ciudad: n.ciudad }));
 writeFileSync(join(WEB, 'index.html'), paginaAgencia(a, ejemplos));
 
-mkdirSync(join(WEB, 'aviso-legal'), { recursive: true });
-const fecha = new Date().toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Europe/Madrid' });
-writeFileSync(join(WEB, 'aviso-legal', 'index.html'), paginaAvisoLegalAgencia(a, fecha));
+// Sin los datos del titular no se publica un aviso legal a medias: la web sale sin él y con noindex.
+rmSync(join(WEB, 'aviso-legal'), { recursive: true, force: true });
+if (avisoLegalCompleto(a)) {
+  mkdirSync(join(WEB, 'aviso-legal'), { recursive: true });
+  const fecha = new Date().toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Europe/Madrid' });
+  writeFileSync(join(WEB, 'aviso-legal', 'index.html'), paginaAvisoLegalAgencia(a, fecha));
+}
 
-writeFileSync(join(WEB, '_headers'), `# Cloudflare Pages: las demos nunca se indexan
-/demo/*
-  X-Robots-Tag: noindex, nofollow
-`);
+writeFileSync(join(WEB, '.nojekyll'), '');
 writeFileSync(join(WEB, 'robots.txt'), `User-agent: *\nAllow: /\n`);
 
-const pendientes = [];
-if (a.whatsapp === '34600000000') pendientes.push('el WhatsApp de la agencia');
-if (a.titular.nif.startsWith('[')) pendientes.push('los datos del titular para el aviso legal');
 console.log(`✓ Web de ${a.nombre} y ${hechos.length} ejemplos en ${WEB}`);
-if (pendientes.length) console.log(`! Antes de publicar, rellena en config.json: ${pendientes.join(' y ')}.`);
+if (!a.whatsapp && !a.email) console.log('! Sin WhatsApp ni correo en config.json: los botones de la web llevan a los ejemplos y a los precios.');
+if (!avisoLegalCompleto(a)) console.log('! Sin nombre, NIF, domicilio y correo del titular en config.json: la web va sin aviso legal y fuera de Google.');
