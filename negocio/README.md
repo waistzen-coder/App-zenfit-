@@ -111,8 +111,8 @@ correos para cuando contesten](ventas/cartas.md).
 
 Lo que falta, todo explicado en [plan/montaje.md](plan/montaje.md):
 
-1. **Crear el repositorio `waistzen-coder.github.io`** en GitHub (1 minuto). Es
-   donde publico gratis la web y las propuestas; GitHub no me deja crearlo a mí.
+1. **Mandar las cartas**, por la carta online de Correos o impresas. Las
+   propuestas ya están publicadas en `waistzen-coder.github.io`.
 2. **La línea de Mostrador** con WhatsApp Business, para llamar sin enseñar tu
    número (unos 5-10 €/mes).
 3. **Un correo de Mostrador** (un Gmail nuevo, gratis).
