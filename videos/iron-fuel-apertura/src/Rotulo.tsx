@@ -75,9 +75,18 @@ const RotuloInner: React.FC<RotuloProps> = ({
   // El metal fundido pasa del blanco al naranja en la mitad de lo que dura
   // el texto. Se queda en naranja: entre el naranja y el azul de la marca
   // cualquier mezcla sale rosa.
-  const enfriado = interpolate(frame, [2, Math.max(8, fin * 0.5)], [0, 1], clamp);
+  const enfriado = interpolate(
+    frame,
+    [2, Math.max(8, fin * 0.5)],
+    [0, 1],
+    clamp,
+  );
   const colorDestacado = fundido
-    ? interpolateColors(enfriado, [0, 0.4, 1], ["#fffbe8", "#ffc061", "#ff7424"])
+    ? interpolateColors(
+        enfriado,
+        [0, 0.4, 1],
+        ["#fffbe8", "#ffc061", "#ff7424"],
+      )
     : AZUL;
   const resplandorDestacado = fundido
     ? interpolateColors(

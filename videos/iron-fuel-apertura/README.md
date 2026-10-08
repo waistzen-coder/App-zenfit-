@@ -1,13 +1,14 @@
-# Teaser de apertura · Iron Fuel Nutrition
+# Vídeos de apertura · Iron Fuel Nutrition
 
-Vídeo vertical de 30 s (1080×1920, 30 fps) para Reels, TikTok y Shorts,
-montado con [Remotion](https://www.remotion.dev) a partir de los vídeos y
-fotos de la tienda grabados con el móvil. Hay dos versiones con el mismo
-guion:
+Vídeos verticales (1080×1920, 30 fps) para Reels, TikTok, Shorts, historias
+y estados de WhatsApp, montados con [Remotion](https://www.remotion.dev) a
+partir de los vídeos y fotos de la tienda grabados con el móvil:
 
-- `Teaser`: la primera, con música sintetizada.
-- `TeaserEpico`: la versión épica, con orquesta de verdad y efectos de
-  forja (abajo).
+- `Teaser`: el teaser de 30 s, la primera versión, con música sintetizada.
+- `TeaserEpico`: el mismo teaser en versión épica, con orquesta de verdad y
+  efectos de forja.
+- `Aviso`: 16 s con el logo para anunciar que pronto se dirán la fecha y la
+  hora de la inauguración.
 
 ## La primera versión
 
@@ -55,6 +56,24 @@ calor (la forja, los productos, el «1») y el azul para la marca. `<Plano>`
 tiene `bloom` para el resplandor de las luces y `golpe` para reforzar la
 entrada en zoom.
 
+## El aviso de la inauguración
+
+«Hemos estado trabajando mucho, pero ya os podemos decir que próximamente os
+diremos fecha y hora de nuestra inauguración», con el logo forjado. Es para
+dar que hablar sin abrir la puerta a todo el mundo: no invita a nadie, solo
+anuncia que la fecha y la hora están al caer.
+
+| Segundos | Qué pasa |
+| --- | --- |
+| 0–2 | «HEMOS ESTADO» en acero y «TRABAJANDO MUCHO» al rojo con chispas de yunque |
+| 2–6 | Un plano por pulso, del montaje de las estanterías a la fachada terminada, con una barra «TRABAJANDO» que llega al 100 % |
+| 6–8 | «PERO YA OS PODEMOS DECIR...» sobre el rótulo de noche y medio segundo de casi silencio |
+| 8–14 | El logo sale de la forja; «PRÓXIMAMENTE OS DIREMOS», «FECHA Y HORA», «DE NUESTRA INAUGURACIÓN» |
+| 14–16 | Cierre: «INAUGURACIÓN», «FECHA Y HORA MUY PRONTO» y un botón «ATENTOS» con campana |
+
+La escena está en `src/aviso/` y la música en `audio/banda_sonora_aviso.py`,
+con la misma orquesta que la versión épica (`audio/orquesta.py`).
+
 ## Rehacerlo
 
 Los vídeos y fotos de la tienda no están en el repositorio, porque es
@@ -77,6 +96,7 @@ Y después:
     npm run medios         # clips, fotos, logo, grano y bandas sonoras (~25 min)
     npm run render         # la primera versión, en out/iron-fuel-teaser.mp4
     npm run render:epico   # la épica, en out/iron-fuel-teaser-epico.mp4
+    npm run render:aviso   # el aviso, en out/iron-fuel-aviso.mp4
 
 `npm run medios` también descarga las muestras de orquesta (unos 500 MB) en
 `audio/vsco/`, que tampoco se suben al repositorio.
@@ -97,16 +117,18 @@ chispas) tardan más de los 30 s que Remotion espera por defecto, así que
 
 ## Dónde se cambia cada cosa
 
-- Los textos: los `<Rotulo>` de `src/escenas/*.tsx` (primera versión) y de
-  `src/epico/*.tsx` (la épica). El texto blanco va como hijo y el azul en
-  `destacado`.
+- Los textos: los `<Rotulo>` de `src/escenas/*.tsx` (primera versión),
+  `src/epico/*.tsx` (la épica) y `src/aviso/*.tsx` (el aviso). El texto
+  blanco va como hijo y el azul en `destacado`.
 - Qué trozo de cada clip sale: `inicio` (en segundos) de cada `<Plano>`, y
   `velocidad` para la cámara lenta.
 - Las transiciones: `entrada` y `salida` de cada `<Plano>` (`corte`, `zoom`,
   `barrido-izq`, `barrido-der`).
-- La música: `audio/banda_sonora.py` y `audio/banda_sonora_epica.py`;
-  después hay que volver a ejecutarlos. Si se mueve un corte en el vídeo,
-  hay que mover su golpe en el script.
+- La música: `audio/banda_sonora.py`, `audio/banda_sonora_epica.py` y
+  `audio/banda_sonora_aviso.py`; después hay que volver a ejecutarlos. Si se
+  mueve un corte en el vídeo, hay que mover su golpe en el script. La
+  orquesta, la percusión y la mezcla que comparten las dos últimas están en
+  `audio/orquesta.py`.
 - Las chispas, brasas y destellos: `src/vfx.tsx`. Todo sale de `random()`
   con semilla, así que cada render es idéntico; para cambiar la forma de un
   estallido basta con cambiar su `semilla`.
