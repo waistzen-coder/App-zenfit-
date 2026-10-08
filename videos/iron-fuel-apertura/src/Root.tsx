@@ -1,4 +1,5 @@
 import { Composition, Folder } from "remotion";
+import { Aviso } from "./Aviso";
 import { CierreEpico } from "./epico/CierreEpico";
 import { FachadaEpica } from "./epico/FachadaEpica";
 import { GanchoEpico } from "./epico/GanchoEpico";
@@ -35,6 +36,14 @@ export const RemotionRoot: React.FC = () => {
         id="TeaserEpico"
         component={TeaserEpico}
         durationInFrames={900}
+        fps={30}
+        width={1080}
+        height={1920}
+      />
+      <Composition
+        id="Aviso"
+        component={Aviso}
+        durationInFrames={480}
         fps={30}
         width={1080}
         height={1920}

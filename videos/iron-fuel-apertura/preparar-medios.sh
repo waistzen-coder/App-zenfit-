@@ -5,8 +5,8 @@
 #   public/clips/        clips etalonados y reescalados, en VP9
 #   public/fotos/        fotos etalonadas y el logo sacado del rótulo
 #   public/grano/        texturas de grano de película
-#   public/audio/        las dos bandas sonoras (audio/banda_sonora.py y
-#                        audio/banda_sonora_epica.py)
+#   public/audio/        las bandas sonoras (audio/banda_sonora.py,
+#                        audio/banda_sonora_epica.py y audio/banda_sonora_aviso.py)
 #   audio/vsco/          las muestras de orquesta de la versión épica
 #
 # Los clips van en VP9 y no en H.264 porque el Chromium de las sesiones en la
@@ -123,3 +123,4 @@ EOF
   git -C audio/vsco read-tree -mu HEAD
 fi
 python3 audio/banda_sonora_epica.py
+python3 audio/banda_sonora_aviso.py

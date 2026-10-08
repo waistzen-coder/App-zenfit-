@@ -9,12 +9,7 @@ import { Destello } from "../efectos";
 import { AZUL, NEGRO, PARPADEOS } from "../marca";
 import { Plano } from "../Plano";
 import { Rotulo } from "../Rotulo";
-import {
-  Brasas,
-  Chispas,
-  DestelloAnamorfico,
-  OndaExpansiva,
-} from "../vfx";
+import { Brasas, Chispas, DestelloAnamorfico, OndaExpansiva } from "../vfx";
 
 const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
 

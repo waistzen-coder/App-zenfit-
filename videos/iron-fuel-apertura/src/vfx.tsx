@@ -186,9 +186,12 @@ const BrasasInner: React.FC<BrasasProps> = ({
     const recorrido = 2200;
     const y = 2050 - ((frame * velocidad + r("o") * recorrido) % recorrido);
     const x =
-      r("x") * 1080 + Math.sin(frame * (0.02 + r("f") * 0.04) + r("p") * 6.3) * 26;
+      r("x") * 1080 +
+      Math.sin(frame * (0.02 + r("f") * 0.04) + r("p") * 6.3) * 26;
     const radio = 1.5 + r("r") * 3.5;
-    const parpadeo = 0.35 + 0.65 * Math.abs(Math.sin(frame * (0.08 + r("b") * 0.2) + r("q") * 6.3));
+    const parpadeo =
+      0.35 +
+      0.65 * Math.abs(Math.sin(frame * (0.08 + r("b") * 0.2) + r("q") * 6.3));
     const color = CHISPA_COLORES[1 + Math.floor(r("c") * 3)];
     puntos.push(
       <g key={i} opacity={parpadeo * intensidad}>
@@ -379,7 +382,11 @@ const LogoForjadoInner: React.FC<LogoForjadoProps> = ({ y, ancho, style }) => {
   const halo = interpolateColors(
     calor,
     [0, 0.5, 1],
-    ["rgba(58, 155, 255, 0.85)", "rgba(255, 110, 30, 0.9)", "rgba(255, 200, 120, 1)"],
+    [
+      "rgba(58, 155, 255, 0.85)",
+      "rgba(255, 110, 30, 0.9)",
+      "rgba(255, 200, 120, 1)",
+    ],
   );
   return (
     <CanvasImage
@@ -433,6 +440,9 @@ export const LogoForjado = Interactive.withSchema({
 type SiguenosProps = {
   /** Altura del borde de arriba del botón, en píxeles. */
   readonly y: number;
+  readonly texto?: string;
+  /** Línea de debajo del botón; vacía para no ponerla. */
+  readonly subtitulo?: string;
   readonly style?: React.CSSProperties;
 };
 
@@ -441,11 +451,16 @@ const CAMPANA =
   "M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z";
 
 /**
- * La llamada a la acción del final: un botón «SÍGUENOS» con la campana que
- * entra con rebote, late con la música y lo cruza un reflejo, y debajo
- * «y no te pierdas la inauguración».
+ * La llamada a la acción del final: un botón con la campana («SÍGUENOS» por
+ * defecto) que entra con rebote, late con la música y lo cruza un reflejo, y
+ * debajo una línea («y no te pierdas la inauguración»).
  */
-const SiguenosInner: React.FC<SiguenosProps> = ({ y, style }) => {
+const SiguenosInner: React.FC<SiguenosProps> = ({
+  y,
+  texto = "SÍGUENOS",
+  subtitulo = "y no te pierdas la inauguración",
+  style,
+}) => {
   const frame = useCurrentFrame();
   const entrada = interpolate(frame, [0, 10], [0, 1], {
     ...clamp,
@@ -453,8 +468,15 @@ const SiguenosInner: React.FC<SiguenosProps> = ({ y, style }) => {
   });
   // Late a 120 BPM (un golpe cada 15 fotogramas) cuando ya ha entrado.
   const latido =
-    frame > 10 ? 1 + 0.035 * Math.pow(Math.max(0, Math.cos(((frame - 10) / 15) * Math.PI)), 8) : 1;
-  const campana = frame > 12 ? 16 * Math.sin((frame - 12) * 0.9) * Math.exp(-(frame - 12) / 14) : 0;
+    frame > 10
+      ? 1 +
+        0.035 *
+          Math.pow(Math.max(0, Math.cos(((frame - 10) / 15) * Math.PI)), 8)
+      : 1;
+  const campana =
+    frame > 12
+      ? 16 * Math.sin((frame - 12) * 0.9) * Math.exp(-(frame - 12) / 14)
+      : 0;
   const reflejo = interpolate(frame, [14, 30], [-60, 160], clamp);
   return (
     <Interactive.Div
@@ -507,7 +529,7 @@ const SiguenosInner: React.FC<SiguenosProps> = ({ y, style }) => {
             color: "#ffffff",
           }}
         >
-          SÍGUENOS
+          {texto}
         </span>
         <div
           style={{
@@ -521,24 +543,26 @@ const SiguenosInner: React.FC<SiguenosProps> = ({ y, style }) => {
           }}
         />
       </div>
-      <div
-        style={{
-          fontFamily: EXO,
-          fontStyle: "normal",
-          fontWeight: 600,
-          fontSize: 44,
-          lineHeight: 1.2,
-          color: "rgba(255, 255, 255, 0.92)",
-          textShadow: "0 4px 18px rgba(0, 0, 0, 0.9)",
-          opacity: interpolate(frame, [8, 18], [0, 1], clamp),
-          translate: `0px ${interpolate(frame, [8, 18], [18, 0], {
-            ...clamp,
-            easing: Easing.out(Easing.cubic),
-          })}px`,
-        }}
-      >
-        y no te pierdas la inauguración
-      </div>
+      {subtitulo ? (
+        <div
+          style={{
+            fontFamily: EXO,
+            fontStyle: "normal",
+            fontWeight: 600,
+            fontSize: 44,
+            lineHeight: 1.2,
+            color: "rgba(255, 255, 255, 0.92)",
+            textShadow: "0 4px 18px rgba(0, 0, 0, 0.9)",
+            opacity: interpolate(frame, [8, 18], [0, 1], clamp),
+            translate: `0px ${interpolate(frame, [8, 18], [18, 0], {
+              ...clamp,
+              easing: Easing.out(Easing.cubic),
+            })}px`,
+          }}
+        >
+          {subtitulo}
+        </div>
+      ) : null}
     </Interactive.Div>
   );
 };
@@ -548,6 +572,100 @@ export const Siguenos = Interactive.withSchema({
   componentName: "<Siguenos>",
   schema: {
     y: numero(0, 1920, 1320, "Altura"),
+  } as const satisfies InteractivitySchema,
+  wrapInSequence: true,
+});
+
+// ------------------------------------------------------------ Barra de progreso
+
+type BarraProgresoProps = {
+  /** Altura del texto de encima de la barra, en píxeles. */
+  readonly y: number;
+  readonly ancho: number;
+  readonly texto?: string;
+  readonly style?: React.CSSProperties;
+};
+
+/** «TRABAJANDO… 100 %»: se llena durante el plano y acaba en el azul de la marca. */
+const BarraProgresoInner: React.FC<BarraProgresoProps> = ({
+  y,
+  ancho,
+  texto = "TRABAJANDO",
+  style,
+}) => {
+  const frame = useCurrentFrame();
+  const { durationInFrames } = useVideoConfig();
+  const p = interpolate(frame, [0, durationInFrames - 6], [0, 1], {
+    ...clamp,
+    easing: Easing.inOut(Easing.cubic),
+  });
+  const completa = p >= 1;
+  return (
+    <Interactive.Div
+      style={{
+        position: "absolute",
+        left: (1080 - ancho) / 2,
+        width: ancho,
+        top: y,
+        opacity: interpolate(frame, [0, 5], [0, 1], clamp),
+        ...style,
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "baseline",
+          marginBottom: 14,
+          fontFamily: EXO,
+          fontWeight: 900,
+          fontStyle: "italic",
+          fontSize: 42,
+          letterSpacing: "0.04em",
+          color: "#ffffff",
+          textShadow: "0 3px 14px rgba(0, 0, 0, 0.95)",
+        }}
+      >
+        <span>{texto}</span>
+        <span
+          style={{
+            color: completa ? AZUL : "#ffffff",
+            textShadow: completa
+              ? `0 0 18px ${AZUL}, 0 3px 14px rgba(0, 0, 0, 0.95)`
+              : "0 3px 14px rgba(0, 0, 0, 0.95)",
+          }}
+        >
+          {Math.round(p * 100)} %
+        </span>
+      </div>
+      <div
+        style={{
+          height: 12,
+          borderRadius: 6,
+          overflow: "hidden",
+          background: "rgba(255, 255, 255, 0.2)",
+          boxShadow: "0 3px 14px rgba(0, 0, 0, 0.7)",
+        }}
+      >
+        <div
+          style={{
+            width: `${p * 100}%`,
+            height: "100%",
+            borderRadius: 6,
+            background: `linear-gradient(90deg, ${AZUL}, #a8d6ff)`,
+          }}
+        />
+      </div>
+    </Interactive.Div>
+  );
+};
+
+export const BarraProgreso = Interactive.withSchema({
+  Component: BarraProgresoInner,
+  componentName: "<BarraProgreso>",
+  schema: {
+    y: numero(0, 1920, 1460, "Altura"),
+    ancho: numero(100, 1080, 760, "Ancho"),
   } as const satisfies InteractivitySchema,
   wrapInSequence: true,
 });

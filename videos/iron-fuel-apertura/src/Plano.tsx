@@ -90,7 +90,12 @@ const PlanoInner: React.FC<PlanoProps> = ({
       easing: Easing.out(Easing.cubic),
     });
     radial = interpolate(frame, [0, 8], [70 * golpe, 0], clamp);
-    aberracion = interpolate(frame, [0, Math.max(1, 10 * golpe)], [22 * golpe, 0], clamp);
+    aberracion = interpolate(
+      frame,
+      [0, Math.max(1, 10 * golpe)],
+      [22 * golpe, 0],
+      clamp,
+    );
   } else if (entrada !== "corte") {
     const signo = entrada === "barrido-izq" ? 1 : -1;
     x = interpolate(frame, [0, 6], [signo * RECORRIDO, 0], {
