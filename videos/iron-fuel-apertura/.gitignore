@@ -16,3 +16,6 @@ public/audio
 
 # Muestras de orquesta (VSCO-2-CE, CC0): preparar-medios.sh las descarga.
 audio/vsco
+
+# Caché de Python al importar audio/orquesta.py
+__pycache__
