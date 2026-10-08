@@ -71,6 +71,11 @@ anuncia que la fecha y la hora están al caer.
 | 8–14 | El logo sale de la forja; «PRÓXIMAMENTE OS DIREMOS», «FECHA Y HORA», «DE NUESTRA INAUGURACIÓN» |
 | 14–16 | Cierre: «INAUGURACIÓN», «FECHA Y HORA MUY PRONTO» y un botón «ATENTOS» con campana |
 
+Hay una segunda composición, `Aviso-fecha`, que en vez de prometer la fecha
+la da: «NUESTRA INAUGURACIÓN», «SERÁ EL SÁBADO», «17 DE OCTUBRE», y en el
+cierre «os diremos la hora muy pronto». La fecha está en las `defaultProps`
+de `src/Root.tsx`.
+
 La escena está en `src/aviso/` y la música en `audio/banda_sonora_aviso.py`,
 con la misma orquesta que la versión épica (`audio/orquesta.py`).
 
@@ -97,6 +102,7 @@ Y después:
     npm run render         # la primera versión, en out/iron-fuel-teaser.mp4
     npm run render:epico   # la épica, en out/iron-fuel-teaser-epico.mp4
     npm run render:aviso   # el aviso, en out/iron-fuel-aviso.mp4
+    npm run render:aviso-fecha   # el aviso con la fecha, en out/iron-fuel-aviso-fecha.mp4
 
 `npm run medios` también descarga las muestras de orquesta (unos 500 MB) en
 `audio/vsco/`, que tampoco se suben al repositorio.

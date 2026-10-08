@@ -12,12 +12,23 @@ import {
   Siguenos,
 } from "../vfx";
 
+/** La fecha de la inauguración, tal como sale en pantalla. */
+export type Fecha = {
+  /** «SÁBADO» */
+  readonly dia: string;
+  /** «17» */
+  readonly numero: string;
+  /** «DE OCTUBRE» */
+  readonly mes: string;
+};
+
 // 8–16 s del aviso. El logo sale de la forja al rojo vivo y se enfría hasta
-// el azul de la marca; debajo, una frase por golpe: «PRÓXIMAMENTE OS
-// DIREMOS», «FECHA Y HORA», «DE NUESTRA INAUGURACIÓN». El cierre lo resume
-// todo con «ATENTOS». No invita a nadie a venir: la inauguración es para los
-// suyos, el vídeo solo anuncia que la fecha y la hora están al caer.
-export const Anuncio: React.FC = () => {
+// el azul de la marca; debajo, una frase por golpe y un cierre con «ATENTOS».
+// Sin fecha: «PRÓXIMAMENTE OS DIREMOS», «FECHA Y HORA», «DE NUESTRA
+// INAUGURACIÓN». Con fecha: «NUESTRA INAUGURACIÓN», «SERÁ EL SÁBADO», «17 DE
+// OCTUBRE», y la hora queda para más adelante. No invita a nadie a venir: la
+// inauguración es para los suyos, el vídeo solo da la noticia.
+export const Anuncio: React.FC<{ readonly fecha?: Fecha }> = ({ fecha }) => {
   const { fps } = useVideoConfig();
 
   return (
@@ -90,6 +101,23 @@ export const Anuncio: React.FC = () => {
         intensidad={1}
       />
 
+      {fecha ? <FrasesConFecha fecha={fecha} /> : <FrasesSinFecha />}
+      <Destello
+        name="Golpe del logo"
+        from={0}
+        durationInFrames={14}
+        premountFor={fps}
+        intensidad={0.8}
+        color="#ffe2c2"
+      />
+    </AbsoluteFill>
+  );
+};
+
+const FrasesSinFecha: React.FC = () => {
+  const { fps } = useVideoConfig();
+  return (
+    <>
       <Rotulo
         name="Próximamente os diremos"
         from={60}
@@ -203,14 +231,6 @@ export const Anuncio: React.FC = () => {
         y={1000}
         color="#bfe0ff"
       />
-      <Destello
-        name="Golpe del logo"
-        from={0}
-        durationInFrames={14}
-        premountFor={fps}
-        intensidad={0.8}
-        color="#ffe2c2"
-      />
       {[60, 90, 120, 180].map((f) => (
         <Destello
           key={f}
@@ -222,6 +242,159 @@ export const Anuncio: React.FC = () => {
           color={f === 90 ? "#ffb070" : AZUL}
         />
       ))}
-    </AbsoluteFill>
+    </>
+  );
+};
+
+const FrasesConFecha: React.FC<{ readonly fecha: Fecha }> = ({ fecha }) => {
+  const { fps } = useVideoConfig();
+  return (
+    <>
+      <Rotulo
+        name="Nuestra inauguración"
+        from={60}
+        durationInFrames={30}
+        premountFor={fps}
+        destacado="INAUGURACIÓN"
+        tamano={104}
+        y={1090}
+        metal
+      >
+        {"NUESTRA"}
+      </Rotulo>
+      <Rotulo
+        name="Será el sábado"
+        from={90}
+        durationInFrames={30}
+        premountFor={fps}
+        destacado={fecha.dia}
+        tamano={124}
+        y={1090}
+        metal
+      >
+        {"SERÁ EL"}
+      </Rotulo>
+      <Chispas
+        name="Chispas de la fecha"
+        from={120}
+        durationInFrames={50}
+        premountFor={fps}
+        x={540}
+        y={1120}
+        cantidad={170}
+        semilla={79}
+        fuerza={46}
+      />
+      <Rotulo
+        name="El día"
+        from={120}
+        durationInFrames={60}
+        premountFor={fps}
+        destacado={fecha.numero}
+        tamano={300}
+        y={1060}
+        fundido
+      >
+        {""}
+      </Rotulo>
+      <Rotulo
+        name="El mes"
+        from={124}
+        durationInFrames={56}
+        premountFor={fps}
+        destacado=""
+        tamano={110}
+        y={1255}
+        metal
+      >
+        {fecha.mes}
+      </Rotulo>
+
+      <Rotulo
+        name="Cierre: Inauguración"
+        from={180}
+        durationInFrames={60}
+        premountFor={fps}
+        destacado=""
+        tamano={92}
+        y={975}
+        salida={false}
+        metal
+      >
+        {"INAUGURACIÓN"}
+      </Rotulo>
+      <Rotulo
+        name="Cierre: la fecha"
+        from={186}
+        durationInFrames={54}
+        premountFor={fps}
+        destacado={fecha.mes}
+        tamano={88}
+        y={1120}
+        salida={false}
+      >
+        {`${fecha.dia} ${fecha.numero}`}
+      </Rotulo>
+      <Siguenos
+        name="Atentos"
+        from={195}
+        durationInFrames={45}
+        premountFor={fps}
+        y={1245}
+        texto="ATENTOS"
+        subtitulo="os diremos la hora muy pronto"
+      />
+
+      {[60, 90].map((f) => (
+        <DestelloAnamorfico
+          key={f}
+          name="Destello de la frase"
+          from={f}
+          durationInFrames={18}
+          premountFor={fps}
+          y={1090}
+          color={AZUL}
+          intensidad={0.6}
+        />
+      ))}
+      <DestelloAnamorfico
+        name="Destello de la fecha"
+        from={120}
+        durationInFrames={24}
+        premountFor={fps}
+        y={1060}
+        color="#ff8a3d"
+        intensidad={1}
+      />
+      <OndaExpansiva
+        name="Onda de la fecha"
+        from={120}
+        durationInFrames={24}
+        premountFor={fps}
+        x={540}
+        y={1060}
+        color="#ffc38a"
+      />
+      <OndaExpansiva
+        name="Onda del cierre"
+        from={180}
+        durationInFrames={22}
+        premountFor={fps}
+        x={540}
+        y={975}
+        color="#bfe0ff"
+      />
+      {[60, 90, 120, 180].map((f) => (
+        <Destello
+          key={f}
+          name="Golpe de la frase"
+          from={f}
+          durationInFrames={f === 120 ? 8 : 6}
+          premountFor={fps}
+          intensidad={f === 120 ? 0.35 : 0.22}
+          color={f === 120 ? "#ffb070" : AZUL}
+        />
+      ))}
+    </>
   );
 };
