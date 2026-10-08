@@ -48,6 +48,17 @@ export const RemotionRoot: React.FC = () => {
         width={1080}
         height={1920}
       />
+      <Composition
+        id="Aviso-fecha"
+        component={Aviso}
+        durationInFrames={480}
+        fps={30}
+        width={1080}
+        height={1920}
+        defaultProps={{
+          fecha: { dia: "SÁBADO", numero: "17", mes: "DE OCTUBRE" },
+        }}
+      />
       <Folder name="Escenas-epicas">
         {ESCENAS_EPICAS.map((e) => (
           <Composition
