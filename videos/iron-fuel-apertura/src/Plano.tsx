@@ -1,5 +1,6 @@
 import { blur } from "@remotion/effects/blur";
 import { chromaticAberration } from "@remotion/effects/chromatic-aberration";
+import { fisheye } from "@remotion/effects/fisheye";
 import { glow } from "@remotion/effects/glow";
 import { zoomBlur } from "@remotion/effects/zoom-blur";
 import { Video } from "@remotion/media";
@@ -47,6 +48,11 @@ type PlanoProps = {
   readonly golpe?: number;
   /** Resplandor alrededor de las luces (0 = sin resplandor). */
   readonly bloom?: number;
+  /**
+   * Ojo de pez, como una cámara de acción: campo de visión en radianes
+   * (0 = lente normal, 1,8 = ojo de pez marcado).
+   */
+  readonly ojoDePez?: number;
   readonly style?: React.CSSProperties;
 };
 
@@ -68,6 +74,7 @@ const PlanoInner: React.FC<PlanoProps> = ({
   temblor = 0,
   golpe = 1,
   bloom = 0,
+  ojoDePez = 0,
   style,
 }) => {
   const frame = useCurrentFrame();
@@ -134,6 +141,11 @@ const PlanoInner: React.FC<PlanoProps> = ({
   const dy = (random(`plano-y-${frame}`) - 0.5) * 2 * sacudida;
 
   const effects = [
+    fisheye({
+      fieldOfView: ojoDePez,
+      zoom: 1.12,
+      disabled: ojoDePez <= 0,
+    }),
     blur({
       radius: barrido,
       horizontal: true,

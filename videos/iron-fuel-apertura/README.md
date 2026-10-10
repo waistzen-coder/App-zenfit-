@@ -9,6 +9,8 @@ partir de los vídeos y fotos de la tienda grabados con el móvil:
   efectos de forja.
 - `Aviso`: 16 s con el logo para anunciar que pronto se dirán la fecha y la
   hora de la inauguración.
+- `Reel`: el mismo aviso en 14 s, montado como un reel de referencia y con
+  su música.
 
 ## La primera versión
 
@@ -79,6 +81,31 @@ de `src/Root.tsx`.
 La escena está en `src/aviso/` y la música en `audio/banda_sonora_aviso.py`,
 con la misma orquesta que la versión épica (`audio/orquesta.py`).
 
+## El reel
+
+El aviso montado como un reel de otra tienda que nos pasaron de referencia, y
+con su música: arranque a oscuras con tubos de neón sobre el rótulo, una
+quemadura de luz roja y blanca en el golpe, cortes a golpe de corchea (las
+letras del rótulo cambian cada 7,5 fotogramas), ojo de pez en las
+estanterías y el logo forjado en el compás fuerte.
+
+| Segundos | Qué pasa |
+| --- | --- |
+| 0–1,5 | El rótulo a oscuras con neones y «HEMOS ESTADO» |
+| 1,5–2,5 | El golpe: quemadura roja, «TRABAJANDO MUCHO» y chispas sobre el techo de LED |
+| 2,5–6,5 | Montaje a ritmo: nevera, estanterías, montaje, letras del rótulo, la escalera |
+| 6,5–8,5 | «PERO YA OS PODEMOS DECIR...» sobre la fachada |
+| 8,5–12,5 | El logo forjado y una frase por golpe (con o sin fecha) |
+| 12,5–14 | Cierre a corcheas: «INAUGURACIÓN», la fecha y «ATENTOS» |
+
+`Reel` promete la fecha y `Reel-fecha` la da (sábado 17 de octubre). La
+música sale de `originales/referencia-reel.mov`, una grabación de pantalla
+del reel; `preparar-medios.sh` la recorta para que el golpe fuerte caiga en
+el segundo 1,5. La canción no es nuestra: Instagram puede silenciar el vídeo
+si se sube con ella dentro. La alternativa es subir la versión sin música y
+añadir el mismo sonido desde la app (en el reel de referencia, «Usar audio»),
+empezando por el mismo punto.
+
 ## Rehacerlo
 
 Los vídeos y fotos de la tienda no están en el repositorio, porque es
@@ -94,6 +121,7 @@ nombres:
     originales/fachada.mov                la fachada y el rótulo (60 fps)
     originales/fachada.jpg                foto de la fachada (de aquí sale el logo)
     originales/escalera.jpg               foto del rótulo con la escalera
+    originales/referencia-reel.mov        grabación del reel de referencia (para la música del reel)
 
 Y después:
 
@@ -103,6 +131,8 @@ Y después:
     npm run render:epico   # la épica, en out/iron-fuel-teaser-epico.mp4
     npm run render:aviso   # el aviso, en out/iron-fuel-aviso.mp4
     npm run render:aviso-fecha   # el aviso con la fecha, en out/iron-fuel-aviso-fecha.mp4
+    npm run render:reel          # el reel, en out/iron-fuel-reel.mp4
+    npm run render:reel-fecha    # el reel con la fecha, en out/iron-fuel-reel-fecha.mp4
 
 `npm run medios` también descarga las muestras de orquesta (unos 500 MB) en
 `audio/vsco/`, que tampoco se suben al repositorio.

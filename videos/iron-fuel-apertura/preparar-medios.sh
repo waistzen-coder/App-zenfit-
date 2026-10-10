@@ -7,6 +7,7 @@
 #   public/grano/        texturas de grano de película
 #   public/audio/        las bandas sonoras (audio/banda_sonora.py,
 #                        audio/banda_sonora_epica.py y audio/banda_sonora_aviso.py)
+#                        y la música del reel, sacada de la referencia
 #   audio/vsco/          las muestras de orquesta de la versión épica
 #
 # Los clips van en VP9 y no en H.264 porque el Chromium de las sesiones en la
@@ -124,3 +125,31 @@ EOF
 fi
 python3 audio/banda_sonora_epica.py
 python3 audio/banda_sonora_aviso.py
+
+# Música del reel: la del reel de referencia que nos pasaron
+# (originales/referencia-reel.mov, una grabación de pantalla de Instagram),
+# recortada para que sus pulsos caigan en fotogramas exactos (120 BPM, el
+# golpe fuerte en el segundo 1,5) y a -14 LUFS. La canción no es nuestra, así
+# que ni la grabación ni el audio se suben al repositorio.
+if [ -f "$O/referencia-reel.mov" ]; then
+  python3 - "$O/referencia-reel.mov" "$P/audio/musica-reel.wav" <<'EOF'
+import json
+import subprocess
+import sys
+
+origen, salida = sys.argv[1:]
+recorte = ["-ss", "0.11", "-t", "14.0", "-i", origen, "-vn"]
+fundidos = "afade=t=in:d=0.08,afade=t=out:st=13.7:d=0.3"
+medida = subprocess.run(
+    ["ffmpeg", "-hide_banner", *recorte, "-af", f"{fundidos},loudnorm=I=-14:TP=-1.5:LRA=11:print_format=json", "-f", "null", "-"],
+    capture_output=True, text=True, check=True,
+).stderr
+m = json.loads(medida[medida.rindex("{"):])
+filtro = (
+    f"{fundidos},loudnorm=I=-14:TP=-1.5:LRA=11:linear=true"
+    f":measured_I={m['input_i']}:measured_TP={m['input_tp']}:measured_LRA={m['input_lra']}"
+    f":measured_thresh={m['input_thresh']}:offset={m['target_offset']}"
+)
+subprocess.run(["ffmpeg", "-v", "error", "-y", *recorte, "-af", filtro, "-ar", "48000", "-ac", "2", "-c:a", "pcm_s16le", salida], check=True)
+EOF
+fi
