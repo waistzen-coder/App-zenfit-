@@ -29,6 +29,8 @@
     "render:epico": "remotion render TeaserEpico out/iron-fuel-teaser-epico.mp4 --codec=h264 --crf=17 --audio-bitrate=192k --timeout=120000",
     "render:aviso": "remotion render Aviso out/iron-fuel-aviso.mp4 --codec=h264 --crf=17 --audio-bitrate=192k --timeout=120000",
     "render:aviso-fecha": "remotion render Aviso-fecha out/iron-fuel-aviso-fecha.mp4 --codec=h264 --crf=17 --audio-bitrate=192k --timeout=120000",
+    "render:reel": "remotion render Reel out/iron-fuel-reel.mp4 --codec=h264 --crf=17 --audio-bitrate=192k --timeout=120000",
+    "render:reel-fecha": "remotion render Reel-fecha out/iron-fuel-reel-fecha.mp4 --codec=h264 --crf=17 --audio-bitrate=192k --timeout=120000",
     "build": "remotion bundle",
     "upgrade": "remotion upgrade",
     "lint": "eslint src && tsc"

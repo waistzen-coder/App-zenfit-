@@ -669,3 +669,144 @@ export const BarraProgreso = Interactive.withSchema({
   } as const satisfies InteractivitySchema,
   wrapInSequence: true,
 });
+
+// ------------------------------------------------------------ Tubos de neón
+
+type TubosNeonProps = {
+  readonly cantidad: number;
+  readonly semilla: number;
+  readonly style?: React.CSSProperties;
+};
+
+const COLORES_NEON = ["#ffffff", AZUL, "#ff2a4a", "#9fd0ff", "#ff2a4a"];
+
+/**
+ * Tubos de luz verticales que se encienden y se apagan a golpe de corchea
+ * (7,5 fotogramas a 120 BPM), como las luces del arranque del reel de
+ * referencia. Cada tubo es una elipse alargada con un degradado: sin filtros.
+ */
+const TubosNeonInner: React.FC<TubosNeonProps> = ({
+  cantidad,
+  semilla,
+  style,
+}) => {
+  const frame = useCurrentFrame();
+  const paso = Math.floor(frame / 7.5);
+  const dentro = (frame - paso * 7.5) / 7.5;
+  const tubos: React.ReactNode[] = [];
+  for (let i = 0; i < cantidad; i++) {
+    const r = (clave: string) => random(`neon-${semilla}-${i}-${clave}`);
+    if (random(`neon-${semilla}-${i}-encendido-${paso}`) < 0.45) {
+      continue;
+    }
+    const color = COLORES_NEON[Math.floor(r("color") * COLORES_NEON.length)];
+    const alto = 500 + r("alto") * 1100;
+    const x = 60 + r("x") * 960;
+    const y = r("y") * (1920 - alto);
+    const intensidad =
+      (0.55 + 0.45 * random(`neon-${semilla}-${i}-brillo-${paso}`)) *
+      (1 - 0.45 * dentro);
+    const tubo = (ancho: number, factor: number) => (
+      <div
+        style={{
+          position: "absolute",
+          left: x - ancho / 2,
+          top: y,
+          width: ancho,
+          height: alto,
+          background: `radial-gradient(closest-side, #ffffff 0%, ${color} 40%, transparent 100%)`,
+          opacity: intensidad * factor,
+        }}
+      />
+    );
+    tubos.push(
+      <div key={i}>
+        {tubo(70, 0.45)}
+        {tubo(10, 1)}
+      </div>,
+    );
+  }
+  return (
+    <Interactive.Div
+      style={{
+        position: "absolute",
+        inset: 0,
+        mixBlendMode: "screen",
+        ...style,
+      }}
+    >
+      {tubos}
+    </Interactive.Div>
+  );
+};
+
+export const TubosNeon = Interactive.withSchema({
+  Component: TubosNeonInner,
+  componentName: "<TubosNeon>",
+  schema: {
+    cantidad: numero(1, 40, 9, "Cantidad"),
+    semilla: numero(0, 9999, 1, "Forma"),
+  } as const satisfies InteractivitySchema,
+  wrapInSequence: true,
+});
+
+// ------------------------------------------------------------ Quemadura
+
+type QuemaduraProps = {
+  readonly color: string;
+  readonly style?: React.CSSProperties;
+};
+
+/**
+ * Quemadura de película: una franja de luz blanca y roja que barre la imagen
+ * de izquierda a derecha en lo que dura, como el golpe del reel de referencia.
+ */
+const QuemaduraInner: React.FC<QuemaduraProps> = ({ color, style }) => {
+  const frame = useCurrentFrame();
+  const { durationInFrames } = useVideoConfig();
+  const p = frame / Math.max(1, durationInFrames - 1);
+  const fuerza = Math.sin(Math.min(1, p) * Math.PI);
+  const x = interpolate(p, [0, 1], [-200, 1280], {
+    ...clamp,
+    easing: Easing.inOut(Easing.quad),
+  });
+  return (
+    <Interactive.Div
+      style={{
+        position: "absolute",
+        inset: 0,
+        mixBlendMode: "screen",
+        ...style,
+      }}
+    >
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          backgroundColor: color,
+          opacity: 0.4 * fuerza,
+        }}
+      />
+      <div
+        style={{
+          position: "absolute",
+          left: x - 380,
+          top: -300,
+          width: 760,
+          height: 2520,
+          background: `radial-gradient(closest-side, #ffffff 0%, #ffe0d0 28%, ${color} 58%, transparent 100%)`,
+          opacity: fuerza,
+        }}
+      />
+    </Interactive.Div>
+  );
+};
+
+export const Quemadura = Interactive.withSchema({
+  Component: QuemaduraInner,
+  componentName: "<Quemadura>",
+  schema: {
+    color: { type: "color", default: "#ff2338", description: "Color" },
+  } as const satisfies InteractivitySchema,
+  wrapInSequence: true,
+});
