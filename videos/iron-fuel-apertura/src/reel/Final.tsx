@@ -16,7 +16,10 @@ import {
 } from "../vfx";
 
 // Las frases después del logo, un golpe cada pulso doble (cada 30
-// fotogramas): sin fecha, la promesa de tu hermano; con fecha, la fecha.
+// fotogramas): sin fecha, la promesa de tu hermano; con fecha, la fecha. La
+// tercera entra 3 fotogramas tarde porque ahí la canción golpea a contratiempo
+// (11,6 s y no 11,5).
+const TERCERA = 153;
 const Frases: React.FC<{ readonly fecha?: Fecha }> = ({ fecha }) => {
   const { fps } = useVideoConfig();
   const frase = (
@@ -30,7 +33,7 @@ const Frases: React.FC<{ readonly fecha?: Fecha }> = ({ fecha }) => {
     <Rotulo
       name={nombre}
       from={from}
-      durationInFrames={30}
+      durationInFrames={Math.min(30, 180 - from)}
       premountFor={fps}
       destacado={destacado}
       tamano={tamano}
@@ -55,7 +58,7 @@ const Frases: React.FC<{ readonly fecha?: Fecha }> = ({ fecha }) => {
         {frase("Fecha y hora", 120, "", "FECHA Y HORA", 124, { fundido: true })}
         {frase(
           "De nuestra inauguración",
-          150,
+          TERCERA,
           "DE NUESTRA",
           "INAUGURACIÓN",
           104,
@@ -69,8 +72,8 @@ const Frases: React.FC<{ readonly fecha?: Fecha }> = ({ fecha }) => {
       {frase("Será el sábado", 120, "SERÁ EL", fecha.dia, 124)}
       <Rotulo
         name="El día"
-        from={150}
-        durationInFrames={30}
+        from={TERCERA}
+        durationInFrames={180 - TERCERA}
         premountFor={fps}
         destacado={fecha.numero}
         tamano={300}
@@ -81,8 +84,8 @@ const Frases: React.FC<{ readonly fecha?: Fecha }> = ({ fecha }) => {
       </Rotulo>
       <Rotulo
         name="El mes"
-        from={153}
-        durationInFrames={27}
+        from={TERCERA + 3}
+        durationInFrames={177 - TERCERA}
         premountFor={fps}
         destacado=""
         tamano={110}
@@ -234,7 +237,7 @@ export const Final: React.FC<{ readonly fecha?: Fecha }> = ({ fecha }) => {
       {fecha ? (
         <Chispas
           name="Chispas de la fecha"
-          from={150}
+          from={TERCERA}
           durationInFrames={40}
           premountFor={fps}
           x={540}
@@ -280,7 +283,7 @@ export const Final: React.FC<{ readonly fecha?: Fecha }> = ({ fecha }) => {
         subtitulo={fecha ? "os diremos la hora muy pronto" : ""}
       />
 
-      {[90, 120, 150].map((f) => (
+      {[90, 120, TERCERA].map((f) => (
         <DestelloAnamorfico
           key={f}
           name="Destello de la frase"
@@ -288,7 +291,7 @@ export const Final: React.FC<{ readonly fecha?: Fecha }> = ({ fecha }) => {
           durationInFrames={18}
           premountFor={fps}
           y={1080}
-          color={f === 150 && fecha ? "#ff8a3d" : AZUL}
+          color={f === TERCERA && fecha ? "#ff8a3d" : AZUL}
           intensidad={0.7}
         />
       ))}
@@ -316,7 +319,7 @@ export const Final: React.FC<{ readonly fecha?: Fecha }> = ({ fecha }) => {
         intensidad={0.75}
         color="#ffe2c2"
       />
-      {[0, 90, 120, 150, 180].map((f) => (
+      {[0, 90, 120, TERCERA, 180].map((f) => (
         <Destello
           key={f}
           name="Golpe de la frase"
@@ -324,7 +327,7 @@ export const Final: React.FC<{ readonly fecha?: Fecha }> = ({ fecha }) => {
           durationInFrames={5}
           premountFor={fps}
           intensidad={0.22}
-          color={f === 150 && fecha ? "#ffb070" : "#ffffff"}
+          color={f === TERCERA && fecha ? "#ffb070" : "#ffffff"}
         />
       ))}
     </AbsoluteFill>
