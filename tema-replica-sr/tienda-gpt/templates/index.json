@@ -1,17 +1,38 @@
 {
   "sections": {
     "hero": {
-      "type": "rp-hero",
+      "type": "rp-hero3d",
       "settings": {
         "product": "juego-de-ventosa-electrica-con-cable",
-        "eyebrow": "RELIEFPATH · VENTOSA ELÉCTRICA 3 EN 1",
-        "heading": "Tu pausa.",
-        "accent": "A tu ritmo.",
-        "text": "Succión regulable, calor y luz roja en un aparato para casa.",
-        "image": "shopify://shop_images/waistzen-reliefpath-hero-20260906.png",
-        "cta": "Comprar ReliefPath",
-        "note": "Bienestar para casa. A tu ritmo, según el manual del fabricante.",
-        "stock_threshold": 20
+        "page_title": true,
+        "eyebrow": "RELIEFPATH™ · SUCCIÓN · CALOR · LUZ ROJA",
+        "heading": "Tu próxima pausa",
+        "accent": "empieza aquí.",
+        "text": "Tres funciones en un aparato para casa. Gíralo, descubre cada función y elige tu pack.",
+        "cta": "Elegir mi pack",
+        "cta_2": "Ver el aparato real",
+        "cta_2_link": "#funciones",
+        "note": "Recreación 3D ilustrativa. Envío estándar gratis en España.",
+        "show_price": true,
+        "stock_threshold": 20,
+        "poster_alt": "ReliefPath en 3D: cuerpo negro y rojo, panel de control y copa transparente",
+        "viewer_role": "visor 3D",
+        "viewer_label": "Modelo 3D de ReliefPath. Arrástralo o usa las flechas para girarlo.",
+        "hint": "Arrastra para girar",
+        "modes_label": "Ver cada función",
+        "mode_1": "Succión",
+        "mode_2": "Calor",
+        "mode_3": "Luz roja",
+        "mode_0_text": "Toca una función para verla en el aparato.",
+        "mode_1_text": "Succión regulable desde el panel superior.",
+        "mode_2_text": "Calor integrado en el mismo aparato.",
+        "mode_3_text": "Luz roja dentro de la copa transparente.",
+        "spot_1_title": "Panel de control",
+        "spot_1_text": "Encendido, modo, succión y calor.",
+        "spot_2_title": "Cuerpo compacto",
+        "spot_2_text": "Negro y rojo, para usar en casa.",
+        "spot_3_title": "Copa transparente",
+        "spot_3_text": "Con la luz roja en su interior."
       }
     },
     "funciones": {
@@ -555,7 +576,8 @@
         "mode_2": "Calor",
         "mode_3": "Luz roja",
         "duration": 22
-      }
+      },
+      "disabled": true
     }
   },
   "order": [
