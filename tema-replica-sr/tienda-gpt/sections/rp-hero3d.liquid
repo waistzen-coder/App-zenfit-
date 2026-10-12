@@ -1,0 +1,172 @@
+{%- comment -%}
+  Portada 3D: el aparato en tiempo real dentro de un anillo de luz, que se gira con el dedo
+  y enseña cada función (succión, calor, luz roja). Primero se pinta una imagen renderizada
+  del mismo modelo (es la imagen principal de la página); cuando el navegador ha terminado
+  de cargar, assets/rp-3d.js la sustituye por el modelo 3D sin salto.
+  Sin WebGL, sin JavaScript o con «ahorro de datos» se queda la imagen, con todo el contenido.
+{%- endcomment -%}
+{{ 'rp-3d.css' | asset_url | stylesheet_tag }}
+{%- liquid
+  assign featured = section.settings.product
+  assign variant = featured.selected_or_first_available_variant
+  assign poster_alt = section.settings.poster_alt
+  if section.settings.poster != blank
+    assign poster_src = section.settings.poster | image_url: width: 1100
+  else
+    assign poster_src = 'rp-3d-poster.webp' | asset_url
+  endif
+-%}
+<section class="rp3d{% if section.settings.page_title %} rp3d--hero{% endif %}" id="rp3d-{{ section.id }}" data-rp3d data-mode="idle" aria-labelledby="rp3d-title-{{ section.id }}">
+  <div class="rp3d__bg" aria-hidden="true"></div>
+  <div class="rp-wrap rp3d__grid">
+    <div class="rp3d__copy">
+      {%- if section.settings.eyebrow != blank -%}<p class="rp3d__eyebrow"><span aria-hidden="true"></span>{{ section.settings.eyebrow | escape }}</p>{%- endif -%}
+      {%- if section.settings.page_title -%}
+        <h1 class="rp3d__title" id="rp3d-title-{{ section.id }}">{{ section.settings.heading | escape }} <em>{{ section.settings.accent | escape }}</em></h1>
+      {%- else -%}
+        <h2 class="rp3d__title" id="rp3d-title-{{ section.id }}">{{ section.settings.heading | escape }} <em>{{ section.settings.accent | escape }}</em></h2>
+      {%- endif -%}
+      {%- if section.settings.text != blank -%}<p class="rp3d__text">{{ section.settings.text | escape }}</p>{%- endif -%}
+    </div>
+
+    <div class="rp3d__stage">
+      <div class="rp3d__viewer" data-rp3d-surface tabindex="0" role="group" aria-roledescription="{{ section.settings.viewer_role | escape }}" aria-label="{{ section.settings.viewer_label | escape }}">
+        <span class="rp3d__ring" aria-hidden="true"></span>
+        <span class="rp3d__floor" aria-hidden="true"></span>
+        <img class="rp3d__poster" src="{{ poster_src }}" width="1100" height="1100" alt="{{ poster_alt | escape }}"{% if section.settings.page_title %} loading="eager" fetchpriority="high"{% else %} loading="lazy"{% endif %}>
+        <canvas class="rp3d__canvas" data-rp3d-canvas aria-hidden="true"></canvas>
+        {%- for k in (1..3) -%}
+          {%- liquid
+            case k
+              when 1
+                assign spot = 'panel'
+                assign spot_title = section.settings.spot_1_title
+                assign spot_text = section.settings.spot_1_text
+              when 2
+                assign spot = 'band'
+                assign spot_title = section.settings.spot_2_title
+                assign spot_text = section.settings.spot_2_text
+              else
+                assign spot = 'cup'
+                assign spot_title = section.settings.spot_3_title
+                assign spot_text = section.settings.spot_3_text
+            endcase
+          -%}
+          {%- if spot_title != blank -%}
+            <div class="rp3d__spot is-hidden" data-rp3d-spot="{{ spot }}">
+              <button type="button" class="rp3d__spot-dot" aria-expanded="false" aria-controls="rp3d-spot-{{ section.id }}-{{ k }}"><span class="visually-hidden">{{ spot_title | escape }}</span></button>
+              <div class="rp3d__spot-card" id="rp3d-spot-{{ section.id }}-{{ k }}" role="note"><strong>{{ spot_title | escape }}</strong>{%- if spot_text != blank -%}<span>{{ spot_text | escape }}</span>{%- endif -%}</div>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+        <p class="rp3d__hint" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M8 13V5.5a1.5 1.5 0 0 1 3 0V11m0-1.5a1.5 1.5 0 0 1 3 0V11m0-.5a1.5 1.5 0 0 1 3 0V12m0-.5a1.5 1.5 0 0 1 3 0V16a6 6 0 0 1-6 6h-1.5a6 6 0 0 1-5-2.7L4.6 16a1.6 1.6 0 0 1 2.6-1.8L8 15" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>{{ section.settings.hint | escape }}</p>
+      </div>
+
+      <div class="rp3d__modes" role="group" aria-label="{{ section.settings.modes_label | escape }}">
+        <button type="button" class="rp3d__mode" data-rp3d-mode="succion" aria-pressed="false">{% render 'sr-icon', name: 'wave' %}{{ section.settings.mode_1 | escape }}</button>
+        <button type="button" class="rp3d__mode" data-rp3d-mode="calor" aria-pressed="false">{% render 'sr-icon', name: 'flame' %}{{ section.settings.mode_2 | escape }}</button>
+        <button type="button" class="rp3d__mode" data-rp3d-mode="luz" aria-pressed="false">{% render 'sr-icon', name: 'sun' %}{{ section.settings.mode_3 | escape }}</button>
+      </div>
+      <p class="rp3d__mode-text" aria-live="polite">
+        <span data-rp3d-text="idle">{{ section.settings.mode_0_text | escape }}</span>
+        <span data-rp3d-text="succion">{{ section.settings.mode_1_text | escape }}</span>
+        <span data-rp3d-text="calor">{{ section.settings.mode_2_text | escape }}</span>
+        <span data-rp3d-text="luz">{{ section.settings.mode_3_text | escape }}</span>
+      </p>
+    </div>
+
+    <div class="rp3d__offer">
+      {%- if featured != blank and section.settings.show_price -%}
+        <div class="rp3d__price"><strong>{{ variant.price | money }}</strong>{%- if variant.compare_at_price > variant.price -%}<s>{{ variant.compare_at_price | money }}</s><span>{{ 'rp.cro.save' | t }} {{ variant.compare_at_price | minus: variant.price | money }}</span>{%- endif -%}</div>
+        <p class="rp3d__payment">{{ 'rp.hero.one_payment' | t }}</p>
+        {% render 'rp-stock-note', variant: variant, threshold: section.settings.stock_threshold %}
+      {%- endif -%}
+      <div class="rp3d__actions">
+        <a class="rp3d__buy" href="#comprar">{{ section.settings.cta | escape }}<span class="rp-arrow" aria-hidden="true">{% render 'sr-icon', name: 'arrow' %}</span></a>
+        {%- if section.settings.cta_2 != blank -%}<a class="rp3d__alt" href="{{ section.settings.cta_2_link | default: '#funciones' }}">{{ section.settings.cta_2 | escape }}</a>{%- endif -%}
+      </div>
+      <p class="rp3d__note">{{ section.settings.note | escape }}</p>
+    </div>
+  </div>
+  <div class="rp-wrap rp3d__meta"><span>{% render 'sr-icon', name: 'truck' %}{{ 'rp.hero.shipping' | t }}</span><span>{% render 'sr-icon', name: 'lock' %}{{ 'rp.hero.payment' | t }}</span><span>{% render 'sr-icon', name: 'refresh' %}{{ 'rp.hero.returns' | t }}</span></div>
+</section>
+
+<script>
+(function(){
+  var root=document.getElementById('rp3d-{{ section.id }}'); if(!root) return;
+  var api=null, pending=null, src={{ 'rp-3d.js' | asset_url | json }};
+  var buttons=root.querySelectorAll('[data-rp3d-mode]');
+  function show(m){
+    root.dataset.mode=m;
+    buttons.forEach(function(b){ b.setAttribute('aria-pressed', b.dataset.rp3dMode===m ? 'true':'false'); });
+  }
+  root.addEventListener('rp3d:mode',function(e){ show(e.detail.mode); });
+  buttons.forEach(function(b){ b.addEventListener('click',function(){
+    var m=b.dataset.rp3dMode;
+    show(m); if(api) api.setMode(m); else pending=m;
+    if(window.srTrack) srTrack('3d_mode',{mode:m});
+  }); });
+  /* Puntos de interés: se abren con toque o teclado */
+  root.querySelectorAll('.rp3d__spot-dot').forEach(function(d){ d.addEventListener('click',function(){
+    var open=d.getAttribute('aria-expanded')!=='true';
+    root.querySelectorAll('.rp3d__spot-dot').forEach(function(o){ o.setAttribute('aria-expanded','false'); o.parentNode.classList.remove('is-open'); });
+    d.setAttribute('aria-expanded',open?'true':'false'); d.parentNode.classList.toggle('is-open',open);
+  }); });
+  var dragged=false; root.addEventListener('pointerdown',function(e){ if(!dragged && e.target.closest('[data-rp3d-surface]')){ dragged=true; if(window.srTrack) srTrack('3d_drag',{}); } });
+  /* Carga del 3D: después de pintar la página, solo si hay WebGL y no hay ahorro de datos */
+  var c=navigator.connection; if(c && c.saveData) return;
+  try{ var t=document.createElement('canvas'); if(!(t.getContext('webgl2')||t.getContext('webgl'))) return; }catch(e){ return; }
+  function mount(){ if(!window.RP3D) return; api=window.RP3D.mount(root,{seamless:true}); if(api && pending) api.setMode(pending); }
+  function load(){
+    if(window.RP3D) return mount();
+    var s=document.createElement('script'); s.src=src; s.async=true; s.onload=mount; document.head.appendChild(s);
+  }
+  function later(){ ('requestIdleCallback' in window) ? requestIdleCallback(load,{timeout:1200}) : setTimeout(load,300); }
+  if(root.classList.contains('rp3d--hero')){ if(document.readyState==='complete') later(); else addEventListener('load',later,{once:true}); }
+  else if('IntersectionObserver' in window){ var io=new IntersectionObserver(function(es){ if(es[0].isIntersecting){ io.disconnect(); load(); } },{rootMargin:'400px'}); io.observe(root); }
+  else load();
+})();
+</script>
+
+{% schema %}
+{
+  "name": "RP · Portada 3D",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Producto" },
+    { "type": "checkbox", "id": "page_title", "label": "Es la portada (título principal H1)", "default": true },
+    { "type": "header", "content": "Textos" },
+    { "type": "text", "id": "eyebrow", "label": "Antetítulo", "default": "RELIEFPATH™ · SUCCIÓN · CALOR · LUZ ROJA" },
+    { "type": "text", "id": "heading", "label": "Título", "default": "Tu próxima pausa" },
+    { "type": "text", "id": "accent", "label": "Énfasis", "default": "empieza aquí." },
+    { "type": "textarea", "id": "text", "label": "Descripción", "default": "Tres funciones en un aparato para casa. Gíralo, descubre cada función y elige tu pack." },
+    { "type": "text", "id": "cta", "label": "Botón principal", "default": "Elegir mi pack" },
+    { "type": "text", "id": "cta_2", "label": "Botón secundario", "default": "Ver el aparato real" },
+    { "type": "url", "id": "cta_2_link", "label": "Enlace del botón secundario", "info": "Vacío = baja al vídeo real de «funciones»." },
+    { "type": "text", "id": "note", "label": "Nota bajo los botones", "default": "Recreación 3D ilustrativa. Envío estándar gratis en España." },
+    { "type": "checkbox", "id": "show_price", "label": "Mostrar precio de una unidad", "default": true },
+    { "type": "range", "id": "stock_threshold", "label": "Avisar de stock bajo desde", "min": 0, "max": 20, "step": 1, "unit": "ud", "default": 20 },
+    { "type": "header", "content": "Visor 3D" },
+    { "type": "image_picker", "id": "poster", "label": "Imagen inicial (opcional)", "info": "Por defecto, una imagen del mismo modelo 3D para que el cambio no se note." },
+    { "type": "text", "id": "poster_alt", "label": "Texto alternativo de la imagen", "default": "ReliefPath en 3D: cuerpo negro y rojo, panel de control y copa transparente" },
+    { "type": "text", "id": "viewer_role", "label": "Tipo de visor (lectores de pantalla)", "default": "visor 3D" },
+    { "type": "text", "id": "viewer_label", "label": "Descripción del visor", "default": "Modelo 3D de ReliefPath. Arrástralo o usa las flechas para girarlo." },
+    { "type": "text", "id": "hint", "label": "Indicación", "default": "Arrastra para girar" },
+    { "type": "text", "id": "modes_label", "label": "Nombre del grupo de funciones", "default": "Ver cada función" },
+    { "type": "text", "id": "mode_1", "label": "Función 1", "default": "Succión" },
+    { "type": "text", "id": "mode_2", "label": "Función 2", "default": "Calor" },
+    { "type": "text", "id": "mode_3", "label": "Función 3", "default": "Luz roja" },
+    { "type": "text", "id": "mode_0_text", "label": "Texto inicial", "default": "Toca una función para verla en el aparato." },
+    { "type": "text", "id": "mode_1_text", "label": "Texto función 1", "default": "Succión regulable desde el panel superior." },
+    { "type": "text", "id": "mode_2_text", "label": "Texto función 2", "default": "Calor integrado en el mismo aparato." },
+    { "type": "text", "id": "mode_3_text", "label": "Texto función 3", "default": "Luz roja dentro de la copa transparente." },
+    { "type": "header", "content": "Puntos de interés" },
+    { "type": "text", "id": "spot_1_title", "label": "Panel · título", "default": "Panel de control" },
+    { "type": "text", "id": "spot_1_text", "label": "Panel · texto", "default": "Encendido, modo, succión y calor." },
+    { "type": "text", "id": "spot_2_title", "label": "Cuerpo · título", "default": "Cuerpo compacto" },
+    { "type": "text", "id": "spot_2_text", "label": "Cuerpo · texto", "default": "Negro y rojo, para usar en casa." },
+    { "type": "text", "id": "spot_3_title", "label": "Copa · título", "default": "Copa transparente" },
+    { "type": "text", "id": "spot_3_text", "label": "Copa · texto", "default": "Con la luz roja en su interior." }
+  ],
+  "presets": [ { "name": "RP · Portada 3D" } ]
+}
+{% endschema %}

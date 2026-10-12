@@ -43,3 +43,23 @@ Shopify o sin JavaScript, todo se ve quieto y completo.
   «TU PAUSA. Tus reglas.» y el botón a la caja de compra.
 - La imagen es la del hero; con un PNG sin fondo del aparato queda más
   parecido al vídeo (se cambia en el editor).
+
+## Portada 3D interactiva (12-10)
+
+Sustituye a «RP · Portada 3D» de ChatGPT (`rp-cinema`, un vídeo renderizado), que
+se ha quitado del tema; su copia está en `retirado/`.
+
+- `sections/rp-hero3d.liquid` «RP · Portada 3D»: portada oscura con el aparato en
+  3D en tiempo real dentro de un anillo de luz. Se gira con el dedo o el ratón (y
+  con las flechas del teclado), tiene tres puntos de interés (panel, cuerpo, copa)
+  y botones de función: Succión (anillos que salen de la copa), Calor (resplandor
+  naranja y el icono del panel encendido) y Luz roja (los LED de la copa se
+  encienden). Si nadie toca, las funciones se van enseñando solas.
+- `assets/rp-3d.js`: el modelo (geometría propia, sin archivos .glb) con Three.js
+  0.186, empaquetado con esbuild desde `src/rp-3d/main.js` (`src/rp-3d/build.sh`).
+  Se descarga después de pintar la página, solo si hay WebGL y sin ahorro de datos.
+- `assets/rp-3d-poster.webp`: imagen renderizada del mismo modelo; es lo primero
+  que se ve y el 3D la sustituye sin salto. Sin WebGL se queda la imagen.
+- `assets/rp-3d.css`: estilos; el anillo, los textos y el fondo cambian de color
+  con cada función. Cabecera oscura cuando esta portada va arriba.
+- Con «reducir movimiento» no gira ni cambia de función solo.
