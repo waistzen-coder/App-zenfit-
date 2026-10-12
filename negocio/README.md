@@ -77,7 +77,7 @@ en tu cuenta y cada gasto lo apruebas tú.
 | [`web/`](web/) | La web de Mostrador, lista para publicar, con su escaparate de ejemplos |
 | [`fabrica/`](fabrica/) | La fábrica: de la ficha de un negocio a su web en un comando ([cómo se usa](fabrica/README.md)) |
 | [`plan/`](plan/) | [Plan de 30 días](plan/plan-30-dias.md), [presupuesto de los 1.000 €](plan/presupuesto.md) y [lo legal y fiscal](plan/legal-fiscal.md) |
-| [`ventas/`](ventas/) | [Oferta y precios](ventas/oferta.md), [cómo encontrar clientes](ventas/prospeccion.md), [guiones](ventas/guiones.md), [objeciones](ventas/objeciones.md) y [hoja de encargo](ventas/hoja-de-encargo.md) |
+| [`ventas/`](ventas/) | [Oferta y precios](ventas/oferta.md), [cómo encontrar clientes](ventas/prospeccion.md), [guiones](ventas/guiones.md), [objeciones](ventas/objeciones.md), [hoja de encargo](ventas/hoja-de-encargo.md) y [plataformas donde piden web](ventas/que-escriban-ellos.md) |
 
 Cada web de propuesta incluye: diseño según el sector, botones de llamada y
 WhatsApp, horario con «abierto ahora» calculado en vivo, cómo llegar, datos
