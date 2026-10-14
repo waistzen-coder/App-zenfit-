@@ -1,6 +1,7 @@
 import { Audio } from "@remotion/media";
 import { AbsoluteFill, Series, staticFile, useVideoConfig } from "remotion";
 import { Grano, Vineta } from "./efectos";
+import { Quemadura } from "./vfx";
 import { Apertura } from "./inauguracion/Apertura";
 import { Informacion } from "./inauguracion/Informacion";
 import { NEGRO } from "./marca";
@@ -31,6 +32,13 @@ export const Inauguracion: React.FC = () => {
           <Informacion />
         </Series.Sequence>
       </Series>
+      <Quemadura
+        name="Quemadura hacia el logo"
+        from={176}
+        durationInFrames={12}
+        premountFor={fps}
+        color="#ff2338"
+      />
       {/* Sombra abajo: deja leer el texto y los botones de las historias. */}
       <AbsoluteFill
         style={{
