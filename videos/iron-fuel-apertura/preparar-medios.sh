@@ -6,7 +6,8 @@
 #   public/fotos/        fotos etalonadas y el logo sacado del rótulo
 #   public/grano/        texturas de grano de película
 #   public/audio/        las bandas sonoras (audio/banda_sonora.py,
-#                        audio/banda_sonora_epica.py y audio/banda_sonora_aviso.py)
+#                        audio/banda_sonora_epica.py, audio/banda_sonora_aviso.py y
+#                        audio/banda_sonora_inauguracion.py)
 #                        y la música del reel, sacada de la referencia
 #   audio/vsco/          las muestras de orquesta de la versión épica
 #
@@ -125,6 +126,7 @@ EOF
 fi
 python3 audio/banda_sonora_epica.py
 python3 audio/banda_sonora_aviso.py
+python3 audio/banda_sonora_inauguracion.py
 
 # Música del reel: la del reel de referencia que nos pasaron
 # (originales/referencia-reel.mov, una grabación de pantalla de Instagram),

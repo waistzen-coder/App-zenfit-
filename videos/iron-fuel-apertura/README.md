@@ -11,6 +11,8 @@ partir de los vídeos y fotos de la tienda grabados con el móvil:
   hora de la inauguración.
 - `Reel`: el mismo aviso en 14 s, montado como un reel de referencia y con
   su música.
+- `Inauguracion`: 18 s con la información de la invitación (fecha, hora,
+  sitio, lo que habrá y el descuento).
 
 ## La primera versión
 
@@ -106,6 +108,21 @@ si se sube con ella dentro. La alternativa es subir la versión sin música y
 añadir el mismo sonido desde la app (en el reel de referencia, «Usar audio»),
 empezando por el mismo punto.
 
+## La inauguración
+
+El vídeo que informa de la apertura, con los datos de la invitación:
+
+| Segundos | Qué pasa |
+| --- | --- |
+| 0–2 | «DETRÁS DE CADA SUEÑO» y «HAY MUCHO TRABAJO» con chispas de yunque |
+| 2–4 | Un plano por pulso: el techo de LED, las estanterías, el montaje, las letras del rótulo |
+| 4–6 | «Y HOY QUEREMOS COMPARTIRLO» sobre la fachada y medio segundo de casi silencio |
+| 6–12 | El logo forjado con «INAUGURACIÓN» y una tarjeta que se llena línea a línea: sábado 17 de octubre, desde las 19:00 h, calle Rafael Alberti 3, bebidas, aperitivos y regalos, 10 % de descuento |
+| 12–18 | «¡TE ESPERAMOS!» y el Instagram; el final queda quieto seis segundos para poder leerlo |
+
+Los datos están en `FILAS`, en `src/inauguracion/Informacion.tsx`, y la
+música en `audio/banda_sonora_inauguracion.py`.
+
 ## Rehacerlo
 
 Los vídeos y fotos de la tienda no están en el repositorio, porque es
@@ -133,6 +150,7 @@ Y después:
     npm run render:aviso-fecha   # el aviso con la fecha, en out/iron-fuel-aviso-fecha.mp4
     npm run render:reel          # el reel, en out/iron-fuel-reel.mp4
     npm run render:reel-fecha    # el reel con la fecha, en out/iron-fuel-reel-fecha.mp4
+    npm run render:inauguracion  # la inauguración, en out/iron-fuel-inauguracion.mp4
 
 `npm run medios` también descarga las muestras de orquesta (unos 500 MB) en
 `audio/vsco/`, que tampoco se suben al repositorio.
@@ -160,8 +178,9 @@ chispas) tardan más de los 30 s que Remotion espera por defecto, así que
   `velocidad` para la cámara lenta.
 - Las transiciones: `entrada` y `salida` de cada `<Plano>` (`corte`, `zoom`,
   `barrido-izq`, `barrido-der`).
-- La música: `audio/banda_sonora.py`, `audio/banda_sonora_epica.py` y
-  `audio/banda_sonora_aviso.py`; después hay que volver a ejecutarlos. Si se
+- La música: `audio/banda_sonora.py`, `audio/banda_sonora_epica.py`,
+  `audio/banda_sonora_aviso.py` y `audio/banda_sonora_inauguracion.py`;
+  después hay que volver a ejecutarlos. Si se
   mueve un corte en el vídeo, hay que mover su golpe en el script. La
   orquesta, la percusión y la mezcla que comparten las dos últimas están en
   `audio/orquesta.py`.
