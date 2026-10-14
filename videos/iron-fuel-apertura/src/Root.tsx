@@ -1,5 +1,6 @@
 import { Composition, Folder } from "remotion";
 import { Aviso } from "./Aviso";
+import { Inauguracion } from "./Inauguracion";
 import { Reel } from "./Reel";
 import { CierreEpico } from "./epico/CierreEpico";
 import { FachadaEpica } from "./epico/FachadaEpica";
@@ -59,6 +60,14 @@ export const RemotionRoot: React.FC = () => {
         defaultProps={{
           fecha: { dia: "SÁBADO", numero: "17", mes: "DE OCTUBRE" },
         }}
+      />
+      <Composition
+        id="Inauguracion"
+        component={Inauguracion}
+        durationInFrames={540}
+        fps={30}
+        width={1080}
+        height={1920}
       />
       <Composition
         id="Reel"
