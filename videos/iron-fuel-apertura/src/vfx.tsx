@@ -810,3 +810,304 @@ export const Quemadura = Interactive.withSchema({
   } as const satisfies InteractivitySchema,
   wrapInSequence: true,
 });
+
+// ------------------------------------------------------------ Rayos de luz
+
+type RayosDeLuzProps = {
+  readonly x: number;
+  readonly y: number;
+  readonly radio: number;
+  readonly rayos: number;
+  readonly color: string;
+  readonly intensidad: number;
+  readonly style?: React.CSSProperties;
+};
+
+/**
+ * Rayos de luz que giran despacio detrás de algo (el logo): un degradado
+ * cónico con rayos suaves que se apagan hacia fuera con una máscara radial.
+ */
+const RayosDeLuzInner: React.FC<RayosDeLuzProps> = ({
+  x,
+  y,
+  radio,
+  rayos,
+  color,
+  intensidad,
+  style,
+}) => {
+  const frame = useCurrentFrame();
+  const paso = 360 / rayos;
+  const paradas: string[] = [];
+  for (let i = 0; i < rayos; i++) {
+    const a = i * paso;
+    paradas.push(
+      `transparent ${a}deg`,
+      `${color} ${a + paso * 0.14}deg`,
+      `transparent ${a + paso * 0.28}deg`,
+      `transparent ${a + paso}deg`,
+    );
+  }
+  const mascara =
+    "radial-gradient(circle closest-side, black 0%, rgba(0, 0, 0, 0.6) 35%, transparent 100%)";
+  return (
+    <Interactive.Div
+      style={{
+        position: "absolute",
+        left: x - radio,
+        top: y - radio,
+        width: radio * 2,
+        height: radio * 2,
+        background: `conic-gradient(from ${frame * 0.4}deg at 50% 50%, ${paradas.join(", ")})`,
+        maskImage: mascara,
+        WebkitMaskImage: mascara,
+        mixBlendMode: "screen",
+        opacity: intensidad * interpolate(frame, [0, 12], [0, 1], clamp),
+        ...style,
+      }}
+    />
+  );
+};
+
+export const RayosDeLuz = Interactive.withSchema({
+  Component: RayosDeLuzInner,
+  componentName: "<RayosDeLuz>",
+  schema: {
+    x: numero(0, 1080, 540, "Centro X"),
+    y: numero(0, 1920, 400, "Centro Y"),
+    radio: numero(100, 1600, 900, "Radio"),
+    rayos: numero(4, 40, 14, "Rayos"),
+    color: { type: "color", default: "#9fd0ff", description: "Color" },
+    intensidad: numero(0, 1, 0.35, "Intensidad", 0.01),
+  } as const satisfies InteractivitySchema,
+  wrapInSequence: true,
+});
+
+// ------------------------------------------------------------ Confeti
+
+type ConfetiProps = {
+  readonly x: number;
+  readonly y: number;
+  readonly cantidad: number;
+  readonly semilla: number;
+  /** Velocidad inicial en píxeles por fotograma. */
+  readonly fuerza: number;
+  /** Hacia dónde dispara, en grados (-90 = hacia arriba). */
+  readonly direccion?: number;
+  /** Abertura del abanico, en grados. */
+  readonly apertura?: number;
+  readonly style?: React.CSSProperties;
+};
+
+const COLORES_CONFETI = [AZUL, "#ffffff", "#ffcf5a", "#ff7424", "#9fd0ff"];
+
+/**
+ * Un cañonazo de confeti para celebrarlo: sale en abanico hacia arriba,
+ * frena con el aire, cae dando vueltas y se desvanece al final.
+ */
+const ConfetiInner: React.FC<ConfetiProps> = ({
+  x,
+  y,
+  cantidad,
+  semilla,
+  fuerza,
+  direccion = -90,
+  apertura = 170,
+  style,
+}) => {
+  const frame = useCurrentFrame();
+  const { durationInFrames } = useVideoConfig();
+  const aire = 0.94;
+  const gravedad = 0.45;
+  const k = (1 - Math.pow(aire, frame)) / (1 - aire);
+  const caida = (gravedad / (1 - aire)) * (frame - k);
+  const fuera = interpolate(
+    frame,
+    [durationInFrames - 18, durationInFrames - 1],
+    [1, 0],
+    clamp,
+  );
+  const piezas: React.ReactNode[] = [];
+  for (let i = 0; i < cantidad; i++) {
+    const r = (clave: string) => random(`confeti-${semilla}-${i}-${clave}`);
+    const angulo =
+      ((direccion + (r("angulo") - 0.5) * apertura) * Math.PI) / 180;
+    const v = fuerza * (0.4 + 0.6 * r("v"));
+    const px =
+      x +
+      Math.cos(angulo) * v * k +
+      Math.sin(frame * (0.1 + r("f") * 0.12) + r("fase") * 6.3) *
+        24 *
+        Math.min(1, frame / 25);
+    const py = y + Math.sin(angulo) * v * k + caida * (0.7 + 0.6 * r("peso"));
+    const ancho = 16 + r("ancho") * 18;
+    const alto = 8 + r("alto") * 9;
+    const giro = r("giro") * 360 + frame * (r("vuelta") - 0.5) * 24;
+    const volteo = Math.cos(
+      frame * (0.18 + r("volteo") * 0.25) + r("fase2") * 6.3,
+    );
+    piezas.push(
+      <div
+        key={i}
+        style={{
+          position: "absolute",
+          left: px - ancho / 2,
+          top: py - alto / 2,
+          width: ancho,
+          height: alto,
+          borderRadius: 2,
+          backgroundColor:
+            COLORES_CONFETI[Math.floor(r("color") * COLORES_CONFETI.length)],
+          rotate: `${giro}deg`,
+          scale: `${volteo} 1`,
+          opacity: fuera,
+        }}
+      />,
+    );
+  }
+  return (
+    <Interactive.Div style={{ position: "absolute", inset: 0, ...style }}>
+      {piezas}
+    </Interactive.Div>
+  );
+};
+
+export const Confeti = Interactive.withSchema({
+  Component: ConfetiInner,
+  componentName: "<Confeti>",
+  schema: {
+    x: numero(0, 1080, 540, "Origen X"),
+    y: numero(0, 1920, 1600, "Origen Y"),
+    cantidad: numero(1, 400, 110, "Cantidad"),
+    semilla: numero(0, 9999, 1, "Forma"),
+    fuerza: numero(1, 120, 40, "Fuerza"),
+  } as const satisfies InteractivitySchema,
+  wrapInSequence: true,
+});
+
+// ------------------------------------------------------------ Sello
+
+type SelloProps = {
+  readonly x: number;
+  readonly y: number;
+  readonly tamano: number;
+  readonly texto: string;
+  readonly subtexto: string;
+  readonly color: string;
+  readonly style?: React.CSSProperties;
+};
+
+/**
+ * Una pegatina redonda que se estampa de golpe (llega grande y desenfocada,
+ * rebota y se queda torcida), late con la música y la cruza un reflejo.
+ */
+const SelloInner: React.FC<SelloProps> = ({
+  x,
+  y,
+  tamano,
+  texto,
+  subtexto,
+  color,
+  style,
+}) => {
+  const frame = useCurrentFrame();
+  const entrada = interpolate(frame, [0, 9], [0, 1], {
+    ...clamp,
+    easing: Easing.out(Easing.back(1.6)),
+  });
+  const latido =
+    frame > 10
+      ? 1 +
+        0.04 * Math.pow(Math.max(0, Math.cos(((frame - 10) / 15) * Math.PI)), 8)
+      : 1;
+  const giro = -14 + 3 * Math.sin(frame * 0.07) * Math.min(1, frame / 20);
+  const reflejo = interpolate(frame % 60, [12, 30], [-60, 160], clamp);
+  return (
+    <Interactive.Div
+      style={{
+        position: "absolute",
+        left: x - tamano / 2,
+        top: y - tamano / 2,
+        width: tamano,
+        height: tamano,
+        borderRadius: "50%",
+        overflow: "hidden",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        background: `radial-gradient(circle at 35% 30%, #ffc38a 0%, ${color} 55%, #b84300 100%)`,
+        boxShadow: `0 0 46px ${color}, 0 12px 30px rgba(0, 0, 0, 0.6)`,
+        rotate: `${giro}deg`,
+        scale: String((2.8 - 1.8 * entrada) * latido),
+        filter: `blur(${interpolate(frame, [0, 6], [12, 0], clamp)}px)`,
+        opacity: interpolate(frame, [0, 3], [0, 1], clamp),
+        ...style,
+      }}
+    >
+      <div
+        style={{
+          position: "absolute",
+          inset: tamano * 0.06,
+          borderRadius: "50%",
+          border: "3px dashed rgba(255, 255, 255, 0.75)",
+        }}
+      />
+      <div
+        style={{
+          fontFamily: EXO,
+          fontStyle: "italic",
+          fontWeight: 900,
+          fontSize: tamano * 0.36,
+          lineHeight: 1,
+          color: "#ffffff",
+          textShadow: "0 4px 10px rgba(120, 30, 0, 0.6)",
+        }}
+      >
+        {texto}
+      </div>
+      <div
+        style={{
+          fontFamily: EXO,
+          fontStyle: "italic",
+          fontWeight: 800,
+          fontSize: tamano * 0.12,
+          letterSpacing: "0.06em",
+          color: "#ffffff",
+          marginTop: tamano * 0.02,
+        }}
+      >
+        {subtexto}
+      </div>
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          bottom: 0,
+          left: `${reflejo}%`,
+          width: "30%",
+          background:
+            "linear-gradient(100deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.5) 50%, rgba(255, 255, 255, 0) 100%)",
+        }}
+      />
+    </Interactive.Div>
+  );
+};
+
+export const Sello = Interactive.withSchema({
+  Component: SelloInner,
+  componentName: "<Sello>",
+  schema: {
+    x: numero(0, 1080, 950, "Centro X"),
+    y: numero(0, 1920, 300, "Centro Y"),
+    tamano: numero(60, 600, 210, "Tamaño"),
+    texto: { type: "text-content", default: "10%", description: "Texto" },
+    subtexto: {
+      type: "text-content",
+      default: "DESCUENTO",
+      description: "Subtexto",
+    },
+    color: { type: "color", default: "#ff7424", description: "Color" },
+  } as const satisfies InteractivitySchema,
+  wrapInSequence: true,
+});

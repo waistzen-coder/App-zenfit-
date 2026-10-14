@@ -120,6 +120,14 @@ El vídeo que informa de la apertura, con los datos de la invitación:
 | 6–12 | El logo forjado con «INAUGURACIÓN» y una tarjeta que se llena línea a línea: sábado 17 de octubre, desde las 19:00 h, calle Rafael Alberti 3, bebidas, aperitivos y regalos, 10 % de descuento |
 | 12–18 | «¡TE ESPERAMOS!» y el Instagram; el final queda quieto seis segundos para poder leerlo |
 
+Va cargado de efectos: neones y una quemadura de luz roja y blanca en el
+arranque, cortes con fogonazos, cristal roto de colores y una fuga de luz en
+las letras del rótulo, otra quemadura al entrar el logo, rayos de luz que giran
+detrás, cada línea de la tarjeta entra con un reflejo, chispas y un empujón de
+cámara, el 10 % se estampa como una pegatina naranja y «¡TE ESPERAMOS!» sale
+con dos cañones de confeti. Los efectos nuevos (`<RayosDeLuz>`, `<Confeti>`,
+`<Sello>`) están en `src/vfx.tsx`.
+
 Los datos están en `FILAS`, en `src/inauguracion/Informacion.tsx`, y la
 música en `audio/banda_sonora_inauguracion.py`.
 

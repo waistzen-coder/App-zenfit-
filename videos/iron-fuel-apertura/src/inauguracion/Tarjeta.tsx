@@ -47,6 +47,11 @@ const FilaTarjeta: React.FC<{
   // Un fogonazo del color de la fila al entrar y, en la destacada, un latido
   // suave cada compás para que no se pierda.
   const fogonazo = interpolate(frame, [0, 12], [0.35, 0], clamp);
+  // Un reflejo de luz cruza la fila justo después de entrar.
+  const reflejo = interpolate(frame, [2, 16], [-35, 135], {
+    ...clamp,
+    easing: Easing.inOut(Easing.quad),
+  });
   const latido = fila.destacada
     ? 0.5 + 0.5 * Math.cos(((Math.max(0, frame - 12) % 60) / 60) * 2 * Math.PI)
     : 0;
@@ -99,6 +104,26 @@ const FilaTarjeta: React.FC<{
         }}
       >
         {fila.texto}
+      </div>
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          overflow: "hidden",
+          pointerEvents: "none",
+        }}
+      >
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            bottom: 0,
+            left: `${reflejo}%`,
+            width: "30%",
+            background:
+              "linear-gradient(100deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.32) 50%, rgba(255, 255, 255, 0) 100%)",
+          }}
+        />
       </div>
     </div>
   );

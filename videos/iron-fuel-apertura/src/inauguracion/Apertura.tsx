@@ -5,11 +5,18 @@ import {
   useCurrentFrame,
   useVideoConfig,
 } from "remotion";
-import { Destello, LineaDeCarga } from "../efectos";
+import { Destello, FugaDeLuz, LineaDeCarga } from "../efectos";
 import { AZUL, NEGRO } from "../marca";
 import { Plano } from "../Plano";
 import { Rotulo } from "../Rotulo";
-import { Brasas, Chispas, DestelloAnamorfico, OndaExpansiva } from "../vfx";
+import {
+  Brasas,
+  Chispas,
+  DestelloAnamorfico,
+  OndaExpansiva,
+  Quemadura,
+  TubosNeon,
+} from "../vfx";
 
 const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
 
@@ -32,6 +39,15 @@ export const Apertura: React.FC = () => {
         semilla={19}
         intensidad={0.75}
         style={{ opacity: interpolate(frame, [56, 66], [1, 0], clamp) }}
+      />
+      <TubosNeon
+        name="Neones del arranque"
+        from={0}
+        durationInFrames={30}
+        premountFor={fps}
+        cantidad={8}
+        semilla={41}
+        style={{ opacity: 0.65 }}
       />
 
       <Plano
@@ -93,18 +109,33 @@ export const Apertura: React.FC = () => {
         salida="barrido-der"
       />
       <Plano
-        name="Las letras del rótulo"
+        name="Las letras del rótulo 1"
         from={105}
-        durationInFrames={15}
+        durationInFrames={7}
         premountFor={fps}
         archivo="clips/fachada-rotulo-60fps.webm"
         inicio={15.4}
         velocidad={0.5}
         zoomInicial={1.2}
-        zoomFinal={1.28}
+        zoomFinal={1.25}
         origen="50% 30%"
         brillo={1}
         entrada="barrido-der"
+      />
+      <Plano
+        name="Las letras del rótulo 2"
+        from={112}
+        durationInFrames={8}
+        premountFor={fps}
+        archivo="clips/fachada-rotulo-60fps.webm"
+        inicio={12.6}
+        velocidad={0.5}
+        zoomInicial={1.4}
+        zoomFinal={1.45}
+        origen="55% 25%"
+        brillo={1}
+        entrada="zoom"
+        golpe={1.3}
       />
       <Plano
         name="La fachada"
@@ -120,6 +151,24 @@ export const Apertura: React.FC = () => {
         brillo={0.5}
         entrada="zoom"
         temblor={12}
+      />
+      <TubosNeon
+        name="Neones sobre la fachada"
+        from={120}
+        durationInFrames={46}
+        premountFor={fps}
+        cantidad={7}
+        semilla={47}
+        style={{ opacity: 0.6 }}
+      />
+      <FugaDeLuz
+        name="Fuga de luz hacia la fachada"
+        from={112}
+        durationInFrames={18}
+        premountFor={fps}
+        semilla={5}
+        tono={200}
+        style={{ opacity: 0.55 }}
       />
       <Brasas
         name="Brasas antes del logo"
@@ -202,6 +251,24 @@ export const Apertura: React.FC = () => {
         color="#ff8a3d"
         intensidad={0.9}
       />
+      <Quemadura
+        name="Quemadura del yunque"
+        from={27}
+        durationInFrames={12}
+        premountFor={fps}
+        color="#ff2338"
+      />
+      {[60, 75, 90, 105, 112].map((f) => (
+        <Destello
+          key={f}
+          name="Fogonazo del corte"
+          from={f}
+          durationInFrames={4}
+          premountFor={fps}
+          intensidad={0.28}
+          color="#ffffff"
+        />
+      ))}
       <Destello
         name="Golpe del yunque"
         from={30}
