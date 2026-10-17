@@ -2,12 +2,13 @@
 # Prepara en public/ todo el material del vídeo a partir de los originales:
 #
 #   originales/          los vídeos y fotos tal como salieron del móvil
-#   public/clips/        clips etalonados y reescalados, en VP9
+#   public/clips/        clips etalonados y reescalados, en VP9, y el vídeo
+#                        base del Edit (edicion/hornear_edit.py)
 #   public/fotos/        fotos etalonadas y el logo sacado del rótulo
 #   public/grano/        texturas de grano de película
 #   public/audio/        las bandas sonoras (audio/banda_sonora.py,
-#                        audio/banda_sonora_epica.py, audio/banda_sonora_aviso.py y
-#                        audio/banda_sonora_inauguracion.py)
+#                        audio/banda_sonora_epica.py, audio/banda_sonora_aviso.py,
+#                        audio/banda_sonora_inauguracion.py y audio/musica_edit.py)
 #                        y la música del reel, sacada de la referencia
 #   audio/vsco/          las muestras de orquesta de la versión épica
 #
@@ -127,6 +128,14 @@ fi
 python3 audio/banda_sonora_epica.py
 python3 audio/banda_sonora_aviso.py
 python3 audio/banda_sonora_inauguracion.py
+python3 audio/musica_edit.py
+
+# El vídeo base del Edit de Instagram: los planos de src/edit/montaje.json
+# (el recorrido del día de la inauguración y los clips de las obras de
+# arriba) con sus rampas de velocidad. Unos 3 minutos.
+if [ -f "$O/recorrido-inauguracion.mp4" ]; then
+  python3 edicion/hornear_edit.py
+fi
 
 # Música del reel: la del reel de referencia que nos pasaron
 # (originales/referencia-reel.mov, una grabación de pantalla de Instagram),

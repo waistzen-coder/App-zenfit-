@@ -13,6 +13,9 @@ partir de los vídeos y fotos de la tienda grabados con el móvil:
   su música.
 - `Inauguracion`: 18 s con la información de la invitación (fecha, hora,
   sitio, lo que habrá y el descuento).
+- `Edit-instagram`: 22 s del recorrido por la tienda el día de la
+  inauguración, montado como un Edit de Instagram, y `Portada-edit`, su
+  portada.
 
 ## La primera versión
 
@@ -131,6 +134,34 @@ con dos cañones de confeti. Los efectos nuevos (`<RayosDeLuz>`, `<Confeti>`,
 Los datos están en `FILAS`, en `src/inauguracion/Informacion.tsx`, y la
 música en `audio/banda_sonora_inauguracion.py`.
 
+## El Edit de Instagram
+
+Un Edit de 22 s del recorrido por la tienda que se grabó el día de la
+inauguración, con música propia de phonk épico:
+
+| Segundos | Qué pasa |
+| --- | --- |
+| 0–3,7 | «DE ESTO...»: seis planos de las obras en blanco y negro, cada vez más seguidos, y un pulso de silencio |
+| 3,7–5,6 | «...A ESTO»: en la caída de la música, el mismo rincón de la tienda desde el mismo ángulo, ya terminado |
+| 5,6–11,2 | El recorrido a golpe de pulso con las palabras del vinilo de la puerta (FUERZA, RESISTENCIA, ENERGÍA, RENDIMIENTO, RECUPERACIÓN); al final la música se frena como una cinta y la imagen pierde el color |
+| 11,2–13,1 | «CONSTRUYE TU MEJOR VERSIÓN» sobre el logo iluminado de la pared |
+| 13,1–16,8 | Segunda caída: un plano por pulso |
+| 16,8–22 | Sobre la fachada con las mesas de la fiesta: el logo forjado, «YA ESTAMOS ABIERTOS», la dirección, el Instagram y «¡TE ESPERAMOS!» con confeti |
+
+El montaje está en `src/edit/montaje.json`: de qué vídeo sale cada plano, en
+qué segundo empieza, cuántos fotogramas dura y su curva de velocidad.
+`edicion/hornear_edit.py` lo convierte en un solo clip,
+`public/clips/edit-montaje.webm`, con las rampas de velocidad (y desenfoque de
+movimiento donde va rápido). Encima, `src/edit/Base.tsx` pone los golpes de
+zoom, la aberración cromática, los temblores y los barridos, y
+`src/EditInstagram.tsx`, los textos. La música, `audio/musica_edit.py`, va a
+128,57 BPM para que un pulso dure exactamente 14 fotogramas. El 808, el
+cencerro, las palmas y los charles son sintetizados; los metales y las
+cuerdas son los de la orquesta.
+
+`Portada-edit` es la portada para la cuadrícula del perfil: el mismo rincón
+antes y ahora, partido en diagonal, con «ASÍ HA QUEDADO».
+
 ## Rehacerlo
 
 Los vídeos y fotos de la tienda no están en el repositorio, porque es
@@ -147,6 +178,7 @@ nombres:
     originales/fachada.jpg                foto de la fachada (de aquí sale el logo)
     originales/escalera.jpg               foto del rótulo con la escalera
     originales/referencia-reel.mov        grabación del reel de referencia (para la música del reel)
+    originales/recorrido-inauguracion.mp4 el recorrido del día de la inauguración (para el Edit)
 
 Y después:
 
@@ -159,6 +191,8 @@ Y después:
     npm run render:reel          # el reel, en out/iron-fuel-reel.mp4
     npm run render:reel-fecha    # el reel con la fecha, en out/iron-fuel-reel-fecha.mp4
     npm run render:inauguracion  # la inauguración, en out/iron-fuel-inauguracion.mp4
+    npm run render:edit          # el Edit de Instagram, en out/iron-fuel-edit.mp4
+    npm run portada:edit         # su portada, en out/iron-fuel-edit-portada.jpg
 
 `npm run medios` también descarga las muestras de orquesta (unos 500 MB) en
 `audio/vsco/`, que tampoco se suben al repositorio.
@@ -187,14 +221,17 @@ chispas) tardan más de los 30 s que Remotion espera por defecto, así que
 - Las transiciones: `entrada` y `salida` de cada `<Plano>` (`corte`, `zoom`,
   `barrido-izq`, `barrido-der`).
 - La música: `audio/banda_sonora.py`, `audio/banda_sonora_epica.py`,
-  `audio/banda_sonora_aviso.py` y `audio/banda_sonora_inauguracion.py`;
-  después hay que volver a ejecutarlos. Si se
+  `audio/banda_sonora_aviso.py`, `audio/banda_sonora_inauguracion.py` y
+  `audio/musica_edit.py`; después hay que volver a ejecutarlos. Si se
   mueve un corte en el vídeo, hay que mover su golpe en el script. La
   orquesta, la percusión y la mezcla que comparten las dos últimas están en
   `audio/orquesta.py`.
 - Las chispas, brasas y destellos: `src/vfx.tsx`. Todo sale de `random()`
   con semilla, así que cada render es idéntico; para cambiar la forma de un
   estallido basta con cambiar su `semilla`.
+- El Edit: los planos y sus rampas, en `src/edit/montaje.json` (después hay
+  que volver a ejecutar `python3 edicion/hornear_edit.py`); los textos, en
+  `src/EditInstagram.tsx` y `src/edit/Cierre.tsx`.
 - Colores y parpadeo de las luces: `src/marca.ts`.
 
 ## Licencia de Remotion
