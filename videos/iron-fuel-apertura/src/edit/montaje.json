@@ -1,0 +1,253 @@
+{
+  "pulso": 14,
+  "planos": [
+    {
+      "nombre": "Antes: la entrada llena de herramientas",
+      "archivo": "public/clips/entrada-techo-led.webm",
+      "desde": 0.3,
+      "fotogramas": 28,
+      "velocidad": [
+        [0, 1],
+        [1, 1]
+      ],
+      "antes": true
+    },
+    {
+      "nombre": "Antes: montando las estanterías",
+      "archivo": "public/clips/montaje.webm",
+      "desde": 0.0,
+      "fotogramas": 28,
+      "velocidad": [
+        [0, 1],
+        [1, 1]
+      ],
+      "antes": true
+    },
+    {
+      "nombre": "Antes: las estanterías vacías",
+      "archivo": "public/clips/estanteria-travelling.webm",
+      "desde": 1.0,
+      "fotogramas": 14,
+      "velocidad": [
+        [0, 1.5],
+        [1, 1.5]
+      ],
+      "antes": true
+    },
+    {
+      "nombre": "Antes: la nevera sin bebidas",
+      "archivo": "public/clips/nevera-led.webm",
+      "desde": 2.3,
+      "fotogramas": 14,
+      "velocidad": [
+        [0, 1],
+        [1, 1]
+      ],
+      "antes": true
+    },
+    {
+      "nombre": "Antes: la escalera y las cajas",
+      "archivo": "public/clips/interior-revelacion.webm",
+      "desde": 8.6,
+      "fotogramas": 14,
+      "velocidad": [
+        [0, 1],
+        [1, 1]
+      ],
+      "antes": true
+    },
+    {
+      "nombre": "Antes: el fondo de la tienda en obras",
+      "archivo": "public/clips/interior-revelacion.webm",
+      "desde": 4.7,
+      "fotogramas": 14,
+      "velocidad": [
+        [0, 1],
+        [1, 0.4]
+      ],
+      "antes": true,
+      "encuadre": 0.3
+    },
+    {
+      "nombre": "...a esto: el mismo sitio, terminado",
+      "brillo": 0.7,
+      "archivo": "originales/recorrido-inauguracion.mp4",
+      "desde": 37.0,
+      "fotogramas": 56,
+      "velocidad": [
+        [0, 1],
+        [0.45, 1],
+        [1, 2.6]
+      ]
+    },
+    {
+      "nombre": "Las neveras",
+      "archivo": "originales/recorrido-inauguracion.mp4",
+      "desde": 21.0,
+      "fotogramas": 28,
+      "velocidad": [
+        [0, 1],
+        [0.4, 1],
+        [1, 2.5]
+      ]
+    },
+    {
+      "nombre": "Los expositores de snacks",
+      "archivo": "originales/recorrido-inauguracion.mp4",
+      "desde": 19.3,
+      "fotogramas": 28,
+      "velocidad": [
+        [0, 1],
+        [0.4, 1],
+        [1, 2.2]
+      ]
+    },
+    {
+      "nombre": "Los suplementos de cerca",
+      "archivo": "originales/recorrido-inauguracion.mp4",
+      "desde": 28.6,
+      "fotogramas": 28,
+      "velocidad": [
+        [0, 1],
+        [0.4, 1],
+        [1, 2.2]
+      ]
+    },
+    {
+      "nombre": "El pasillo a toda velocidad",
+      "archivo": "originales/recorrido-inauguracion.mp4",
+      "desde": 33.0,
+      "fotogramas": 28,
+      "velocidad": [
+        [0, 1.2],
+        [0.3, 1.5],
+        [1, 4]
+      ]
+    },
+    {
+      "nombre": "La pared de proteínas",
+      "archivo": "originales/recorrido-inauguracion.mp4",
+      "desde": 47.6,
+      "fotogramas": 28,
+      "velocidad": [
+        [0, 1],
+        [0.4, 1],
+        [1, 2.4]
+      ]
+    },
+    {
+      "nombre": "El escaparate y las neveras (se para con la música)",
+      "archivo": "originales/recorrido-inauguracion.mp4",
+      "desde": 61.0,
+      "fotogramas": 28,
+      "velocidad": [
+        [0, 2.5],
+        [0.5, 2.5],
+        [1, 0]
+      ]
+    },
+    {
+      "nombre": "El logo de la pared",
+      "brillo": 0.7,
+      "archivo": "originales/recorrido-inauguracion.mp4",
+      "desde": 43.1,
+      "fotogramas": 56,
+      "velocidad": [
+        [0, 1.25],
+        [1, 1.25]
+      ]
+    },
+    {
+      "nombre": "La tienda entera con el logo",
+      "brillo": 0.7,
+      "archivo": "originales/recorrido-inauguracion.mp4",
+      "desde": 26.9,
+      "fotogramas": 14,
+      "velocidad": [
+        [0, 1],
+        [1, 1.8]
+      ]
+    },
+    {
+      "nombre": "Los snacks de cerca",
+      "archivo": "originales/recorrido-inauguracion.mp4",
+      "desde": 25.6,
+      "fotogramas": 14,
+      "velocidad": [
+        [0, 1],
+        [1, 1.8]
+      ]
+    },
+    {
+      "nombre": "El escaparate con las mesas fuera",
+      "archivo": "originales/recorrido-inauguracion.mp4",
+      "desde": 66.6,
+      "fotogramas": 14,
+      "velocidad": [
+        [0, 1],
+        [1, 1.8]
+      ]
+    },
+    {
+      "nombre": "La pared de suplementos",
+      "archivo": "originales/recorrido-inauguracion.mp4",
+      "desde": 70.4,
+      "fotogramas": 14,
+      "velocidad": [
+        [0, 1.5],
+        [1, 2.5]
+      ]
+    },
+    {
+      "nombre": "Proteínas y globos",
+      "archivo": "originales/recorrido-inauguracion.mp4",
+      "desde": 50.4,
+      "fotogramas": 14,
+      "velocidad": [
+        [0, 1],
+        [1, 1.8]
+      ]
+    },
+    {
+      "nombre": "El vinilo de la puerta",
+      "archivo": "originales/recorrido-inauguracion.mp4",
+      "desde": 12.0,
+      "fotogramas": 14,
+      "velocidad": [
+        [0, 1],
+        [1, 1.5]
+      ]
+    },
+    {
+      "nombre": "El expositor verde",
+      "archivo": "originales/recorrido-inauguracion.mp4",
+      "desde": 56.4,
+      "fotogramas": 14,
+      "velocidad": [
+        [0, 1],
+        [1, 1.8]
+      ]
+    },
+    {
+      "nombre": "La tienda entera, último vistazo",
+      "brillo": 0.7,
+      "archivo": "originales/recorrido-inauguracion.mp4",
+      "desde": 72.6,
+      "fotogramas": 14,
+      "velocidad": [
+        [0, 1.5],
+        [1, 3]
+      ]
+    },
+    {
+      "nombre": "La fachada con las mesas de la fiesta",
+      "archivo": "originales/recorrido-inauguracion.mp4",
+      "desde": 0.0,
+      "fotogramas": 156,
+      "velocidad": [
+        [0, 1],
+        [1, 1]
+      ]
+    }
+  ]
+}

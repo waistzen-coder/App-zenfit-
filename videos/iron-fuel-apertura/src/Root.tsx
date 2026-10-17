@@ -1,5 +1,8 @@
 import { Composition, Folder } from "remotion";
 import { Aviso } from "./Aviso";
+import { EditInstagram } from "./EditInstagram";
+import { DURACION as DURACION_EDIT } from "./edit/montaje";
+import { Portada as PortadaEdit } from "./edit/Portada";
 import { Inauguracion } from "./Inauguracion";
 import { Reel } from "./Reel";
 import { CierreEpico } from "./epico/CierreEpico";
@@ -87,6 +90,23 @@ export const RemotionRoot: React.FC = () => {
         defaultProps={{
           fecha: { dia: "SÁBADO", numero: "17", mes: "DE OCTUBRE" },
         }}
+      />
+      <Composition
+        id="Edit-instagram"
+        component={EditInstagram}
+        durationInFrames={DURACION_EDIT}
+        fps={30}
+        width={1080}
+        height={1920}
+      />
+      {/* Se saca como imagen en el fotograma 30, con las animaciones ya quietas. */}
+      <Composition
+        id="Portada-edit"
+        component={PortadaEdit}
+        durationInFrames={31}
+        fps={30}
+        width={1080}
+        height={1920}
       />
       <Folder name="Escenas-epicas">
         {ESCENAS_EPICAS.map((e) => (
