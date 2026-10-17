@@ -197,6 +197,27 @@ export const Cierre: React.FC = () => {
         intensidad={1}
       />
 
+      {/* El confeti va por detrás de los textos para que se lean bien. */}
+      {[
+        { lado: "izquierda", x: 40, direccion: -62, semilla: 17 },
+        { lado: "derecha", x: 1040, direccion: -118, semilla: 18 },
+      ].map((c) => (
+        <Confeti
+          key={c.lado}
+          name={`Cañón de confeti (${c.lado})`}
+          from={ultimo}
+          durationInFrames={156 - ultimo}
+          premountFor={fps}
+          x={c.x}
+          y={1840}
+          cantidad={90}
+          semilla={c.semilla}
+          fuerza={72}
+          direccion={c.direccion}
+          apertura={46}
+        />
+      ))}
+
       <Rotulo
         name="Ya estamos abiertos"
         from={PULSO}
@@ -256,25 +277,6 @@ export const Cierre: React.FC = () => {
         y={1500}
         color="#ffb070"
       />
-      {[
-        { lado: "izquierda", x: 40, direccion: -62, semilla: 17 },
-        { lado: "derecha", x: 1040, direccion: -118, semilla: 18 },
-      ].map((c) => (
-        <Confeti
-          key={c.lado}
-          name={`Cañón de confeti (${c.lado})`}
-          from={ultimo}
-          durationInFrames={156 - ultimo}
-          premountFor={fps}
-          x={c.x}
-          y={1840}
-          cantidad={90}
-          semilla={c.semilla}
-          fuerza={72}
-          direccion={c.direccion}
-          apertura={46}
-        />
-      ))}
       <Destello
         name="Golpe del logo"
         from={0}
