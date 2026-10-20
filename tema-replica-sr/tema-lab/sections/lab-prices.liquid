@@ -1,0 +1,77 @@
+{%- comment -%} Tabla de precios por pack (calculada) y plazos de envío por zona. Para landings por país o ciudad. {%- endcomment -%}
+{%- liquid
+  assign p = section.settings.product
+  assign v = p.selected_or_first_available_variant
+-%}
+<section class="lab lab-sec{% if section.settings.surface %} lab-sec--surface{% endif %}" id="{{ section.settings.anchor | default: 'precios' | handleize }}">
+  <div class="lab-wrap">
+    <div data-lab-reveal>
+      <p class="lab-eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      <h2 class="lab-h2">{{ section.settings.heading }}</h2>
+      {%- if section.settings.lead != blank -%}<p class="lab-lead">{% render 'lab-fill', text: section.settings.lead, product: p %}</p>{%- endif -%}
+    </div>
+    <div class="lab-split lab-mt">
+      {%- if v != blank -%}
+        <div class="lab-table-wrap" data-lab-reveal>
+          <table class="lab-table">
+            <caption class="visually-hidden">{{ 'lab.table.caption' | t }}</caption>
+            <thead><tr><th scope="col">{{ 'lab.table.pack' | t }}</th><th scope="col">{{ 'lab.table.total' | t }}</th><th scope="col">{{ 'lab.table.unit' | t }}</th></tr></thead>
+            <tbody>
+              {%- for q in (1..3) -%}
+                <tr>
+                  <td><a href="{{ p.url }}?pack={{ q }}">{% if q == 1 %}{{ 'lab.hero.one' | t }}{% else %}{{ 'lab.hero.many' | t: count: q }}{% endif %}</a></td>
+                  <td><strong>{% render 'lab-pack-price', price: v.price, qty: q, show: 'net' %}</strong></td>
+                  <td>{% render 'lab-pack-price', price: v.price, qty: q, show: 'unit' %}</td>
+                </tr>
+              {%- endfor -%}
+            </tbody>
+          </table>
+        </div>
+      {%- endif -%}
+      {%- if section.blocks.size > 0 -%}
+        <div class="lab-table-wrap" data-lab-reveal>
+          <table class="lab-table">
+            <caption class="visually-hidden">{{ 'lab.table.ship_caption' | t }}</caption>
+            <thead><tr><th scope="col">{{ 'lab.table.zone' | t }}</th><th scope="col">{{ 'lab.table.time' | t }}</th><th scope="col">{{ 'lab.table.cost' | t }}</th></tr></thead>
+            <tbody>
+              {%- for b in section.blocks -%}
+                <tr {{ b.shopify_attributes }}><td>{{ b.settings.zone | escape }}</td><td>{{ b.settings.time | escape }}</td><td>{{ b.settings.cost | escape }}</td></tr>
+              {%- endfor -%}
+            </tbody>
+          </table>
+        </div>
+      {%- endif -%}
+    </div>
+    {%- if section.settings.note != blank -%}<p class="lab-note lab-mt">{% render 'lab-fill', text: section.settings.note, product: p %}</p>{%- endif -%}
+    {%- if p != blank and section.settings.cta != blank -%}
+      <p class="lab-mt"><a class="lab-btn lab-btn--accent" href="{{ p.url }}">{{ section.settings.cta | escape }}{% render 'lab-icon', name: 'arrow' %}</a></p>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Lab · Precios y envío",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Producto" },
+    { "type": "text", "id": "anchor", "label": "Ancla", "default": "precios" },
+    { "type": "text", "id": "eyebrow", "label": "Ceja", "default": "Precio y envío" },
+    { "type": "inline_richtext", "id": "heading", "label": "Título", "default": "Lo que pagas y <em>cuándo llega</em>" },
+    { "type": "inline_richtext", "id": "lead", "label": "Entradilla", "default": "Precios con el descuento del pack ya aplicado. Envío gratis a las direcciones de España que admite el checkout." },
+    { "type": "inline_richtext", "id": "note", "label": "Nota", "default": "Con contrareembolso se añade un recargo de gestión de [fee] por pedido. Revisa siempre el total en el checkout." },
+    { "type": "text", "id": "cta", "label": "Botón", "default": "Elegir mi pack" },
+    { "type": "checkbox", "id": "surface", "label": "Fondo blanco", "default": true }
+  ],
+  "blocks": [
+    {
+      "type": "zone", "name": "Zona de envío",
+      "settings": [
+        { "type": "text", "id": "zone", "label": "Zona", "default": "Península" },
+        { "type": "text", "id": "time", "label": "Plazo", "default": "24–48 h" },
+        { "type": "text", "id": "cost", "label": "Coste", "default": "Gratis" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Lab · Precios y envío" }]
+}
+{% endschema %}

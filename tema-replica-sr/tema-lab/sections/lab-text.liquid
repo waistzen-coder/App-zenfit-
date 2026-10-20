@@ -1,0 +1,40 @@
+{%- comment -%} Bloque de texto con ceja, título, texto y hasta 2 botones. {%- endcomment -%}
+{%- liquid
+  assign heading_tag = 'h2'
+  if section.settings.as_h1
+    assign heading_tag = 'h1'
+  endif
+-%}
+<section class="lab lab-sec{% if section.settings.surface %} lab-sec--surface{% endif %}"{% if section.settings.anchor != blank %} id="{{ section.settings.anchor | handleize }}"{% endif %}>
+  <div class="lab-wrap">
+    <div class="lab-text{% if section.settings.center %} lab-text--center{% endif %}" data-lab-reveal>
+      {%- if section.settings.eyebrow != blank -%}<p class="lab-eyebrow">{{ section.settings.eyebrow | escape }}</p>{%- endif -%}
+      {%- if section.settings.heading != blank -%}<{{ heading_tag }} class="lab-h2">{{ section.settings.heading }}</{{ heading_tag }}>{%- endif -%}
+      {%- if section.settings.text != blank -%}<div class="lab-prose lab-prose--page">{{ section.settings.text }}</div>{%- endif -%}
+      <div class="lab-hero__ctas">
+        {%- if section.settings.b1 != blank and section.settings.b1_link != blank -%}<a class="lab-btn lab-btn--primary" href="{{ section.settings.b1_link }}">{{ section.settings.b1 | escape }}</a>{%- endif -%}
+        {%- if section.settings.b2 != blank and section.settings.b2_link != blank -%}<a class="lab-btn lab-btn--ghost" href="{{ section.settings.b2_link }}">{{ section.settings.b2 | escape }}</a>{%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Lab · Texto",
+  "settings": [
+    { "type": "text", "id": "anchor", "label": "Ancla" },
+    { "type": "text", "id": "eyebrow", "label": "Ceja" },
+    { "type": "inline_richtext", "id": "heading", "label": "Título", "default": "Un título con <em>énfasis</em>" },
+    { "type": "checkbox", "id": "as_h1", "label": "Usar H1", "default": false },
+    { "type": "richtext", "id": "text", "label": "Texto", "default": "<p>Escribe aquí el texto.</p>" },
+    { "type": "text", "id": "b1", "label": "Botón 1" },
+    { "type": "url", "id": "b1_link", "label": "Botón 1 · enlace" },
+    { "type": "text", "id": "b2", "label": "Botón 2" },
+    { "type": "url", "id": "b2_link", "label": "Botón 2 · enlace" },
+    { "type": "checkbox", "id": "center", "label": "Centrado", "default": false },
+    { "type": "checkbox", "id": "surface", "label": "Fondo blanco", "default": false }
+  ],
+  "presets": [{ "name": "Lab · Texto" }]
+}
+{% endschema %}

@@ -1,0 +1,85 @@
+{%- comment -%}
+  Cabecera fija: logo, 6 enlaces, buscador, cuenta, carrito con contador y
+  botón «Comprar». En móvil, carrito y hamburguesa con cajón lateral. El icono
+  del carrito lleva el id que usa el carrito lateral de Dawn para abrirse y
+  actualizar el contador.
+{%- endcomment -%}
+{%- liquid
+  assign buy = section.settings.buy_link
+  if buy == blank
+    assign buy = routes.root_url | append: '#packs'
+  endif
+  assign root = routes.root_url
+  if root == '/'
+    assign root = ''
+  endif
+-%}
+{%- assign n_links = section.settings.menu.links.size | default: 0 -%}
+{%- capture links -%}
+  {%- if n_links > 0 -%}
+    {%- for l in section.settings.menu.links -%}
+      <a href="{{ l.url }}"{% if l.current %} aria-current="page"{% endif %}>{{ l.title | escape }}</a>
+    {%- endfor -%}
+  {%- else -%}
+    <a href="{{ root }}/#catalogo">{{ 'lab.nav.shop' | t }}</a>
+    <a href="{{ root }}/#calidad">{{ 'lab.nav.quality' | t }}</a>
+    <a href="{{ root }}/#preguntas">{{ 'lab.nav.faq' | t }}</a>
+    <a href="{{ root }}/#sobre">{{ 'lab.nav.about' | t }}</a>
+    {%- assign pg = pages['contact'] -%}
+    {%- if pg.url != blank %}<a href="{{ pg.url }}">{{ 'lab.nav.contact' | t }}</a>{% endif -%}
+    {%- assign pg = pages['track-order'] -%}
+    {%- if pg.url != blank %}<a href="{{ pg.url }}">{{ 'lab.nav.track' | t }}</a>{% endif -%}
+  {%- endif -%}
+{%- endcapture -%}
+
+<header class="lab lab-header">
+  <div class="lab-wrap lab-header__in">
+    <a class="lab-logo" href="{{ routes.root_url }}">
+      {%- if section.settings.logo != blank -%}
+        {%- assign h = section.settings.logo_height -%}
+        {%- assign w = section.settings.logo.aspect_ratio | times: h | ceil -%}
+        {{ section.settings.logo | image_url: width: 400 | image_tag: width: w, height: h, alt: shop.name, loading: 'eager' }}
+      {%- else -%}
+        <span class="lab-logo__dot" aria-hidden="true"></span>{{ section.settings.logo_text | default: shop.name | escape }}
+      {%- endif -%}
+    </a>
+    <nav class="lab-nav" aria-label="{{ 'lab.header.nav' | t }}">{{ links }}</nav>
+    <div class="lab-header__tools">
+      <a class="lab-icon-btn" href="{{ routes.search_url }}" aria-label="{{ 'lab.header.search' | t }}">{% render 'lab-icon', name: 'search' %}</a>
+      {%- if shop.customer_accounts_enabled -%}
+        <a class="lab-icon-btn" href="{{ routes.account_url }}" aria-label="{{ 'lab.header.account' | t }}">{% render 'lab-icon', name: 'user' %}</a>
+      {%- endif -%}
+      <a class="lab-icon-btn" id="cart-icon-bubble" href="{{ routes.cart_url }}">{% render 'lab-cart-icon' %}</a>
+      {%- if section.settings.buy_label != blank -%}
+        <a class="lab-btn lab-btn--accent lab-header__buy" href="{{ buy }}">{{ section.settings.buy_label | escape }}</a>
+      {%- endif -%}
+      <button type="button" class="lab-icon-btn lab-burger" data-lab-drawer-open aria-controls="LabMenu" aria-expanded="false" aria-label="{{ 'lab.header.menu' | t }}">{% render 'lab-icon', name: 'menu' %}</button>
+    </div>
+  </div>
+  <div class="lab-drawer" id="LabMenu" role="dialog" aria-modal="true" aria-label="{{ 'lab.header.menu' | t }}">
+    <div class="lab-drawer__bg" data-lab-drawer-close></div>
+    <div class="lab-drawer__panel">
+      <button type="button" class="lab-icon-btn lab-drawer__close" data-lab-drawer-close aria-label="{{ 'lab.header.close_menu' | t }}">{% render 'lab-icon', name: 'x' %}</button>
+      {{ links }}
+      {%- if shop.customer_accounts_enabled -%}<a href="{{ routes.account_url }}">{{ 'lab.header.account' | t }}</a>{%- endif -%}
+      {%- if section.settings.buy_label != blank -%}
+        <a class="lab-btn lab-btn--accent lab-btn--block" href="{{ buy }}">{{ section.settings.buy_label | escape }}</a>
+      {%- endif -%}
+    </div>
+  </div>
+</header>
+
+{% schema %}
+{
+  "name": "Lab · Cabecera",
+  "class": "lab-header-section",
+  "settings": [
+    { "type": "image_picker", "id": "logo", "label": "Logo" },
+    { "type": "range", "id": "logo_height", "label": "Alto del logo", "min": 20, "max": 36, "step": 2, "unit": "px", "default": 28 },
+    { "type": "text", "id": "logo_text", "label": "Texto del logo (sin imagen)", "info": "Vacío: el nombre de la tienda." },
+    { "type": "link_list", "id": "menu", "label": "Menú", "info": "Vacío: Tienda, Calidad, Preguntas, Sobre nosotros, Contacto y Seguir mi pedido." },
+    { "type": "text", "id": "buy_label", "label": "Botón", "default": "Comprar" },
+    { "type": "url", "id": "buy_link", "label": "Enlace del botón", "info": "Vacío: los packs de la portada." }
+  ]
+}
+{% endschema %}

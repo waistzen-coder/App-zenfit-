@@ -1,0 +1,97 @@
+{%- comment -%}
+  Preguntas frecuentes agrupadas (Pedidos · Envíos · Producto · Pagos ·
+  Devoluciones) con datos estructurados FAQPage. Las respuestas admiten las
+  marcas de precio de lab-fill, así no se quedan viejas.
+{%- endcomment -%}
+{%- liquid
+  assign p = section.settings.product
+  assign heading_tag = 'h2'
+  if section.settings.as_h1
+    assign heading_tag = 'h1'
+  endif
+  assign qas = section.blocks | where: 'type', 'qa'
+-%}
+<section class="lab lab-sec{% if section.settings.surface %} lab-sec--surface{% endif %}" id="{{ section.settings.anchor | default: 'preguntas' | handleize }}">
+  <div class="lab-wrap lab-faq">
+    <div data-lab-reveal>
+      <p class="lab-eyebrow">{{ section.settings.eyebrow | escape }}{% if qas.size > 0 %} · {{ qas.size }}{% endif %}</p>
+      <{{ heading_tag }} class="lab-h2">{{ section.settings.heading }}</{{ heading_tag }}>
+      {%- if section.settings.lead != blank -%}<p class="lab-lead">{{ section.settings.lead }}</p>{%- endif -%}
+      {%- assign pg = pages['contact'] -%}
+      {%- if section.settings.contact_label != blank and pg.url != blank -%}
+        <p class="lab-mt"><a class="lab-link" href="{{ pg.url }}">{{ section.settings.contact_label | escape }}{% render 'lab-icon', name: 'arrow' %}</a></p>
+      {%- endif -%}
+      {%- if section.settings.all_label != blank and section.settings.all_page != blank -%}
+        <p><a class="lab-link" href="{{ section.settings.all_page.url }}">{{ section.settings.all_label | escape }}{% render 'lab-icon', name: 'arrow' %}</a></p>
+      {%- endif -%}
+    </div>
+    <div>
+      {%- comment -%} Cada pregunta va en el grupo que tiene encima; las de antes del primer grupo, sin título. {%- endcomment -%}
+      {%- assign groups = section.blocks | where: 'type', 'group' -%}
+      {%- assign first = section.blocks | first -%}
+      {%- if section.blocks.size > 0 and first.type != 'group' -%}
+        <div class="lab-faq__group">
+          {%- for b in section.blocks -%}
+            {%- if b.type == 'group' -%}{%- break -%}{%- endif -%}
+            {%- render 'lab-faq-item', b: b, p: p -%}
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+      {%- for g in groups -%}
+        <div class="lab-faq__group" {{ g.shopify_attributes }}>
+          <span class="lab-mono">{{ g.settings.title | escape }}</span>
+          {%- assign inside = false -%}
+          {%- for b in section.blocks -%}
+            {%- if b.id == g.id -%}
+              {%- assign inside = true -%}
+            {%- elsif b.type == 'group' and inside -%}
+              {%- break -%}
+            {%- elsif inside -%}
+              {%- render 'lab-faq-item', b: b, p: p -%}
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+  {%- if qas.size > 0 and section.settings.schema -%}
+    <script type="application/ld+json">
+      {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+        {%- for b in qas -%}
+          {%- capture a -%}{% render 'lab-fill', text: b.settings.a, product: p %}{%- endcapture -%}
+          {"@type":"Question","name":{{ b.settings.q | json }},"acceptedAnswer":{"@type":"Answer","text":{{ a | strip_html | strip | json }}}}{% unless forloop.last %},{% endunless %}
+        {%- endfor -%}
+      ]}
+    </script>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "Lab · Preguntas",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Producto (para los precios)" },
+    { "type": "text", "id": "anchor", "label": "Ancla", "default": "preguntas" },
+    { "type": "text", "id": "eyebrow", "label": "Ceja", "default": "Preguntas frecuentes" },
+    { "type": "inline_richtext", "id": "heading", "label": "Título", "default": "Antes de comprar, <em>pregunta.</em>" },
+    { "type": "checkbox", "id": "as_h1", "label": "Usar H1 (página de preguntas)", "default": false },
+    { "type": "inline_richtext", "id": "lead", "label": "Entradilla", "default": "Lo que más nos preguntan sobre los packs, el envío, el pago y las devoluciones." },
+    { "type": "text", "id": "contact_label", "label": "Enlace a contacto", "default": "¿No está tu pregunta? Escríbenos" },
+    { "type": "page", "id": "all_page", "label": "Página con todas las preguntas" },
+    { "type": "text", "id": "all_label", "label": "Texto del enlace", "default": "Ver todas las preguntas" },
+    { "type": "checkbox", "id": "schema", "label": "Datos estructurados FAQPage", "info": "Desactívalo si esta misma lista está en otra página indexada.", "default": true },
+    { "type": "checkbox", "id": "surface", "label": "Fondo blanco", "default": false }
+  ],
+  "blocks": [
+    { "type": "group", "name": "Grupo", "settings": [ { "type": "text", "id": "title", "label": "Nombre", "default": "Pedidos" } ] },
+    {
+      "type": "qa", "name": "Pregunta",
+      "settings": [
+        { "type": "text", "id": "q", "label": "Pregunta", "default": "¿Cuánto cuesta cada pack?" },
+        { "type": "richtext", "id": "a", "label": "Respuesta", "info": "Marcas: [p1] [p2] [p3] [u2] [u3] [d2] [d3] [fee].", "default": "<p>1 unidad: [p1]. Pack de 2: [p2] ([u2]/ud). Pack de 3: [p3] ([u3]/ud). El descuento del pack se aplica solo en el carrito.</p>" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Lab · Preguntas" }]
+}
+{% endschema %}

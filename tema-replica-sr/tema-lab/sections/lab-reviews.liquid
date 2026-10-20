@@ -1,0 +1,36 @@
+{%- comment -%}
+  Reseñas: solo las de una app de reseñas real (p. ej. Judge.me) puestas como
+  bloque. Sin bloques, no se pinta nada para los clientes.
+{%- endcomment -%}
+{%- if section.blocks.size > 0 or request.design_mode -%}
+<section class="lab lab-sec{% if section.settings.surface %} lab-sec--surface{% endif %}" id="opiniones">
+  <div class="lab-wrap">
+    <div data-lab-reveal>
+      <p class="lab-eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      <h2 class="lab-h2">{{ section.settings.heading }}</h2>
+    </div>
+    <div class="lab-reviews__app">
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when '@app' -%}{% render block %}
+        {%- endcase -%}
+      {%- else -%}
+        <p class="lab-pending">{{ 'lab.reviews.pending' | t }}</p>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Lab · Reseñas reales",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Ceja", "default": "Opiniones verificadas" },
+    { "type": "inline_richtext", "id": "heading", "label": "Título", "default": "Lo que dicen <em>quienes lo usan</em>" },
+    { "type": "checkbox", "id": "surface", "label": "Fondo blanco", "default": true }
+  ],
+  "blocks": [{ "type": "@app" }],
+  "presets": [{ "name": "Lab · Reseñas reales" }]
+}
+{% endschema %}

@@ -1,0 +1,183 @@
+{
+  "sections": {
+    "proof": {
+      "type": "lab-proof",
+      "settings": {
+        "anchor": "calidad",
+        "surface": false,
+        "as_h1": true
+      },
+      "blocks": {
+        "b1": {
+          "type": "step",
+          "settings": {
+            "title": "Lo publicamos por escrito",
+            "text": "Plazos de envío, devoluciones y garantía están en páginas públicas. Lo que pone ahí es lo que se aplica a tu pedido."
+          }
+        },
+        "b2": {
+          "type": "step",
+          "settings": {
+            "title": "Te enseñamos el aparato real",
+            "text": "La primera foto de la ficha es del aparato real. Las ilustraciones se indican como tales en su texto alternativo."
+          }
+        },
+        "b3": {
+          "type": "step",
+          "settings": {
+            "title": "Respondemos por escrito",
+            "text": "Dudas sobre el aparato, el pedido o una devolución: <a href=\"mailto:waistzen@gmail.com\">waistzen@gmail.com</a>. Si ya compraste, indica tu número de pedido."
+          }
+        },
+        "b4": {
+          "type": "doc",
+          "settings": {
+            "kind": "Política",
+            "title": "Envíos y entregas",
+            "l1": "Zona",
+            "v1": "España",
+            "l2": "Península",
+            "v2": "24–48 h",
+            "l3": "Baleares",
+            "v3": "2–4 días laborables",
+            "status": "Publicada",
+            "page": "envios",
+            "button": "Ver la política"
+          }
+        },
+        "b5": {
+          "type": "doc",
+          "settings": {
+            "kind": "Política",
+            "title": "Devoluciones y desistimiento",
+            "l1": "Desistimiento",
+            "v1": "14 días (legal)",
+            "l2": "Plazo de la tienda",
+            "v2": "30 días",
+            "l3": "Etiqueta",
+            "v3": "La pagamos nosotros",
+            "status": "Publicada",
+            "page": "devoluciones",
+            "button": "Ver la política"
+          }
+        },
+        "b6": {
+          "type": "doc",
+          "settings": {
+            "kind": "Garantía",
+            "title": "Garantía legal de conformidad",
+            "l1": "Plazo",
+            "v1": "3 años",
+            "l2": "Devoluciones",
+            "v2": "Motril (Granada)",
+            "l3": "",
+            "v3": "",
+            "status": "Publicada",
+            "page": "devoluciones",
+            "button": "Ver la garantía"
+          }
+        },
+        "b7": {
+          "type": "doc",
+          "settings": {
+            "kind": "Manual",
+            "title": "Instrucciones del fabricante",
+            "l1": "Formato",
+            "v1": "PDF",
+            "l2": "",
+            "v2": "",
+            "l3": "",
+            "v3": "",
+            "status": "Publicado",
+            "button": "Descargar el manual"
+          }
+        },
+        "b8": {
+          "type": "doc",
+          "settings": {
+            "kind": "Conformidad",
+            "title": "Declaración CE del fabricante",
+            "l1": "Formato",
+            "v1": "PDF",
+            "l2": "",
+            "v2": "",
+            "l3": "",
+            "v3": "",
+            "status": "Publicada",
+            "button": "Ver la declaración"
+          }
+        }
+      },
+      "block_order": [
+        "b1",
+        "b2",
+        "b3",
+        "b4",
+        "b5",
+        "b6",
+        "b7",
+        "b8"
+      ]
+    },
+    "trust": {
+      "type": "lab-trust",
+      "settings": {},
+      "blocks": {
+        "b1": {
+          "type": "card",
+          "settings": {
+            "icon": "doc",
+            "title": "Todo por escrito",
+            "text": "Envíos, devoluciones y garantía, publicados en páginas abiertas.",
+            "link_label": "Ver las pruebas",
+            "link": "/#calidad"
+          }
+        },
+        "b2": {
+          "type": "card",
+          "settings": {
+            "icon": "lock",
+            "title": "Pago seguro",
+            "text": "Checkout cifrado de Shopify. Si lo prefieres, paga al recibirlo con contrareembolso.",
+            "link_label": ""
+          }
+        },
+        "b3": {
+          "type": "card",
+          "settings": {
+            "icon": "truck",
+            "title": "Envío con seguimiento",
+            "text": "Gratis desde España. Península en 24–48 h.",
+            "link_label": "Ver envíos",
+            "page": "envios"
+          }
+        },
+        "b4": {
+          "type": "card",
+          "settings": {
+            "icon": "chat",
+            "title": "¿Te ayudamos a elegir?",
+            "text": "Escríbenos y te decimos qué pack encaja contigo.",
+            "link_label": "Escríbenos",
+            "page": "contact"
+          }
+        }
+      },
+      "block_order": [
+        "b1",
+        "b2",
+        "b3",
+        "b4"
+      ]
+    },
+    "legal": {
+      "type": "lab-legal",
+      "settings": {}
+    }
+  },
+  "order": [
+    "proof",
+    "trust",
+    "legal"
+  ]
+}

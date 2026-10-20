@@ -1,0 +1,194 @@
+{
+  "sections": {
+    "about": {
+      "type": "lab-about",
+      "settings": {
+        "anchor": "sobre",
+        "surface": false,
+        "steps_title": "Cómo llega tu pedido",
+        "as_h1": true
+      },
+      "blocks": {
+        "b1": {
+          "type": "fact",
+          "settings": {
+            "label": "Tienda",
+            "value": "Waistzen"
+          }
+        },
+        "b2": {
+          "type": "fact",
+          "settings": {
+            "label": "Producto",
+            "value": "ReliefPath™ · 1 aparato, 3 packs"
+          }
+        },
+        "b3": {
+          "type": "fact",
+          "settings": {
+            "label": "Contacto",
+            "value": "<a href=\"mailto:waistzen@gmail.com\">waistzen@gmail.com</a>"
+          }
+        },
+        "b4": {
+          "type": "fact",
+          "settings": {
+            "label": "Envíos",
+            "value": "Desde un almacén en España"
+          }
+        },
+        "b5": {
+          "type": "fact",
+          "settings": {
+            "label": "Devoluciones",
+            "value": "Camino de las Ventillas, 18600 Motril (Granada)"
+          }
+        },
+        "b6": {
+          "type": "fact",
+          "settings": {
+            "label": "Garantía",
+            "value": "3 años (legal)"
+          }
+        },
+        "b7": {
+          "type": "milestone",
+          "settings": {
+            "label": "Hoy",
+            "title": "Eliges tu pack",
+            "text": "Pagas con tarjeta en el checkout o eliges pagar al recibirlo."
+          }
+        },
+        "b8": {
+          "type": "milestone",
+          "settings": {
+            "label": "24–48 h",
+            "title": "Llega a casa",
+            "text": "Envío gratis con seguimiento desde España a la península."
+          }
+        },
+        "b9": {
+          "type": "milestone",
+          "settings": {
+            "label": "30 días",
+            "title": "Si no te convence",
+            "text": "Tienes 30 días desde que lo recibes para pedir la devolución."
+          }
+        }
+      },
+      "block_order": [
+        "b1",
+        "b2",
+        "b3",
+        "b4",
+        "b5",
+        "b6",
+        "b7",
+        "b8",
+        "b9"
+      ]
+    },
+    "why": {
+      "type": "lab-cols",
+      "settings": {
+        "anchor": "por-que",
+        "eyebrow": "Por qué comprar aquí",
+        "heading": "Comprar fácil, <em>devolver fácil.</em>",
+        "surface": true
+      },
+      "blocks": {
+        "b1": {
+          "type": "col",
+          "settings": {
+            "icon": "truck",
+            "title": "Envío desde España",
+            "text": "Gratis y con seguimiento. Península en 24–48 h; Baleares en 2–4 días laborables.",
+            "link_label": "Ver envíos",
+            "page": "envios"
+          }
+        },
+        "b2": {
+          "type": "col",
+          "settings": {
+            "icon": "refresh",
+            "title": "30 días para devolver",
+            "text": "Además de los 14 días legales de desistimiento. La etiqueta de devolución la pagamos nosotros.",
+            "link_label": "Ver devoluciones",
+            "page": "devoluciones"
+          }
+        },
+        "b3": {
+          "type": "col",
+          "settings": {
+            "icon": "chat",
+            "title": "Te respondemos por escrito",
+            "text": "Escríbenos a waistzen@gmail.com antes o después de comprar. Si ya pediste, indica tu número de pedido.",
+            "link_label": "Escribirnos",
+            "page": "contact"
+          }
+        }
+      },
+      "block_order": [
+        "b1",
+        "b2",
+        "b3"
+      ]
+    },
+    "trust": {
+      "type": "lab-trust",
+      "settings": {},
+      "blocks": {
+        "b1": {
+          "type": "card",
+          "settings": {
+            "icon": "doc",
+            "title": "Todo por escrito",
+            "text": "Envíos, devoluciones y garantía, publicados en páginas abiertas.",
+            "link_label": "Ver las pruebas",
+            "link": "/#calidad"
+          }
+        },
+        "b2": {
+          "type": "card",
+          "settings": {
+            "icon": "lock",
+            "title": "Pago seguro",
+            "text": "Checkout cifrado de Shopify. Si lo prefieres, paga al recibirlo con contrareembolso.",
+            "link_label": ""
+          }
+        },
+        "b3": {
+          "type": "card",
+          "settings": {
+            "icon": "truck",
+            "title": "Envío con seguimiento",
+            "text": "Gratis desde España. Península en 24–48 h.",
+            "link_label": "Ver envíos",
+            "page": "envios"
+          }
+        },
+        "b4": {
+          "type": "card",
+          "settings": {
+            "icon": "chat",
+            "title": "¿Te ayudamos a elegir?",
+            "text": "Escríbenos y te decimos qué pack encaja contigo.",
+            "link_label": "Escríbenos",
+            "page": "contact"
+          }
+        }
+      },
+      "block_order": [
+        "b1",
+        "b2",
+        "b3",
+        "b4"
+      ]
+    }
+  },
+  "order": [
+    "about",
+    "why",
+    "trust"
+  ]
+}

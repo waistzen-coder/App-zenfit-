@@ -1,0 +1,110 @@
+{%- comment -%}
+  Pie: quién vende, enlaces de tienda, ayuda y legales, formas de pago reales
+  (las que tiene activas la tienda), idioma si hay más de uno, preferencias de
+  cookies y «Volver arriba».
+{%- endcomment -%}
+{%- liquid
+  assign root = routes.root_url
+  if root == '/'
+    assign root = ''
+  endif
+-%}
+<footer class="lab lab-footer">
+  <div class="lab-wrap">
+    <div class="lab-footer__grid">
+      <div class="lab-footer__about">
+        <a class="lab-logo" href="{{ routes.root_url }}"><span class="lab-logo__dot" aria-hidden="true"></span>{{ shop.name | escape }}</a>
+        {%- if section.settings.about != blank -%}<div>{{ section.settings.about }}</div>{%- endif -%}
+        {%- if shop.email != blank -%}
+          <p><a class="lab-link" href="mailto:{{ shop.email }}">{% render 'lab-icon', name: 'mail' %}{{ shop.email }}</a></p>
+        {%- endif -%}
+      </div>
+
+      {%- for i in (1..3) -%}
+        {%- liquid
+          assign menu_key = 'menu_' | append: i
+          assign title_key = 'title_' | append: i
+          assign menu = section.settings[menu_key]
+          assign n_links = menu.links.size | default: 0
+        -%}
+        <div>
+          <h2>{{ section.settings[title_key] | escape }}</h2>
+          <ul>
+            {%- if n_links > 0 -%}
+              {%- for l in menu.links -%}<li><a href="{{ l.url }}">{{ l.title | escape }}</a></li>{%- endfor -%}
+            {%- elsif i == 1 -%}
+              <li><a href="{{ root }}/#packs">{{ 'lab.footer.packs' | t }}</a></li>
+              <li><a href="{{ root }}/#aparato">{{ 'lab.footer.device' | t }}</a></li>
+              <li><a href="{{ root }}/#calidad">{{ 'lab.nav.quality' | t }}</a></li>
+              <li><a href="{{ root }}/#preguntas">{{ 'lab.nav.faq' | t }}</a></li>
+              <li><a href="{{ root }}/#sobre">{{ 'lab.nav.about' | t }}</a></li>
+            {%- elsif i == 2 -%}
+              {%- assign pg = pages['contact'] -%}{%- if pg.url != blank -%}<li><a href="{{ pg.url }}">{{ 'lab.nav.contact' | t }}</a></li>{%- endif -%}
+              {%- assign pg = pages['track-order'] -%}{%- if pg.url != blank -%}<li><a href="{{ pg.url }}">{{ 'lab.nav.track' | t }}</a></li>{%- endif -%}
+              {%- assign pg = pages['envios'] -%}{%- if pg.url != blank -%}<li><a href="{{ pg.url }}">{{ 'lab.footer.shipping' | t }}</a></li>{%- endif -%}
+              {%- assign pg = pages['devoluciones'] -%}{%- if pg.url != blank -%}<li><a href="{{ pg.url }}">{{ 'lab.footer.returns' | t }}</a></li>{%- endif -%}
+              {%- if shop.customer_accounts_enabled -%}<li><a href="{{ routes.account_url }}">{{ 'lab.header.account' | t }}</a></li>{%- endif -%}
+            {%- else -%}
+              {%- if shop.terms_of_service != blank -%}<li><a href="{{ shop.terms_of_service.url }}">{{ 'lab.footer.terms' | t }}</a></li>{%- endif -%}
+              {%- assign pg = pages['privacidad'] -%}
+              {%- if pg.url != blank -%}<li><a href="{{ pg.url }}">{{ 'lab.footer.privacy' | t }}</a></li>
+              {%- elsif shop.privacy_policy != blank -%}<li><a href="{{ shop.privacy_policy.url }}">{{ 'lab.footer.privacy' | t }}</a></li>{%- endif -%}
+              <li hidden data-lab-cookies><button type="button" class="lab-plain">{{ 'lab.footer.cookies' | t }}</button></li>
+              {%- assign pg = pages['devoluciones'] -%}{%- if pg.url != blank -%}<li><a href="{{ pg.url }}">{{ 'lab.footer.returns' | t }}</a></li>{%- endif -%}
+              {%- assign pg = pages['envios'] -%}{%- if pg.url != blank -%}<li><a href="{{ pg.url }}">{{ 'lab.footer.shipping' | t }}</a></li>{%- endif -%}
+              {%- assign pg = pages['aviso-legal'] -%}
+              {%- if pg.url != blank -%}<li><a href="{{ pg.url }}">{{ 'lab.footer.legal_notice' | t }}</a></li>
+              {%- else -%}
+                {%- for pol in shop.policies -%}
+                  {%- if pol.url contains 'legal-notice' -%}<li><a href="{{ pol.url }}">{{ 'lab.footer.legal_notice' | t }}</a></li>{%- endif -%}
+                {%- endfor -%}
+              {%- endif -%}
+              {%- assign pg = pages['data-sharing-opt-out'] -%}{%- if pg.url != blank -%}<li><a href="{{ pg.url }}">{{ 'lab.footer.privacy_choices' | t }}</a></li>{%- endif -%}
+            {%- endif -%}
+          </ul>
+        </div>
+      {%- endfor -%}
+    </div>
+
+    <div class="lab-footer__bottom">
+      {%- assign year = 'now' | date: '%Y' -%}
+      <span>{{ 'lab.footer.rights' | t: year: year, shop: shop.name }}</span>
+      {%- if shop.privacy_policy != blank -%}
+        <a class="lab-gdpr" href="{{ shop.privacy_policy.url }}">{% render 'lab-icon', name: 'gdpr' %}{{ 'lab.footer.gdpr' | t }}</a>
+      {%- endif -%}
+      {%- if shop.enabled_payment_types.size > 0 -%}
+        <ul class="lab-pay" aria-label="{{ 'lab.footer.pay' | t }}">
+          {%- for type in shop.enabled_payment_types -%}<li>{{ type | payment_type_svg_tag }}</li>{%- endfor -%}
+        </ul>
+      {%- endif -%}
+      {%- if localization.available_languages.size > 1 -%}
+        {%- form 'localization', class: 'lab-loc' -%}
+          <label for="LabLang">{{ 'lab.footer.language' | t }}</label>
+          <select id="LabLang" name="language_code" data-lab-autosubmit>
+            {%- for language in localization.available_languages -%}
+              <option value="{{ language.iso_code }}" lang="{{ language.iso_code }}"{% if language.iso_code == localization.language.iso_code %} selected{% endif %}>{{ language.endonym_name | capitalize }}</option>
+            {%- endfor -%}
+          </select>
+          <noscript><button class="lab-btn lab-btn--ghost">OK</button></noscript>
+        {%- endform -%}
+      {%- endif -%}
+      <a class="lab-top" href="#MainContent">{% render 'lab-icon', name: 'arrow' %}{{ 'lab.footer.top' | t }}</a>
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Lab · Pie",
+  "class": "lab-footer-section",
+  "settings": [
+    { "type": "richtext", "id": "about", "label": "Quién vende", "default": "<p>Waistzen vende ReliefPath™, un aparato de bienestar para uso doméstico con ventosas eléctricas, calor y luz roja. Enviamos desde un almacén en España, con seguimiento.</p>" },
+    { "type": "text", "id": "title_1", "label": "Columna 1 · título", "default": "Tienda" },
+    { "type": "link_list", "id": "menu_1", "label": "Columna 1 · menú", "info": "Vacío: enlaces a las secciones de la portada." },
+    { "type": "text", "id": "title_2", "label": "Columna 2 · título", "default": "Ayuda" },
+    { "type": "link_list", "id": "menu_2", "label": "Columna 2 · menú", "info": "Vacío: contacto, seguimiento, envíos y devoluciones." },
+    { "type": "text", "id": "title_3", "label": "Columna 3 · título", "default": "Legal" },
+    { "type": "link_list", "id": "menu_3", "label": "Columna 3 · menú", "info": "Vacío: condiciones, privacidad, cookies, devoluciones, envíos y aviso legal." }
+  ]
+}
+{% endschema %}

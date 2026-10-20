@@ -1,0 +1,388 @@
+{
+  "sections": {
+    "main": {
+      "type": "lab-product",
+      "settings": {
+        "default_pack": 1,
+        "cod": true
+      },
+      "blocks": {
+        "b1": {
+          "type": "description",
+          "settings": {
+            "title": "Descripción",
+            "open": true
+          }
+        },
+        "b2": {
+          "type": "tab",
+          "settings": {
+            "title": "Modo de uso",
+            "open": false,
+            "text": "<p>Antes del primer uso, lee el manual del fabricante: zonas permitidas, duración, frecuencia, niveles y contraindicaciones. Empieza siempre por el nivel más bajo de succión y calor.</p><p>Ante dolor, una lesión o una reacción inesperada, deja de usarlo y consulta a un profesional sanitario.</p>"
+          }
+        },
+        "b3": {
+          "type": "tab",
+          "settings": {
+            "title": "Qué incluye el pedido",
+            "open": false,
+            "text": "<p>La cantidad de aparatos ReliefPath™ del pack que elijas. Para confirmar accesorios, alimentación o tipo de cable antes de comprar, escríbenos a <a href=\"mailto:waistzen@gmail.com\">waistzen@gmail.com</a>.</p>"
+          }
+        },
+        "b4": {
+          "type": "tab",
+          "settings": {
+            "title": "Envío, devoluciones y garantía",
+            "open": false,
+            "text": "<p><strong>Envío:</strong> gratis desde un almacén en España, con seguimiento. Península en 24–48 h; Baleares en 2–4 días laborables; Canarias, Ceuta y Melilla, consúltanos antes.</p><p><strong>Devoluciones:</strong> 14 días de desistimiento por ley, ampliados a 30 días desde la recepción. La etiqueta la pagamos nosotros.</p><p><strong>Garantía:</strong> 3 años de garantía legal de conformidad.</p><p><a href=\"/pages/envios\">Envíos</a> · <a href=\"/pages/devoluciones\">Devoluciones</a></p>"
+          }
+        },
+        "b5": {
+          "type": "tab",
+          "settings": {
+            "title": "Pago contra reembolso",
+            "open": false,
+            "text": "<p>Si tu dirección tiene cobertura, puedes pagar al recibirlo. Se añade un recargo de gestión de <strong>[fee]</strong> por pedido, que aparece como una línea más antes de confirmar.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "b1",
+        "b2",
+        "b3",
+        "b4",
+        "b5"
+      ]
+    },
+    "reviews": {
+      "type": "lab-reviews",
+      "settings": {
+        "surface": true
+      }
+    },
+    "proof": {
+      "type": "lab-proof",
+      "settings": {
+        "anchor": "calidad",
+        "surface": false
+      },
+      "blocks": {
+        "b1": {
+          "type": "step",
+          "settings": {
+            "title": "Lo publicamos por escrito",
+            "text": "Plazos de envío, devoluciones y garantía están en páginas públicas. Lo que pone ahí es lo que se aplica a tu pedido."
+          }
+        },
+        "b2": {
+          "type": "step",
+          "settings": {
+            "title": "Te enseñamos el aparato real",
+            "text": "La primera foto de la ficha es del aparato real. Las ilustraciones se indican como tales en su texto alternativo."
+          }
+        },
+        "b3": {
+          "type": "step",
+          "settings": {
+            "title": "Respondemos por escrito",
+            "text": "Dudas sobre el aparato, el pedido o una devolución: <a href=\"mailto:waistzen@gmail.com\">waistzen@gmail.com</a>. Si ya compraste, indica tu número de pedido."
+          }
+        },
+        "b4": {
+          "type": "doc",
+          "settings": {
+            "kind": "Política",
+            "title": "Envíos y entregas",
+            "l1": "Zona",
+            "v1": "España",
+            "l2": "Península",
+            "v2": "24–48 h",
+            "l3": "Baleares",
+            "v3": "2–4 días laborables",
+            "status": "Publicada",
+            "page": "envios",
+            "button": "Ver la política"
+          }
+        },
+        "b5": {
+          "type": "doc",
+          "settings": {
+            "kind": "Política",
+            "title": "Devoluciones y desistimiento",
+            "l1": "Desistimiento",
+            "v1": "14 días (legal)",
+            "l2": "Plazo de la tienda",
+            "v2": "30 días",
+            "l3": "Etiqueta",
+            "v3": "La pagamos nosotros",
+            "status": "Publicada",
+            "page": "devoluciones",
+            "button": "Ver la política"
+          }
+        },
+        "b6": {
+          "type": "doc",
+          "settings": {
+            "kind": "Garantía",
+            "title": "Garantía legal de conformidad",
+            "l1": "Plazo",
+            "v1": "3 años",
+            "l2": "Devoluciones",
+            "v2": "Motril (Granada)",
+            "l3": "",
+            "v3": "",
+            "status": "Publicada",
+            "page": "devoluciones",
+            "button": "Ver la garantía"
+          }
+        },
+        "b7": {
+          "type": "doc",
+          "settings": {
+            "kind": "Manual",
+            "title": "Instrucciones del fabricante",
+            "l1": "Formato",
+            "v1": "PDF",
+            "l2": "",
+            "v2": "",
+            "l3": "",
+            "v3": "",
+            "status": "Publicado",
+            "button": "Descargar el manual"
+          }
+        },
+        "b8": {
+          "type": "doc",
+          "settings": {
+            "kind": "Conformidad",
+            "title": "Declaración CE del fabricante",
+            "l1": "Formato",
+            "v1": "PDF",
+            "l2": "",
+            "v2": "",
+            "l3": "",
+            "v3": "",
+            "status": "Publicada",
+            "button": "Ver la declaración"
+          }
+        }
+      },
+      "block_order": [
+        "b1",
+        "b2",
+        "b3",
+        "b4",
+        "b5",
+        "b6",
+        "b7",
+        "b8"
+      ]
+    },
+    "why": {
+      "type": "lab-cols",
+      "settings": {
+        "anchor": "por-que",
+        "eyebrow": "Por qué comprar aquí",
+        "heading": "Comprar fácil, <em>devolver fácil.</em>",
+        "surface": true
+      },
+      "blocks": {
+        "b1": {
+          "type": "col",
+          "settings": {
+            "icon": "truck",
+            "title": "Envío desde España",
+            "text": "Gratis y con seguimiento. Península en 24–48 h; Baleares en 2–4 días laborables.",
+            "link_label": "Ver envíos",
+            "page": "envios"
+          }
+        },
+        "b2": {
+          "type": "col",
+          "settings": {
+            "icon": "refresh",
+            "title": "30 días para devolver",
+            "text": "Además de los 14 días legales de desistimiento. La etiqueta de devolución la pagamos nosotros.",
+            "link_label": "Ver devoluciones",
+            "page": "devoluciones"
+          }
+        },
+        "b3": {
+          "type": "col",
+          "settings": {
+            "icon": "chat",
+            "title": "Te respondemos por escrito",
+            "text": "Escríbenos a waistzen@gmail.com antes o después de comprar. Si ya pediste, indica tu número de pedido.",
+            "link_label": "Escribirnos",
+            "page": "contact"
+          }
+        }
+      },
+      "block_order": [
+        "b1",
+        "b2",
+        "b3"
+      ]
+    },
+    "faq": {
+      "type": "lab-faq",
+      "settings": {
+        "product": "juego-de-ventosa-electrica-con-cable",
+        "anchor": "preguntas",
+        "schema": false
+      },
+      "blocks": {
+        "b1": {
+          "type": "group",
+          "settings": {
+            "title": "Pedidos"
+          }
+        },
+        "b2": {
+          "type": "qa",
+          "settings": {
+            "q": "¿Cuánto cuesta cada pack?",
+            "a": "<p>1 unidad: <strong>[p1]</strong>. Pack de 2: <strong>[p2]</strong> ([u2]/ud). Pack de 3: <strong>[p3]</strong> ([u3]/ud). El descuento del pack (−[d2] % y −[d3] %) se aplica solo en el carrito.</p>"
+          }
+        },
+        "b3": {
+          "type": "qa",
+          "settings": {
+            "q": "¿Puedo usar el código RELIEF10 con un pack?",
+            "a": "<p>RELIEF10 es un 10 % para tu primer pedido. No se suma al descuento de los packs: si compras 2 o 3, ya llevas el descuento del pack.</p>"
+          }
+        },
+        "b4": {
+          "type": "group",
+          "settings": {
+            "title": "Envíos"
+          }
+        },
+        "b5": {
+          "type": "qa",
+          "settings": {
+            "q": "¿Cuánto tarda en llegar?",
+            "a": "<p>Península: 24–48 h. Baleares: 2–4 días laborables. Canarias, Ceuta y Melilla: escríbenos antes de pedir. Todos los envíos salen de un almacén en España y llevan seguimiento. <a href=\"/pages/envios\">Ver envíos</a>.</p>"
+          }
+        },
+        "b6": {
+          "type": "group",
+          "settings": {
+            "title": "Pagos"
+          }
+        },
+        "b7": {
+          "type": "qa",
+          "settings": {
+            "q": "¿Puedo pagar al recibirlo?",
+            "a": "<p>Sí, con contrareembolso si tu dirección tiene cobertura. Se añade un recargo de gestión de <strong>[fee]</strong> por pedido, que verás como una línea más antes de pagar.</p>"
+          }
+        },
+        "b8": {
+          "type": "group",
+          "settings": {
+            "title": "Devoluciones"
+          }
+        },
+        "b9": {
+          "type": "qa",
+          "settings": {
+            "q": "¿Puedo devolverlo?",
+            "a": "<p>Tienes 14 días de desistimiento por ley y lo ampliamos a <strong>30 días</strong> desde que lo recibes. La etiqueta de devolución la pagamos nosotros. <a href=\"/pages/devoluciones\">Ver devoluciones</a>.</p>"
+          }
+        },
+        "b10": {
+          "type": "group",
+          "settings": {
+            "title": "Producto"
+          }
+        },
+        "b11": {
+          "type": "qa",
+          "settings": {
+            "q": "¿Sustituye a un fisioterapeuta o a un tratamiento?",
+            "a": "<p>No. ReliefPath™ no sustituye un diagnóstico, tratamiento médico, fisioterapia ni medicación. Ante dolor, una lesión o cualquier duda sanitaria, consulta a un profesional sanitario.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "b1",
+        "b2",
+        "b3",
+        "b4",
+        "b5",
+        "b6",
+        "b7",
+        "b8",
+        "b9",
+        "b10",
+        "b11"
+      ]
+    },
+    "trust": {
+      "type": "lab-trust",
+      "settings": {},
+      "blocks": {
+        "b1": {
+          "type": "card",
+          "settings": {
+            "icon": "doc",
+            "title": "Todo por escrito",
+            "text": "Envíos, devoluciones y garantía, publicados en páginas abiertas.",
+            "link_label": "Ver las pruebas",
+            "link": "/#calidad"
+          }
+        },
+        "b2": {
+          "type": "card",
+          "settings": {
+            "icon": "lock",
+            "title": "Pago seguro",
+            "text": "Checkout cifrado de Shopify. Si lo prefieres, paga al recibirlo con contrareembolso.",
+            "link_label": ""
+          }
+        },
+        "b3": {
+          "type": "card",
+          "settings": {
+            "icon": "truck",
+            "title": "Envío con seguimiento",
+            "text": "Gratis desde España. Península en 24–48 h.",
+            "link_label": "Ver envíos",
+            "page": "envios"
+          }
+        },
+        "b4": {
+          "type": "card",
+          "settings": {
+            "icon": "chat",
+            "title": "¿Te ayudamos a elegir?",
+            "text": "Escríbenos y te decimos qué pack encaja contigo.",
+            "link_label": "Escríbenos",
+            "page": "contact"
+          }
+        }
+      },
+      "block_order": [
+        "b1",
+        "b2",
+        "b3",
+        "b4"
+      ]
+    },
+    "legal": {
+      "type": "lab-legal",
+      "settings": {}
+    }
+  },
+  "order": [
+    "main",
+    "reviews",
+    "proof",
+    "why",
+    "faq",
+    "trust",
+    "legal"
+  ]
+}

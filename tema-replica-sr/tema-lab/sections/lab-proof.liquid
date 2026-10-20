@@ -1,0 +1,119 @@
+{%- comment -%}
+  Calidad: el método en 3 pasos, la rejilla de documentos y la guía «Cómo
+  revisar tu ReliefPath al recibirlo». Un documento sin enlace no se enseña
+  a los clientes: solo aparece en el editor, marcado como pendiente.
+{%- endcomment -%}
+{%- liquid
+  assign steps = section.blocks | where: 'type', 'step'
+  assign docs = section.blocks | where: 'type', 'doc'
+  assign heading_tag = 'h2'
+  if section.settings.as_h1
+    assign heading_tag = 'h1'
+  endif
+  assign shown = 0
+  for b in docs
+    assign href = b.settings.file | default: b.settings.link | default: b.settings.page.url
+    if href != blank
+      assign shown = shown | plus: 1
+    endif
+  endfor
+-%}
+<section class="lab lab-sec{% if section.settings.surface %} lab-sec--surface{% endif %}" id="{{ section.settings.anchor | default: 'calidad' | handleize }}">
+  <div class="lab-wrap">
+    <div data-lab-reveal>
+      <p class="lab-eyebrow">{{ section.settings.eyebrow | escape }}{% if shown > 0 %} · {{ 'lab.proof.docs' | t: count: shown }}{% endif %}</p>
+      <{{ heading_tag }} class="lab-h2">{{ section.settings.heading }}</{{ heading_tag }}>
+      {%- if section.settings.lead != blank -%}<p class="lab-lead">{{ section.settings.lead }}</p>{%- endif -%}
+    </div>
+
+    {%- if steps.size > 0 -%}
+      <ol class="lab-steps">
+        {%- for b in steps -%}
+          <li class="lab-card lab-step" data-lab-reveal {{ b.shopify_attributes }}>
+            <span class="lab-mono lab-step__n">{{ 'lab.proof.step' | t }} {% if forloop.index < 10 %}0{% endif %}{{ forloop.index }}</span>
+            <h3 class="lab-h3">{{ b.settings.title | escape }}</h3>
+            <p>{{ b.settings.text }}</p>
+          </li>
+        {%- endfor -%}
+      </ol>
+    {%- endif -%}
+
+    {%- if docs.size > 0 -%}
+      <div class="lab-docs">
+        {%- for b in docs -%}
+          {%- assign href = b.settings.file | default: b.settings.link | default: b.settings.page.url -%}
+          {%- if href == blank and request.design_mode == false -%}{%- continue -%}{%- endif -%}
+          <article class="lab-card lab-doc" data-lab-reveal {{ b.shopify_attributes }}>
+            <div class="lab-doc__top">
+              <span class="lab-mono lab-doc__type">{% render 'lab-icon', name: 'doc' %} {{ b.settings.kind | escape }}</span>
+              {%- if href != blank -%}<span class="lab-doc__ok">{% render 'lab-icon', name: 'check-circle' %}{{ b.settings.status | default: 'Publicado' | escape }}</span>{%- endif -%}
+            </div>
+            <h3 class="lab-h3">{{ b.settings.title | escape }}</h3>
+            <dl>
+              {%- for i in (1..3) -%}
+                {%- assign lk = 'l' | append: i -%}{%- assign vk = 'v' | append: i -%}
+                {%- if b.settings[lk] != blank -%}<dt>{{ b.settings[lk] | escape }}</dt><dd>{{ b.settings[vk] | escape }}</dd>{%- endif -%}
+              {%- endfor -%}
+            </dl>
+            {%- if href != blank -%}
+              <a class="lab-btn lab-btn--ghost" href="{{ href }}"{% if b.settings.file != blank %} target="_blank" rel="noopener"{% endif %}>{% if b.settings.file != blank %}{% render 'lab-icon', name: 'download' %}{% endif %}{{ b.settings.button | default: 'Ver documento' | escape }}</a>
+            {%- else -%}
+              <p class="lab-pending">{{ 'lab.proof.pending' | t }}</p>
+            {%- endif -%}
+          </article>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    {%- if section.settings.guide != blank -%}
+      <div class="lab-verify" id="revisar" data-lab-reveal>
+        <h3 class="lab-h3">{{ section.settings.guide_title | escape }}</h3>
+        {{ section.settings.guide }}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Lab · Calidad y pruebas",
+  "settings": [
+    { "type": "text", "id": "anchor", "label": "Ancla", "default": "calidad" },
+    { "type": "text", "id": "eyebrow", "label": "Ceja", "default": "Calidad · lo que puedes comprobar" },
+    { "type": "inline_richtext", "id": "heading", "label": "Título", "default": "Pruebas, <em>no promesas.</em>" },
+    { "type": "checkbox", "id": "as_h1", "label": "Usar H1 (página de calidad)", "default": false },
+    { "type": "inline_richtext", "id": "lead", "label": "Entradilla", "default": "Todo lo que te contamos aquí está publicado y enlazado: plazos, devoluciones, garantía y documentos del aparato. Si un documento no está aún, no lo enseñamos." },
+    { "type": "checkbox", "id": "surface", "label": "Fondo blanco", "default": true },
+    { "type": "text", "id": "guide_title", "label": "Guía · título", "default": "Cómo revisar tu ReliefPath™ al recibirlo, en 5 pasos" },
+    { "type": "richtext", "id": "guide", "label": "Guía · pasos", "default": "<ol><li><strong>Comprueba el paquete.</strong> Que el número de pedido y las unidades coinciden con tu confirmación.</li><li><strong>Busca el marcado CE</strong> en el aparato, en su etiqueta o en la caja, y guarda el manual.</li><li><strong>Lee el manual del fabricante</strong> antes del primer uso: zonas, tiempos, niveles y contraindicaciones.</li><li><strong>Empieza por el nivel más bajo</strong> de succión y calor, como indique el manual.</li><li><strong>Si algo no está bien, escríbenos.</strong> Tienes 30 días desde que lo recibes para devolverlo y la etiqueta la pagamos nosotros.</li></ol>" }
+  ],
+  "blocks": [
+    {
+      "type": "step", "name": "Paso del método", "limit": 3,
+      "settings": [
+        { "type": "text", "id": "title", "label": "Título", "default": "Lo publicamos por escrito" },
+        { "type": "inline_richtext", "id": "text", "label": "Texto", "default": "Plazos de envío, devoluciones y garantía están en páginas públicas. Lo que pone ahí es lo que se aplica a tu pedido." }
+      ]
+    },
+    {
+      "type": "doc", "name": "Documento",
+      "settings": [
+        { "type": "text", "id": "kind", "label": "Tipo", "default": "Política" },
+        { "type": "text", "id": "title", "label": "Título", "default": "Envíos y entregas" },
+        { "type": "text", "id": "l1", "label": "Dato 1 · nombre", "default": "Zona" },
+        { "type": "text", "id": "v1", "label": "Dato 1 · valor", "default": "España" },
+        { "type": "text", "id": "l2", "label": "Dato 2 · nombre" },
+        { "type": "text", "id": "v2", "label": "Dato 2 · valor" },
+        { "type": "text", "id": "l3", "label": "Dato 3 · nombre" },
+        { "type": "text", "id": "v3", "label": "Dato 3 · valor" },
+        { "type": "text", "id": "status", "label": "Estado", "default": "Publicado" },
+        { "type": "page", "id": "page", "label": "Página" },
+        { "type": "text", "id": "link", "label": "O enlace (/#ancla o URL)" },
+        { "type": "text", "id": "file", "label": "O PDF (URL de Contenido › Archivos)" },
+        { "type": "text", "id": "button", "label": "Botón", "default": "Ver documento" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Lab · Calidad y pruebas" }]
+}
+{% endschema %}

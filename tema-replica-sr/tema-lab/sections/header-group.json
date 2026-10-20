@@ -1,0 +1,24 @@
+{
+  "type": "header",
+  "name": "Header group",
+  "sections": {
+    "offer": {
+      "type": "lab-offer",
+      "settings": {
+        "tag": "PACKS",
+        "cta": "Lo quiero",
+        "closable": true
+      }
+    },
+    "header": {
+      "type": "lab-header",
+      "settings": {
+        "buy_label": "Comprar"
+      }
+    }
+  },
+  "order": [
+    "offer",
+    "header"
+  ]
+}

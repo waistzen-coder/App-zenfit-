@@ -1,0 +1,68 @@
+{%- comment -%}
+  Barra de oferta: una oferta concreta y, si tiene fecha de fin real, la fecha y
+  la cuenta atrás. Sin fecha, no hay cuenta atrás. Si la fecha ya pasó, la barra
+  no se pinta. Con los textos vacíos se escribe sola con los descuentos de los
+  ajustes del tema, así no se queda desfasada.
+{%- endcomment -%}
+{%- liquid
+  assign end = section.settings.end_date | strip
+  assign today = 'now' | date: '%Y-%m-%d'
+  assign expired = false
+  if end != blank and end < today
+    assign expired = true
+  endif
+  assign long = section.settings.text_long
+  if long == blank
+    assign long = 'lab.offer.auto_long' | t: d2: settings.lab_disc_2, d3: settings.lab_disc_3
+  endif
+  assign short = section.settings.text_short
+  if short == blank
+    assign short = 'lab.offer.auto_short' | t: d2: settings.lab_disc_2, d3: settings.lab_disc_3
+  endif
+  assign link = section.settings.link
+  if link == blank
+    assign link = routes.root_url | append: '#packs'
+  endif
+  assign key = long | append: end | handleize | slice: 0, 40
+-%}
+{%- unless expired -%}
+  <div class="lab lab-offer" id="LabOffer" data-lab-offer="{{ key }}"{% if end != blank %} data-end="{{ end }}T23:59:59{{ 'now' | date: '%z' | slice: 0, 3 }}:{{ 'now' | date: '%z' | slice: 3, 2 }}"{% endif %}>
+    <div class="lab-offer__in">
+      {%- if section.settings.tag != blank -%}<span class="lab-offer__tag">{{ section.settings.tag | escape }}</span>{%- endif -%}
+      <span>
+        <span class="lab-offer__long">{{ long | escape }}</span>
+        <span class="lab-offer__short">{{ short | escape }}</span>
+        {%- if end != blank %}
+          <span class="lab-offer__long">{{ 'lab.offer.until' | t: date: end }}</span>
+          <span class="lab-offer__cd" data-lab-cd hidden></span>
+        {%- endif -%}
+      </span>
+      {%- if section.settings.cta != blank -%}
+        <a class="lab-offer__cta" href="{{ link }}">{{ section.settings.cta | escape }}</a>
+      {%- endif -%}
+      {%- if section.settings.closable -%}
+        <button type="button" class="lab-offer__x" data-lab-offer-x aria-label="{{ 'lab.offer.close' | t }}">{% render 'lab-icon', name: 'x' %}</button>
+      {%- endif -%}
+    </div>
+  </div>
+  {%- if section.settings.closable -%}
+    <script>try{if(sessionStorage.getItem('lab-offer')==={{ key | json }})document.getElementById('LabOffer').hidden=true}catch(e){}</script>
+  {%- endif -%}
+{%- endunless -%}
+
+{% schema %}
+{
+  "name": "Lab · Barra de oferta",
+  "class": "lab-offer-section",
+  "settings": [
+    { "type": "text", "id": "tag", "label": "Etiqueta corta", "default": "PACKS" },
+    { "type": "text", "id": "text_long", "label": "Texto (escritorio)", "info": "Vacío: se escribe solo con los descuentos de Ajustes del tema › ReliefPath Lab." },
+    { "type": "text", "id": "text_short", "label": "Texto corto (móvil)", "info": "Vacío: se escribe solo." },
+    { "type": "text", "id": "cta", "label": "Botón", "default": "Lo quiero" },
+    { "type": "url", "id": "link", "label": "Enlace del botón", "info": "Vacío: lleva a los packs de la portada." },
+    { "type": "text", "id": "end_date", "label": "Fecha de fin (AAAA-MM-DD)", "info": "Solo si la oferta termina de verdad ese día. Con fecha se ve la cuenta atrás; al pasar, la barra desaparece." },
+    { "type": "checkbox", "id": "closable", "label": "Se puede cerrar", "default": true }
+  ],
+  "presets": [{ "name": "Lab · Barra de oferta" }]
+}
+{% endschema %}

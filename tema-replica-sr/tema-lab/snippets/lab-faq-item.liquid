@@ -1,0 +1,5 @@
+{%- comment -%} Una pregunta del acordeón de lab-faq. {%- endcomment -%}
+<details {{ b.shopify_attributes }}>
+  <summary>{{ b.settings.q | escape }}{% render 'lab-icon', name: 'plus' %}</summary>
+  <div class="lab-faq__a">{% render 'lab-fill', text: b.settings.a, product: p %}</div>
+</details>

@@ -1,0 +1,127 @@
+{
+  "lab": {
+    "meta_title": "Ventosa eléctrica con calor y luz roja | Waistzen",
+    "meta_description": "ReliefPath™: ventosa eléctrica con calor y luz roja. Packs de 1, 2 y 3 con envío gratis desde España en 24–48 h y 30 días para devolver.",
+    "offer": {
+      "auto_long": "Packs con descuento automático: −{{ d2 }} % llevando 2 y −{{ d3 }} % llevando 3. Se aplica en el carrito.",
+      "auto_short": "Packs: −{{ d2 }} % en 2 · −{{ d3 }} % en 3",
+      "until": "Hasta el {{ date }} a medianoche.",
+      "close": "Cerrar la barra de oferta"
+    },
+    "header": {
+      "nav": "Menú principal",
+      "menu": "Menú",
+      "close_menu": "Cerrar el menú",
+      "account": "Mi cuenta",
+      "search": "Buscar"
+    },
+    "nav": {
+      "shop": "Tienda",
+      "quality": "Calidad",
+      "faq": "Preguntas",
+      "about": "Sobre nosotros",
+      "contact": "Contacto",
+      "track": "Seguir mi pedido"
+    },
+    "crumbs": {
+      "label": "Migas de pan",
+      "home": "Inicio"
+    },
+    "hero": {
+      "eyebrow": {
+        "one": "Tienda · {{ count }} pack · envío desde España",
+        "other": "Tienda · {{ count }} packs · envío desde España"
+      },
+      "packs": "Packs disponibles",
+      "one": "1 unidad",
+      "many": "Pack de {{ count }}"
+    },
+    "catalog": {
+      "refs": {
+        "one": "{{ count }} referencia",
+        "other": "{{ count }} referencias"
+      },
+      "nav": "Categorías del catálogo",
+      "no_product": "Elige el producto en los ajustes de esta sección."
+    },
+    "card": {
+      "add": "Añadir al carrito",
+      "sold_out": "Agotado",
+      "notify": "Avísame",
+      "units": "uds",
+      "view": "Ver el pack",
+      "was": "Antes",
+      "per_unit": "/ud",
+      "save": "Ahorras"
+    },
+    "proof": {
+      "docs": {
+        "one": "{{ count }} documento",
+        "other": "{{ count }} documentos"
+      },
+      "step": "Paso",
+      "pending": "PENDIENTE: sube el PDF a Contenido › Archivos y pega aquí su URL. Hasta entonces, los clientes no ven esta tarjeta."
+    },
+    "video": {
+      "pending": "PENDIENTE: sube un vídeo grabado con el aparato real. Sin vídeo, esta sección no se muestra a los clientes."
+    },
+    "reviews": {
+      "pending": "PENDIENTE: añade aquí el bloque de reseñas de tu app (p. ej. Judge.me). Sin bloque, esta sección no se muestra. No pongas reseñas inventadas."
+    },
+    "guide": {
+      "toc": "En esta guía"
+    },
+    "table": {
+      "caption": "Precio de cada pack",
+      "ship_caption": "Plazos y coste de envío por zona",
+      "pack": "Pack",
+      "total": "Total",
+      "unit": "Por unidad",
+      "save": "Ahorras",
+      "zone": "Zona",
+      "time": "Plazo",
+      "cost": "Coste"
+    },
+    "pdp": {
+      "gallery": "Fotos del producto",
+      "view_image": "Ver la imagen {{ index }}",
+      "reviews": {
+        "one": "{{ count }} reseña",
+        "other": "{{ count }} reseñas"
+      },
+      "tax_note": "IVA incluido.",
+      "in_stock": "En stock",
+      "low_stock": {
+        "one": "Queda {{ count }} unidad",
+        "other": "Quedan {{ count }} unidades"
+      },
+      "choose": "Elige tu pack",
+      "not_enough": "No hay unidades suficientes",
+      "buy_now": "Comprar ahora",
+      "cod_open": "Pagar al recibirlo (+{{ fee }})",
+      "cod_pack": "Pack",
+      "cod_fee": "Recargo de gestión del contrareembolso",
+      "cod_total": "Total al recibirlo",
+      "cod_help": "En el checkout, elige pagar contra reembolso. El envío sigue siendo gratis.",
+      "cod_go": "Continuar con contrareembolso",
+      "cod_note": "Preferencia: contrareembolso. Elegir pago contra reembolso en el checkout.",
+      "fee_eyebrow": "Contrareembolso"
+    },
+    "footer": {
+      "packs": "Packs",
+      "device": "El aparato",
+      "shipping": "Envíos y entregas",
+      "returns": "Devoluciones y desistimiento",
+      "terms": "Condiciones de venta",
+      "privacy": "Privacidad",
+      "cookies": "Preferencias de cookies",
+      "legal_notice": "Aviso legal",
+      "privacy_choices": "Tus opciones de privacidad",
+      "rights": "© {{ year }} {{ shop }}",
+      "gdpr": "Privacidad y RGPD",
+      "pay": "Formas de pago",
+      "language": "Idioma",
+      "top": "Volver arriba"
+    }
+  }
+}

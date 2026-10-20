@@ -1,0 +1,162 @@
+{%- comment -%}
+  Hero de tienda: migas, ceja con el número de packs, H1 con la palabra clave,
+  subtítulo, 2 botones, 3 cifras enlazadas a su prueba, 4 chips de confianza y
+  las tarjetas de los packs flotando. Las cifras de precio salen del producto.
+{%- endcomment -%}
+{%- liquid
+  assign p = section.settings.product
+  assign v = p.selected_or_first_available_variant
+  assign packs = section.blocks | where: 'type', 'pack'
+  assign figs = section.blocks | where: 'type', 'figure'
+  assign chips = section.blocks | where: 'type', 'chip'
+  assign root = routes.root_url
+  if root == '/'
+    assign root = ''
+  endif
+  assign eyebrow = section.settings.eyebrow
+  if eyebrow == blank
+    assign eyebrow = 'lab.hero.eyebrow' | t: count: packs.size
+  endif
+  assign heading_tag = 'h1'
+  if section.settings.as_h2
+    assign heading_tag = 'h2'
+  endif
+-%}
+<section class="lab lab-hero" id="tienda">
+  <div class="lab-wrap">
+    {%- if section.settings.crumbs -%}
+      <nav aria-label="{{ 'lab.crumbs.label' | t }}">
+        <ol class="lab-crumbs">
+          <li><a href="{{ routes.root_url }}">{{ 'lab.crumbs.home' | t }}</a></li>
+          <li aria-current="page">{{ section.settings.crumb | default: 'Tienda' | escape }}</li>
+        </ol>
+      </nav>
+      {%- if request.page_type != 'index' -%}
+        <script type="application/ld+json">
+          {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
+            {"@type":"ListItem","position":1,"name":{{ 'lab.crumbs.home' | t | json }},"item":{{ request.origin | append: routes.root_url | json }}},
+            {"@type":"ListItem","position":2,"name":{{ section.settings.crumb | default: 'Tienda' | json }},"item":{{ request.origin | append: request.path | json }}}]}
+        </script>
+      {%- endif -%}
+    {%- endif -%}
+    <div class="lab-hero__grid">
+      <div>
+        <p class="lab-eyebrow">{{ eyebrow | escape }}</p>
+        <{{ heading_tag }} class="lab-h1">{{ section.settings.heading }}</{{ heading_tag }}>
+        {%- if section.settings.sub != blank -%}
+          <p class="lab-lead">{% render 'lab-fill', text: section.settings.sub, product: p %}</p>
+        {%- endif -%}
+        <div class="lab-hero__ctas">
+          {%- if section.settings.cta1 != blank -%}
+            <a class="lab-btn lab-btn--accent" href="{{ section.settings.cta1_link | default: '#packs' }}">{{ section.settings.cta1 | escape }}{% render 'lab-icon', name: 'arrow' %}</a>
+          {%- endif -%}
+          {%- if section.settings.cta2 != blank -%}
+            <a class="lab-btn lab-btn--ghost" href="{{ section.settings.cta2_link | default: '#calidad' }}">{{ section.settings.cta2 | escape }}</a>
+          {%- endif -%}
+        </div>
+        {%- if figs.size > 0 -%}
+          <ul class="lab-figures" role="list">
+            {%- for b in figs -%}
+              {%- assign href = b.settings.link | default: b.settings.page.url -%}
+              <li class="lab-figure" {{ b.shopify_attributes }}>
+                {%- if href != blank -%}<a href="{{ href }}">{%- endif -%}
+                <strong class="lab-figure__v">{{ b.settings.value | escape }}</strong>
+                <span class="lab-figure__l">{{ b.settings.label | escape }}</span>
+                {%- if href != blank -%}</a>{%- endif -%}
+              </li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+        {%- if chips.size > 0 -%}
+          <ul class="lab-trustchips" role="list">
+            {%- for b in chips -%}
+              <li class="lab-chip" {{ b.shopify_attributes }}>{% render 'lab-icon', name: b.settings.icon %}{{ b.settings.text | escape }}</li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+      </div>
+      {%- if packs.size > 0 and p != blank -%}
+        <div class="lab-float" aria-label="{{ 'lab.hero.packs' | t }}">
+          {%- for b in packs -%}
+            {%- liquid
+              assign q = b.settings.qty
+              assign img = b.settings.image
+              if img == blank
+                assign mi = b.settings.media_index | minus: 1
+                assign img = p.media[mi].preview_image | default: p.featured_media.preview_image
+              endif
+            -%}
+            <a class="lab-float__card" href="{{ p.url }}?pack={{ q }}" {{ b.shopify_attributes }}>
+              <span class="lab-float__img">
+                {%- if img != blank -%}
+                  {{ img | image_url: width: 200, height: 200, crop: 'center' | image_tag: width: 88, height: 88, loading: 'eager', alt: '' }}
+                {%- endif -%}
+              </span>
+              <span>
+                <span class="lab-mono">{{ b.settings.label | escape }}</span>
+                <strong>{% if q == 1 %}{{ 'lab.hero.one' | t }}{% else %}{{ 'lab.hero.many' | t: count: q }}{% endif %}</strong>
+                <span class="lab-float__price">{% render 'lab-pack-price', price: v.price, qty: q, show: 'net' %} <span class="lab-unit">· {% render 'lab-pack-price', price: v.price, qty: q, show: 'unit' %}{{ 'lab.card.per_unit' | t }}</span></span>
+              </span>
+            </a>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+{%- if request.page_type == 'index' -%}
+  <script type="application/ld+json">
+    {"@context":"https://schema.org","@graph":[
+      {"@type":"Organization","@id":{{ request.origin | append: '/#org' | json }},"name":{{ shop.name | json }},"url":{{ request.origin | json }}{% if shop.email != blank %},"email":{{ shop.email | json }},"contactPoint":{"@type":"ContactPoint","contactType":"customer support","email":{{ shop.email | json }},"availableLanguage":["es"]}{% endif %}},
+      {"@type":"WebSite","name":{{ shop.name | json }},"url":{{ request.origin | json }},"publisher":{"@id":{{ request.origin | append: '/#org' | json }}}}]}
+  </script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Lab · Hero de tienda",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Producto" },
+    { "type": "checkbox", "id": "crumbs", "label": "Migas de pan", "default": true },
+    { "type": "text", "id": "crumb", "label": "Nombre en las migas", "default": "Tienda" },
+    { "type": "text", "id": "eyebrow", "label": "Ceja", "info": "Vacío: «Tienda · N packs», contando los packs de abajo." },
+    { "type": "inline_richtext", "id": "heading", "label": "Título (H1)", "info": "Pon en cursiva 1–3 palabras para el énfasis.", "default": "Comprar ventosas eléctricas con <em>calor y luz roja</em> en España" },
+    { "type": "checkbox", "id": "as_h2", "label": "Usar H2 (si la página ya tiene otro H1)", "default": false },
+    { "type": "inline_richtext", "id": "sub", "label": "Subtítulo", "info": "Marcas: [p1] [p2] [p3] precio del pack, [u2] [u3] o [desde] precio por unidad, [d2] [d3] descuento.", "default": "ReliefPath™ suelto, en pack de 2 o en pack de 3: succión regulable, calor y luz roja en un aparato de uso doméstico. Desde [desde]/ud, con envío gratis desde España." },
+    { "type": "text", "id": "cta1", "label": "Botón principal", "default": "Ver los packs" },
+    { "type": "text", "id": "cta1_link", "label": "Enlace del botón principal", "default": "#packs" },
+    { "type": "text", "id": "cta2", "label": "Botón secundario", "default": "Lo que puedes comprobar" },
+    { "type": "text", "id": "cta2_link", "label": "Enlace del botón secundario", "default": "#calidad" }
+  ],
+  "blocks": [
+    {
+      "type": "figure", "name": "Cifra", "limit": 3,
+      "settings": [
+        { "type": "text", "id": "value", "label": "Cifra", "default": "24–48 h" },
+        { "type": "text", "id": "label", "label": "Qué significa", "default": "Entrega en península" },
+        { "type": "page", "id": "page", "label": "Página con la prueba" },
+        { "type": "text", "id": "link", "label": "O enlace (/#ancla o URL)" }
+      ]
+    },
+    {
+      "type": "chip", "name": "Chip de confianza", "limit": 4,
+      "settings": [
+        { "type": "select", "id": "icon", "label": "Icono", "default": "lock", "options": [
+          { "value": "lock", "label": "Candado" }, { "value": "truck", "label": "Camión" }, { "value": "refresh", "label": "Devolución" },
+          { "value": "chat", "label": "Soporte" }, { "value": "shield", "label": "Garantía" }, { "value": "cash", "label": "Contrareembolso" } ] },
+        { "type": "text", "id": "text", "label": "Texto", "default": "Pago 100 % seguro" }
+      ]
+    },
+    {
+      "type": "pack", "name": "Tarjeta de pack", "limit": 3,
+      "settings": [
+        { "type": "range", "id": "qty", "label": "Unidades", "min": 1, "max": 3, "step": 1, "default": 1 },
+        { "type": "text", "id": "label", "label": "Etiqueta", "default": "RELIEFPATH · 1 UD" },
+        { "type": "image_picker", "id": "image", "label": "Imagen" },
+        { "type": "range", "id": "media_index", "label": "Si no hay imagen: foto nº del producto", "min": 1, "max": 10, "step": 1, "default": 1 }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Lab · Hero de tienda" }]
+}
+{% endschema %}

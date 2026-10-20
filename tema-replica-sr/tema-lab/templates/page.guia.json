@@ -1,0 +1,130 @@
+{
+  "sections": {
+    "guide": {
+      "type": "lab-guide",
+      "settings": {
+        "product": "juego-de-ventosa-electrica-con-cable"
+      },
+      "blocks": {
+        "b1": {
+          "type": "chapter",
+          "settings": {
+            "title": "Qué es ReliefPath™",
+            "body": "<p>ReliefPath™ es un aparato de bienestar para uso doméstico que combina tres funciones: una <strong>ventosa eléctrica</strong> de succión regulable, <strong>calor</strong> y <strong>luz roja</strong>. Se usa en casa, siguiendo el manual del fabricante.</p>"
+          }
+        },
+        "b2": {
+          "type": "chapter",
+          "settings": {
+            "title": "Lo que no es",
+            "body": "<p>No es un tratamiento. No sustituye un diagnóstico, tratamiento médico, fisioterapia ni medicación, y no prometemos resultados clínicos. Si tienes dolor, una lesión o una condición de salud, consulta antes a un profesional sanitario.</p>"
+          }
+        },
+        "b3": {
+          "type": "packs",
+          "settings": {
+            "title": "Qué pack te conviene",
+            "body": "<p>El precio por unidad baja con el pack: −[d2] % llevando 2 y −[d3] % llevando 3. El descuento se aplica solo en el carrito.</p>"
+          }
+        },
+        "b4": {
+          "type": "chapter",
+          "settings": {
+            "title": "Antes del primer uso",
+            "body": "<ol><li>Comprueba que el pedido llega completo.</li><li>Busca el marcado CE y guarda el manual.</li><li>Lee zonas permitidas, duración, frecuencia y contraindicaciones.</li><li>Empieza por el nivel más bajo de succión y calor.</li></ol>"
+          }
+        },
+        "b5": {
+          "type": "chapter",
+          "settings": {
+            "title": "Envío y entrega",
+            "body": "<p>Gratis desde un almacén en España, con seguimiento. Península: 24–48 h. Baleares: 2–4 días laborables. Canarias, Ceuta y Melilla: escríbenos antes de pedir. <a href=\"/pages/envios\">Ver envíos</a>.</p>"
+          }
+        },
+        "b6": {
+          "type": "chapter",
+          "settings": {
+            "title": "Pago",
+            "body": "<p>Con tarjeta en el checkout o al recibirlo con contrareembolso, con un recargo de gestión de [fee] por pedido.</p>"
+          }
+        },
+        "b7": {
+          "type": "chapter",
+          "settings": {
+            "title": "Devoluciones y garantía",
+            "body": "<p>14 días de desistimiento por ley, ampliados a 30 días desde la recepción. La etiqueta la pagamos nosotros. Garantía legal de conformidad de 3 años. <a href=\"/pages/devoluciones\">Ver devoluciones</a>.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "b1",
+        "b2",
+        "b3",
+        "b4",
+        "b5",
+        "b6",
+        "b7"
+      ]
+    },
+    "trust": {
+      "type": "lab-trust",
+      "settings": {},
+      "blocks": {
+        "b1": {
+          "type": "card",
+          "settings": {
+            "icon": "doc",
+            "title": "Todo por escrito",
+            "text": "Envíos, devoluciones y garantía, publicados en páginas abiertas.",
+            "link_label": "Ver las pruebas",
+            "link": "/#calidad"
+          }
+        },
+        "b2": {
+          "type": "card",
+          "settings": {
+            "icon": "lock",
+            "title": "Pago seguro",
+            "text": "Checkout cifrado de Shopify. Si lo prefieres, paga al recibirlo con contrareembolso.",
+            "link_label": ""
+          }
+        },
+        "b3": {
+          "type": "card",
+          "settings": {
+            "icon": "truck",
+            "title": "Envío con seguimiento",
+            "text": "Gratis desde España. Península en 24–48 h.",
+            "link_label": "Ver envíos",
+            "page": "envios"
+          }
+        },
+        "b4": {
+          "type": "card",
+          "settings": {
+            "icon": "chat",
+            "title": "¿Te ayudamos a elegir?",
+            "text": "Escríbenos y te decimos qué pack encaja contigo.",
+            "link_label": "Escríbenos",
+            "page": "contact"
+          }
+        }
+      },
+      "block_order": [
+        "b1",
+        "b2",
+        "b3",
+        "b4"
+      ]
+    },
+    "legal": {
+      "type": "lab-legal",
+      "settings": {}
+    }
+  },
+  "order": [
+    "guide",
+    "trust",
+    "legal"
+  ]
+}
