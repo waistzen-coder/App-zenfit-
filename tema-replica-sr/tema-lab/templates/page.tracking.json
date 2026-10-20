@@ -1,0 +1,72 @@
+{
+  "sections": {
+    "main": {
+      "type": "lab-text",
+      "settings": {
+        "eyebrow": "Mi pedido",
+        "heading": "Seguir mi <em>pedido</em>",
+        "as_h1": true,
+        "text": "<p>Para consultar tu pedido, usa el enlace del email de confirmación de compra. Cuando el transportista dé el seguimiento, lo verás también en tu cuenta.</p><p>Si no encuentras la confirmación, revisa el correo no deseado o escríbenos a <a href=\"mailto:waistzen@gmail.com\">waistzen@gmail.com</a> con tu número de pedido.</p>",
+        "b1": "Consultar mis pedidos",
+        "b1_link": "/account",
+        "b2": "Escribirnos",
+        "b2_link": "/pages/contact"
+      }
+    },
+    "trust": {
+      "type": "lab-trust",
+      "settings": {},
+      "blocks": {
+        "b1": {
+          "type": "card",
+          "settings": {
+            "icon": "doc",
+            "title": "Todo por escrito",
+            "text": "Envíos, devoluciones y garantía, publicados en páginas abiertas.",
+            "link_label": "Ver las pruebas",
+            "link": "/#calidad"
+          }
+        },
+        "b2": {
+          "type": "card",
+          "settings": {
+            "icon": "lock",
+            "title": "Pago seguro",
+            "text": "Checkout cifrado de Shopify. Si lo prefieres, paga al recibirlo con contrareembolso.",
+            "link_label": ""
+          }
+        },
+        "b3": {
+          "type": "card",
+          "settings": {
+            "icon": "truck",
+            "title": "Envío con seguimiento",
+            "text": "Gratis desde España. Península en 24–48 h.",
+            "link_label": "Ver envíos",
+            "page": "envios"
+          }
+        },
+        "b4": {
+          "type": "card",
+          "settings": {
+            "icon": "chat",
+            "title": "¿Te ayudamos a elegir?",
+            "text": "Escríbenos y te decimos qué pack encaja contigo.",
+            "link_label": "Escríbenos",
+            "page": "contact"
+          }
+        }
+      },
+      "block_order": [
+        "b1",
+        "b2",
+        "b3",
+        "b4"
+      ]
+    }
+  },
+  "order": [
+    "main",
+    "trust"
+  ]
+}

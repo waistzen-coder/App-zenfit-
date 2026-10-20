@@ -1,0 +1,30 @@
+{%- comment -%}
+  Botón «Añadir al carrito» con el product-form de Dawn: añade la cantidad del
+  pack y abre el carrito lateral sin salir de la página.
+  Uso: render 'lab-atc', product: p, variant: v, qty: 2, form_id: 'x', label: '…', btn: 'lab-btn--primary', qty_input: true
+{%- endcomment -%}
+{%- liquid
+  assign v = variant | default: product.selected_or_first_available_variant
+  assign q = qty | default: 1
+  assign lbl = label
+  if lbl == blank
+    assign lbl = 'lab.card.add' | t
+  endif
+  assign enough = true
+  if v.inventory_management == 'shopify' and v.inventory_policy == 'deny' and v.inventory_quantity < q
+    assign enough = false
+  endif
+-%}
+<product-form class="lab-atc" data-hide-errors="false">
+  {%- form 'product', product, id: form_id, novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+    <input type="hidden" name="id" value="{{ v.id }}" disabled>
+    <input type="hidden" name="quantity" value="{{ q }}"{% if qty_input %} data-lab-qty{% endif %}>
+    <button type="submit" name="add" class="lab-btn {{ btn | default: 'lab-btn--primary' }} lab-btn--block"{% unless v.available and enough %} disabled{% endunless %}>
+      <span>{% if v.available and enough %}{{ lbl }}{% else %}{{ 'lab.card.sold_out' | t }}{% endif %}</span>
+      {%- render 'loading-spinner' -%}
+    </button>
+    <div class="product-form__error-message-wrapper" role="alert" hidden>
+      <span class="product-form__error-message"></span>
+    </div>
+  {%- endform -%}
+</product-form>

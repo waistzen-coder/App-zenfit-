@@ -1,0 +1,43 @@
+{%- comment -%} Vídeo real del aparato. Sin vídeo subido no se pinta (solo un aviso en el editor). {%- endcomment -%}
+{%- assign vid = section.settings.video -%}
+{%- if vid != blank or request.design_mode -%}
+<section class="lab lab-sec{% if section.settings.surface %} lab-sec--surface{% endif %}" id="video">
+  <div class="lab-wrap lab-video">
+    <div class="lab-video__frame" data-lab-reveal>
+      {%- if vid != blank -%}
+        {{ vid | video_tag: controls: true, playsinline: true, muted: section.settings.muted, preload: 'none', image_size: '1280x' }}
+      {%- else -%}
+        <p class="lab-pending">{{ 'lab.video.pending' | t }}</p>
+      {%- endif -%}
+    </div>
+    <div data-lab-reveal>
+      <p class="lab-eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      <h2 class="lab-h2">{{ section.settings.heading }}</h2>
+      {%- if section.blocks.size > 0 -%}
+        <ul>
+          {%- for b in section.blocks -%}
+            <li {{ b.shopify_attributes }}><span class="lab-mono">{% if forloop.index < 10 %}0{% endif %}{{ forloop.index }}</span>{{ b.settings.text | escape }}</li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Lab · Vídeo real",
+  "settings": [
+    { "type": "video", "id": "video", "label": "Vídeo (grabado con el aparato real)" },
+    { "type": "checkbox", "id": "muted", "label": "Sin sonido", "default": true },
+    { "type": "text", "id": "eyebrow", "label": "Ceja", "default": "En vídeo" },
+    { "type": "inline_richtext", "id": "heading", "label": "Título", "default": "Así es el aparato, <em>sin filtros.</em>" },
+    { "type": "checkbox", "id": "surface", "label": "Fondo blanco", "default": false }
+  ],
+  "blocks": [
+    { "type": "point", "name": "Punto", "limit": 4, "settings": [ { "type": "text", "id": "text", "label": "Texto", "default": "Panel de control y copa transparente" } ] }
+  ],
+  "presets": [{ "name": "Lab · Vídeo real" }]
+}
+{% endschema %}

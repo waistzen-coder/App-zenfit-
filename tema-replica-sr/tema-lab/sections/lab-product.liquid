@@ -1,0 +1,361 @@
+{%- comment -%}
+  Ficha de producto Lab: galería con miniaturas y deslizamiento, H1 SEO,
+  valoración (solo con reseñas reales), packs en píldoras con precio y precio
+  por unidad, «Añadir al carrito» (carrito lateral de Dawn), «Comprar ahora»
+  (checkout en español), contrareembolso con el recargo en una línea, chips
+  de confianza, acordeón, barra fija en móvil y Product + Offer + Breadcrumb.
+  Los importes de cada pack se calculan aquí; el JS solo los cambia de sitio.
+{%- endcomment -%}
+{%- liquid
+  assign p = product
+  assign v = p.selected_or_first_available_variant
+  assign pid = 'LabPdp-' | append: section.id
+  assign fee_p = settings.lab_fee_product
+  assign is_fee = false
+  if fee_p != blank and fee_p.id == p.id
+    assign is_fee = true
+  endif
+  assign fee = 0
+  if section.settings.cod and fee_p != blank and is_fee == false
+    assign fee_v = fee_p.selected_or_first_available_variant
+    if fee_v.available
+      assign fee = fee_v.price
+    endif
+  endif
+  assign tracked = false
+  if v.inventory_management == 'shopify' and v.inventory_policy == 'deny'
+    assign tracked = true
+  endif
+  assign rating_count = p.metafields.reviews.rating_count.value | default: 0
+  assign root = routes.root_url
+  if root == '/'
+    assign root = ''
+  endif
+  assign start_q = 1
+  if section.settings.default_pack > 1 and v.available
+    assign start_q = section.settings.default_pack
+    if tracked and v.inventory_quantity < start_q
+      assign start_q = 1
+    endif
+  endif
+  assign cod_note = 'lab.pdp.cod_note' | t | url_encode
+  assign cod_attr = 'Contrareembolso' | url_encode
+  assign fee_f = fee | money
+-%}
+
+{%- if is_fee -%}
+  <section class="lab lab-fee">
+    <div class="lab-wrap lab-text">
+      <p class="lab-eyebrow">{{ 'lab.pdp.fee_eyebrow' | t }}</p>
+      <h1 class="lab-h2">{{ 'waistzen_review.fee_title' | t }}</h1>
+      <p class="lab-lead">{{ 'waistzen_review.fee_info' | t }}</p>
+      <div class="lab-hero__ctas"><a class="lab-btn lab-btn--primary" href="{{ routes.root_url }}">{{ 'lab.crumbs.home' | t }}</a></div>
+    </div>
+  </section>
+{%- else -%}
+<section class="lab lab-pdp" id="{{ pid }}" data-lab-pdp>
+  <div class="lab-wrap">
+    <nav aria-label="{{ 'lab.crumbs.label' | t }}">
+      <ol class="lab-crumbs">
+        <li><a href="{{ routes.root_url }}">{{ 'lab.crumbs.home' | t }}</a></li>
+        <li><a href="{{ root }}/#catalogo">{{ 'lab.nav.shop' | t }}</a></li>
+        <li aria-current="page">{{ p.title | escape }}</li>
+      </ol>
+    </nav>
+
+    <div class="lab-pdp__grid">
+      <div class="lab-gal">
+        <div class="lab-gal__track" tabindex="0" role="region" aria-label="{{ 'lab.pdp.gallery' | t }}">
+          {%- for m in p.media -%}
+            {%- assign img = m.preview_image -%}
+            <div class="lab-gal__slide">
+              {%- if img != blank -%}
+                {%- liquid
+                  assign alt = m.alt | default: p.title
+                  if forloop.first
+                    echo img | image_url: width: 1200, height: 1200, crop: 'center' | image_tag: widths: '400, 600, 800, 1000, 1200', sizes: '(min-width: 1240px) 600px, (min-width: 990px) 50vw, 100vw', loading: 'eager', fetchpriority: 'high', alt: alt, width: 1200, height: 1200
+                  else
+                    echo img | image_url: width: 1200, height: 1200, crop: 'center' | image_tag: widths: '400, 600, 800, 1000, 1200', sizes: '(min-width: 1240px) 600px, (min-width: 990px) 50vw, 100vw', loading: 'lazy', alt: alt, width: 1200, height: 1200
+                  endif
+                -%}
+              {%- endif -%}
+            </div>
+          {%- else -%}
+            <div class="lab-gal__slide">{{ 'product-1' | placeholder_svg_tag }}</div>
+          {%- endfor -%}
+        </div>
+        {%- if p.media.size > 1 -%}
+          <div class="lab-gal__thumbs">
+            {%- for m in p.media -%}
+              <button type="button" aria-current="{% if forloop.first %}true{% else %}false{% endif %}" aria-label="{{ 'lab.pdp.view_image' | t: index: forloop.index }}">
+                {{ m.preview_image | image_url: width: 140, height: 140, crop: 'center' | image_tag: width: 64, height: 64, loading: 'lazy', alt: '' }}
+              </button>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+
+      <div class="lab-pdp__info">
+        <div>
+          {%- if section.settings.eyebrow != blank -%}<p class="lab-eyebrow">{{ section.settings.eyebrow | escape }}</p>{%- endif -%}
+          <h1 class="lab-pdp__title">{{ p.title | escape }}{% if section.settings.subtitle != blank %}<span>{{ section.settings.subtitle | escape }}</span>{% endif %}</h1>
+        </div>
+
+        {%- if rating_count > 0 -%}
+          {%- assign r = p.metafields.reviews.rating.value.rating | round: 1 -%}
+          <a class="lab-rating" href="#opiniones">{% render 'lab-icon', name: 'star' %}<strong>{{ r | replace: '.', ',' }}</strong><span>({{ 'lab.pdp.reviews' | t: count: rating_count }})</span></a>
+        {%- endif -%}
+
+        {%- capture net0 -%}{% render 'lab-pack-price', price: v.price, qty: start_q, show: 'net' %}{%- endcapture -%}
+        {%- capture unit0 -%}{% render 'lab-pack-price', price: v.price, qty: start_q, show: 'unit' %}{%- endcapture -%}
+        {%- capture cents0 -%}{% render 'lab-pack-price', price: v.price, qty: start_q, show: 'net_cents' %}{%- endcapture -%}
+        {%- assign cod0 = cents0 | plus: fee | money -%}
+        <div class="lab-pdp__price">
+          <div class="lab-price">
+            <span class="lab-price__now{% if start_q > 1 %} is-sale{% endif %}" data-lab-now>{{ net0 }}</span>
+            <s class="lab-price__was" data-lab-was hidden></s>
+          </div>
+          <span class="lab-unit"><span data-lab-unit>{{ unit0 }}</span>{{ 'lab.card.per_unit' | t }} <span class="lab-save" data-lab-save hidden></span></span>
+          <p class="lab-note">{{ 'lab.pdp.tax_note' | t }}{% if section.settings.ship_note != blank %} {{ section.settings.ship_note | escape }}{% endif %}</p>
+        </div>
+
+        {%- if v.available -%}
+          <p class="lab-stock">{% if tracked and v.inventory_quantity <= section.settings.low_stock %}{{ 'lab.pdp.low_stock' | t: count: v.inventory_quantity }}{% else %}{{ 'lab.pdp.in_stock' | t }}{% endif %}</p>
+        {%- else -%}
+          <p class="lab-stock is-out">{{ 'lab.card.sold_out' | t }}</p>
+        {%- endif -%}
+
+        <fieldset class="lab-pills">
+          <legend>{{ 'lab.pdp.choose' | t }}</legend>
+          {%- for q in (1..3) -%}
+            {%- liquid
+              assign key = 's' | append: q
+              assign d = 0
+              if q >= 3
+                assign d = settings.lab_disc_3
+              elsif q >= 2
+                assign d = settings.lab_disc_2
+              endif
+              assign ok = v.available
+              if tracked and v.inventory_quantity < q
+                assign ok = false
+              endif
+              assign cut = v.price | times: d | divided_by: 100
+              assign unit = v.price | minus: cut
+              assign net = unit | times: q
+              assign was = 0
+              if settings.lab_show_compare and v.compare_at_price > v.price
+                assign was = v.compare_at_price | times: q
+              elsif q > 1
+                assign was = v.price | times: q
+              endif
+              assign save = 0
+              if was > net
+                assign save = was | minus: net
+              endif
+              if q == 1
+                assign label = 'lab.hero.one' | t
+              else
+                assign label = 'lab.hero.many' | t: count: q
+              endif
+              assign buy = routes.cart_url | append: '/' | append: v.id | append: ':' | append: q | append: '?locale=es'
+              assign cod_url = buy
+              if fee > 0
+                assign cod_url = routes.cart_url | append: '/' | append: v.id | append: ':' | append: q | append: ',' | append: fee_v.id | append: ':1?locale=es&attributes%5BPago%20preferido%5D=' | append: cod_attr | append: '&note=' | append: cod_note
+              endif
+            -%}
+            <label class="lab-pill{% if q == start_q %} is-on{% endif %}">
+              <input type="radio" name="lab-pack" value="{{ q }}"{% if q == start_q %} checked{% endif %}{% unless ok %} disabled{% endunless %}
+                data-qty="{{ q }}" data-label="{{ label | escape }}" data-net="{{ net | money | strip_html | escape }}" data-unit="{{ unit | money | strip_html | escape }}"
+                {% if was > net %}data-was="{{ was | money | strip_html | escape }}" data-save="{{ 'lab.card.save' | t }} {{ save | money | strip_html | escape }}"{% endif %}
+                data-cod="{{ net | plus: fee | money | strip_html | escape }}" data-buy="{{ buy }}" data-cod-url="{{ cod_url }}">
+              <span class="lab-pill__dot" aria-hidden="true"></span>
+              <span class="lab-pill__main">
+                <strong>{{ label }}</strong>
+                <span>{% if ok %}{{ section.settings[key] | escape }}{% else %}{{ 'lab.pdp.not_enough' | t }}{% endif %}</span>
+              </span>
+              <span class="lab-pill__price">
+                <strong>{{ net | money }}</strong>
+                {%- if was > net -%}<s><span class="visually-hidden">{{ 'lab.card.was' | t }}</span>{{ was | money }}</s>{%- endif -%}
+                <span class="lab-unit">{{ unit | money }}{{ 'lab.card.per_unit' | t }}</span>
+              </span>
+              {%- if d > 0 -%}<span class="lab-pill__tag">−{{ d }} %</span>{%- endif -%}
+            </label>
+          {%- endfor -%}
+        </fieldset>
+
+        <div class="lab-pdp__actions" data-lab-actions>
+          {%- assign fid = pid | append: '-form' -%}
+          {% render 'lab-atc', product: p, variant: v, qty: start_q, form_id: fid, btn: 'lab-btn--accent', qty_input: true %}
+          {%- if v.available -%}
+            <a class="lab-btn lab-btn--primary lab-btn--block" data-lab-buy href="{{ routes.cart_url }}/{{ v.id }}:{{ start_q }}?locale=es">{{ 'lab.pdp.buy_now' | t }}</a>
+            {%- if fee > 0 -%}
+              <button type="button" class="lab-btn lab-btn--ghost lab-btn--block" data-lab-cod-open aria-expanded="false" aria-controls="{{ pid }}-cod">{% render 'lab-icon', name: 'cash' %}{{ 'lab.pdp.cod_open' | t: fee: fee_f }}</button>
+            {%- endif -%}
+          {%- endif -%}
+        </div>
+
+        {%- if fee > 0 and v.available -%}
+          <div class="lab-cod" id="{{ pid }}-cod" data-lab-cod hidden>
+            <div class="lab-cod__row"><span>{{ 'lab.pdp.cod_pack' | t }}</span><span data-lab-cod-sub>{{ net0 }}</span></div>
+            <div class="lab-cod__row"><span>{{ 'lab.pdp.cod_fee' | t }}</span><span>{{ fee | money }}</span></div>
+            <div class="lab-cod__row"><strong>{{ 'lab.pdp.cod_total' | t }}</strong><strong data-lab-cod-total>{{ cod0 }}</strong></div>
+            <p>{{ 'lab.pdp.cod_help' | t }}</p>
+            <a class="lab-btn lab-btn--primary lab-btn--block" data-lab-cod-go href="{{ routes.cart_url }}">{{ 'lab.pdp.cod_go' | t }}{% render 'lab-icon', name: 'arrow' %}</a>
+          </div>
+        {%- endif -%}
+
+        <ul class="lab-trustrow" role="list">
+          {%- for i in (1..4) -%}
+            {%- assign tk = 't' | append: i -%}{%- assign ik = 'ti' | append: i -%}
+            {%- if section.settings[tk] != blank -%}<li>{% render 'lab-icon', name: section.settings[ik] %}{{ section.settings[tk] | escape }}</li>{%- endif -%}
+          {%- endfor -%}
+        </ul>
+        {%- if shop.enabled_payment_types.size > 0 -%}
+          <ul class="lab-pay" aria-label="{{ 'lab.footer.pay' | t }}">
+            {%- for type in shop.enabled_payment_types -%}<li>{{ type | payment_type_svg_tag }}</li>{%- endfor -%}
+          </ul>
+        {%- endif -%}
+
+        {%- if section.blocks.size > 0 -%}
+          <div class="lab-acc">
+            {%- for b in section.blocks -%}
+              {%- case b.type -%}
+                {%- when '@app' -%}
+                  {% render b %}
+                {%- when 'description' -%}
+                  {%- if p.description != blank -%}
+                    <details {{ b.shopify_attributes }}{% if b.settings.open %} open{% endif %}>
+                      <summary>{{ b.settings.title | escape }}{% render 'lab-icon', name: 'plus' %}</summary>
+                      <div class="lab-acc__c">{{ p.description }}</div>
+                    </details>
+                  {%- endif -%}
+                {%- else -%}
+                  <details {{ b.shopify_attributes }}{% if b.settings.open %} open{% endif %}>
+                    <summary>{{ b.settings.title | escape }}{% render 'lab-icon', name: 'plus' %}</summary>
+                    <div class="lab-acc__c">{% render 'lab-fill', text: b.settings.text, product: p %}</div>
+                  </details>
+              {%- endcase -%}
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{%- if v.available -%}
+  <div class="lab lab-sticky" data-lab-sticky="{{ pid }}" inert>
+    <div class="lab-sticky__txt"><span data-lab-sticky-label>{% if start_q == 1 %}{{ 'lab.hero.one' | t }}{% else %}{{ 'lab.hero.many' | t: count: start_q }}{% endif %}</span><strong data-lab-now>{{ net0 }}</strong></div>
+    <button type="button" class="lab-btn lab-btn--accent" data-lab-sticky-add>{{ 'lab.card.add' | t }}</button>
+  </div>
+{%- endif -%}
+
+<script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Product",
+        "@id": {{ request.origin | append: p.url | append: '#product' | json }},
+        "name": {{ p.title | json }},
+        "url": {{ request.origin | append: p.url | json }},
+        "description": {{ p.description | strip_html | strip_newlines | truncate: 500 | json }},
+        {%- if v.sku != blank %}"sku": {{ v.sku | json }},{% endif %}
+        {%- if v.barcode != blank %}"gtin": {{ v.barcode | json }},{% endif %}
+        {%- if section.settings.brand != blank %}"brand": {"@type": "Brand", "name": {{ section.settings.brand | json }}},{% endif %}
+        "image": [{% for m in p.media limit: 6 %}{{ m.preview_image | image_url: width: 1200 | prepend: 'https:' | json }}{% unless forloop.last %},{% endunless %}{% endfor %}],
+        {%- if rating_count > 0 %}
+        "aggregateRating": {"@type": "AggregateRating", "ratingValue": {{ p.metafields.reviews.rating.value.rating | json }}, "reviewCount": {{ rating_count }}},
+        {%- endif %}
+        "offers": {
+          "@type": "Offer",
+          "url": {{ request.origin | append: p.url | json }},
+          "price": {{ v.price | divided_by: 100.0 | round: 2 | json }},
+          "priceCurrency": {{ cart.currency.iso_code | json }},
+          "availability": "https://schema.org/{% if v.available %}InStock{% else %}OutOfStock{% endif %}",
+          "itemCondition": "https://schema.org/NewCondition",
+          "seller": {"@type": "Organization", "name": {{ shop.name | json }}}
+          {%- if section.settings.free_shipping %},
+          "shippingDetails": {
+            "@type": "OfferShippingDetails",
+            "shippingRate": {"@type": "MonetaryAmount", "value": 0, "currency": {{ cart.currency.iso_code | json }}},
+            "shippingDestination": {"@type": "DefinedRegion", "addressCountry": "ES"},
+            "deliveryTime": {
+              "@type": "ShippingDeliveryTime",
+              "handlingTime": {"@type": "QuantitativeValue", "minValue": 0, "maxValue": 1, "unitCode": "DAY"},
+              "transitTime": {"@type": "QuantitativeValue", "minValue": 1, "maxValue": 2, "unitCode": "DAY"}
+            }
+          }
+          {%- endif %}
+          {%- if section.settings.return_days > 0 %},
+          "hasMerchantReturnPolicy": {
+            "@type": "MerchantReturnPolicy",
+            "applicableCountry": "ES",
+            "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+            "merchantReturnDays": {{ section.settings.return_days }},
+            "returnMethod": "https://schema.org/ReturnByMail",
+            "returnFees": "https://schema.org/FreeReturn"
+          }
+          {%- endif %}
+        }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {"@type": "ListItem", "position": 1, "name": {{ 'lab.crumbs.home' | t | json }}, "item": {{ request.origin | append: routes.root_url | json }}},
+          {"@type": "ListItem", "position": 2, "name": {{ p.title | json }}, "item": {{ request.origin | append: p.url | json }}}
+        ]
+      }
+    ]
+  }
+</script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Lab · Ficha de producto",
+  "class": "lab-pdp-section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Ceja", "default": "Aparato de bienestar · uso doméstico" },
+    { "type": "text", "id": "subtitle", "label": "Subtítulo del H1", "default": "Ventosa eléctrica con succión regulable, calor y luz roja" },
+    { "type": "text", "id": "brand", "label": "Marca (datos estructurados)", "default": "ReliefPath" },
+    { "type": "text", "id": "ship_note", "label": "Nota bajo el precio", "default": "Envío gratis a España." },
+    { "type": "range", "id": "default_pack", "label": "Pack elegido al entrar", "min": 1, "max": 3, "step": 1, "default": 1 },
+    { "type": "range", "id": "low_stock", "label": "Avisar de pocas unidades por debajo de", "min": 0, "max": 50, "step": 1, "default": 10 },
+    { "type": "text", "id": "s1", "label": "1 unidad · texto", "default": "Un aparato" },
+    { "type": "text", "id": "s2", "label": "Pack de 2 · texto", "default": "Dos aparatos · uno para regalar" },
+    { "type": "text", "id": "s3", "label": "Pack de 3 · texto", "default": "El precio más bajo por unidad" },
+    { "type": "checkbox", "id": "cod", "label": "Contrareembolso", "info": "Usa el producto del recargo de Ajustes del tema › ReliefPath Lab.", "default": true },
+    { "type": "select", "id": "ti1", "label": "Chip 1 · icono", "default": "truck", "options": [{ "value": "truck", "label": "Camión" }, { "value": "refresh", "label": "Devolución" }, { "value": "shield", "label": "Garantía" }, { "value": "lock", "label": "Candado" }, { "value": "chat", "label": "Soporte" }] },
+    { "type": "text", "id": "t1", "label": "Chip 1", "default": "Envío gratis desde España" },
+    { "type": "select", "id": "ti2", "label": "Chip 2 · icono", "default": "refresh", "options": [{ "value": "truck", "label": "Camión" }, { "value": "refresh", "label": "Devolución" }, { "value": "shield", "label": "Garantía" }, { "value": "lock", "label": "Candado" }, { "value": "chat", "label": "Soporte" }] },
+    { "type": "text", "id": "t2", "label": "Chip 2", "default": "30 días para devolver" },
+    { "type": "select", "id": "ti3", "label": "Chip 3 · icono", "default": "shield", "options": [{ "value": "truck", "label": "Camión" }, { "value": "refresh", "label": "Devolución" }, { "value": "shield", "label": "Garantía" }, { "value": "lock", "label": "Candado" }, { "value": "chat", "label": "Soporte" }] },
+    { "type": "text", "id": "t3", "label": "Chip 3", "default": "3 años de garantía legal" },
+    { "type": "select", "id": "ti4", "label": "Chip 4 · icono", "default": "lock", "options": [{ "value": "truck", "label": "Camión" }, { "value": "refresh", "label": "Devolución" }, { "value": "shield", "label": "Garantía" }, { "value": "lock", "label": "Candado" }, { "value": "chat", "label": "Soporte" }] },
+    { "type": "text", "id": "t4", "label": "Chip 4", "default": "Pago seguro" },
+    { "type": "checkbox", "id": "free_shipping", "label": "Datos estructurados: envío gratis a España", "info": "Solo si el envío es gratis de verdad en el checkout.", "default": true },
+    { "type": "number", "id": "return_days", "label": "Datos estructurados: días para devolver", "info": "0 para no publicarlo.", "default": 30 }
+  ],
+  "blocks": [
+    { "type": "@app" },
+    {
+      "type": "description", "name": "Descripción", "limit": 1,
+      "settings": [
+        { "type": "text", "id": "title", "label": "Título", "default": "Descripción" },
+        { "type": "checkbox", "id": "open", "label": "Abierto", "default": false }
+      ]
+    },
+    {
+      "type": "tab", "name": "Pestaña",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Título", "default": "Modo de uso" },
+        { "type": "richtext", "id": "text", "label": "Texto", "info": "Admite las marcas de precio [p1] [p2] [p3] [u2] [u3] [fee].", "default": "<p>Escribe aquí el contenido.</p>" },
+        { "type": "checkbox", "id": "open", "label": "Abierto", "default": false }
+      ]
+    }
+  ]
+}
+{% endschema %}

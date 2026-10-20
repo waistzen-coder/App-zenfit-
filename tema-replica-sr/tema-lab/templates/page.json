@@ -1,0 +1,11 @@
+{
+  "sections": {
+    "main": {
+      "type": "lab-page",
+      "settings": {}
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

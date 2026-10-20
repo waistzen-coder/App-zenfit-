@@ -1,0 +1,51 @@
+{%- comment -%} Tres columnas con icono, dato y enlace a su prueba («Por qué comprar aquí»). {%- endcomment -%}
+<section class="lab lab-sec{% if section.settings.surface %} lab-sec--surface{% endif %}" id="{{ section.settings.anchor | default: 'por-que' | handleize }}">
+  <div class="lab-wrap">
+    <div data-lab-reveal>
+      <p class="lab-eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      <h2 class="lab-h2">{{ section.settings.heading }}</h2>
+    </div>
+    <div class="lab-cols">
+      {%- for b in section.blocks -%}
+        {%- assign href = b.settings.link | default: b.settings.page.url -%}
+        <div class="lab-card lab-col" data-lab-reveal {{ b.shopify_attributes }}>
+          <span class="lab-col__ic">{% render 'lab-icon', name: b.settings.icon %}</span>
+          <h3 class="lab-h3">{{ b.settings.title | escape }}</h3>
+          <p>{{ b.settings.text }}</p>
+          {%- if href != blank and b.settings.link_label != blank -%}
+            <a class="lab-link" href="{{ href }}">{{ b.settings.link_label | escape }}{% render 'lab-icon', name: 'arrow' %}</a>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Lab · 3 columnas",
+  "settings": [
+    { "type": "text", "id": "anchor", "label": "Ancla", "default": "por-que" },
+    { "type": "text", "id": "eyebrow", "label": "Ceja", "default": "Por qué comprar aquí" },
+    { "type": "inline_richtext", "id": "heading", "label": "Título", "default": "Comprar fácil, <em>devolver fácil.</em>" },
+    { "type": "checkbox", "id": "surface", "label": "Fondo blanco", "default": false }
+  ],
+  "blocks": [
+    {
+      "type": "col", "name": "Columna", "limit": 6,
+      "settings": [
+        { "type": "select", "id": "icon", "label": "Icono", "default": "truck", "options": [
+          { "value": "truck", "label": "Camión" }, { "value": "refresh", "label": "Devolución" }, { "value": "chat", "label": "Soporte" },
+          { "value": "shield", "label": "Garantía" }, { "value": "lock", "label": "Candado" }, { "value": "cash", "label": "Contrareembolso" },
+          { "value": "flame", "label": "Calor" }, { "value": "sun", "label": "Luz" }, { "value": "wave", "label": "Succión" }, { "value": "box", "label": "Caja" } ] },
+        { "type": "text", "id": "title", "label": "Título", "default": "Envío desde España" },
+        { "type": "inline_richtext", "id": "text", "label": "Texto", "default": "Gratis y con seguimiento. Península en 24–48 h." },
+        { "type": "text", "id": "link_label", "label": "Enlace · texto", "default": "Ver envíos" },
+        { "type": "page", "id": "page", "label": "Enlace · página" },
+        { "type": "text", "id": "link", "label": "O enlace (/#ancla o URL)" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Lab · 3 columnas" }]
+}
+{% endschema %}

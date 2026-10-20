@@ -1,0 +1,14 @@
+{%- comment -%} Aviso del sector, en una línea, antes del pie. {%- endcomment -%}
+{%- if section.settings.text != blank -%}
+  <div class="lab lab-legal"><div class="lab-wrap">{{ section.settings.text }}</div></div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Lab · Aviso del sector",
+  "settings": [
+    { "type": "richtext", "id": "text", "label": "Aviso", "default": "<p><strong>Aviso:</strong> ReliefPath™ es un aparato de bienestar para uso doméstico. No sustituye un diagnóstico, tratamiento médico, fisioterapia ni medicación. Lee las instrucciones del fabricante antes de usarlo y, ante dolor, lesión o cualquier duda sanitaria, consulta a un profesional sanitario.</p>" }
+  ],
+  "presets": [{ "name": "Lab · Aviso del sector" }]
+}
+{% endschema %}

@@ -1,0 +1,39 @@
+{%- comment -%}
+  Cambia las marcas de un texto por los importes reales, para que los textos
+  editables no se queden con precios viejos:
+    [p1] [p2] [p3]  total del pack de 1, 2 y 3      [u2] [u3]  precio por unidad
+    [d2] [d3]       % de descuento del pack          [desde]    precio por unidad más bajo
+    [fee]           recargo del contrareembolso (Ajustes del tema)
+  Uso: render 'lab-fill', text: block.settings.answer, product: p
+{%- endcomment -%}
+{%- liquid
+  assign out = text
+  assign v = product.selected_or_first_available_variant
+  if v != blank
+    capture p1
+      render 'lab-pack-price', price: v.price, qty: 1, show: 'net'
+    endcapture
+    capture p2
+      render 'lab-pack-price', price: v.price, qty: 2, show: 'net'
+    endcapture
+    capture p3
+      render 'lab-pack-price', price: v.price, qty: 3, show: 'net'
+    endcapture
+    capture u2
+      render 'lab-pack-price', price: v.price, qty: 2, show: 'unit'
+    endcapture
+    capture u3
+      render 'lab-pack-price', price: v.price, qty: 3, show: 'unit'
+    endcapture
+    assign out = out | replace: '[p1]', p1 | replace: '[p2]', p2 | replace: '[p3]', p3 | replace: '[u2]', u2 | replace: '[u3]', u3 | replace: '[desde]', u3
+  endif
+  assign fee = ''
+  assign fp = settings.lab_fee_product
+  if fp != blank and fp.selected_or_first_available_variant.available
+    assign fee = fp.selected_or_first_available_variant.price | money
+  endif
+  assign d2 = settings.lab_disc_2 | append: ''
+  assign d3 = settings.lab_disc_3 | append: ''
+  assign out = out | replace: '[d2]', d2 | replace: '[d3]', d3 | replace: '[fee]', fee
+  echo out
+-%}

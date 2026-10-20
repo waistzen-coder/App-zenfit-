@@ -1,0 +1,74 @@
+{%- comment -%}
+  Tarjeta de producto del catálogo: imagen 1:1, categoría, título SEO,
+  valoración (solo con reseñas reales), precio, precio por unidad y botón.
+  Uso: render 'lab-card', product: p, qty: 2, title: '…', benefit: '…', cat: 'Packs', image: img, badge: '', key: block.id, sid: section.id
+{%- endcomment -%}
+{%- liquid
+  assign v = product.selected_or_first_available_variant
+  assign q = qty | default: 1
+  assign d = 0
+  if q >= 3
+    assign d = settings.lab_disc_3 | default: 0
+  elsif q >= 2
+    assign d = settings.lab_disc_2 | default: 0
+  endif
+  assign img = image | default: product.featured_media.preview_image
+  assign url = product.url | append: '?pack=' | append: q
+  assign t = title | default: product.title
+  assign enough = true
+  if v.inventory_management == 'shopify' and v.inventory_policy == 'deny' and v.inventory_quantity < q
+    assign enough = false
+  endif
+  assign tag = badge
+  if v.available == false or enough == false
+    assign tag = 'lab.card.sold_out' | t
+  elsif tag == blank and d > 0
+    assign tag = '−' | append: d | append: ' %'
+  endif
+  assign rating_count = product.metafields.reviews.rating_count.value | default: 0
+  capture alt
+    echo t
+    if q > 1
+      echo ', ' | append: q | append: ' unidades'
+    endif
+    echo ' · ' | append: shop.name
+    if benefit != blank
+      echo ', ' | append: benefit
+    endif
+  endcapture
+-%}
+<article class="lab-card lab-pc" data-lab-reveal>
+  <a class="lab-pc__media" href="{{ url }}" tabindex="-1" aria-hidden="true">
+    {%- if img != blank -%}
+      {{ img | image_url: width: 600, height: 600, crop: 'center' | image_tag: widths: '300, 450, 600', sizes: '(min-width: 1200px) 380px, (min-width: 750px) 30vw, 50vw', loading: 'lazy', alt: alt, width: 600, height: 600 }}
+    {%- else -%}
+      {{ 'product-1' | placeholder_svg_tag }}
+    {%- endif -%}
+    {%- if tag != blank -%}<span class="lab-pc__badge{% if d > 0 or v.available == false %} lab-pc__badge--sale{% endif %}">{{ tag | escape }}</span>{%- endif -%}
+    {%- if q > 1 -%}<span class="lab-pc__qty">×{{ q }} {{ 'lab.card.units' | t }}</span>{%- endif -%}
+    <span class="lab-pc__quick"><span class="lab-btn lab-btn--ghost lab-btn--block">{{ 'lab.card.view' | t }}</span></span>
+  </a>
+  <div class="lab-pc__body">
+    {%- if cat != blank -%}<span class="lab-mono lab-pc__cat">{{ cat | escape }}</span>{%- endif -%}
+    <h3 class="lab-h3 lab-pc__title"><a href="{{ url }}">{{ t | escape }}{% if benefit != blank %} <span class="lab-pc__benefit">| {{ benefit | escape }}</span>{% endif %}</a></h3>
+    {%- if rating_count > 0 -%}
+      {%- assign r = product.metafields.reviews.rating.value.rating | round: 1 -%}
+      <span class="lab-pc__rating">{% render 'lab-icon', name: 'star' %} {{ r | replace: '.', ',' }} ({{ rating_count }})</span>
+    {%- endif -%}
+    <div class="lab-price">
+      <span class="lab-price__now{% if d > 0 %} is-sale{% endif %}">{% render 'lab-pack-price', price: v.price, qty: q, show: 'net' %}</span>
+      {%- if d > 0 -%}<s class="lab-price__was"><span class="visually-hidden">{{ 'lab.card.was' | t }}</span>{% render 'lab-pack-price', price: v.price, qty: q, show: 'was' %}</s>{%- endif -%}
+    </div>
+    <span class="lab-unit">{% render 'lab-pack-price', price: v.price, qty: q, show: 'unit' %}{{ 'lab.card.per_unit' | t }}{% if d > 0 %} · <span class="lab-save">{{ 'lab.card.save' | t }} {% render 'lab-pack-price', price: v.price, qty: q, show: 'save' %}</span>{% endif %}</span>
+    <div class="lab-pc__cta">
+      {%- if v.available and enough -%}
+        {%- assign fid = 'LabCard-' | append: sid | append: '-' | append: key -%}
+        {%- capture lbl -%}{{ 'lab.card.add' | t }}{%- endcapture -%}
+        {% render 'lab-atc', product: product, variant: v, qty: q, form_id: fid, label: lbl, btn: 'lab-btn--primary' %}
+      {%- else -%}
+        {%- assign pg = pages['contact'] -%}
+        <a class="lab-btn lab-btn--ghost lab-btn--block" href="{{ pg.url | default: routes.root_url }}">{{ 'lab.card.notify' | t }}</a>
+      {%- endif -%}
+    </div>
+  </div>
+</article>

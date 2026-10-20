@@ -1,0 +1,51 @@
+{%- comment -%} Cierre de confianza: 4 garantías, cada una con su enlace a la prueba. {%- endcomment -%}
+<section class="lab lab-sec{% if section.settings.surface %} lab-sec--surface{% endif %}" id="garantias">
+  <div class="lab-wrap">
+    <div data-lab-reveal>
+      <p class="lab-eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      <h2 class="lab-h2">{{ section.settings.heading }}</h2>
+    </div>
+    <div class="lab-trust">
+      {%- for b in section.blocks -%}
+        {%- assign href = b.settings.link | default: b.settings.page.url -%}
+        <div class="lab-card lab-trust__card" data-lab-reveal {{ b.shopify_attributes }}>
+          <span class="lab-col__ic">{% render 'lab-icon', name: b.settings.icon %}</span>
+          {%- if b.settings.figure != blank -%}<span class="lab-num-big">{{ b.settings.figure | escape }}</span>{%- endif -%}
+          <h3 class="lab-h3">{{ b.settings.title | escape }}</h3>
+          <p>{{ b.settings.text }}</p>
+          {%- if href != blank and b.settings.link_label != blank -%}
+            <a class="lab-link" href="{{ href }}">{{ b.settings.link_label | escape }}{% render 'lab-icon', name: 'arrow' %}</a>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Lab · Cierre de confianza",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Ceja", "default": "Garantías" },
+    { "type": "inline_richtext", "id": "heading", "label": "Título", "default": "Tu pedido, <em>sin sorpresas.</em>" },
+    { "type": "checkbox", "id": "surface", "label": "Fondo blanco", "default": true }
+  ],
+  "blocks": [
+    {
+      "type": "card", "name": "Garantía", "limit": 4,
+      "settings": [
+        { "type": "select", "id": "icon", "label": "Icono", "default": "doc", "options": [
+          { "value": "doc", "label": "Documento" }, { "value": "lock", "label": "Candado" }, { "value": "truck", "label": "Camión" },
+          { "value": "chat", "label": "Soporte" }, { "value": "refresh", "label": "Devolución" }, { "value": "shield", "label": "Garantía" } ] },
+        { "type": "text", "id": "figure", "label": "Cifra (opcional)" },
+        { "type": "text", "id": "title", "label": "Título", "default": "Todo por escrito" },
+        { "type": "inline_richtext", "id": "text", "label": "Texto", "default": "Envíos, devoluciones y garantía en páginas públicas." },
+        { "type": "text", "id": "link_label", "label": "Enlace · texto", "default": "Ver las pruebas" },
+        { "type": "page", "id": "page", "label": "Enlace · página" },
+        { "type": "text", "id": "link", "label": "O enlace (/#ancla o URL)" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Lab · Cierre de confianza" }]
+}
+{% endschema %}

@@ -1,0 +1,208 @@
+{
+  "sections": {
+    "faq": {
+      "type": "lab-faq",
+      "settings": {
+        "product": "juego-de-ventosa-electrica-con-cable",
+        "anchor": "preguntas",
+        "schema": true,
+        "as_h1": true
+      },
+      "blocks": {
+        "b1": {
+          "type": "group",
+          "settings": {
+            "title": "Pedidos"
+          }
+        },
+        "b2": {
+          "type": "qa",
+          "settings": {
+            "q": "¿Cuánto cuesta cada pack?",
+            "a": "<p>1 unidad: <strong>[p1]</strong>. Pack de 2: <strong>[p2]</strong> ([u2]/ud). Pack de 3: <strong>[p3]</strong> ([u3]/ud). El descuento del pack (−[d2] % y −[d3] %) se aplica solo en el carrito.</p>"
+          }
+        },
+        "b3": {
+          "type": "qa",
+          "settings": {
+            "q": "¿Puedo usar el código RELIEF10 con un pack?",
+            "a": "<p>RELIEF10 es un 10 % para tu primer pedido. No se suma al descuento de los packs: si compras 2 o 3, ya llevas el descuento del pack.</p>"
+          }
+        },
+        "b4": {
+          "type": "qa",
+          "settings": {
+            "q": "¿Qué incluye el pedido?",
+            "a": "<p>La cantidad de aparatos ReliefPath™ del pack que elijas. Si quieres confirmar accesorios, alimentación o tipo de cable antes de comprar, escríbenos a <a href=\"mailto:waistzen@gmail.com\">waistzen@gmail.com</a>.</p>"
+          }
+        },
+        "b5": {
+          "type": "group",
+          "settings": {
+            "title": "Envíos"
+          }
+        },
+        "b6": {
+          "type": "qa",
+          "settings": {
+            "q": "¿Cuánto tarda en llegar?",
+            "a": "<p>Península: 24–48 h. Baleares: 2–4 días laborables. Canarias, Ceuta y Melilla: escríbenos antes de pedir. Todos los envíos salen de un almacén en España y llevan seguimiento. <a href=\"/pages/envios\">Ver envíos</a>.</p>"
+          }
+        },
+        "b7": {
+          "type": "qa",
+          "settings": {
+            "q": "¿Cuánto cuesta el envío?",
+            "a": "<p>El envío estándar es gratis a las direcciones de España que admite el checkout. Revisa el total antes de confirmar.</p>"
+          }
+        },
+        "b8": {
+          "type": "group",
+          "settings": {
+            "title": "Producto"
+          }
+        },
+        "b9": {
+          "type": "qa",
+          "settings": {
+            "q": "¿Qué es ReliefPath™?",
+            "a": "<p>Un aparato de bienestar para uso doméstico que combina ventosa eléctrica de succión regulable, calor y luz roja.</p>"
+          }
+        },
+        "b10": {
+          "type": "qa",
+          "settings": {
+            "q": "¿Cómo se usa?",
+            "a": "<p>Sigue el manual del fabricante: zonas permitidas, duración, frecuencia, niveles y contraindicaciones. Empieza siempre por el nivel más bajo.</p>"
+          }
+        },
+        "b11": {
+          "type": "qa",
+          "settings": {
+            "q": "¿Sustituye a un fisioterapeuta o a un tratamiento?",
+            "a": "<p>No. ReliefPath™ no sustituye un diagnóstico, tratamiento médico, fisioterapia ni medicación. Ante dolor, una lesión o cualquier duda sanitaria, consulta a un profesional sanitario.</p>"
+          }
+        },
+        "b12": {
+          "type": "group",
+          "settings": {
+            "title": "Pagos"
+          }
+        },
+        "b13": {
+          "type": "qa",
+          "settings": {
+            "q": "¿Cómo puedo pagar?",
+            "a": "<p>Con tarjeta y con los métodos que muestra el checkout (los ves en el pie de esta página), o al recibirlo con contrareembolso.</p>"
+          }
+        },
+        "b14": {
+          "type": "qa",
+          "settings": {
+            "q": "¿Puedo pagar al recibirlo?",
+            "a": "<p>Sí, con contrareembolso si tu dirección tiene cobertura. Se añade un recargo de gestión de <strong>[fee]</strong> por pedido, que verás como una línea más antes de pagar.</p>"
+          }
+        },
+        "b15": {
+          "type": "group",
+          "settings": {
+            "title": "Devoluciones"
+          }
+        },
+        "b16": {
+          "type": "qa",
+          "settings": {
+            "q": "¿Puedo devolverlo?",
+            "a": "<p>Tienes 14 días de desistimiento por ley y lo ampliamos a <strong>30 días</strong> desde que lo recibes. La etiqueta de devolución la pagamos nosotros. <a href=\"/pages/devoluciones\">Ver devoluciones</a>.</p>"
+          }
+        },
+        "b17": {
+          "type": "qa",
+          "settings": {
+            "q": "¿Qué garantía tiene?",
+            "a": "<p>3 años de garantía legal de conformidad. Si el aparato falla, escríbenos con tu número de pedido.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "b1",
+        "b2",
+        "b3",
+        "b4",
+        "b5",
+        "b6",
+        "b7",
+        "b8",
+        "b9",
+        "b10",
+        "b11",
+        "b12",
+        "b13",
+        "b14",
+        "b15",
+        "b16",
+        "b17"
+      ]
+    },
+    "trust": {
+      "type": "lab-trust",
+      "settings": {},
+      "blocks": {
+        "b1": {
+          "type": "card",
+          "settings": {
+            "icon": "doc",
+            "title": "Todo por escrito",
+            "text": "Envíos, devoluciones y garantía, publicados en páginas abiertas.",
+            "link_label": "Ver las pruebas",
+            "link": "/#calidad"
+          }
+        },
+        "b2": {
+          "type": "card",
+          "settings": {
+            "icon": "lock",
+            "title": "Pago seguro",
+            "text": "Checkout cifrado de Shopify. Si lo prefieres, paga al recibirlo con contrareembolso.",
+            "link_label": ""
+          }
+        },
+        "b3": {
+          "type": "card",
+          "settings": {
+            "icon": "truck",
+            "title": "Envío con seguimiento",
+            "text": "Gratis desde España. Península en 24–48 h.",
+            "link_label": "Ver envíos",
+            "page": "envios"
+          }
+        },
+        "b4": {
+          "type": "card",
+          "settings": {
+            "icon": "chat",
+            "title": "¿Te ayudamos a elegir?",
+            "text": "Escríbenos y te decimos qué pack encaja contigo.",
+            "link_label": "Escríbenos",
+            "page": "contact"
+          }
+        }
+      },
+      "block_order": [
+        "b1",
+        "b2",
+        "b3",
+        "b4"
+      ]
+    },
+    "legal": {
+      "type": "lab-legal",
+      "settings": {}
+    }
+  },
+  "order": [
+    "faq",
+    "trust",
+    "legal"
+  ]
+}

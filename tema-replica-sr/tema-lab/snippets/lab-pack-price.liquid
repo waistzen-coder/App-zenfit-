@@ -1,0 +1,37 @@
+{%- comment -%}
+  Precio de un pack con el descuento automático de la tienda (Ajustes del
+  tema › ReliefPath Lab). Pinta solo el importe pedido en «show»:
+    net  · total del pack        unit · precio por unidad
+    was  · sin descuento         save · lo que se ahorra
+    disc · % aplicado (número)
+  Mismo cálculo que Shopify: el % se quita de cada unidad, redondeando abajo.
+  Uso: render 'lab-pack-price', price: variant.price, qty: 2, show: 'net'
+{%- endcomment -%}
+{%- liquid
+  assign q = qty | default: 1 | plus: 0
+  assign d = 0
+  if q >= 3
+    assign d = settings.lab_disc_3 | default: 0
+  elsif q >= 2
+    assign d = settings.lab_disc_2 | default: 0
+  endif
+  assign cut = price | times: d | divided_by: 100
+  assign unit = price | minus: cut
+  assign net = unit | times: q
+  assign was = price | times: q
+  assign save = was | minus: net
+  case show
+    when 'net'
+      echo net | money
+    when 'unit'
+      echo unit | money
+    when 'was'
+      echo was | money
+    when 'save'
+      echo save | money
+    when 'disc'
+      echo d
+    when 'net_cents'
+      echo net
+  endcase
+-%}

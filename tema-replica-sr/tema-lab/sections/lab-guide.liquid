@@ -1,0 +1,78 @@
+{%- comment -%}
+  Guía larga con índice fijo: un capítulo por bloque (H2 con ancla). Si la
+  página tiene contenido propio, va como introducción.
+{%- endcomment -%}
+{%- assign p = section.settings.product -%}
+<section class="lab lab-sec">
+  <div class="lab-wrap">
+    <nav aria-label="{{ 'lab.crumbs.label' | t }}">
+      <ol class="lab-crumbs">
+        <li><a href="{{ routes.root_url }}">{{ 'lab.crumbs.home' | t }}</a></li>
+        <li aria-current="page">{{ page.title | default: section.settings.heading | strip_html | escape }}</li>
+      </ol>
+    </nav>
+    <div class="lab-text">
+      <p class="lab-eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      <h1 class="lab-h1">{{ section.settings.heading }}</h1>
+      {%- if page.content != blank -%}<div class="lab-prose lab-prose--page">{{ page.content }}</div>{%- elsif section.settings.intro != blank -%}<p class="lab-lead">{% render 'lab-fill', text: section.settings.intro, product: p %}</p>{%- endif -%}
+    </div>
+    <div class="lab-guide lab-mt">
+      <nav class="lab-toc" aria-label="{{ 'lab.guide.toc' | t }}">
+        <span class="lab-mono">{{ 'lab.guide.toc' | t }}</span>
+        {%- for b in section.blocks -%}<a href="#g-{{ b.id }}">{{ b.settings.title | escape }}</a>{%- endfor -%}
+      </nav>
+      <div class="lab-prose">
+        {%- for b in section.blocks -%}
+          <h2 id="g-{{ b.id }}" {{ b.shopify_attributes }}>{{ b.settings.title | escape }}</h2>
+          {% render 'lab-fill', text: b.settings.body, product: p %}
+          {%- if b.type == 'packs' and p != blank -%}
+            {%- assign v = p.selected_or_first_available_variant -%}
+            <div class="lab-table-wrap">
+              <table class="lab-table">
+                <thead><tr><th scope="col">{{ 'lab.table.pack' | t }}</th><th scope="col">{{ 'lab.table.total' | t }}</th><th scope="col">{{ 'lab.table.unit' | t }}</th><th scope="col">{{ 'lab.table.save' | t }}</th></tr></thead>
+                <tbody>
+                  {%- for q in (1..3) -%}
+                    <tr><td>{% if q == 1 %}{{ 'lab.hero.one' | t }}{% else %}{{ 'lab.hero.many' | t: count: q }}{% endif %}</td><td><strong>{% render 'lab-pack-price', price: v.price, qty: q, show: 'net' %}</strong></td><td>{% render 'lab-pack-price', price: v.price, qty: q, show: 'unit' %}</td><td>{% if q > 1 %}{% render 'lab-pack-price', price: v.price, qty: q, show: 'save' %}{% else %}—{% endif %}</td></tr>
+                  {%- endfor -%}
+                </tbody>
+              </table>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+        {%- if p != blank and section.settings.cta != blank -%}
+          <p class="lab-mt"><a class="lab-btn lab-btn--accent" href="{{ p.url }}">{{ section.settings.cta | escape }}{% render 'lab-icon', name: 'arrow' %}</a></p>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Lab · Guía",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Producto (para los precios)" },
+    { "type": "text", "id": "eyebrow", "label": "Ceja", "default": "Guía de compra y uso" },
+    { "type": "inline_richtext", "id": "heading", "label": "Título (H1)", "default": "ReliefPath™: qué es, qué pack elegir y cómo <em>usarlo con cabeza</em>" },
+    { "type": "inline_richtext", "id": "intro", "label": "Introducción (si la página no tiene texto)", "default": "Todo lo que conviene saber antes de comprar un aparato de ventosas eléctricas con calor y luz roja: qué hace, qué no hace, cuánto cuesta cada pack y cómo funcionan el envío y la devolución." },
+    { "type": "text", "id": "cta", "label": "Botón final", "default": "Ver ReliefPath™ y sus packs" }
+  ],
+  "blocks": [
+    {
+      "type": "chapter", "name": "Capítulo",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Título (H2)", "default": "Qué es ReliefPath™" },
+        { "type": "richtext", "id": "body", "label": "Texto", "info": "Admite las marcas de precio [p1] [p2] [p3] [u2] [u3] [fee].", "default": "<p>Escribe aquí el capítulo.</p>" }
+      ]
+    },
+    {
+      "type": "packs", "name": "Capítulo con tabla de packs",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Título (H2)", "default": "Qué pack te conviene" },
+        { "type": "richtext", "id": "body", "label": "Texto antes de la tabla", "default": "<p>Los packs llevan el descuento automático en el carrito.</p>" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Lab · Guía" }]
+}
+{% endschema %}

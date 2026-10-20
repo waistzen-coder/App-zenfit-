@@ -1,0 +1,30 @@
+{%- comment -%} Página de texto (envíos, devoluciones, privacidad…): migas, H1 y contenido de la página. {%- endcomment -%}
+<section class="lab lab-sec">
+  <div class="lab-wrap">
+    <nav aria-label="{{ 'lab.crumbs.label' | t }}">
+      <ol class="lab-crumbs">
+        <li><a href="{{ routes.root_url }}">{{ 'lab.crumbs.home' | t }}</a></li>
+        <li aria-current="page">{{ page.title | escape }}</li>
+      </ol>
+    </nav>
+    <div class="lab-text">
+      {%- if section.settings.eyebrow != blank -%}<p class="lab-eyebrow">{{ section.settings.eyebrow | escape }}</p>{%- endif -%}
+      <h1 class="lab-h1">{{ page.title | escape }}</h1>
+      {%- if page.content != blank -%}<div class="lab-prose lab-prose--page">{{ page.content }}</div>{%- endif -%}
+    </div>
+  </div>
+  <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
+      {"@type":"ListItem","position":1,"name":{{ 'lab.crumbs.home' | t | json }},"item":{{ request.origin | append: routes.root_url | json }}},
+      {"@type":"ListItem","position":2,"name":{{ page.title | json }},"item":{{ request.origin | append: page.url | json }}}]}
+  </script>
+</section>
+
+{% schema %}
+{
+  "name": "Lab · Página",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Ceja" }
+  ]
+}
+{% endschema %}

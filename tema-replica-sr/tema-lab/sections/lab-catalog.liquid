@@ -1,0 +1,125 @@
+{%- comment -%}
+  Catálogo en una sola página: barra fija con el total y un chip por categoría
+  (con su contador), y una sección numerada 01, 02… por categoría. Cada
+  «Producto» va dentro de la categoría que tiene encima en la lista de
+  bloques. Los contadores salen de los bloques, no se escriben a mano.
+{%- endcomment -%}
+{%- liquid
+  assign p = section.settings.product
+  assign items = section.blocks | where: 'type', 'item'
+  assign cats = section.blocks | where: 'type', 'category'
+-%}
+<div class="lab lab-catalog" id="{{ section.settings.anchor | default: 'catalogo' | handleize }}">
+  {%- if cats.size > 0 -%}
+    <div class="lab-catbar" data-lab-catbar>
+      <div class="lab-wrap lab-catbar__in">
+        <p class="lab-catbar__title">{{ section.settings.title | escape }}<span class="lab-mono">{{ 'lab.catalog.refs' | t: count: items.size }}</span></p>
+        <nav class="lab-catbar__chips" aria-label="{{ 'lab.catalog.nav' | t }}">
+          {%- for c in cats -%}
+            {%- liquid
+              assign n = 0
+              assign inside = false
+              for b in section.blocks
+                if b.id == c.id
+                  assign inside = true
+                elsif b.type == 'category' and inside
+                  break
+                elsif b.type == 'item' and inside
+                  assign n = n | plus: 1
+                endif
+              endfor
+            -%}
+            <a class="lab-chip" href="#{{ c.settings.slug | default: c.id | handleize }}">{{ c.settings.name | escape }} <span class="lab-mono">{{ n }}</span></a>
+          {%- endfor -%}
+        </nav>
+      </div>
+    </div>
+  {%- endif -%}
+
+  {%- if p == blank -%}
+    <div class="lab-wrap lab-sec"><p class="lab-pending">{{ 'lab.catalog.no_product' | t }}</p></div>
+  {%- else -%}
+    {%- assign idx = 0 -%}
+    {%- for c in cats -%}
+      {%- assign idx = idx | plus: 1 -%}
+      {%- capture grid -%}
+        {%- assign inside = false -%}
+        {%- assign n = 0 -%}
+        {%- for b in section.blocks -%}
+          {%- if b.id == c.id -%}
+            {%- assign inside = true -%}
+          {%- elsif b.type == 'category' and inside -%}
+            {%- break -%}
+          {%- elsif b.type == 'item' and inside -%}
+            {%- assign n = n | plus: 1 -%}
+            {%- liquid
+              assign img = b.settings.image
+              if img == blank
+                assign mi = b.settings.media_index | minus: 1
+                assign img = p.media[mi].preview_image
+              endif
+            -%}
+            <div {{ b.shopify_attributes }}>
+              {%- render 'lab-card', product: p, qty: b.settings.qty, title: b.settings.title, benefit: b.settings.benefit, cat: c.settings.name, image: img, badge: b.settings.badge, key: b.id, sid: section.id -%}
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      {%- endcapture -%}
+      <section class="lab-sec lab-cat{% if n < 4 %} lab-cat--side{% endif %}{% cycle '', ' lab-sec--surface' %}" id="{{ c.settings.slug | default: c.id | handleize }}" aria-labelledby="LabCat-{{ c.id }}" {{ c.shopify_attributes }}>
+        <div class="lab-wrap lab-cat__wrap">
+          <div class="lab-cat__head" data-lab-reveal>
+            <span class="lab-cat__idx">{% if idx < 10 %}0{% endif %}{{ idx }}</span>
+            <div>
+              <h2 class="lab-h2" id="LabCat-{{ c.id }}">{{ c.settings.name | escape }}</h2>
+              {%- if c.settings.line != blank -%}<p class="lab-cat__line">{% render 'lab-fill', text: c.settings.line, product: p %}</p>{%- endif -%}
+            </div>
+            <span class="lab-mono lab-cat__count">{{ 'lab.catalog.refs' | t: count: n }}</span>
+          </div>
+          <div class="lab-grid{% if n == 1 %} lab-grid--one{% elsif n < 4 %} lab-grid--few{% endif %}">{{ grid }}</div>
+        </div>
+      </section>
+    {%- endfor -%}
+
+    <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+    <script type="application/ld+json">
+      {"@context":"https://schema.org","@type":"ItemList","name":{{ section.settings.title | json }},"numberOfItems":{{ items.size }},"itemListElement":[
+        {%- for b in items -%}
+          {"@type":"ListItem","position":{{ forloop.index }},"url":{{ request.origin | append: p.url | append: '?pack=' | append: b.settings.qty | json }},"name":{{ b.settings.title | default: p.title | json }}}{% unless forloop.last %},{% endunless %}
+        {%- endfor -%}
+      ]}
+    </script>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Lab · Catálogo",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Producto" },
+    { "type": "text", "id": "title", "label": "Título de la barra", "default": "Catálogo" },
+    { "type": "text", "id": "anchor", "label": "Ancla", "default": "catalogo" }
+  ],
+  "blocks": [
+    {
+      "type": "category", "name": "Categoría",
+      "settings": [
+        { "type": "text", "id": "name", "label": "Nombre (H2)", "default": "Packs" },
+        { "type": "text", "id": "slug", "label": "Ancla", "default": "packs" },
+        { "type": "text", "id": "line", "label": "Qué resuelve, en una frase", "info": "Admite las marcas [d2] [d3] [desde].", "default": "El precio más bajo del catálogo: −[d2] % llevando 2 y −[d3] % llevando 3." }
+      ]
+    },
+    {
+      "type": "item", "name": "Producto",
+      "settings": [
+        { "type": "range", "id": "qty", "label": "Unidades", "min": 1, "max": 3, "step": 1, "default": 2 },
+        { "type": "text", "id": "title", "label": "Título", "default": "Pack 2 ReliefPath™" },
+        { "type": "text", "id": "benefit", "label": "Beneficio", "default": "Uno para ti y otro para compartir" },
+        { "type": "image_picker", "id": "image", "label": "Imagen 1:1" },
+        { "type": "range", "id": "media_index", "label": "Si no hay imagen: foto nº del producto", "min": 1, "max": 10, "step": 1, "default": 1 },
+        { "type": "text", "id": "badge", "label": "Insignia", "info": "Vacío: el % del pack, o «Agotado»." }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Lab · Catálogo" }]
+}
+{% endschema %}

@@ -1,0 +1,72 @@
+{%- comment -%} Sobre nosotros: quién vende, datos comprobables y cómo llega el pedido en 3 hitos. {%- endcomment -%}
+{%- liquid
+  assign facts = section.blocks | where: 'type', 'fact'
+  assign steps = section.blocks | where: 'type', 'milestone'
+  assign heading_tag = 'h2'
+  if section.settings.as_h1
+    assign heading_tag = 'h1'
+  endif
+-%}
+<section class="lab lab-sec{% if section.settings.surface %} lab-sec--surface{% endif %}" id="{{ section.settings.anchor | default: 'sobre' | handleize }}">
+  <div class="lab-wrap">
+    <div class="lab-split">
+      <div data-lab-reveal>
+        <p class="lab-eyebrow">{{ section.settings.eyebrow | escape }}</p>
+        <{{ heading_tag }} class="lab-h2">{{ section.settings.heading }}</{{ heading_tag }}>
+        {%- if section.settings.text != blank -%}<div class="lab-prose lab-mt">{{ section.settings.text }}</div>{%- endif -%}
+      </div>
+      {%- if facts.size > 0 -%}
+        <ul class="lab-facts" data-lab-reveal>
+          {%- for b in facts -%}
+            <li {{ b.shopify_attributes }}><span>{{ b.settings.label | escape }}</span><span>{{ b.settings.value }}</span></li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+    </div>
+    {%- if steps.size > 0 -%}
+      {%- if section.settings.steps_title != blank -%}<h3 class="lab-h3 lab-mt">{{ section.settings.steps_title | escape }}</h3>{%- endif -%}
+      <ol class="lab-timeline">
+        {%- for b in steps -%}
+          <li data-lab-reveal {{ b.shopify_attributes }}>
+            <span class="lab-mono">{% if forloop.index < 10 %}0{% endif %}{{ forloop.index }} · {{ b.settings.label | escape }}</span>
+            <h4 class="lab-h3">{{ b.settings.title | escape }}</h4>
+            <p>{{ b.settings.text }}</p>
+          </li>
+        {%- endfor -%}
+      </ol>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Lab · Sobre nosotros",
+  "settings": [
+    { "type": "text", "id": "anchor", "label": "Ancla", "default": "sobre" },
+    { "type": "text", "id": "eyebrow", "label": "Ceja", "default": "Sobre nosotros" },
+    { "type": "inline_richtext", "id": "heading", "label": "Título", "default": "Quién está detrás de <em>Waistzen</em>" },
+    { "type": "checkbox", "id": "as_h1", "label": "Usar H1 (página Sobre nosotros)", "default": false },
+    { "type": "richtext", "id": "text", "label": "Texto", "default": "<p>Waistzen es la tienda online que vende ReliefPath™ en España. Vendemos un único aparato y lo explicamos sin rodeos: qué hace, qué no hace, cuánto cuesta y cómo se devuelve.</p><p>Si tienes una duda antes de comprar, escríbenos y te respondemos por escrito.</p>" },
+    { "type": "checkbox", "id": "surface", "label": "Fondo blanco", "default": false },
+    { "type": "text", "id": "steps_title", "label": "Hitos · título", "default": "Cómo llega tu pedido" }
+  ],
+  "blocks": [
+    {
+      "type": "fact", "name": "Dato", "limit": 8,
+      "settings": [
+        { "type": "text", "id": "label", "label": "Nombre", "default": "Tienda" },
+        { "type": "inline_richtext", "id": "value", "label": "Valor", "default": "Waistzen" }
+      ]
+    },
+    {
+      "type": "milestone", "name": "Hito", "limit": 3,
+      "settings": [
+        { "type": "text", "id": "label", "label": "Etiqueta", "default": "Hoy" },
+        { "type": "text", "id": "title", "label": "Título", "default": "Eliges tu pack" },
+        { "type": "inline_richtext", "id": "text", "label": "Texto", "default": "Pagas con tarjeta o eliges pagar al recibirlo." }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Lab · Sobre nosotros" }]
+}
+{% endschema %}
