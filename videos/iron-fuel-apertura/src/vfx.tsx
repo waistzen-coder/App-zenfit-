@@ -61,6 +61,11 @@ type ChispasProps = {
    * chispas vayan a cámara lenta a la vez que el plano.
    */
   readonly tiempo?: (frame: number) => number;
+  /**
+   * Del color más apagado al más vivo (por defecto, del rojo al blanco de la
+   * forja); el segundo es también el del resplandor.
+   */
+  readonly colores?: readonly string[];
   readonly style?: React.CSSProperties;
 };
 
@@ -72,6 +77,7 @@ const ChispasInner: React.FC<ChispasProps> = ({
   semilla,
   fuerza,
   tiempo,
+  colores = CHISPA_COLORES,
   style,
 }) => {
   const fotograma = useCurrentFrame();
@@ -111,7 +117,7 @@ const ChispasInner: React.FC<ChispasProps> = ({
         y1={y0}
         x2={x1}
         y2={y1}
-        stroke="#ff7a1a"
+        stroke={colores[1]}
         strokeWidth={ancho * 4.5}
         strokeLinecap="round"
         opacity={opacidad * 0.2}
@@ -124,7 +130,7 @@ const ChispasInner: React.FC<ChispasProps> = ({
         y1={y0}
         x2={x1}
         y2={y1}
-        stroke={interpolateColors(resto, [0, 0.35, 0.7, 1], CHISPA_COLORES)}
+        stroke={interpolateColors(resto, [0, 0.35, 0.7, 1], [...colores])}
         strokeWidth={ancho}
         strokeLinecap="round"
         opacity={opacidad}

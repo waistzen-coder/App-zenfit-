@@ -16,6 +16,8 @@ partir de los vídeos y fotos de la tienda grabados con el móvil:
 - `Edit-instagram`: 22 s del recorrido por la tienda el día de la
   inauguración, montado como un Edit de Instagram, y `Portada-edit`, su
   portada.
+- `Publicidad-instagram`: un anuncio de 15 s hecho solo con cuatro fotos de
+  la tienda abierta.
 
 ## La primera versión
 
@@ -162,6 +164,28 @@ cuerdas son los de la orquesta.
 `Portada-edit` es la portada para la cuadrícula del perfil: el mismo rincón
 antes y ahora, partido en diagonal, con «ASÍ HA QUEDADO».
 
+## El anuncio
+
+Un anuncio de 15 s para Instagram, oscuro y con el azul eléctrico de la
+marca, hecho solo con cuatro fotos de la tienda abierta (la fachada, los dos
+pasillos y las proteínas delante del logo de la pared). Las fotos se mueven
+como si las grabara una cámara: acercamientos, paneos e inclinaciones, con
+golpes de zoom, barridos y destellos en cada golpe de la música.
+
+| Segundos | Qué pasa |
+| --- | --- |
+| 0–2 | La fachada a oscuras; un destello azul y un marco de electricidad encienden el rótulo; «MOTRIL, SUBE EL NIVEL» |
+| 2–5 | Hacia dentro: los dos pasillos y dos detalles, un corte por golpe |
+| 5–10 | «ALIMENTA TU OBJETIVO» y un plano por pulso: las proteínas, latas de C4 y Monster, botes ISO, Rice Up, Whey cookies… |
+| 10–12 | La tienda entera y una luz que se quema hacia el cierre |
+| 12–15 | El logo original sobre la tienda desenfocada, con un pulso azul por golpe, partículas y un destello final; «TE ESPERAMOS EN MOTRIL» y @ironfuelnutrition_ |
+
+Los planos están en `PLANOS`, en `src/Publicidad.tsx`. En las fotos, que son
+más anchas que el vídeo, `encuadre` dice qué parte se ve: así salen los
+expositores y las neveras de los bordes. La música es
+`audio/musica_anuncio.py` (electrónica a 120 BPM, un pulso cada 15
+fotogramas); la batería, el 808 y las sierras son los de `audio/sintes.py`.
+
 ## Rehacerlo
 
 Los vídeos y fotos de la tienda no están en el repositorio, porque es
@@ -179,6 +203,10 @@ nombres:
     originales/escalera.jpg               foto del rótulo con la escalera
     originales/referencia-reel.mov        grabación del reel de referencia (para la música del reel)
     originales/recorrido-inauguracion.mp4 el recorrido del día de la inauguración (para el Edit)
+    originales/anuncio-fachada.jpg        las cuatro fotos del anuncio: la fachada,
+    originales/anuncio-pasillo-suplementos.jpg   el pasillo de los suplementos,
+    originales/anuncio-pasillo-neveras.jpg       el de las neveras
+    originales/anuncio-proteinas.jpg             y las proteínas delante del logo
 
 Y después:
 
@@ -193,6 +221,7 @@ Y después:
     npm run render:inauguracion  # la inauguración, en out/iron-fuel-inauguracion.mp4
     npm run render:edit          # el Edit de Instagram, en out/iron-fuel-edit.mp4
     npm run portada:edit         # su portada, en out/iron-fuel-edit-portada.jpg
+    npm run render:publicidad    # el anuncio, en out/iron-fuel-anuncio.mp4
 
 `npm run medios` también descarga las muestras de orquesta (unos 500 MB) en
 `audio/vsco/`, que tampoco se suben al repositorio.
@@ -221,8 +250,9 @@ chispas) tardan más de los 30 s que Remotion espera por defecto, así que
 - Las transiciones: `entrada` y `salida` de cada `<Plano>` (`corte`, `zoom`,
   `barrido-izq`, `barrido-der`).
 - La música: `audio/banda_sonora.py`, `audio/banda_sonora_epica.py`,
-  `audio/banda_sonora_aviso.py`, `audio/banda_sonora_inauguracion.py` y
-  `audio/musica_edit.py`; después hay que volver a ejecutarlos. Si se
+  `audio/banda_sonora_aviso.py`, `audio/banda_sonora_inauguracion.py`,
+  `audio/musica_edit.py` y `audio/musica_anuncio.py`; después hay que
+  volver a ejecutarlos. Si se
   mueve un corte en el vídeo, hay que mover su golpe en el script. La
   orquesta, la percusión y la mezcla que comparten las dos últimas están en
   `audio/orquesta.py`.

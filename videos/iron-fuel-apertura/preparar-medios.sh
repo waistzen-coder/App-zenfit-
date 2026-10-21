@@ -4,11 +4,13 @@
 #   originales/          los vídeos y fotos tal como salieron del móvil
 #   public/clips/        clips etalonados y reescalados, en VP9, y el vídeo
 #                        base del Edit (edicion/hornear_edit.py)
-#   public/fotos/        fotos etalonadas y el logo sacado del rótulo
+#   public/fotos/        fotos etalonadas (también las del anuncio) y el logo
+#                        sacado del rótulo
 #   public/grano/        texturas de grano de película
 #   public/audio/        las bandas sonoras (audio/banda_sonora.py,
 #                        audio/banda_sonora_epica.py, audio/banda_sonora_aviso.py,
-#                        audio/banda_sonora_inauguracion.py y audio/musica_edit.py)
+#                        audio/banda_sonora_inauguracion.py, audio/musica_edit.py
+#                        y audio/musica_anuncio.py)
 #                        y la música del reel, sacada de la referencia
 #   audio/vsco/          las muestras de orquesta de la versión épica
 #
@@ -63,6 +65,17 @@ print("+".join(f"eq(n,{i})" for i in np.round(t * 120).astype(int)))
 ffmpeg -v error -y -ss 9.9 -t 2.2 -i "$O/fachada.mov" -vf "minterpolate=fps=120:mi_mode=mci:mc_mode=aobmc:me_mode=bidir:vsbmc=1,select='$RAMPA',setpts=N/30/TB,hqdn3d=1.5:1.5:3:3,$GRADE,scale=1080:1936:flags=lanczos,crop=1080:1920,unsharp=5:5:0.6:5:5:0,format=yuv420p" -r 30 $VP9 -g 15 "$P/clips/fachada-rampa.webm"
 
 ffmpeg -v error -y -i "$O/fachada.jpg" -vf "$GRADE" -q:v 2 "$P/fotos/fachada.jpg"
+
+# Las fotos del anuncio de 15 s (Publicidad-instagram): negros profundos,
+# contraste de cine y sombras algo frías, sin tocar el color de los productos.
+# El fondo del cierre es la tienda entera desenfocada.
+ANUNCIO="eq=contrast=1.12:saturation=1.08:gamma=0.96,colorbalance=rs=-0.04:gs=-0.01:bs=0.07:rh=0.02,curves=master='0/0 0.06/0.02 0.25/0.2 0.5/0.5 0.8/0.84 1/1'"
+if [ -f "$O/anuncio-fachada.jpg" ]; then
+  for f in fachada pasillo-suplementos pasillo-neveras proteinas; do
+    ffmpeg -v error -y -i "$O/anuncio-$f.jpg" -vf "$ANUNCIO" -q:v 2 "$P/fotos/anuncio-$f.jpg"
+  done
+  ffmpeg -v error -y -i "$O/anuncio-pasillo-suplementos.jpg" -vf "$ANUNCIO,gblur=sigma=24" -q:v 2 "$P/fotos/anuncio-fondo-cierre.jpg"
+fi
 ffmpeg -v error -y -i "$O/escalera.jpg" -vf "$GRADE" -q:v 2 "$P/fotos/escalera.jpg"
 
 # El logo es el propio rótulo de la foto de la fachada: se recorta, se corrige
@@ -129,6 +142,7 @@ python3 audio/banda_sonora_epica.py
 python3 audio/banda_sonora_aviso.py
 python3 audio/banda_sonora_inauguracion.py
 python3 audio/musica_edit.py
+python3 audio/musica_anuncio.py
 
 # El vídeo base del Edit de Instagram: los planos de src/edit/montaje.json
 # (el recorrido del día de la inauguración y los clips de las obras de

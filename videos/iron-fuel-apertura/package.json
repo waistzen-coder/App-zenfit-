@@ -34,6 +34,7 @@
     "render:inauguracion": "remotion render Inauguracion out/iron-fuel-inauguracion.mp4 --codec=h264 --crf=17 --audio-bitrate=192k --timeout=120000",
     "render:edit": "remotion render Edit-instagram out/iron-fuel-edit.mp4 --codec=h264 --crf=17 --audio-bitrate=192k --timeout=120000",
     "portada:edit": "remotion still Portada-edit out/iron-fuel-edit-portada.jpg --frame=30 --image-format=jpeg --jpeg-quality=92",
+    "render:publicidad": "remotion render Publicidad-instagram out/iron-fuel-anuncio.mp4 --codec=h264 --crf=17 --audio-bitrate=192k --timeout=120000",
     "build": "remotion bundle",
     "upgrade": "remotion upgrade",
     "lint": "eslint src && tsc"
