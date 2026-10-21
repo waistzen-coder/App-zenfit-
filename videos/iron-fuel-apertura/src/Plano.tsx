@@ -2,6 +2,7 @@ import { blur } from "@remotion/effects/blur";
 import { chromaticAberration } from "@remotion/effects/chromatic-aberration";
 import { fisheye } from "@remotion/effects/fisheye";
 import { glow } from "@remotion/effects/glow";
+import { shine } from "@remotion/effects/shine";
 import { zoomBlur } from "@remotion/effects/zoom-blur";
 import { Video } from "@remotion/media";
 import type React from "react";
@@ -53,6 +54,20 @@ type PlanoProps = {
    * (0 = lente normal, 1,8 = ojo de pez marcado).
    */
   readonly ojoDePez?: number;
+  /** Inclinación de la cámara en grados al empezar y al acabar. */
+  readonly giro?: readonly [number, number];
+  /** Desplazamiento lateral, en % del ancho, al empezar y al acabar. */
+  readonly paneo?: readonly [number, number];
+  /** Un reflejo de luz cruza el plano en su primera mitad. */
+  readonly reflejo?: boolean;
+  /**
+   * Solo fotos: qué parte de la anchura se ve (0 = el borde izquierdo de la
+   * foto, 1 = el derecho) cuando la foto es más ancha que el vídeo. Hace
+   * falta `proporcion`, el ancho entre el alto de la foto (0,75 para 3:4).
+   * El origen del zoom se mide entonces sobre la foto.
+   */
+  readonly encuadre?: number;
+  readonly proporcion?: number;
   readonly style?: React.CSSProperties;
 };
 
@@ -75,6 +90,11 @@ const PlanoInner: React.FC<PlanoProps> = ({
   golpe = 1,
   bloom = 0,
   ojoDePez = 0,
+  giro = [0, 0],
+  paneo = [0, 0],
+  reflejo = false,
+  encuadre = 0.5,
+  proporcion,
   style,
 }) => {
   const frame = useCurrentFrame();
@@ -136,11 +156,28 @@ const PlanoInner: React.FC<PlanoProps> = ({
     );
   }
 
+  // La inclinación y el paneo van suaves y, para que nunca asomen los bordes
+  // de la imagen, el plano se amplía lo justo para el giro y el paneo máximos.
+  const suave = { ...clamp, easing: Easing.inOut(Easing.quad) };
+  const angulo = interpolate(frame, [0, fin], giro, suave);
+  x += interpolate(frame, [0, fin], paneo, suave);
+  const inclinacion = (Math.max(...giro.map(Math.abs)) * Math.PI) / 180;
+  escala *=
+    (Math.cos(inclinacion) + (1920 / 1080) * Math.sin(inclinacion)) *
+    (1 + Math.max(...paneo.map(Math.abs)) / 50);
+
   const sacudida = temblor * interpolate(frame, [0, 12], [1, 0], clamp);
   const dx = (random(`plano-x-${frame}`) - 0.5) * 2 * sacudida;
   const dy = (random(`plano-y-${frame}`) - 0.5) * 2 * sacudida;
 
   const effects = [
+    shine({
+      progress: interpolate(frame, [0, fin * 0.6], [0, 1], suave),
+      angle: 24,
+      haloIntensity: 0.22,
+      coreIntensity: 0.3,
+      disabled: !reflejo || frame > fin * 0.6,
+    }),
     fisheye({
       fieldOfView: ojoDePez,
       zoom: 1.12,
@@ -169,6 +206,7 @@ const PlanoInner: React.FC<PlanoProps> = ({
     height: "100%",
     scale: String(escala),
     translate: `calc(${x}% + ${dx}px) ${dy}px`,
+    rotate: `${angulo}deg`,
     transformOrigin: origen,
     filter: `brightness(${brillo + quemado})`,
     ...style,
@@ -188,14 +226,22 @@ const PlanoInner: React.FC<PlanoProps> = ({
     );
   }
 
+  // Con la foto entera de alto, sin recortar los lados.
+  const ancho = proporcion
+    ? Math.max(1080, Math.round(1920 * proporcion))
+    : 1080;
   return (
     <CanvasImage
       src={staticFile(archivo)}
-      width={1080}
+      width={ancho}
       height={1920}
       fit="cover"
       effects={effects}
-      style={estilo}
+      style={{
+        ...estilo,
+        width: ancho,
+        left: -(ancho - 1080) * encuadre,
+      }}
     />
   );
 };

@@ -3,6 +3,7 @@ import { Aviso } from "./Aviso";
 import { EditInstagram } from "./EditInstagram";
 import { DURACION as DURACION_EDIT } from "./edit/montaje";
 import { Portada as PortadaEdit } from "./edit/Portada";
+import { DURACION_PUBLICIDAD, Publicidad } from "./Publicidad";
 import { Inauguracion } from "./Inauguracion";
 import { Reel } from "./Reel";
 import { CierreEpico } from "./epico/CierreEpico";
@@ -95,6 +96,14 @@ export const RemotionRoot: React.FC = () => {
         id="Edit-instagram"
         component={EditInstagram}
         durationInFrames={DURACION_EDIT}
+        fps={30}
+        width={1080}
+        height={1920}
+      />
+      <Composition
+        id="Publicidad-instagram"
+        component={Publicidad}
+        durationInFrames={DURACION_PUBLICIDAD}
         fps={30}
         width={1080}
         height={1920}

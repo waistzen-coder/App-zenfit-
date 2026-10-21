@@ -3,8 +3,8 @@
 
 128,57 BPM, para que un pulso dure 14 fotogramas exactos y un compás 56 (los
 cortes de src/edit/montaje.json caen en pulsos). La batería, el 808 y el
-cencerro son sintetizados; los metales, las cuerdas y la percusión grande,
-de la orquesta de audio/orquesta.py.
+cencerro son sintetizados (audio/sintes.py); los metales, las cuerdas y la
+percusión grande, de la orquesta de audio/orquesta.py.
 
     compases 1-2   «DE ESTO...»: las obras, con el ritmo apagado como desde
                    fuera, cuerdas en tensión y un redoble; el último pulso
@@ -20,32 +20,23 @@ de la orquesta de audio/orquesta.py.
     python3 audio/musica_edit.py   # escribe public/audio/musica-edit.wav
 """
 
-import json
-import subprocess
-import tempfile
 from pathlib import Path
 
 import numpy as np
-from scipy.io import wavfile
-from scipy.ndimage import maximum_filter1d
-from scipy.signal import fftconvolve, lfilter
 
 from orquesta import (
     SR,
-    Bus,
     Mezcla,
     bloque,
     boom,
     braam,
     cello_spic,
     cello_sus,
-    decay,
     envolvente,
     highpass,
     impacto,
     lowpass,
     ostinato,
-    phase,
     plato,
     put,
     redoble_timbal,
@@ -63,6 +54,7 @@ from orquesta import (
     violin_trem,
     whoosh,
 )
+from sintes import Ritmo, caja, campana, exportar, hz, mezclar, ochocientos, palmada
 
 SALIDA = Path(__file__).resolve().parent.parent / "public" / "audio" / "musica-edit.wav"
 DURACION = 22.0
@@ -101,107 +93,10 @@ ACORDES = [
 
 m = Mezcla(DURACION, ACORDES)
 orquesta, percusion, sfx, post = m.orquesta, m.percusion, m.sfx, m.post
-bateria = Bus(m.n, m.rev)
-bajo = Bus(m.n, m.rev)
-campana_bus = Bus(m.n, m.rev)
-# Envolvente de los bombos: aparta el resto en cada golpe (compresión lateral).
-bombeo = np.zeros(m.n)
+r = Ritmo(m)
+bateria, bajo, campana_bus = r.bateria, r.bajo, r.sinte
+bombo, charles = r.bombo, r.charles
 
-
-def hz(midi):
-    return 440.0 * 2 ** ((midi - 69) / 12)
-
-
-def cuadrada(f, t):
-    """Onda cuadrada sin aliasing: solo los armónicos impares audibles."""
-    x = np.zeros_like(t)
-    k = 1
-    while k * f < 16_000:
-        x += np.sin(2 * np.pi * k * f * t) / k
-        k += 2
-    return x * 4 / np.pi
-
-
-# ------------------------------------------------------------- la batería
-
-
-def bombo_phonk():
-    t = tt(0.42)
-    cuerpo = np.sin(phase(46 + 210 * decay(t, 0.025))) * decay(t, 0.17)
-    clic = highpass(rng.standard_normal(len(t)), 2500) * decay(t, 0.003) * 0.6
-    return np.tanh(1.8 * (cuerpo + clic))
-
-
-def palmada():
-    t = tt(0.45)
-    env = np.zeros(len(t))
-    for d in (0.0, 0.011, 0.023):
-        env += np.where(t >= d, decay(np.maximum(t - d, 0), 0.007), 0)
-    env += 0.55 * np.where(t >= 0.023, decay(np.maximum(t - 0.023, 0), 0.12), 0)
-    ruido = highpass(lowpass(rng.standard_normal(len(t)), 6500), 950) * env
-    cuerpo = np.sin(2 * np.pi * 185 * t) * decay(t, 0.045) * 0.4
-    return np.tanh(1.5 * (ruido + cuerpo))
-
-
-def caja():
-    """Caja corta para los redobles."""
-    t = tt(0.16)
-    ruido = highpass(lowpass(rng.standard_normal(len(t)), 7000), 1200) * decay(t, 0.04)
-    cuerpo = np.sin(2 * np.pi * 200 * t) * decay(t, 0.03) * 0.5
-    return np.tanh(1.4 * (ruido + cuerpo))
-
-
-FRECUENCIAS_CHARLES = (205.3, 304.4, 369.6, 522.7, 540.0, 800.0)
-
-
-def _charles(abierto):
-    t = tt(0.32 if abierto else 0.08)
-    metal = sum(cuadrada(f, t) for f in FRECUENCIAS_CHARLES)
-    x = highpass(metal, 7000, order=4) * 0.5 + highpass(rng.standard_normal(len(t)), 8000) * 0.5
-    return x * decay(t, 0.1 if abierto else 0.014) * np.minimum(1, t / 0.0005)
-
-
-CHARLES = [_charles(False) for _ in range(4)]
-CHARLES_ABIERTO = _charles(True)
-
-
-def bombo(at, gain=0.8, send=0.0):
-    put(bateria, bombo_phonk(), at, gain, send=send)
-    i = int(at * SR)
-    n = min(int(0.35 * SR), m.n - i)
-    if n > 0:
-        bombeo[i : i + n] = np.maximum(bombeo[i : i + n], gain * decay(tt(n / SR), 0.11)[:n])
-
-
-def charles(at, gain, pan=0.15, abierto=False):
-    x = CHARLES_ABIERTO if abierto else CHARLES[rng.integers(0, 4)]
-    put(bateria, x, at, gain, pan)
-
-
-# ------------------------------------------------------------- el 808 y el cencerro
-
-
-def ochocientos(midi, dur, desde=None):
-    """El bajo 808, saturado para que tenga armónicos y se oiga en el móvil."""
-    t = tt(dur + 0.05)
-    f = np.full(len(t), hz(midi))
-    if desde is not None:
-        f += (hz(desde) - hz(midi)) * np.clip(1 - t / 0.08, 0, 1)
-    f *= 1 + 0.9 * decay(t, 0.008)
-    x = np.tanh(2.6 * (np.sin(phase(f)) + 0.12)) - np.tanh(2.6 * 0.12)
-    env = np.minimum(1, t / 0.003) * decay(t, 1.4)
-    return x * env * np.interp(t, [0, dur, dur + 0.05], [1, 1, 0])
-
-
-def campana(midi, dur=0.42):
-    """Cencerro de 808: dos cuadradas a 1:1,48, filtradas y saturadas."""
-    f = hz(midi)
-    t = tt(dur)
-    x = 0.65 * cuadrada(f, t) + 0.5 * cuadrada(f * 1.4815, t)
-    x = highpass(lowpass(x, 5200), f * 0.8)
-    env = (0.55 * decay(t, 0.015) + 0.45 * decay(t, 0.15)) * np.minimum(1, t / 0.001)
-    x = np.tanh(2.2 * x * env) * np.interp(t, [0, dur - 0.03, dur], [1, 1, 0])
-    return x / np.abs(x).max()
 
 
 # El riff del cencerro: 3 + 3 + 2 + 3 + 3 + 2 semicorcheas, sobre el acorde.
@@ -387,12 +282,7 @@ put(campana_bus, campana(86, 0.6), FINAL + PULSO * 1.5, 0.12, 0.2, send=0.9)
 # ------------------------------------------------------------- mezcla
 
 
-# Menos subgrave y más medios y agudos: en el altavoz del móvil el subgrave
-# no se oye y solo se come el margen.
-ECUALIZACION = "bass=g=-3.5:f=60,treble=g=2.5:f=1500"
-
-
-def exportar():
+def acabar():
     n = m.n
     t_all = np.arange(n) / SR
     i_caida = int(CAIDA_1 * SR)
@@ -403,33 +293,7 @@ def exportar():
         for canal in (0, 1):
             bus.x[:i_caida, canal] = sweep_lowpass(bus.x[:i_caida, canal], corte) * 0.6
 
-    ir_t = tt(2.6)
-    ir = rng.standard_normal((len(ir_t), 2)) * decay(ir_t, 2.2 / 6.9)[:, None]
-    ir = lowpass(ir, 6500)
-    pre = int(0.015 * SR)
-    ir[:pre] *= np.linspace(0, 1, pre)[:, None]
-    ir /= np.sqrt((ir**2).sum(axis=0))
-    wet = np.stack([fftconvolve(m.rev.x[:, k], ir[:, k])[:n] for k in (0, 1)], axis=1)
-
-    # La orquesta se aparta en los golpes de percusión grande y todo lo
-    # melódico «respira» con el bombo, como en el phonk.
-    pico = maximum_filter1d(np.abs(percusion.x).max(axis=1), size=int(0.02 * SR))
-    a = 1 - np.exp(-1 / (0.12 * SR))
-    seguidor = lfilter([a], [1, a - 1], pico)
-    seguidor = np.clip(seguidor / np.percentile(seguidor, 99.5), 0, 1)
-    respiro = np.clip(bombeo / 0.8, 0, 1)
-    duck_orquesta = (1 - 0.35 * seguidor - 0.3 * respiro)[:, None]
-    duck_respiro = (1 - 0.45 * respiro)[:, None]
-
-    mix = (
-        orquesta.x * duck_orquesta
-        + percusion.x
-        + sfx.x * 0.9
-        + bateria.x
-        + bajo.x * duck_respiro ** 0.5
-        + campana_bus.x * duck_respiro
-        + wet * 0.45
-    )
+    mix = mezclar(m, r)
     # El pulso de silencio antes de la primera caída.
     mix *= np.interp(t_all, [HUECO[0] - 0.01, HUECO[0] + 0.02, CAIDA_1 - 0.005, CAIDA_1], [1, 0.04, 0.04, 1])[:, None]
     mix += post.x
@@ -443,33 +307,7 @@ def exportar():
     tramo *= np.interp(tau, [0, largo_p * 0.8, largo_p], [1, 0.7, 0])[:, None]
     mix[a0:a1] = tramo
 
-    mix = highpass(mix, 28)
-    mix = mix / np.abs(mix).max() * 0.92
-    mix = np.tanh(1.6 * mix) / np.tanh(1.6)
-    mix *= np.interp(t_all, [0, DURACION - 1.6, DURACION], [1, 1, 0])[:, None]
-
-    SALIDA.parent.mkdir(parents=True, exist_ok=True)
-    with tempfile.TemporaryDirectory() as tmp:
-        crudo = Path(tmp) / "crudo.wav"
-        wavfile.write(crudo, SR, mix.astype(np.float32))
-        medida = subprocess.run(
-            ["ffmpeg", "-hide_banner", "-i", str(crudo), "-af", f"{ECUALIZACION},loudnorm=I=-14:TP=-1.2:LRA=11:print_format=json", "-f", "null", "-"],
-            capture_output=True,
-            text=True,
-            check=True,
-        ).stderr
-        mm = json.loads(medida[medida.rindex("{") :])
-        filtro = (
-            f"{ECUALIZACION},loudnorm=I=-14:TP=-1.2:LRA=11:linear=true"
-            f":measured_I={mm['input_i']}:measured_TP={mm['input_tp']}"
-            f":measured_LRA={mm['input_lra']}:measured_thresh={mm['input_thresh']}"
-            f":offset={mm['target_offset']}"
-        )
-        subprocess.run(
-            ["ffmpeg", "-v", "error", "-y", "-i", str(crudo), "-af", filtro, "-ar", str(SR), "-c:a", "pcm_s16le", str(SALIDA)],
-            check=True,
-        )
-    print(f"{SALIDA} ({DURACION:.0f} s)")
+    exportar(mix, DURACION, SALIDA)
 
 
-exportar()
+acabar()
