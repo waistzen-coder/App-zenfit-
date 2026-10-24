@@ -191,6 +191,15 @@ for f in sorted(os.listdir(os.path.join(BUILD, 'locales'))):
     fill(data, es)
     save(path, data)
 
+# Copia suelta de los archivos de Dawn que cambia este script, para poder
+# subirlos uno a uno (themeFilesUpsert) a un tema que ya existe.
+LOOSE = os.path.join(OUT, 'sueltos')
+for rel in ['layout/theme.liquid', 'snippets/meta-tags.liquid', 'snippets/cart-drawer.liquid',
+            'config/settings_schema.json', 'config/settings_data.json'] + \
+           ['locales/' + f for f in sorted(os.listdir(os.path.join(BUILD, 'locales'))) if f.endswith('.json') and '.schema.' not in f]:
+    os.makedirs(os.path.dirname(os.path.join(LOOSE, rel)), exist_ok=True)
+    shutil.copy(os.path.join(BUILD, rel), os.path.join(LOOSE, rel))
+
 zpath = os.path.join(OUT, 'reliefpath-lab.zip')
 with zipfile.ZipFile(zpath, 'w', zipfile.ZIP_DEFLATED) as z:
     for root, _, files in os.walk(BUILD):
