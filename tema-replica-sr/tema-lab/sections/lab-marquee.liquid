@@ -1,0 +1,42 @@
+{%- comment -%}
+  Cinta de garantías que se desliza sin fin (se para al pasar el ratón o con
+  el teclado). La segunda copia es decorativa y no la leen los lectores de
+  pantalla. Con movimiento reducido, queda quieta.
+{%- endcomment -%}
+{%- if section.blocks.size > 0 -%}
+  {%- capture items -%}
+    {%- for b in section.blocks -%}
+      <li {{ b.shopify_attributes }}>{% render 'lab-icon', name: b.settings.icon %}{% if b.settings.link != blank %}<a href="{{ b.settings.link }}">{{ b.settings.text | escape }}</a>{% else %}{{ b.settings.text | escape }}{% endif %}</li>
+    {%- endfor -%}
+  {%- endcapture -%}
+  <div class="lab lab-marquee" style="--dur: {{ section.settings.speed }}s">
+    <div class="lab-marquee__track">
+      <ul class="lab-marquee__list" aria-label="{{ section.settings.label | escape }}">{{ items }}</ul>
+      <ul class="lab-marquee__list" aria-hidden="true">{{ items | replace: '<a ', '<a tabindex="-1" ' }}</ul>
+    </div>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Lab · Cinta de garantías",
+  "settings": [
+    { "type": "text", "id": "label", "label": "Descripción (accesibilidad)", "default": "Garantías de compra" },
+    { "type": "range", "id": "speed", "label": "Duración de una vuelta", "min": 20, "max": 90, "step": 2, "unit": "s", "default": 48 }
+  ],
+  "blocks": [
+    {
+      "type": "item", "name": "Garantía",
+      "settings": [
+        { "type": "select", "id": "icon", "label": "Icono", "default": "truck", "options": [
+          { "value": "truck", "label": "Camión" }, { "value": "refresh", "label": "Devolución" }, { "value": "shield", "label": "Garantía" },
+          { "value": "lock", "label": "Candado" }, { "value": "cash", "label": "Contrareembolso" }, { "value": "chat", "label": "Soporte" },
+          { "value": "doc", "label": "Documento" }, { "value": "pin", "label": "Lugar" } ] },
+        { "type": "text", "id": "text", "label": "Texto", "default": "Envío gratis desde España" },
+        { "type": "text", "id": "link", "label": "Enlace (opcional)" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Lab · Cinta de garantías" }]
+}
+{% endschema %}

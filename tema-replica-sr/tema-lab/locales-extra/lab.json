@@ -105,7 +105,8 @@
       "cod_help": "En el checkout, elige pagar contra reembolso. El envío sigue siendo gratis.",
       "cod_go": "Continuar con contrareembolso",
       "cod_note": "Preferencia: contrareembolso. Elegir pago contra reembolso en el checkout.",
-      "fee_eyebrow": "Contrareembolso"
+      "fee_eyebrow": "Contrareembolso",
+      "close": "Cerrar"
     },
     "footer": {
       "packs": "Packs",
@@ -122,6 +123,30 @@
       "pay": "Formas de pago",
       "language": "Idioma",
       "top": "Volver arriba"
+    },
+    "stage": {
+      "role": "visor 3D",
+      "label": "Modelo 3D de ReliefPath. Arrástralo o usa las flechas para girarlo.",
+      "poster_alt": "ReliefPath en 3D: cuerpo negro y rojo, panel de control y copa transparente. Imagen ilustrativa.",
+      "fig": "FIG. 01 · RELIEFPATH™",
+      "illustrative": "MODELO ILUSTRATIVO",
+      "hint": "Arrastra para girar",
+      "modes": "Funciones del aparato",
+      "m1": "Succión",
+      "m2": "Calor",
+      "m3": "Luz roja",
+      "t0": "Toca una función para verla en el aparato.",
+      "t1": "Succión regulable desde el panel superior.",
+      "t2": "Calor integrado en el mismo aparato.",
+      "t3": "Luz roja dentro de la copa transparente."
+    },
+    "builder": {
+      "chart": "Precio por unidad según el pack"
+    },
+    "upsell": {
+      "kicker": "Pack de {{ count }} · −{{ disc }} %",
+      "text_html": "<strong>Llévate 1 más por {{ extra }}</strong> y paga {{ unit }}/ud.",
+      "cta": "Llevar {{ count }}"
     }
   }
 }

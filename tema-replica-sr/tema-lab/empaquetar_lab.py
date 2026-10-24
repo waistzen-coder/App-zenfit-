@@ -59,6 +59,12 @@ schema.insert(1, {
          'info': 'Solo si ese precio se ha aplicado de verdad: en la UE el precio anterior debe ser el más bajo de los últimos 30 días.'},
         {'type': 'checkbox', 'id': 'lab_dark', 'label': 'Modo oscuro automático', 'default': True,
          'info': 'Sigue el ajuste claro/oscuro del móvil o del ordenador del cliente.'},
+        {'type': 'product', 'id': 'lab_main_product', 'label': 'Producto de los packs',
+         'info': 'El carrito lateral propone pasar al pack siguiente de este producto.'},
+        {'type': 'header', 'content': 'Movimiento y velocidad'},
+        {'type': 'checkbox', 'id': 'lab_transitions', 'label': 'Transiciones entre páginas y precarga', 'default': True,
+         'info': 'La foto pasa de la tarjeta a la ficha sin cortes y las páginas se precargan al pasar el ratón. Se ignora en navegadores sin soporte.'},
+        {'type': 'checkbox', 'id': 'lab_progress', 'label': 'Barra de progreso de lectura', 'default': True},
     ],
 })
 save(ss_path, schema)
@@ -87,6 +93,7 @@ cur.update({
     'cart_type': 'drawer',
     'lab_disc_2': 20, 'lab_disc_3': 30, 'lab_fee_product': 'contrareembolso-gastos-de-gestion',
     'lab_show_compare': False, 'lab_dark': True,
+    'lab_main_product': 'juego-de-ventosa-electrica-con-cable', 'lab_transitions': True, 'lab_progress': True,
 })
 settings['current'] = cur
 save(sd_path, settings)
@@ -107,8 +114,25 @@ SEO = """{%- liquid
   endif
 -%}
 """
+# Transiciones entre páginas (se cancelan si el cliente toca algo, para no
+# frenar la respuesta) y precarga de enlaces al pasar el ratón, sin carrito,
+# checkout ni cuenta. Solo navegadores que lo soportan; el resto lo ignora.
+MODERN = '''    {%- if settings.lab_transitions -%}
+      <style>@media (prefers-reduced-motion: no-preference){@view-transition{navigation:auto}}</style>
+      <script>
+        window.addEventListener('pagereveal', function (e) {
+          var vt = e.viewTransition; if (!vt) return;
+          var skip = function () { try { vt.skipTransition(); } catch (_) {} };
+          ['pointerdown', 'keydown', 'wheel'].forEach(function (n) { addEventListener(n, skip, { once: true, passive: true }); });
+        });
+      </script>
+      <script type="speculationrules">
+        {"prefetch":[{"where":{"and":[{"href_matches":"/*"},{"not":{"href_matches":["/cart*","/checkout*","/checkouts/*","/account*","/*/cart*","/*/checkout*","/*/account*","/discount/*","/password*"]}},{"not":{"selector_matches":"[rel~=nofollow], [target=_blank], [data-no-prefetch]"}}]},"eagerness":"moderate"}]}
+      </script>
+    {%- endif -%}
+'''
 patch('layout/theme.liquid', [
-    ('    <meta name="theme-color" content="">', '    <meta name="theme-color" content="#F6F7F9">'),
+    ('    <meta name="theme-color" content="">', '    <meta name="theme-color" content="#F6F7F9">\n' + MODERN.rstrip('\n')),
     ('    <title>\n      {{ page_title }}', SEO + '    <title>\n      {{ lab_title }}'),
     ('{%- unless page_title contains shop.name %}', '{%- unless lab_title contains shop.name %}'),
     ('    {% if page_description %}\n      <meta name="description" content="{{ page_description | escape }}">',
@@ -122,6 +146,15 @@ patch('layout/theme.liquid', [
      "    {{ 'lab-inter.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2' }}\n"
      "    {{ 'lab-intertight.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2' }}"),
     ('  <body class="gradient', '  <body class="lab{% if settings.lab_dark %} lab-dark-ok{% endif %} gradient'),
+    ('    <a class="skip-to-content-link button visually-hidden" href="#MainContent">',
+     '    {%- if settings.lab_progress -%}<div class="lab-progress" aria-hidden="true"></div>{%- endif -%}\n'
+     '    <a class="skip-to-content-link button visually-hidden" href="#MainContent">'),
+])
+
+# Carrito lateral de Dawn: propuesta de subir de pack debajo de las líneas.
+patch('snippets/cart-drawer.liquid', [
+    ('                </table>\n              </div>\n            {%- endif -%}\n            <p id="CartDrawer-LiveRegionText"',
+     '                </table>\n              </div>\n              {%- render \'lab-cart-upsell\' -%}\n            {%- endif -%}\n            <p id="CartDrawer-LiveRegionText"'),
 ])
 patch('snippets/meta-tags.liquid', [
     ('  assign og_title = page_title | default: shop.name',

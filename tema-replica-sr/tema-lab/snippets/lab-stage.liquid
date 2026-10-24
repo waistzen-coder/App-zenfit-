@@ -1,0 +1,48 @@
+{%- comment -%}
+  Escenario 3D del aparato (oscuro, con rejilla técnica). Primero se ve el
+  póster, que es un render del mismo modelo; assets/lab.js carga lab-3d.js
+  después de pintar la página y lo cambia por el modelo en tiempo real.
+  Uso: render 'lab-stage', s: section.settings, sid: section.id, eager: true
+{%- endcomment -%}
+<div class="lab-stage" data-lab-stage data-mode="idle" data-src="{{ 'lab-3d.js' | asset_url }}" data-idle="#dfe5ee">
+  <div class="lab-stage__view" data-rp3d-surface tabindex="0" role="group" aria-roledescription="{{ 'lab.stage.role' | t }}" aria-label="{{ 'lab.stage.label' | t }}">
+    <img class="lab-stage__poster" src="{{ 'lab-3d-poster.webp' | asset_url }}" width="1100" height="1100" alt="{{ 'lab.stage.poster_alt' | t }}"{% if eager %} loading="eager" fetchpriority="high"{% else %} loading="lazy"{% endif %}>
+    <canvas data-rp3d-canvas aria-hidden="true"></canvas>
+    <span class="lab-mono lab-stage__tag">{{ 'lab.stage.fig' | t }}</span>
+    <span class="lab-mono lab-stage__tag lab-stage__tag--r">{{ 'lab.stage.illustrative' | t }}</span>
+    <span class="lab-stage__cross lab-stage__cross--a" aria-hidden="true"></span>
+    <span class="lab-stage__cross lab-stage__cross--b" aria-hidden="true"></span>
+    {%- for k in (1..3) -%}
+      {%- liquid
+        case k
+          when 1
+            assign spot = 'panel'
+          when 2
+            assign spot = 'band'
+          else
+            assign spot = 'cup'
+        endcase
+        assign tk = 'spot' | append: k | append: '_title'
+        assign xk = 'spot' | append: k | append: '_text'
+      -%}
+      {%- if s[tk] != blank -%}
+        <div class="lab-stage__spot is-hidden" data-rp3d-spot="{{ spot }}">
+          <button type="button" class="lab-stage__dot" aria-expanded="false" aria-controls="LabSpot-{{ sid }}-{{ k }}"><span class="visually-hidden">{{ s[tk] | escape }}</span></button>
+          <div class="lab-stage__card" id="LabSpot-{{ sid }}-{{ k }}" role="note"><strong>{{ s[tk] | escape }}</strong>{{ s[xk] | escape }}</div>
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+    <p class="lab-stage__hint" aria-hidden="true">{% render 'lab-icon', name: 'hand' %}{{ 'lab.stage.hint' | t }}</p>
+  </div>
+  <div class="lab-stage__modes" role="group" aria-label="{{ 'lab.stage.modes' | t }}">
+    <button type="button" class="lab-stage__mode" data-rp3d-mode="succion" aria-pressed="false">{% render 'lab-icon', name: 'wave' %}{{ 'lab.stage.m1' | t }}</button>
+    <button type="button" class="lab-stage__mode" data-rp3d-mode="calor" aria-pressed="false">{% render 'lab-icon', name: 'flame' %}{{ 'lab.stage.m2' | t }}</button>
+    <button type="button" class="lab-stage__mode" data-rp3d-mode="luz" aria-pressed="false">{% render 'lab-icon', name: 'sun' %}{{ 'lab.stage.m3' | t }}</button>
+  </div>
+  <p class="lab-stage__text" aria-live="polite">
+    <span data-rp3d-text="idle">{{ 'lab.stage.t0' | t }}</span>
+    <span data-rp3d-text="succion">{{ 'lab.stage.t1' | t }}</span>
+    <span data-rp3d-text="calor">{{ 'lab.stage.t2' | t }}</span>
+    <span data-rp3d-text="luz">{{ 'lab.stage.t3' | t }}</span>
+  </p>
+</div>

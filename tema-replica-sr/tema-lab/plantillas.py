@@ -212,14 +212,59 @@ def legal():
     return section('lab-legal', {})
 
 
+def marquee():
+    return section('lab-marquee', {'label': 'Garantías de compra', 'speed': 48}, [
+        block('item', icon='truck', text='Envío gratis desde España', link='/pages/envios'),
+        block('item', icon='truck', text='Península en 24–48 h'),
+        block('item', icon='refresh', text='30 días para devolver', link='/pages/devoluciones'),
+        block('item', icon='doc', text='Etiqueta de devolución pagada'),
+        block('item', icon='shield', text='Garantía legal de 3 años'),
+        block('item', icon='lock', text='Pago seguro'),
+        block('item', icon='cash', text='Pago al recibirlo disponible'),
+        block('item', icon='chat', text='Atención en español'),
+    ])
+
+
+def bento(**over):
+    s = {'product': PRODUCT}
+    s.update(over)
+    return section('lab-bento', s, [
+        block('tile', size='xl', art='photo', media_index=2, kicker='RELIEFPATH™', title='Un aparato, tres funciones',
+              text='Ventosa eléctrica, calor y luz roja, para usar en casa.', link_label='Ver el aparato', link='/products/' + PRODUCT),
+        block('tile', size='s', art='rings', kicker='01 · SUCCIÓN', title='Succión regulable',
+              text='La intensidad se ajusta desde el panel superior.'),
+        block('tile', size='s', art='heat', kicker='02 · CALOR', title='Calor integrado',
+              text='En el mismo aparato.'),
+        block('tile', size='m', art='light', kicker='03 · LUZ ROJA', title='Luz roja en la copa',
+              text='La copa transparente lleva la luz roja en su interior.'),
+        block('tile', size='m', art='doc', kicker='TODO POR ESCRITO', title='Lee antes de usar',
+              text='Zonas, tiempos, niveles y precauciones: en el manual del fabricante.', link_label='Cómo usarlo', link='#como-usarlo'),
+    ])
+
+
+def scrolly(**over):
+    s = {'product': PRODUCT}
+    s.update(over)
+    return section('lab-scrolly', s, [
+        block('step', title='Comprueba el pedido', text='Que llegan las unidades de tu pack y el manual del fabricante.', media_index=1),
+        block('step', title='Lee el manual', text='Zonas permitidas, duración, frecuencia y contraindicaciones de tu modelo.', media_index=7),
+        block('step', title='Empieza por lo más suave', text='Nivel más bajo de succión y calor; sube solo si el manual lo permite.', media_index=4),
+        block('step', title='Si algo no va, escríbenos', text='Tienes 30 días desde que lo recibes para devolverlo y la etiqueta la pagamos nosotros.', media_index=6),
+    ])
+
+
 # Portada ---------------------------------------------------------------------
 
 save('templates/index.json', template(
     ('hero', hero()),
+    ('marquee', marquee()),
     ('catalog', catalog()),
+    ('bento', bento()),
+    ('glow', section('lab-glow', {})),
+    ('scrolly', scrolly()),
+    ('builder', section('lab-builder', {'product': PRODUCT, 'start': 2})),
     ('proof', proof()),
     ('video', section('lab-video', {})),
-    ('why', cols()),
     ('reviews', section('lab-reviews', {})),
     ('faq', faq(FAQ_SHORT)),
     ('about', about()),
@@ -249,9 +294,11 @@ PDP_TABS = [
 ]
 PDP = template(
     ('main', section('lab-product', {'default_pack': 1, 'cod': True}, PDP_TABS)),
+    ('marquee', marquee()),
+    ('bento', bento(surface=True)),
+    ('scrolly', scrolly(surface=False)),
     ('reviews', section('lab-reviews', {'surface': True})),
-    ('proof', proof(surface=False)),
-    ('why', cols(surface=True)),
+    ('proof', proof(surface=True)),
     ('faq', faq(FAQ_SHORT[:2] + [Q_CODE] + FAQ_SHORT[2:], schema=False)),
     ('trust', trust()),
     ('legal', legal()),

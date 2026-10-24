@@ -1,7 +1,9 @@
 {%- comment -%}
   Hero de tienda: migas, ceja con el número de packs, H1 con la palabra clave,
   subtítulo, 2 botones, 3 cifras enlazadas a su prueba, 4 chips de confianza y
-  las tarjetas de los packs flotando. Las cifras de precio salen del producto.
+  a la derecha el escenario 3D (o las tarjetas de los packs). Fondo aurora con
+  rejilla técnica y entrada escalonada; las cifras cuentan al entrar. Los
+  importes salen del producto.
 {%- endcomment -%}
 {%- liquid
   assign p = section.settings.product
@@ -23,6 +25,7 @@
   endif
 -%}
 <section class="lab lab-hero" id="tienda">
+  {%- if section.settings.aurora -%}<div class="lab-aurora" aria-hidden="true"></div>{%- endif -%}
   <div class="lab-wrap">
     {%- if section.settings.crumbs -%}
       <nav aria-label="{{ 'lab.crumbs.label' | t }}">
@@ -40,27 +43,29 @@
       {%- endif -%}
     {%- endif -%}
     <div class="lab-hero__grid">
-      <div>
-        <p class="lab-eyebrow">{{ eyebrow | escape }}</p>
-        <{{ heading_tag }} class="lab-h1">{{ section.settings.heading }}</{{ heading_tag }}>
+      <div class="lab-hero__top">
+        <p class="lab-eyebrow lab-in" style="--i:0">{{ eyebrow | escape }}</p>
+        <{{ heading_tag }} class="lab-h1 lab-in" style="--i:1">{{ section.settings.heading }}</{{ heading_tag }}>
         {%- if section.settings.sub != blank -%}
-          <p class="lab-lead">{% render 'lab-fill', text: section.settings.sub, product: p %}</p>
+          <p class="lab-lead lab-in" style="--i:2">{% render 'lab-fill', text: section.settings.sub, product: p %}</p>
         {%- endif -%}
-        <div class="lab-hero__ctas">
+        <div class="lab-hero__ctas lab-in" style="--i:3">
           {%- if section.settings.cta1 != blank -%}
-            <a class="lab-btn lab-btn--accent" href="{{ section.settings.cta1_link | default: '#packs' }}">{{ section.settings.cta1 | escape }}{% render 'lab-icon', name: 'arrow' %}</a>
+            <a class="lab-btn lab-btn--accent" data-lab-magnetic href="{{ section.settings.cta1_link | default: '#packs' }}">{{ section.settings.cta1 | escape }}{% render 'lab-icon', name: 'arrow' %}</a>
           {%- endif -%}
           {%- if section.settings.cta2 != blank -%}
             <a class="lab-btn lab-btn--ghost" href="{{ section.settings.cta2_link | default: '#calidad' }}">{{ section.settings.cta2 | escape }}</a>
           {%- endif -%}
         </div>
+      </div>
+      <div class="lab-hero__bottom">
         {%- if figs.size > 0 -%}
-          <ul class="lab-figures" role="list">
+          <ul class="lab-figures lab-in" style="--i:4" role="list">
             {%- for b in figs -%}
               {%- assign href = b.settings.link | default: b.settings.page.url -%}
               <li class="lab-figure" {{ b.shopify_attributes }}>
                 {%- if href != blank -%}<a href="{{ href }}">{%- endif -%}
-                <strong class="lab-figure__v">{{ b.settings.value | escape }}</strong>
+                <strong class="lab-figure__v" data-lab-count>{{ b.settings.value | escape }}</strong>
                 <span class="lab-figure__l">{{ b.settings.label | escape }}</span>
                 {%- if href != blank -%}</a>{%- endif -%}
               </li>
@@ -68,15 +73,27 @@
           </ul>
         {%- endif -%}
         {%- if chips.size > 0 -%}
-          <ul class="lab-trustchips" role="list">
+          <ul class="lab-trustchips lab-in" style="--i:5" role="list">
             {%- for b in chips -%}
               <li class="lab-chip" {{ b.shopify_attributes }}>{% render 'lab-icon', name: b.settings.icon %}{{ b.settings.text | escape }}</li>
             {%- endfor -%}
           </ul>
         {%- endif -%}
       </div>
-      {%- if packs.size > 0 and p != blank -%}
-        <div class="lab-float" aria-label="{{ 'lab.hero.packs' | t }}">
+      {%- if section.settings.visual == 'stage' -%}
+        <div class="lab-hero__visual lab-in" style="--i:2">
+          {%- render 'lab-stage', s: section.settings, sid: section.id, eager: true -%}
+          {%- if packs.size > 0 and p != blank -%}
+            <nav class="lab-rail" aria-label="{{ 'lab.hero.packs' | t }}">
+              {%- for b in packs -%}
+                {%- assign q = b.settings.qty -%}
+                <a href="{{ p.url }}?pack={{ q }}"{% if q == 3 %} class="is-best"{% endif %} {{ b.shopify_attributes }}><span class="lab-mono">{% if q == 1 %}{{ 'lab.hero.one' | t }}{% else %}{{ 'lab.hero.many' | t: count: q }}{% endif %}</span><strong>{% render 'lab-pack-price', price: v.price, qty: q, show: 'net' %}</strong></a>
+              {%- endfor -%}
+            </nav>
+          {%- endif -%}
+        </div>
+      {%- elsif packs.size > 0 and p != blank -%}
+        <div class="lab-hero__visual lab-float" aria-label="{{ 'lab.hero.packs' | t }}">
           {%- for b in packs -%}
             {%- liquid
               assign q = b.settings.qty
@@ -126,7 +143,17 @@
     { "type": "text", "id": "cta1", "label": "Botón principal", "default": "Ver los packs" },
     { "type": "text", "id": "cta1_link", "label": "Enlace del botón principal", "default": "#packs" },
     { "type": "text", "id": "cta2", "label": "Botón secundario", "default": "Lo que puedes comprobar" },
-    { "type": "text", "id": "cta2_link", "label": "Enlace del botón secundario", "default": "#calidad" }
+    { "type": "text", "id": "cta2_link", "label": "Enlace del botón secundario", "default": "#calidad" },
+    { "type": "header", "content": "Lado derecho" },
+    { "type": "select", "id": "visual", "label": "Qué se ve", "default": "stage", "options": [
+      { "value": "stage", "label": "Modelo 3D del aparato" }, { "value": "cards", "label": "Tarjetas de los packs" } ] },
+    { "type": "checkbox", "id": "aurora", "label": "Fondo aurora con rejilla", "default": true },
+    { "type": "text", "id": "spot1_title", "label": "3D · punto 1", "default": "Panel de control" },
+    { "type": "text", "id": "spot1_text", "label": "3D · punto 1 · texto", "default": "Los ajustes del aparato, en la parte superior." },
+    { "type": "text", "id": "spot2_title", "label": "3D · punto 2", "default": "Cuerpo compacto" },
+    { "type": "text", "id": "spot2_text", "label": "3D · punto 2 · texto", "default": "Negro y rojo, para usar en casa." },
+    { "type": "text", "id": "spot3_title", "label": "3D · punto 3", "default": "Copa transparente" },
+    { "type": "text", "id": "spot3_text", "label": "3D · punto 3 · texto", "default": "Con la luz roja en su interior." }
   ],
   "blocks": [
     {

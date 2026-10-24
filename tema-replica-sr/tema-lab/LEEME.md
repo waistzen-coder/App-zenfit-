@@ -12,6 +12,34 @@ otro tema de la tienda.
 | Ficha (`product.json`, `product.reliefpatch.json`) | Galería · packs 1/2/3 · añadir al carrito (carrito lateral) · comprar ahora (checkout en español) · contrareembolso con su recargo · barra fija en móvil · acordeón · Product + Offer + Breadcrumb |
 | Páginas | `page.json` (envíos, devoluciones…), `page.contact`, `page.tracking`, `page.calidad`, `page.faq`, `page.guia`, `page.sobre`, `page.landing-espana` |
 
+## Lab 2.0 (24-10): movimiento e interacción
+
+Ideas tomadas de las webs de producto que mejor funcionan hoy (Apple, tiendas
+DTC de referencia, ganadoras de Awwwards) y de las guías de rendimiento de
+Shopify. Todo es mejora progresiva: sin soporte, sin JavaScript o con
+«movimiento reducido», la página se ve completa y quieta.
+
+| Idea | Dónde | Cómo |
+|---|---|---|
+| Visor 3D del aparato con modos (succión, calor, luz roja) y puntos de interés | Hero | `snippets/lab-stage`, `assets/lab-3d.js` (Three.js, se carga después de pintar la página; antes se ve el póster) |
+| Fondo aurora con rejilla técnica y entrada escalonada | Hero | CSS (`.lab-aurora`, `.lab-in`) |
+| Cifras que cuentan, botón magnético | Hero | `lab.js` (`counters`, `pointerFx`) |
+| Cinta de garantías sin fin | Portada y ficha | `sections/lab-marquee` |
+| Bento con dibujos vivos y foco que sigue al ratón | Portada y ficha | `sections/lab-bento` |
+| Banda oscura de luz roja ligada al scroll | Portada | `sections/lab-glow` (`animation-timeline: view()`) |
+| «Cómo usarlo» con imagen fija y pasos | Portada y ficha | `sections/lab-scrolly` |
+| Calculadora de packs con precio que rueda y barras | Portada | `sections/lab-builder` |
+| Pack de 3 con borde animado | Catálogo y ficha | `.lab-best` (`@property`) |
+| Vuelo al carrito y contador que salta | Todo «Añadir al carrito» | `lab.js` (`fly`) |
+| «Llévate 1 más por X €» dentro del carrito lateral | Carrito de Dawn | `snippets/lab-cart-upsell` + parche en `snippets/cart-drawer.liquid` |
+| Zoom al pasar el ratón y visor a pantalla completa | Galería de la ficha | `lab.js` (`gallery`) |
+| Transición entre páginas (la foto vuela de la tarjeta a la ficha) | Todo el tema | `@view-transition` + `view-transition-name`, se cancela al tocar |
+| Precarga de enlaces al pasar el ratón | Todo el tema | `<script type="speculationrules">` (sin carrito, checkout ni cuenta) |
+| Cabecera que se esconde al bajar, barra de progreso | Todo el tema | `lab.js` (`header`), `.lab-progress` |
+| Acordeones con altura animada | Preguntas y ficha | `interpolate-size` + `::details-content` |
+
+Se activan o desactivan en *Ajustes del tema › ReliefPath Lab*.
+
 ## Reglas que sigue
 
 - Los precios de los packs se calculan con los descuentos de *Ajustes del
@@ -33,6 +61,12 @@ otro tema de la tienda.
 git clone --depth 1 --branch v15.4.1 https://github.com/Shopify/dawn.git <dawn>
 python3 plantillas.py            # plantillas JSON y grupos de cabecera/pie
 python3 empaquetar_lab.py <dawn> # dist/reliefpath-lab.zip
+```
+
+El visor 3D se compila aparte (Three.js + esbuild):
+
+```
+cd <carpeta con node_modules de three y esbuild> && sh <tema-lab>/src/lab-3d/build.sh <tema-lab>
 ```
 
 El zip se sube como tema nuevo con `themeCreate`.

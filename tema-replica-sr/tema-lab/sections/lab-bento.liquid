@@ -1,0 +1,93 @@
+{%- comment -%}
+  Bento: baldosas de distintos tamaños, cada una con un dibujo vivo hecho en
+  CSS (anillos de succión, calor que sube, luz roja que respira, documento,
+  ruta de envío) o una foto. Con ratón, el foco sigue al puntero.
+{%- endcomment -%}
+{%- assign p = section.settings.product -%}
+<section class="lab lab-sec{% if section.settings.surface %} lab-sec--surface{% endif %}" id="{{ section.settings.anchor | default: 'funciones' | handleize }}">
+  <div class="lab-wrap">
+    <div data-lab-reveal>
+      <p class="lab-eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      <h2 class="lab-h2">{{ section.settings.heading }}</h2>
+      {%- if section.settings.lead != blank -%}<p class="lab-lead">{{ section.settings.lead }}</p>{%- endif -%}
+    </div>
+    <div class="lab-bento">
+      {%- for b in section.blocks -%}
+        {%- liquid
+          assign art = b.settings.art
+          assign href = b.settings.link
+          if href == blank and b.settings.page != blank
+            assign href = b.settings.page.url
+          endif
+          assign tag = 'div'
+          if href != blank
+            assign tag = 'a'
+          endif
+          assign dark = false
+          if art == 'heat' or art == 'light' or art == 'photo'
+            assign dark = true
+          endif
+        -%}
+        <{{ tag }}{% if href != blank %} href="{{ href }}"{% endif %} class="lab-tile lab-tile--{{ b.settings.size }}{% if dark %} lab-tile--dark{% endif %}{% if art == 'photo' %} lab-tile--photo{% endif %} lab-spot" data-lab-reveal {{ b.shopify_attributes }}>
+          <span class="lab-tile__art" aria-hidden="true">
+            {%- case art -%}
+              {%- when 'rings' -%}<span class="lab-art-rings"><i></i><i></i><i></i><b></b></span>
+              {%- when 'heat' -%}<span class="lab-art-heat"><svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M34 100c-8-14 8-22 0-36s8-22 0-36"/><path d="M60 100c-8-14 8-22 0-36s8-22 0-36"/><path d="M86 100c-8-14 8-22 0-36s8-22 0-36"/></svg></span>
+              {%- when 'light' -%}<span class="lab-art-light"></span>
+              {%- when 'doc' -%}<span class="lab-art-doc"><i></i><i></i><i></i><i></i><b>✓</b></span>
+              {%- when 'route' -%}<svg class="lab-art-route" viewBox="0 0 150 96" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 84C40 84 30 20 70 20s40 52 72 18"/><circle cx="8" cy="84" r="5" fill="currentColor"/><circle cx="142" cy="38" r="5" fill="currentColor"/></svg>
+              {%- when 'photo' -%}
+                {%- liquid
+                  assign img = b.settings.image
+                  if img == blank and p != blank
+                    assign mi = b.settings.media_index | minus: 1
+                    assign img = p.media[mi].preview_image
+                  endif
+                -%}
+                {%- if img != blank -%}{{ img | image_url: width: 1200 | image_tag: widths: '600, 900, 1200', sizes: '(min-width: 990px) 60vw, 100vw', loading: 'lazy', alt: '' }}{%- endif -%}
+            {%- endcase -%}
+          </span>
+          {%- if b.settings.kicker != blank -%}<span class="lab-mono">{{ b.settings.kicker | escape }}</span>{%- endif -%}
+          <h3 class="lab-h3">{{ b.settings.title | escape }}</h3>
+          {%- if b.settings.text != blank -%}<p>{{ b.settings.text }}</p>{%- endif -%}
+          {%- if href != blank and b.settings.link_label != blank -%}<span class="lab-tile__link">{{ b.settings.link_label | escape }}{% render 'lab-icon', name: 'arrow' %}</span>{%- endif -%}
+        </{{ tag }}>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Lab · Bento",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Producto (fotos)" },
+    { "type": "text", "id": "anchor", "label": "Ancla", "default": "funciones" },
+    { "type": "text", "id": "eyebrow", "label": "Ceja", "default": "El aparato" },
+    { "type": "inline_richtext", "id": "heading", "label": "Título", "default": "Tres funciones, <em>un solo aparato.</em>" },
+    { "type": "inline_richtext", "id": "lead", "label": "Entradilla" },
+    { "type": "checkbox", "id": "surface", "label": "Fondo blanco", "default": false }
+  ],
+  "blocks": [
+    {
+      "type": "tile", "name": "Baldosa",
+      "settings": [
+        { "type": "select", "id": "size", "label": "Tamaño", "default": "s", "options": [
+          { "value": "s", "label": "Pequeña" }, { "value": "m", "label": "Mediana" }, { "value": "l", "label": "Grande (alta)" }, { "value": "xl", "label": "Muy grande" } ] },
+        { "type": "select", "id": "art", "label": "Dibujo", "default": "rings", "options": [
+          { "value": "rings", "label": "Anillos (succión)" }, { "value": "heat", "label": "Calor" }, { "value": "light", "label": "Luz roja" },
+          { "value": "doc", "label": "Documento" }, { "value": "route", "label": "Ruta de envío" }, { "value": "photo", "label": "Foto" }, { "value": "none", "label": "Ninguno" } ] },
+        { "type": "image_picker", "id": "image", "label": "Foto" },
+        { "type": "range", "id": "media_index", "label": "Si no hay foto: foto nº del producto", "min": 1, "max": 10, "step": 1, "default": 1 },
+        { "type": "text", "id": "kicker", "label": "Etiqueta", "default": "01 · SUCCIÓN" },
+        { "type": "text", "id": "title", "label": "Título", "default": "Succión regulable" },
+        { "type": "inline_richtext", "id": "text", "label": "Texto", "default": "La intensidad se ajusta desde el panel superior." },
+        { "type": "text", "id": "link_label", "label": "Enlace · texto" },
+        { "type": "page", "id": "page", "label": "Enlace · página" },
+        { "type": "text", "id": "link", "label": "O enlace (/#ancla o URL)" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Lab · Bento" }]
+}
+{% endschema %}
