@@ -98,6 +98,83 @@
         "b10"
       ]
     },
+    "marquee": {
+      "type": "lab-marquee",
+      "settings": {
+        "label": "Garantías de compra",
+        "speed": 48
+      },
+      "blocks": {
+        "b1": {
+          "type": "item",
+          "settings": {
+            "icon": "truck",
+            "text": "Envío gratis desde España",
+            "link": "/pages/envios"
+          }
+        },
+        "b2": {
+          "type": "item",
+          "settings": {
+            "icon": "truck",
+            "text": "Península en 24–48 h"
+          }
+        },
+        "b3": {
+          "type": "item",
+          "settings": {
+            "icon": "refresh",
+            "text": "30 días para devolver",
+            "link": "/pages/devoluciones"
+          }
+        },
+        "b4": {
+          "type": "item",
+          "settings": {
+            "icon": "doc",
+            "text": "Etiqueta de devolución pagada"
+          }
+        },
+        "b5": {
+          "type": "item",
+          "settings": {
+            "icon": "shield",
+            "text": "Garantía legal de 3 años"
+          }
+        },
+        "b6": {
+          "type": "item",
+          "settings": {
+            "icon": "lock",
+            "text": "Pago seguro"
+          }
+        },
+        "b7": {
+          "type": "item",
+          "settings": {
+            "icon": "cash",
+            "text": "Pago al recibirlo disponible"
+          }
+        },
+        "b8": {
+          "type": "item",
+          "settings": {
+            "icon": "chat",
+            "text": "Atención en español"
+          }
+        }
+      },
+      "block_order": [
+        "b1",
+        "b2",
+        "b3",
+        "b4",
+        "b5",
+        "b6",
+        "b7",
+        "b8"
+      ]
+    },
     "catalog": {
       "type": "lab-catalog",
       "settings": {
@@ -160,6 +237,133 @@
         "b4",
         "b5"
       ]
+    },
+    "bento": {
+      "type": "lab-bento",
+      "settings": {
+        "product": "juego-de-ventosa-electrica-con-cable"
+      },
+      "blocks": {
+        "b1": {
+          "type": "tile",
+          "settings": {
+            "size": "xl",
+            "art": "photo",
+            "media_index": 2,
+            "kicker": "RELIEFPATH™",
+            "title": "Un aparato, tres funciones",
+            "text": "Ventosa eléctrica, calor y luz roja, para usar en casa.",
+            "link_label": "Ver el aparato",
+            "link": "/products/juego-de-ventosa-electrica-con-cable"
+          }
+        },
+        "b2": {
+          "type": "tile",
+          "settings": {
+            "size": "s",
+            "art": "rings",
+            "kicker": "01 · SUCCIÓN",
+            "title": "Succión regulable",
+            "text": "La intensidad se ajusta desde el panel superior."
+          }
+        },
+        "b3": {
+          "type": "tile",
+          "settings": {
+            "size": "s",
+            "art": "heat",
+            "kicker": "02 · CALOR",
+            "title": "Calor integrado",
+            "text": "En el mismo aparato."
+          }
+        },
+        "b4": {
+          "type": "tile",
+          "settings": {
+            "size": "m",
+            "art": "light",
+            "kicker": "03 · LUZ ROJA",
+            "title": "Luz roja en la copa",
+            "text": "La copa transparente lleva la luz roja en su interior."
+          }
+        },
+        "b5": {
+          "type": "tile",
+          "settings": {
+            "size": "m",
+            "art": "doc",
+            "kicker": "TODO POR ESCRITO",
+            "title": "Lee antes de usar",
+            "text": "Zonas, tiempos, niveles y precauciones: en el manual del fabricante.",
+            "link_label": "Cómo usarlo",
+            "link": "#como-usarlo"
+          }
+        }
+      },
+      "block_order": [
+        "b1",
+        "b2",
+        "b3",
+        "b4",
+        "b5"
+      ]
+    },
+    "glow": {
+      "type": "lab-glow",
+      "settings": {}
+    },
+    "scrolly": {
+      "type": "lab-scrolly",
+      "settings": {
+        "product": "juego-de-ventosa-electrica-con-cable"
+      },
+      "blocks": {
+        "b1": {
+          "type": "step",
+          "settings": {
+            "title": "Comprueba el pedido",
+            "text": "Que llegan las unidades de tu pack y el manual del fabricante.",
+            "media_index": 1
+          }
+        },
+        "b2": {
+          "type": "step",
+          "settings": {
+            "title": "Lee el manual",
+            "text": "Zonas permitidas, duración, frecuencia y contraindicaciones de tu modelo.",
+            "media_index": 7
+          }
+        },
+        "b3": {
+          "type": "step",
+          "settings": {
+            "title": "Empieza por lo más suave",
+            "text": "Nivel más bajo de succión y calor; sube solo si el manual lo permite.",
+            "media_index": 4
+          }
+        },
+        "b4": {
+          "type": "step",
+          "settings": {
+            "title": "Si algo no va, escríbenos",
+            "text": "Tienes 30 días desde que lo recibes para devolverlo y la etiqueta la pagamos nosotros.",
+            "media_index": 6
+          }
+        }
+      },
+      "block_order": [
+        "b1",
+        "b2",
+        "b3",
+        "b4"
+      ]
+    },
+    "builder": {
+      "type": "lab-builder",
+      "settings": {
+        "product": "juego-de-ventosa-electrica-con-cable",
+        "start": 2
+      }
     },
     "proof": {
       "type": "lab-proof",
@@ -282,51 +486,6 @@
     "video": {
       "type": "lab-video",
       "settings": {}
-    },
-    "why": {
-      "type": "lab-cols",
-      "settings": {
-        "anchor": "por-que",
-        "eyebrow": "Por qué comprar aquí",
-        "heading": "Comprar fácil, <em>devolver fácil.</em>"
-      },
-      "blocks": {
-        "b1": {
-          "type": "col",
-          "settings": {
-            "icon": "truck",
-            "title": "Envío desde España",
-            "text": "Gratis y con seguimiento. Península en 24–48 h; Baleares en 2–4 días laborables.",
-            "link_label": "Ver envíos",
-            "page": "envios"
-          }
-        },
-        "b2": {
-          "type": "col",
-          "settings": {
-            "icon": "refresh",
-            "title": "30 días para devolver",
-            "text": "Además de los 14 días legales de desistimiento. La etiqueta de devolución la pagamos nosotros.",
-            "link_label": "Ver devoluciones",
-            "page": "devoluciones"
-          }
-        },
-        "b3": {
-          "type": "col",
-          "settings": {
-            "icon": "chat",
-            "title": "Te respondemos por escrito",
-            "text": "Escríbenos a waistzen@gmail.com antes o después de comprar. Si ya pediste, indica tu número de pedido.",
-            "link_label": "Escribirnos",
-            "page": "contact"
-          }
-        }
-      },
-      "block_order": [
-        "b1",
-        "b2",
-        "b3"
-      ]
     },
     "reviews": {
       "type": "lab-reviews",
@@ -564,10 +723,14 @@
   },
   "order": [
     "hero",
+    "marquee",
     "catalog",
+    "bento",
+    "glow",
+    "scrolly",
+    "builder",
     "proof",
     "video",
-    "why",
     "reviews",
     "faq",
     "about",

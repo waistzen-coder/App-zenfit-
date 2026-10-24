@@ -1,0 +1,42 @@
+{%- comment -%}
+  Banda oscura «calor y luz roja»: título grande y el aparato con un brillo
+  rojo que crece al llegar al centro de la pantalla (ligado al scroll donde
+  el navegador lo permite; si no, respira suave).
+{%- endcomment -%}
+<section class="lab lab-glow" id="{{ section.settings.anchor | default: 'luz-roja' | handleize }}">
+  <span class="lab-glow__orb" aria-hidden="true"></span>
+  <div class="lab-wrap">
+    <p class="lab-eyebrow" data-lab-reveal>{{ section.settings.eyebrow | escape }}</p>
+    <h2 class="lab-glow__title" data-lab-reveal>{{ section.settings.heading }}</h2>
+    <div class="lab-glow__img" data-lab-reveal>
+      {%- if section.settings.image != blank -%}
+        {{ section.settings.image | image_url: width: 1000 | image_tag: widths: '500, 800, 1000', sizes: '(min-width: 750px) 480px, 78vw', loading: 'lazy', alt: section.settings.alt }}
+      {%- else -%}
+        <img src="{{ 'lab-3d-poster.webp' | asset_url }}" width="1100" height="1100" loading="lazy" alt="{{ section.settings.alt | escape }}">
+      {%- endif -%}
+    </div>
+    {%- if section.settings.chips != blank -%}
+      <div class="lab-glow__chips" data-lab-reveal>
+        {%- assign chips = section.settings.chips | split: '·' -%}
+        {%- for c in chips -%}<span>{{ c | strip | escape }}</span>{%- endfor -%}
+      </div>
+    {%- endif -%}
+    {%- if section.settings.note != blank -%}<p class="lab-glow__note">{{ section.settings.note | escape }}</p>{%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Lab · Banda luz roja",
+  "settings": [
+    { "type": "text", "id": "anchor", "label": "Ancla", "default": "luz-roja" },
+    { "type": "text", "id": "eyebrow", "label": "Ceja", "default": "Calor · luz roja · succión" },
+    { "type": "inline_richtext", "id": "heading", "label": "Título", "default": "Calor y luz roja, <em>en el mismo aparato.</em>" },
+    { "type": "image_picker", "id": "image", "label": "Imagen (mejor con fondo transparente)", "info": "Vacío: render del modelo 3D." },
+    { "type": "text", "id": "alt", "label": "Texto alternativo", "default": "ReliefPath: cuerpo negro y rojo con copa transparente. Imagen ilustrativa." },
+    { "type": "text", "id": "chips", "label": "Etiquetas (separadas por ·)", "default": "Succión regulable · Calor · Luz roja · Uso doméstico" },
+    { "type": "text", "id": "note", "label": "Nota", "default": "Imagen ilustrativa. Úsalo siempre según el manual del fabricante." }
+  ],
+  "presets": [{ "name": "Lab · Banda luz roja" }]
+}
+{% endschema %}

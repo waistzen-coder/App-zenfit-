@@ -1,0 +1,130 @@
+{%- comment -%}
+  Calculadora de packs: eliges 1, 2 o 3 y el precio rueda hasta el total,
+  la barra del precio por unidad se enciende y el botón añade esa cantidad
+  (con el carrito lateral de Dawn). Los importes salen del producto y de los
+  descuentos de Ajustes del tema; aquí no se escribe ningún precio a mano.
+{%- endcomment -%}
+{%- liquid
+  assign p = section.settings.product
+  assign v = p.selected_or_first_available_variant
+  assign start = section.settings.start
+  assign gid = 'LabB-' | append: section.id
+-%}
+{%- if p != blank -%}
+<section class="lab lab-sec{% if section.settings.surface %} lab-sec--surface{% endif %}" id="{{ section.settings.anchor | default: 'elige' | handleize }}" data-lab-builder>
+  <div class="lab-wrap lab-builder__grid">
+    <div data-lab-reveal>
+      <p class="lab-eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      <h2 class="lab-h2">{{ section.settings.heading }}</h2>
+      {%- if section.settings.lead != blank -%}<p class="lab-lead">{% render 'lab-fill', text: section.settings.lead, product: p %}</p>{%- endif -%}
+
+      <fieldset class="lab-seg" data-i="{{ start }}">
+        <legend class="visually-hidden">{{ 'lab.pdp.choose' | t }}</legend>
+        <span class="lab-seg__pill" aria-hidden="true"></span>
+        {%- for q in (1..3) -%}
+          {%- liquid
+            capture net
+              render 'lab-pack-price', price: v.price, qty: q, show: 'net'
+            endcapture
+            capture net_c
+              render 'lab-pack-price', price: v.price, qty: q, show: 'net_cents'
+            endcapture
+            capture unit
+              render 'lab-pack-price', price: v.price, qty: q, show: 'unit'
+            endcapture
+            capture was
+              render 'lab-pack-price', price: v.price, qty: q, show: 'was'
+            endcapture
+            capture save
+              render 'lab-pack-price', price: v.price, qty: q, show: 'save'
+            endcapture
+            capture d
+              render 'lab-pack-price', price: v.price, qty: q, show: 'disc'
+            endcapture
+            assign d = d | plus: 0
+            if q == 1
+              assign label = 'lab.hero.one' | t
+            else
+              assign label = 'lab.hero.many' | t: count: q
+            endif
+          -%}
+          <label>
+            <input type="radio" name="{{ gid }}" value="{{ q }}"{% if q == start %} checked{% endif %}
+              data-qty="{{ q }}" data-label="{{ label | escape }}" data-net="{{ net | strip_html | escape }}" data-net-cents="{{ net_c | strip }}" data-unit="{{ unit | strip_html | escape }}"
+              {% if d > 0 %}data-was="{{ was | strip_html | escape }}" data-save="{{ save | strip_html | escape }}"{% endif %}>
+            <span>{{ label }}{% if d > 0 %}<small>−{{ d }} %</small>{% endif %}</span>
+          </label>
+        {%- endfor -%}
+      </fieldset>
+
+      {%- liquid
+        capture net0
+          render 'lab-pack-price', price: v.price, qty: start, show: 'net'
+        endcapture
+        capture net0_c
+          render 'lab-pack-price', price: v.price, qty: start, show: 'net_cents'
+        endcapture
+      -%}
+      <div class="lab-builder__price">
+        <strong class="lab-roll" data-lab-b-net data-cents="{{ net0_c | strip }}">{{ net0 }}</strong>
+        <s data-lab-b-was{% if start == 1 %} hidden{% endif %}>{% render 'lab-pack-price', price: v.price, qty: start, show: 'was' %}</s>
+      </div>
+      <p class="lab-builder__meta">
+        <span data-lab-b-saverow{% if start == 1 %} hidden{% endif %}>{{ 'lab.card.save' | t }} <strong data-lab-b-save>{% render 'lab-pack-price', price: v.price, qty: start, show: 'save' %}</strong> · </span>
+        <span data-lab-b-unit>{% render 'lab-pack-price', price: v.price, qty: start, show: 'unit' %}</span>{{ 'lab.card.per_unit' | t }}
+      </p>
+      <span class="visually-hidden" aria-live="polite" data-lab-b-live></span>
+      <div class="lab-builder__actions">
+        {%- assign fid = gid | append: '-form' -%}
+        {% render 'lab-atc', product: p, variant: v, qty: start, form_id: fid, btn: 'lab-btn--accent', qty_input: true %}
+        <a class="lab-btn lab-btn--ghost lab-btn--block" data-lab-b-link data-base="{{ p.url }}" href="{{ p.url }}?pack={{ start }}">{{ section.settings.link_label | escape }}</a>
+        <p class="lab-note">{{ section.settings.note | escape }}</p>
+      </div>
+    </div>
+
+    <div class="lab-chart" data-lab-reveal>
+      <div class="lab-chart__head">
+        {%- if p.featured_media != blank -%}
+          <img src="{{ p.featured_media.preview_image | image_url: width: 160, height: 160, crop: 'center' }}" width="48" height="48" loading="lazy" alt="" data-lab-fly-src>
+        {%- endif -%}
+        <span class="lab-mono">{{ 'lab.builder.chart' | t }}</span>
+      </div>
+      <div class="lab-bars" role="img" aria-label="{{ 'lab.builder.chart' | t }}">
+        {%- for q in (1..3) -%}
+          {%- liquid
+            capture unit_c
+              render 'lab-pack-price', price: v.price, qty: q, show: 'net_cents'
+            endcapture
+            assign unit_c = unit_c | plus: 0 | divided_by: q
+            assign h = unit_c | times: 100 | divided_by: v.price
+          -%}
+          <div class="lab-bar{% if q == start %} is-on{% endif %}">
+            <span class="lab-bar__val">{% render 'lab-pack-price', price: v.price, qty: q, show: 'unit' %}</span>
+            <span class="lab-bar__col" style="--h: {{ h | divided_by: 100.0 }}"></span>
+            <span class="lab-mono lab-bar__lbl">{% if q == 1 %}{{ 'lab.hero.one' | t }}{% else %}{{ 'lab.hero.many' | t: count: q }}{% endif %}</span>
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+  <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+</section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Lab · Calculadora packs",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Producto" },
+    { "type": "text", "id": "anchor", "label": "Ancla", "default": "elige" },
+    { "type": "range", "id": "start", "label": "Pack elegido al entrar", "min": 1, "max": 3, "step": 1, "default": 2 },
+    { "type": "text", "id": "eyebrow", "label": "Ceja", "default": "Calculadora de packs" },
+    { "type": "inline_richtext", "id": "heading", "label": "Título", "default": "Cuantos más, <em>menos por unidad.</em>" },
+    { "type": "inline_richtext", "id": "lead", "label": "Entradilla", "default": "Elige cuántos quieres y mira lo que pagas por cada uno. El descuento (−[d2] % y −[d3] %) se aplica solo en el carrito." },
+    { "type": "text", "id": "link_label", "label": "Enlace a la ficha", "default": "Ver la ficha completa" },
+    { "type": "text", "id": "note", "label": "Nota", "default": "Envío gratis a España. Revisa siempre el total en el checkout." },
+    { "type": "checkbox", "id": "surface", "label": "Fondo blanco", "default": false }
+  ],
+  "presets": [{ "name": "Lab · Calculadora packs" }]
+}
+{% endschema %}

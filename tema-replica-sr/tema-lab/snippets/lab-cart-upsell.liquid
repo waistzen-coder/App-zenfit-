@@ -1,0 +1,49 @@
+{%- comment -%}
+  Dentro del carrito lateral: si llevas 1 o 2 unidades del aparato, propone
+  el pack siguiente con lo que cuesta de más y el precio por unidad. El botón
+  cambia la cantidad con el método de Dawn (assets/lab.js) y el descuento
+  automático de la tienda hace el resto. Importes calculados, no escritos.
+{%- endcomment -%}
+{%- liquid
+  assign mp = settings.lab_main_product
+  assign line = 0
+  if mp != blank
+    for item in cart.items
+      if item.product_id == mp.id
+        assign line = forloop.index
+        assign it = item
+        break
+      endif
+    endfor
+  endif
+-%}
+{%- if line > 0 and it.quantity < 3 -%}
+  {%- liquid
+    assign next = it.quantity | plus: 1
+    assign base = it.variant.price
+    capture now_c
+      render 'lab-pack-price', price: base, qty: it.quantity, show: 'net_cents'
+    endcapture
+    capture next_c
+      render 'lab-pack-price', price: base, qty: next, show: 'net_cents'
+    endcapture
+    capture d
+      render 'lab-pack-price', price: base, qty: next, show: 'disc'
+    endcapture
+    assign d = d | plus: 0
+    assign extra = next_c | minus: now_c
+    assign extra_f = extra | money
+    capture unit
+      render 'lab-pack-price', price: base, qty: next, show: 'unit'
+    endcapture
+  -%}
+  {%- if d > 0 -%}
+    <div class="lab lab-upsell">
+      <div>
+        <span class="lab-mono">{{ 'lab.upsell.kicker' | t: count: next, disc: d }}</span>
+        <p>{{ 'lab.upsell.text_html' | t: extra: extra_f, unit: unit }}</p>
+      </div>
+      <button type="button" class="lab-btn lab-btn--accent" data-lab-upsell data-line="{{ line }}" data-qty="{{ next }}" data-variant="{{ it.variant_id }}">{{ 'lab.upsell.cta' | t: count: next }}</button>
+    </div>
+  {%- endif -%}
+{%- endif -%}

@@ -53,7 +53,7 @@
     </div>
   </section>
 {%- else -%}
-<section class="lab lab-pdp" id="{{ pid }}" data-lab-pdp>
+<section class="lab lab-pdp" id="{{ pid }}" data-lab-pdp data-lab-gallery-label="{{ 'lab.pdp.gallery' | t }}" data-lab-close-label="{{ 'lab.pdp.close' | t }}">
   <div class="lab-wrap">
     <nav aria-label="{{ 'lab.crumbs.label' | t }}">
       <ol class="lab-crumbs">
@@ -68,7 +68,7 @@
         <div class="lab-gal__track" tabindex="0" role="region" aria-label="{{ 'lab.pdp.gallery' | t }}">
           {%- for m in p.media -%}
             {%- assign img = m.preview_image -%}
-            <div class="lab-gal__slide">
+            <div class="lab-gal__slide"{% if img != blank %} data-full="{{ img | image_url: width: 1800 }}"{% endif %} aria-label="{{ 'lab.pdp.view_image' | t: index: forloop.index }}">
               {%- if img != blank -%}
                 {%- liquid
                   assign alt = m.alt | default: p.title
@@ -112,7 +112,7 @@
         {%- assign cod0 = cents0 | plus: fee | money -%}
         <div class="lab-pdp__price">
           <div class="lab-price">
-            <span class="lab-price__now{% if start_q > 1 %} is-sale{% endif %}" data-lab-now>{{ net0 }}</span>
+            <span class="lab-price__now lab-roll{% if start_q > 1 %} is-sale{% endif %}" data-lab-now data-cents="{{ cents0 | strip }}">{{ net0 }}</span>
             <s class="lab-price__was" data-lab-was hidden></s>
           </div>
           <span class="lab-unit"><span data-lab-unit>{{ unit0 }}</span>{{ 'lab.card.per_unit' | t }} <span class="lab-save" data-lab-save hidden></span></span>
@@ -164,11 +164,11 @@
                 assign cod_url = routes.cart_url | append: '/' | append: v.id | append: ':' | append: q | append: ',' | append: fee_v.id | append: ':1?locale=es&attributes%5BPago%20preferido%5D=' | append: cod_attr | append: '&note=' | append: cod_note
               endif
             -%}
-            <label class="lab-pill{% if q == start_q %} is-on{% endif %}">
+            <label class="lab-pill{% if q == start_q %} is-on{% endif %}{% if q == 3 and d > 0 %} lab-best{% endif %}">
               <input type="radio" name="lab-pack" value="{{ q }}"{% if q == start_q %} checked{% endif %}{% unless ok %} disabled{% endunless %}
-                data-qty="{{ q }}" data-label="{{ label | escape }}" data-net="{{ net | money | strip_html | escape }}" data-unit="{{ unit | money | strip_html | escape }}"
+                data-qty="{{ q }}" data-label="{{ label | escape }}" data-net="{{ net | money | strip_html | escape }}" data-net-cents="{{ net }}" data-unit="{{ unit | money | strip_html | escape }}"
                 {% if was > net %}data-was="{{ was | money | strip_html | escape }}" data-save="{{ 'lab.card.save' | t }} {{ save | money | strip_html | escape }}"{% endif %}
-                data-cod="{{ net | plus: fee | money | strip_html | escape }}" data-buy="{{ buy }}" data-cod-url="{{ cod_url }}">
+                data-cod="{{ net | plus: fee | money | strip_html | escape }}" data-cod-cents="{{ net | plus: fee }}" data-buy="{{ buy }}" data-cod-url="{{ cod_url }}">
               <span class="lab-pill__dot" aria-hidden="true"></span>
               <span class="lab-pill__main">
                 <strong>{{ label }}</strong>
@@ -199,7 +199,7 @@
           <div class="lab-cod" id="{{ pid }}-cod" data-lab-cod hidden>
             <div class="lab-cod__row"><span>{{ 'lab.pdp.cod_pack' | t }}</span><span data-lab-cod-sub>{{ net0 }}</span></div>
             <div class="lab-cod__row"><span>{{ 'lab.pdp.cod_fee' | t }}</span><span>{{ fee | money }}</span></div>
-            <div class="lab-cod__row"><strong>{{ 'lab.pdp.cod_total' | t }}</strong><strong data-lab-cod-total>{{ cod0 }}</strong></div>
+            <div class="lab-cod__row"><strong>{{ 'lab.pdp.cod_total' | t }}</strong><strong class="lab-roll" data-lab-cod-total data-cents="{{ cents0 | plus: fee }}">{{ cod0 }}</strong></div>
             <p>{{ 'lab.pdp.cod_help' | t }}</p>
             <a class="lab-btn lab-btn--primary lab-btn--block" data-lab-cod-go href="{{ routes.cart_url }}">{{ 'lab.pdp.cod_go' | t }}{% render 'lab-icon', name: 'arrow' %}</a>
           </div>
@@ -246,7 +246,7 @@
 
 {%- if v.available -%}
   <div class="lab lab-sticky" data-lab-sticky="{{ pid }}" inert>
-    <div class="lab-sticky__txt"><span data-lab-sticky-label>{% if start_q == 1 %}{{ 'lab.hero.one' | t }}{% else %}{{ 'lab.hero.many' | t: count: start_q }}{% endif %}</span><strong data-lab-now>{{ net0 }}</strong></div>
+    <div class="lab-sticky__txt"><span data-lab-sticky-label>{% if start_q == 1 %}{{ 'lab.hero.one' | t }}{% else %}{{ 'lab.hero.many' | t: count: start_q }}{% endif %}</span><strong class="lab-roll" data-lab-now data-cents="{{ cents0 | strip }}">{{ net0 }}</strong></div>
     <button type="button" class="lab-btn lab-btn--accent" data-lab-sticky-add>{{ 'lab.card.add' | t }}</button>
   </div>
 {%- endif -%}

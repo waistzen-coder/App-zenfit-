@@ -1,0 +1,83 @@
+{%- comment -%}
+  «Cómo usarlo»: en escritorio, la imagen se queda fija y cambia con cada
+  paso mientras una línea se llena al bajar. En móvil, cada paso lleva su
+  propia imagen. Sin JS se leen todos los pasos con su texto.
+{%- endcomment -%}
+{%- assign p = section.settings.product -%}
+<section class="lab lab-sec{% if section.settings.surface %} lab-sec--surface{% endif %}" id="{{ section.settings.anchor | default: 'como-usarlo' | handleize }}" data-lab-scrolly>
+  <div class="lab-wrap">
+    <div data-lab-reveal>
+      <p class="lab-eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      <h2 class="lab-h2">{{ section.settings.heading }}</h2>
+      {%- if section.settings.lead != blank -%}<p class="lab-lead">{{ section.settings.lead }}</p>{%- endif -%}
+    </div>
+    <div class="lab-scrolly__grid">
+      <div class="lab-scrolly__media" aria-hidden="true">
+        <div class="lab-scrolly__frame">
+          {%- for b in section.blocks -%}
+            {%- liquid
+              assign img = b.settings.image
+              if img == blank and p != blank
+                assign mi = b.settings.media_index | minus: 1
+                assign img = p.media[mi].preview_image
+              endif
+            -%}
+            {%- liquid
+              assign cls = ''
+              if forloop.first
+                assign cls = 'is-on'
+              endif
+            -%}
+            {%- if img != blank -%}{{ img | image_url: width: 1000, height: 1000, crop: 'center' | image_tag: widths: '500, 800, 1000', sizes: '(min-width: 990px) 45vw, 1px', loading: 'lazy', alt: '', class: cls }}{%- endif -%}
+          {%- endfor -%}
+          <span class="lab-mono lab-scrolly__count" data-lab-scrolly-count>01 / {% if section.blocks.size < 10 %}0{% endif %}{{ section.blocks.size }}</span>
+        </div>
+      </div>
+      <ol class="lab-scrolly__steps">
+        {%- for b in section.blocks -%}
+          {%- liquid
+            assign img = b.settings.image
+            if img == blank and p != blank
+              assign mi = b.settings.media_index | minus: 1
+              assign img = p.media[mi].preview_image
+            endif
+          -%}
+          <li class="lab-scrolly__step{% if forloop.first %} is-on{% endif %}" {{ b.shopify_attributes }}>
+            <span class="lab-mono">{{ 'lab.proof.step' | t }} {% if forloop.index < 10 %}0{% endif %}{{ forloop.index }}</span>
+            <h3 class="lab-h3">{{ b.settings.title | escape }}</h3>
+            <p>{{ b.settings.text }}</p>
+            {%- if img != blank -%}
+              <div class="lab-scrolly__thumb">{{ img | image_url: width: 800 | image_tag: widths: '400, 800', sizes: '(min-width: 990px) 1px, 92vw', loading: 'lazy', alt: img.alt | default: b.settings.title }}</div>
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+      </ol>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Lab · Cómo usarlo",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Producto (fotos)" },
+    { "type": "text", "id": "anchor", "label": "Ancla", "default": "como-usarlo" },
+    { "type": "text", "id": "eyebrow", "label": "Ceja", "default": "Cómo usarlo" },
+    { "type": "inline_richtext", "id": "heading", "label": "Título", "default": "Cuatro pasos, <em>con cabeza.</em>" },
+    { "type": "inline_richtext", "id": "lead", "label": "Entradilla" },
+    { "type": "checkbox", "id": "surface", "label": "Fondo blanco", "default": true }
+  ],
+  "blocks": [
+    {
+      "type": "step", "name": "Paso",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Título", "default": "Lee el manual" },
+        { "type": "inline_richtext", "id": "text", "label": "Texto", "default": "Zonas permitidas, duración, frecuencia y contraindicaciones." },
+        { "type": "image_picker", "id": "image", "label": "Imagen" },
+        { "type": "range", "id": "media_index", "label": "Si no hay imagen: foto nº del producto", "min": 1, "max": 10, "step": 1, "default": 1 }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Lab · Cómo usarlo" }]
+}
+{% endschema %}
