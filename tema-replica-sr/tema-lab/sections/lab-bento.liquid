@@ -7,7 +7,7 @@
 <section class="lab lab-sec{% if section.settings.surface %} lab-sec--surface{% endif %}" id="{{ section.settings.anchor | default: 'funciones' | handleize }}">
   <div class="lab-wrap">
     <div data-lab-reveal>
-      <p class="lab-eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {%- if section.settings.eyebrow != blank -%}<p class="lab-eyebrow">{{ section.settings.eyebrow | escape }}</p>{%- endif -%}
       <h2 class="lab-h2">{{ section.settings.heading }}</h2>
       {%- if section.settings.lead != blank -%}<p class="lab-lead">{{ section.settings.lead }}</p>{%- endif -%}
     </div>
@@ -28,7 +28,7 @@
             assign dark = true
           endif
         -%}
-        <{{ tag }}{% if href != blank %} href="{{ href }}"{% endif %} class="lab-tile lab-tile--{{ b.settings.size }}{% if dark %} lab-tile--dark{% endif %}{% if art == 'photo' %} lab-tile--photo{% endif %} lab-spot" data-lab-reveal {{ b.shopify_attributes }}>
+        <{{ tag }}{% if href != blank %} href="{{ href }}"{% endif %} class="lab-tile lab-tile--{{ b.settings.size }}{% if dark %} lab-tile--dark{% endif %}{% if art == 'photo' %} lab-tile--photo{% endif %}" data-lab-reveal {{ b.shopify_attributes }}>
           <span class="lab-tile__art" aria-hidden="true">
             {%- case art -%}
               {%- when 'rings' -%}<span class="lab-art-rings"><i></i><i></i><i></i><b></b></span>
@@ -50,7 +50,7 @@
           {%- if b.settings.kicker != blank -%}<span class="lab-mono">{{ b.settings.kicker | escape }}</span>{%- endif -%}
           <h3 class="lab-h3">{{ b.settings.title | escape }}</h3>
           {%- if b.settings.text != blank -%}<p>{{ b.settings.text }}</p>{%- endif -%}
-          {%- if href != blank and b.settings.link_label != blank -%}<span class="lab-tile__link">{{ b.settings.link_label | escape }}{% render 'lab-icon', name: 'arrow' %}</span>{%- endif -%}
+          {%- if href != blank and b.settings.link_label != blank -%}<span class="lab-tile__link">{{ b.settings.link_label | escape }}</span>{%- endif -%}
         </{{ tag }}>
       {%- endfor -%}
     </div>
@@ -63,7 +63,7 @@
   "settings": [
     { "type": "product", "id": "product", "label": "Producto (fotos)" },
     { "type": "text", "id": "anchor", "label": "Ancla", "default": "funciones" },
-    { "type": "text", "id": "eyebrow", "label": "Ceja", "default": "El aparato" },
+    { "type": "text", "id": "eyebrow", "label": "Ceja (opcional)", "info": "Úsala solo si añade un dato; vacía, no sale." },
     { "type": "inline_richtext", "id": "heading", "label": "Título", "default": "Tres funciones, <em>un solo aparato.</em>" },
     { "type": "inline_richtext", "id": "lead", "label": "Entradilla" },
     { "type": "checkbox", "id": "surface", "label": "Fondo blanco", "default": false }

@@ -14,15 +14,15 @@
 <section class="lab lab-sec{% if section.settings.surface %} lab-sec--surface{% endif %}" id="{{ section.settings.anchor | default: 'preguntas' | handleize }}">
   <div class="lab-wrap lab-faq">
     <div data-lab-reveal>
-      <p class="lab-eyebrow">{{ section.settings.eyebrow | escape }}{% if qas.size > 0 %} · {{ qas.size }}{% endif %}</p>
+      {%- if section.settings.eyebrow != blank -%}<p class="lab-eyebrow">{{ section.settings.eyebrow | escape }}{% if qas.size > 0 %} · {{ qas.size }}{% endif %}</p>{%- endif -%}
       <{{ heading_tag }} class="lab-h2">{{ section.settings.heading }}</{{ heading_tag }}>
       {%- if section.settings.lead != blank -%}<p class="lab-lead">{{ section.settings.lead }}</p>{%- endif -%}
       {%- assign pg = pages['contact'] -%}
       {%- if section.settings.contact_label != blank and pg.url != blank -%}
-        <p class="lab-mt"><a class="lab-link" href="{{ pg.url }}">{{ section.settings.contact_label | escape }}{% render 'lab-icon', name: 'arrow' %}</a></p>
+        <p class="lab-mt"><a class="lab-link" href="{{ pg.url }}">{{ section.settings.contact_label | escape }}</a></p>
       {%- endif -%}
       {%- if section.settings.all_label != blank and section.settings.all_page != blank -%}
-        <p><a class="lab-link" href="{{ section.settings.all_page.url }}">{{ section.settings.all_label | escape }}{% render 'lab-icon', name: 'arrow' %}</a></p>
+        <p><a class="lab-link" href="{{ section.settings.all_page.url }}">{{ section.settings.all_label | escape }}</a></p>
       {%- endif -%}
     </div>
     <div>
@@ -72,7 +72,7 @@
   "settings": [
     { "type": "product", "id": "product", "label": "Producto (para los precios)" },
     { "type": "text", "id": "anchor", "label": "Ancla", "default": "preguntas" },
-    { "type": "text", "id": "eyebrow", "label": "Ceja", "default": "Preguntas frecuentes" },
+    { "type": "text", "id": "eyebrow", "label": "Ceja (opcional)", "info": "Úsala solo si añade un dato; vacía, no sale." },
     { "type": "inline_richtext", "id": "heading", "label": "Título", "default": "Antes de comprar, <em>pregunta.</em>" },
     { "type": "checkbox", "id": "as_h1", "label": "Usar H1 (página de preguntas)", "default": false },
     { "type": "inline_richtext", "id": "lead", "label": "Entradilla", "default": "Lo que más nos preguntan sobre los packs, el envío, el pago y las devoluciones." },

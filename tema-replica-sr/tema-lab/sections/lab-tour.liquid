@@ -1,0 +1,119 @@
+{%- comment -%}
+  Visita 3D: la sección mide varias pantallas y el aparato se queda fijo
+  mientras bajas. Cada tramo es una función (succión, calor, luz roja): el
+  modelo cambia de vista y de luz, el fondo cambia de tono y el texto pasa al
+  capítulo siguiente. Assets/lab.js la activa solo si hay espacio y el
+  movimiento está permitido; si no, se lee como una lista con el póster.
+  Los capítulos son bloques: cada uno elige su función.
+{%- endcomment -%}
+{%- liquid
+  assign p = section.settings.product
+  assign anchor = section.settings.anchor | default: 'funciones' | handleize
+  assign chs = section.blocks
+-%}
+<section class="lab lab-tour" id="{{ anchor }}" data-lab-tour data-src="{{ 'lab-3d.js' | asset_url }}" style="--n:{{ chs.size | at_least: 1 }}" aria-labelledby="LabTour-{{ section.id }}">
+  <div class="lab-tour__pin">
+    <div class="lab-tour__bg" aria-hidden="true">
+      {%- for b in chs -%}
+        {%- liquid
+          case b.settings.mode
+            when 'calor'
+              assign word = 'lab.stage.m2' | t
+            when 'luz'
+              assign word = 'lab.stage.m3' | t
+            else
+              assign word = 'lab.stage.m1' | t
+          endcase
+        -%}
+        <span class="lab-tour__tone{% if forloop.first %} is-on{% endif %}" data-tone="{{ b.settings.mode }}"><b>{{ word }}</b></span>
+      {%- endfor -%}
+    </div>
+    <div class="lab-wrap lab-tour__grid">
+      <div class="lab-tour__head">
+        <h2 class="lab-h2" id="LabTour-{{ section.id }}">{{ section.settings.heading }}</h2>
+        {%- if chs.size > 1 -%}
+          <ol class="lab-tour__rail" role="list" aria-label="{{ 'lab.stage.modes' | t }}">
+            {%- for b in chs -%}
+              {%- liquid
+                case b.settings.mode
+                  when 'calor'
+                    assign word = 'lab.stage.m2' | t
+                  when 'luz'
+                    assign word = 'lab.stage.m3' | t
+                  else
+                    assign word = 'lab.stage.m1' | t
+                endcase
+              -%}
+              <li data-tone="{{ b.settings.mode }}"><a href="#{{ anchor }}-{{ forloop.index }}" data-lab-tour-go="{{ forloop.index0 }}"{% if forloop.first %} aria-current="step"{% endif %}><span>{{ word }}</span><i aria-hidden="true"></i></a></li>
+            {%- endfor -%}
+          </ol>
+        {%- endif -%}
+      </div>
+      <div class="lab-tour__view" data-rp3d-surface aria-hidden="true">
+        <img class="lab-tour__poster" src="{{ 'lab-3d-poster.webp' | asset_url }}" width="1100" height="1100" alt="" loading="lazy">
+        <canvas data-rp3d-canvas></canvas>
+        <span class="lab-mono lab-tour__note">{{ 'lab.stage.illustrative' | t }}</span>
+      </div>
+      <div class="lab-tour__copy">
+        {%- for b in chs -%}
+          {%- liquid
+            case b.settings.mode
+              when 'calor'
+                assign icon = 'flame'
+              when 'luz'
+                assign icon = 'sun'
+              else
+                assign icon = 'wave'
+            endcase
+          -%}
+          <article class="lab-tour__ch{% if forloop.first %} is-on{% endif %}" id="{{ anchor }}-{{ forloop.index }}" data-mode="{{ b.settings.mode }}" data-tone="{{ b.settings.mode }}" {{ b.shopify_attributes }}>
+            <span class="lab-tour__ic" aria-hidden="true">{% render 'lab-icon', name: icon %}</span>
+            <h3 class="lab-tour__t">{{ b.settings.title | escape }}</h3>
+            {%- if b.settings.text != blank -%}<p>{{ b.settings.text }}</p>{%- endif -%}
+          </article>
+        {%- endfor -%}
+      </div>
+      {%- if section.settings.cta != blank -%}
+        <div class="lab-tour__end">
+          <a class="lab-btn lab-btn--accent" href="{{ section.settings.cta_link | default: '#packs' }}" data-lab-tour-cta>{{ section.settings.cta | escape }}{% render 'lab-icon', name: 'arrow' %}</a>
+          {%- if section.settings.price_line != blank and p != blank -%}
+            <span class="lab-tour__from">{% render 'lab-fill', text: section.settings.price_line, product: p %}</span>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Lab · Visita 3D",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Producto (precio)" },
+    { "type": "text", "id": "anchor", "label": "Ancla", "default": "funciones" },
+    { "type": "inline_richtext", "id": "heading", "label": "Título", "default": "Un aparato, <em>tres funciones.</em>" },
+    { "type": "text", "id": "cta", "label": "Botón", "default": "Ver los packs" },
+    { "type": "text", "id": "cta_link", "label": "Enlace del botón", "default": "#packs" },
+    { "type": "inline_richtext", "id": "price_line", "label": "Línea de precio", "info": "Marcas: [desde] [u2] [u3] [p1] [p2] [p3] [d2] [d3].", "default": "Desde <strong>[desde]/ud</strong> llevando 3" }
+  ],
+  "blocks": [
+    {
+      "type": "chapter", "name": "Capítulo", "limit": 3,
+      "settings": [
+        { "type": "select", "id": "mode", "label": "Función", "default": "succion", "options": [
+          { "value": "succion", "label": "Succión" }, { "value": "calor", "label": "Calor" }, { "value": "luz", "label": "Luz roja" } ] },
+        { "type": "text", "id": "title", "label": "Título", "default": "Succión que regulas tú." },
+        { "type": "inline_richtext", "id": "text", "label": "Texto", "default": "La intensidad se ajusta desde el panel superior. Empieza siempre por la más baja." }
+      ]
+    }
+  ],
+  "presets": [{
+    "name": "Lab · Visita 3D",
+    "blocks": [
+      { "type": "chapter", "settings": { "mode": "succion" } },
+      { "type": "chapter", "settings": { "mode": "calor", "title": "Calor en el mismo aparato.", "text": "Sigue los tiempos que indica el manual del fabricante." } },
+      { "type": "chapter", "settings": { "mode": "luz", "title": "Luz roja dentro de la copa.", "text": "Se enciende en el interior de la copa transparente." } }
+    ]
+  }]
+}
+{% endschema %}

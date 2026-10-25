@@ -73,6 +73,8 @@ schema.insert(1, {
         {'type': 'checkbox', 'id': 'lab_transitions', 'label': 'Transiciones entre páginas y precarga', 'default': True,
          'info': 'La foto pasa de la tarjeta a la ficha sin cortes y las páginas se precargan al pasar el ratón. Se ignora en navegadores sin soporte.'},
         {'type': 'checkbox', 'id': 'lab_progress', 'label': 'Barra de progreso de lectura', 'default': True},
+        {'type': 'checkbox', 'id': 'lab_reveals', 'label': 'Aparición de los bloques al bajar', 'default': False,
+         'info': 'Apagado, la página se ve quieta y el movimiento se reserva para la visita 3D.'},
     ],
 })
 save(ss_path, schema)
@@ -101,7 +103,7 @@ cur.update({
     'cart_type': 'drawer',
     'lab_disc_2': 20, 'lab_disc_3': 30, 'lab_fee_product': 'contrareembolso-gastos-de-gestion',
     'lab_show_compare': False, 'lab_dark': True,
-    'lab_main_product': 'juego-de-ventosa-electrica-con-cable', 'lab_transitions': True, 'lab_progress': True,
+    'lab_main_product': 'juego-de-ventosa-electrica-con-cable', 'lab_transitions': True, 'lab_progress': True, 'lab_reveals': False,
     'lab_checkout_locale': 'es', 'lab_first_code': 'RELIEF10', 'lab_first_pct': 10, 'lab_first_auto': True,
 })
 settings['current'] = cur
@@ -160,7 +162,7 @@ patch('layout/theme.liquid', [
      "    {{ 'lab.css' | asset_url | stylesheet_tag }}\n"
      "    {{ 'lab-inter.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2' }}\n"
      "    {{ 'lab-intertight.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2' }}"),
-    ('  <body class="gradient', '  <body class="lab{% if settings.lab_dark %} lab-dark-ok{% endif %} gradient'),
+    ('  <body class="gradient', '  <body class="lab{% if settings.lab_dark %} lab-dark-ok{% endif %}{% if settings.lab_reveals %} lab-rv{% endif %} gradient'),
     ('    <a class="skip-to-content-link button visually-hidden" href="#MainContent">',
      '    {%- if settings.lab_progress -%}<div class="lab-progress" aria-hidden="true"></div>{%- endif -%}\n'
      '    <a class="skip-to-content-link button visually-hidden" href="#MainContent">'),

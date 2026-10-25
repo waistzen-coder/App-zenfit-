@@ -59,10 +59,12 @@
     setTimeout(function () { if (el._labRoll === id) el.textContent = finalText; }, dur + 120);
   }
 
-  /* Aparición suave. Donde el navegador tiene animaciones ligadas al scroll lo
-     hace el CSS; aquí solo el respaldo, y solo bajo el pliegue. */
+  /* Aparición suave, solo si se activa en Ajustes del tema (por defecto no:
+     que todo aparezca igual en cada sección cansa y resta a la visita 3D).
+     Donde el navegador tiene animaciones ligadas al scroll lo hace el CSS;
+     aquí solo el respaldo, y solo bajo el pliegue. */
   function reveal() {
-    if (reduce || design || !('IntersectionObserver' in window) || cssOk('animation-timeline: view()')) return;
+    if (reduce || design || !document.body.classList.contains('lab-rv') || !('IntersectionObserver' in window) || cssOk('animation-timeline: view()')) return;
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
         if (!e.isIntersecting) return;
@@ -218,8 +220,8 @@
     $$('[data-lab-count]').forEach(function (el) { if (once(el, 'labCnt')) io.observe(el); });
   }
 
-  /* Botones magnéticos, foco que sigue al puntero e inclinación 3D. Solo con
-     ratón (no en pantallas táctiles) y sin movimiento reducido. */
+  /* Botón principal magnético. Solo con ratón (no en pantallas táctiles) y
+     sin movimiento reducido. */
   function pointerFx() {
     if (reduce || !fine) return;
     $$('[data-lab-magnetic]').forEach(function (el) {
@@ -231,25 +233,27 @@
       });
       el.addEventListener('pointerleave', function () { el.style.transform = ''; });
     });
-    $$('.lab-spot').forEach(function (el) {
-      if (!once(el, 'labSpot')) return;
-      el.addEventListener('pointermove', function (e) {
-        var r = el.getBoundingClientRect();
-        el.style.setProperty('--mx', (e.clientX - r.left) + 'px');
-        el.style.setProperty('--my', (e.clientY - r.top) + 'px');
-      });
-    });
-    $$('.lab-tilt').forEach(function (el) {
-      if (!once(el, 'labTilt')) return;
-      el.addEventListener('pointermove', function (e) {
-        var r = el.getBoundingClientRect();
-        var px = (e.clientX - r.left) / r.width - 0.5, py = (e.clientY - r.top) / r.height - 0.5;
-        el.style.setProperty('--ry', (px * 6).toFixed(2) + 'deg');
-        el.style.setProperty('--rx', (-py * 5).toFixed(2) + 'deg');
-        el.classList.add('is-tilting');
-      });
-      el.addEventListener('pointerleave', function () { el.classList.remove('is-tilting'); });
-    });
+  }
+
+  /* Motor 3D compartido por el visor y la visita: se comprueba WebGL una
+     vez y el archivo se pide una sola vez aunque haya dos piezas 3D. */
+  var gl3d = null, wait3d = [];
+  function can3d() {
+    if (gl3d !== null) return gl3d;
+    var c = navigator.connection;
+    gl3d = !reduce && !(c && (c.saveData || /(^|-)2g$/.test(c.effectiveType || '')));
+    if (gl3d) try { var t = document.createElement('canvas'); gl3d = !!(t.getContext('webgl2') || t.getContext('webgl')); } catch (e) { gl3d = false; }
+    return gl3d;
+  }
+  function load3d(src, cb) {
+    if (window.RP3D) return cb();
+    if (!src) return;
+    wait3d.push(cb);
+    if (wait3d.length > 1) return;
+    var s = document.createElement('script');
+    s.src = src; s.async = true;
+    s.onload = function () { var w = wait3d; wait3d = []; w.forEach(function (f) { f(); }); };
+    document.head.appendChild(s);
   }
 
   /* Visor 3D: se carga después de pintar la página (o al acercar el ratón),
@@ -282,9 +286,7 @@
           d.parentNode.classList.toggle('is-open', open);
         });
       });
-      var c = navigator.connection;
-      if (reduce || (c && (c.saveData || /(^|-)2g$/.test(c.effectiveType || '')))) return;
-      try { var t = document.createElement('canvas'); if (!(t.getContext('webgl2') || t.getContext('webgl'))) return; } catch (e) { return; }
+      if (!can3d()) return;
       function mount() {
         if (!window.RP3D) return;
         api = window.RP3D.mount(root, { seamless: true, idleColor: root.getAttribute('data-idle') || '#dfe5ee' });
@@ -293,10 +295,7 @@
       function load() {
         if (loading || !src) return;
         loading = true;
-        if (window.RP3D) return mount();
-        var s = document.createElement('script');
-        s.src = src; s.async = true; s.onload = mount;
-        document.head.appendChild(s);
+        load3d(src, mount);
       }
       ['pointerenter', 'focusin'].forEach(function (ev) { root.addEventListener(ev, load, { once: true }); });
       root.addEventListener('touchstart', load, { once: true, passive: true });
@@ -329,6 +328,92 @@
         list.style.setProperty('--sp', clamp((mid - r.top) / Math.max(1, r.height), 0, 1).toFixed(3));
       }
       onScroll(update); update();
+    });
+  }
+
+  /* Visita 3D: la sección mide varias pantallas y su interior se queda fijo.
+     El avance del scroll elige el capítulo: el modelo cambia de modo, el
+     fondo de tono y el texto pasa al siguiente. El motor se pide al
+     acercarse; mientras, el póster hace de aparato. Con «movimiento
+     reducido» o una pantalla muy baja se queda como lista. */
+  function tour() {
+    $$('[data-lab-tour]').forEach(function (root) {
+      if (!once(root, 'labInit')) return;
+      var chs = $$('.lab-tour__ch', root), tones = $$('.lab-tour__tone', root), go = $$('[data-lab-tour-go]', root);
+      var n = chs.length, de = document.documentElement;
+      if (!n || reduce || window.innerHeight < 480) return;
+      root.classList.add('is-live');
+      var cur = -1, api = null, seen = {};
+      function mode(i) { return chs[i].getAttribute('data-mode'); }
+      function span() { return Math.max(1, root.offsetHeight - window.innerHeight); }
+      function set(i) {
+        if (i === cur) return;
+        cur = i;
+        chs.forEach(function (c, j) { c.classList.toggle('is-on', j === i); });
+        tones.forEach(function (t, j) { t.classList.toggle('is-on', j === i); });
+        go.forEach(function (a, j) { if (j === i) a.setAttribute('aria-current', 'step'); else a.removeAttribute('aria-current'); });
+        if (api) api.setMode(mode(i));
+      }
+      function update() {
+        var r = root.getBoundingClientRect(), h = window.innerHeight;
+        var pinned = r.top <= 1 && r.bottom >= h - 1;
+        de.classList.toggle('lab-tour-on', pinned);
+        if (r.bottom < -h || r.top > 2 * h) return;
+        var p = clamp(-r.top / span(), 0, 1);
+        go.forEach(function (a, j) { a.style.setProperty('--f', clamp(p * n - j, 0, 1).toFixed(3)); });
+        set(Math.min(n - 1, Math.floor(p * n)));
+        if (pinned && !seen[cur]) { seen[cur] = 1; track('lab_tour_chapter', { chapter: cur + 1, mode: mode(cur) }); }
+      }
+      function goTo(j, smooth) {
+        var top = root.getBoundingClientRect().top + window.scrollY + span() * (j + 0.12) / n;
+        window.scrollTo({ top: Math.round(top), behavior: smooth ? 'smooth' : 'auto' });
+      }
+      go.forEach(function (a, j) { a.addEventListener('click', function (e) { e.preventDefault(); goTo(j, true); }); });
+      var cta = root.querySelector('[data-lab-tour-cta]');
+      if (cta) cta.addEventListener('click', function () { de.classList.remove('lab-tour-on'); track('lab_tour_cta', { chapter: cur + 1 }); });
+      root.addEventListener('shopify:block:select', function (e) {
+        var i = chs.indexOf(e.target.closest ? e.target.closest('.lab-tour__ch') : null);
+        if (i > -1) goTo(i, false);
+      });
+      onScroll(update); update();
+      window.addEventListener('resize', update);
+
+      if (!can3d()) return;
+      function mount() {
+        if (api || !window.RP3D) return;
+        api = window.RP3D.mount(root, { seamless: true, autoCycle: false, mode: mode(Math.max(0, cur)) });
+      }
+      /* Montar el motor ocupa el hilo un momento: se espera a que la visita
+         esté cerca y el navegador libre, para no frenar un toque en la ficha. */
+      var src = root.getAttribute('data-src');
+      var go3d = function () {
+        if ('requestIdleCallback' in window) requestIdleCallback(function () { load3d(src, mount); }, { timeout: 1500 });
+        else setTimeout(function () { load3d(src, mount); }, 200);
+      };
+      if (!('IntersectionObserver' in window)) return go3d();
+      var io = new IntersectionObserver(function (es) {
+        if (!es[0].isIntersecting) return;
+        io.disconnect();
+        go3d();
+      }, { rootMargin: '60% 0px' });
+      io.observe(root);
+    });
+  }
+
+  /* Ticket de garantías: se «imprime» una vez, línea a línea, al entrar en
+     pantalla. Si ya se ve al cargar, o sin soporte, queda impreso. */
+  function receipt() {
+    if (reduce || !('IntersectionObserver' in window)) return;
+    $$('[data-lab-receipt]').forEach(function (el) {
+      if (!once(el, 'labInit') || el.getBoundingClientRect().top < window.innerHeight) return;
+      el.classList.add('is-armed');
+      var io = new IntersectionObserver(function (es) {
+        if (!es[0].isIntersecting) return;
+        io.disconnect();
+        el.classList.add('is-printed');
+        track('lab_receipt_view', {});
+      }, { threshold: 0.35 });
+      io.observe(el);
     });
   }
 
@@ -635,7 +720,7 @@
     if (!check()) window.addEventListener('load', function () { if (!check()) setTimeout(check, 2500); });
   }
 
-  function sections() { reveal(); offer(); drawer(); catbar(); counters(); pointerFx(); stage(); scrolly(); builder(); pdp(); footer(); }
+  function sections() { reveal(); offer(); drawer(); catbar(); counters(); pointerFx(); stage(); tour(); scrolly(); builder(); receipt(); pdp(); footer(); }
   function init() { sections(); progress(); header(); fly(); upsell(); checkout(); transitions(); }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
   document.addEventListener('shopify:section:load', sections);

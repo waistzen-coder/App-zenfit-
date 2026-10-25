@@ -7,7 +7,7 @@
 <section class="lab lab-sec{% if section.settings.surface %} lab-sec--surface{% endif %}" id="{{ section.settings.anchor | default: 'como-usarlo' | handleize }}" data-lab-scrolly>
   <div class="lab-wrap">
     <div data-lab-reveal>
-      <p class="lab-eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {%- if section.settings.eyebrow != blank -%}<p class="lab-eyebrow">{{ section.settings.eyebrow | escape }}</p>{%- endif -%}
       <h2 class="lab-h2">{{ section.settings.heading }}</h2>
       {%- if section.settings.lead != blank -%}<p class="lab-lead">{{ section.settings.lead }}</p>{%- endif -%}
     </div>
@@ -62,7 +62,7 @@
   "settings": [
     { "type": "product", "id": "product", "label": "Producto (fotos)" },
     { "type": "text", "id": "anchor", "label": "Ancla", "default": "como-usarlo" },
-    { "type": "text", "id": "eyebrow", "label": "Ceja", "default": "Cómo usarlo" },
+    { "type": "text", "id": "eyebrow", "label": "Ceja (opcional)", "info": "Úsala solo si añade un dato; vacía, no sale." },
     { "type": "inline_richtext", "id": "heading", "label": "Título", "default": "Cuatro pasos, <em>con cabeza.</em>" },
     { "type": "inline_richtext", "id": "lead", "label": "Entradilla" },
     { "type": "checkbox", "id": "surface", "label": "Fondo blanco", "default": true }

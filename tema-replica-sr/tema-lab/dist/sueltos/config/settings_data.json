@@ -191,6 +191,7 @@
     "lab_main_product": "juego-de-ventosa-electrica-con-cable",
     "lab_transitions": true,
     "lab_progress": true,
+    "lab_reveals": false,
     "lab_checkout_locale": "es",
     "lab_first_code": "RELIEF10",
     "lab_first_pct": 10,

@@ -2,7 +2,7 @@
 <section class="lab lab-sec{% if section.settings.surface %} lab-sec--surface{% endif %}" id="{{ section.settings.anchor | default: 'por-que' | handleize }}">
   <div class="lab-wrap">
     <div data-lab-reveal>
-      <p class="lab-eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {%- if section.settings.eyebrow != blank -%}<p class="lab-eyebrow">{{ section.settings.eyebrow | escape }}</p>{%- endif -%}
       <h2 class="lab-h2">{{ section.settings.heading }}</h2>
     </div>
     <div class="lab-cols">
@@ -13,7 +13,7 @@
           <h3 class="lab-h3">{{ b.settings.title | escape }}</h3>
           <p>{{ b.settings.text }}</p>
           {%- if href != blank and b.settings.link_label != blank -%}
-            <a class="lab-link" href="{{ href }}">{{ b.settings.link_label | escape }}{% render 'lab-icon', name: 'arrow' %}</a>
+            <a class="lab-link" href="{{ href }}">{{ b.settings.link_label | escape }}</a>
           {%- endif -%}
         </div>
       {%- endfor -%}
@@ -26,7 +26,7 @@
   "name": "Lab · 3 columnas",
   "settings": [
     { "type": "text", "id": "anchor", "label": "Ancla", "default": "por-que" },
-    { "type": "text", "id": "eyebrow", "label": "Ceja", "default": "Por qué comprar aquí" },
+    { "type": "text", "id": "eyebrow", "label": "Ceja (opcional)", "info": "Úsala solo si añade un dato; vacía, no sale." },
     { "type": "inline_richtext", "id": "heading", "label": "Título", "default": "Comprar fácil, <em>devolver fácil.</em>" },
     { "type": "checkbox", "id": "surface", "label": "Fondo blanco", "default": false }
   ],

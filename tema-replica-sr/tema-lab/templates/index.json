@@ -238,79 +238,42 @@
         "b5"
       ]
     },
-    "bento": {
-      "type": "lab-bento",
+    "tour": {
+      "type": "lab-tour",
       "settings": {
         "product": "juego-de-ventosa-electrica-con-cable"
       },
       "blocks": {
         "b1": {
-          "type": "tile",
+          "type": "chapter",
           "settings": {
-            "size": "xl",
-            "art": "photo",
-            "media_index": 2,
-            "kicker": "RELIEFPATH™",
-            "title": "Un aparato, tres funciones",
-            "text": "Ventosa eléctrica, calor y luz roja, para usar en casa.",
-            "link_label": "Ver el aparato",
-            "link": "/products/juego-de-ventosa-electrica-con-cable"
+            "mode": "succion",
+            "title": "Succión que regulas tú.",
+            "text": "La intensidad se ajusta desde el panel superior. Empieza siempre por la más baja."
           }
         },
         "b2": {
-          "type": "tile",
+          "type": "chapter",
           "settings": {
-            "size": "s",
-            "art": "rings",
-            "kicker": "01 · SUCCIÓN",
-            "title": "Succión regulable",
-            "text": "La intensidad se ajusta desde el panel superior."
+            "mode": "calor",
+            "title": "Calor en el mismo aparato.",
+            "text": "Sigue los tiempos que indica el manual del fabricante."
           }
         },
         "b3": {
-          "type": "tile",
+          "type": "chapter",
           "settings": {
-            "size": "s",
-            "art": "heat",
-            "kicker": "02 · CALOR",
-            "title": "Calor integrado",
-            "text": "En el mismo aparato."
-          }
-        },
-        "b4": {
-          "type": "tile",
-          "settings": {
-            "size": "m",
-            "art": "light",
-            "kicker": "03 · LUZ ROJA",
-            "title": "Luz roja en la copa",
-            "text": "La copa transparente lleva la luz roja en su interior."
-          }
-        },
-        "b5": {
-          "type": "tile",
-          "settings": {
-            "size": "m",
-            "art": "doc",
-            "kicker": "TODO POR ESCRITO",
-            "title": "Lee antes de usar",
-            "text": "Zonas, tiempos, niveles y precauciones: en el manual del fabricante.",
-            "link_label": "Cómo usarlo",
-            "link": "#como-usarlo"
+            "mode": "luz",
+            "title": "Luz roja dentro de la copa.",
+            "text": "Se enciende en el interior de la copa transparente."
           }
         }
       },
       "block_order": [
         "b1",
         "b2",
-        "b3",
-        "b4",
-        "b5"
+        "b3"
       ]
-    },
-    "glow": {
-      "type": "lab-glow",
-      "settings": {}
     },
     "scrolly": {
       "type": "lab-scrolly",
@@ -665,46 +628,85 @@
         "b9"
       ]
     },
-    "trust": {
-      "type": "lab-trust",
-      "settings": {},
+    "receipt": {
+      "type": "lab-receipt",
+      "settings": {
+        "product": "juego-de-ventosa-electrica-con-cable",
+        "surface": true
+      },
       "blocks": {
         "b1": {
-          "type": "card",
+          "type": "line",
           "settings": {
-            "icon": "doc",
-            "title": "Todo por escrito",
-            "text": "Envíos, devoluciones y garantía, publicados en páginas abiertas.",
-            "link_label": "Ver las pruebas",
-            "link": "/#calidad"
-          }
-        },
-        "b2": {
-          "type": "card",
-          "settings": {
-            "icon": "lock",
-            "title": "Pago seguro",
-            "text": "Checkout cifrado de Shopify. Si lo prefieres, paga al recibirlo con contrareembolso.",
-            "link_label": ""
-          }
-        },
-        "b3": {
-          "type": "card",
-          "settings": {
-            "icon": "truck",
-            "title": "Envío con seguimiento",
-            "text": "Gratis desde España. Península en 24–48 h.",
-            "link_label": "Ver envíos",
+            "label": "Envío a península y Baleares",
+            "value": "[0]",
             "page": "envios"
           }
         },
-        "b4": {
-          "type": "card",
+        "b2": {
+          "type": "line",
           "settings": {
-            "icon": "chat",
-            "title": "¿Te ayudamos a elegir?",
-            "text": "Escríbenos y te decimos qué pack encaja contigo.",
-            "link_label": "Escríbenos",
+            "label": "Entrega en península",
+            "value": "24–48 h",
+            "page": "envios"
+          }
+        },
+        "b3": {
+          "type": "line",
+          "settings": {
+            "label": "Plazo para devolver",
+            "value": "30 días",
+            "page": "devoluciones"
+          }
+        },
+        "b4": {
+          "type": "line",
+          "settings": {
+            "label": "Etiqueta de devolución",
+            "value": "[0]",
+            "page": "devoluciones"
+          }
+        },
+        "b5": {
+          "type": "line",
+          "settings": {
+            "label": "Garantía legal",
+            "value": "3 años",
+            "page": "devoluciones"
+          }
+        },
+        "b6": {
+          "type": "line",
+          "settings": {
+            "label": "Pago con tarjeta",
+            "value": "Sin recargo"
+          }
+        },
+        "b7": {
+          "type": "line",
+          "settings": {
+            "label": "Pago al recibirlo",
+            "value": "+[fee]"
+          }
+        },
+        "b8": {
+          "type": "link",
+          "settings": {
+            "label": "Ver envíos",
+            "page": "envios"
+          }
+        },
+        "b9": {
+          "type": "link",
+          "settings": {
+            "label": "Ver devoluciones",
+            "page": "devoluciones"
+          }
+        },
+        "b10": {
+          "type": "link",
+          "settings": {
+            "label": "¿Dudas? Escríbenos",
             "page": "contact"
           }
         }
@@ -713,7 +715,13 @@
         "b1",
         "b2",
         "b3",
-        "b4"
+        "b4",
+        "b5",
+        "b6",
+        "b7",
+        "b8",
+        "b9",
+        "b10"
       ]
     },
     "legal": {
@@ -725,8 +733,7 @@
     "hero",
     "marquee",
     "catalog",
-    "bento",
-    "glow",
+    "tour",
     "scrolly",
     "builder",
     "proof",
@@ -734,7 +741,7 @@
     "reviews",
     "faq",
     "about",
-    "trust",
+    "receipt",
     "legal"
   ]
 }

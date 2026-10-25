@@ -1,0 +1,112 @@
+{%- comment -%}
+  Cierre de confianza en forma de ticket: cada garantía es una línea con su
+  importe o su plazo, la etiqueta enlaza a la página que lo prueba y el total
+  es «Sorpresas: 0,00 €». Marcas en los valores: [0] importe cero con el
+  formato de la tienda, [fee] recargo del contrareembolso y las de lab-fill.
+  Una línea cuyo valor queda vacío (p. ej. sin recargo configurado) no sale.
+{%- endcomment -%}
+{%- liquid
+  assign p = section.settings.product
+  assign zero = 0 | money
+  assign lines = section.blocks | where: 'type', 'line'
+  assign links = section.blocks | where: 'type', 'link'
+-%}
+<section class="lab lab-sec{% if section.settings.surface %} lab-sec--surface{% endif %}" id="{{ section.settings.anchor | default: 'garantias' | handleize }}" aria-labelledby="LabReceipt-{{ section.id }}">
+  <div class="lab-wrap lab-receipt__grid">
+    <div class="lab-receipt__intro">
+      {%- if section.settings.eyebrow != blank -%}<p class="lab-eyebrow">{{ section.settings.eyebrow | escape }}</p>{%- endif -%}
+      <h2 class="lab-h2" id="LabReceipt-{{ section.id }}">{{ section.settings.heading }}</h2>
+      {%- if section.settings.lead != blank -%}<p class="lab-lead">{{ section.settings.lead }}</p>{%- endif -%}
+      {%- if links.size > 0 -%}
+        <ul class="lab-receipt__links" role="list">
+          {%- for b in links -%}
+            {%- assign href = b.settings.link | default: b.settings.page.url -%}
+            {%- if href != blank -%}
+              <li {{ b.shopify_attributes }}><a href="{{ href }}">{{ b.settings.label | escape }}</a></li>
+            {%- endif -%}
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+    </div>
+    <div class="lab-receipt" data-lab-receipt>
+      <div class="lab-receipt__paper">
+        <div class="lab-receipt__head">
+          <strong>{{ section.settings.ticket_title | default: shop.name | escape }}</strong>
+          {%- if section.settings.ticket_sub != blank -%}<span>{{ section.settings.ticket_sub | escape }}</span>{%- endif -%}
+        </div>
+        <dl class="lab-receipt__lines">
+          {%- for b in lines -%}
+            {%- liquid
+              capture val
+                render 'lab-fill', text: b.settings.value, product: p
+              endcapture
+              assign val = val | replace: '[0]', zero | strip
+              assign href = b.settings.link | default: b.settings.page.url
+            -%}
+            {%- if val != blank and val != '+' -%}
+              <div class="lab-receipt__line" style="--i:{{ forloop.index }}" {{ b.shopify_attributes }}>
+                <dt>{%- if href != blank -%}<a href="{{ href }}">{{ b.settings.label | escape }}</a>{%- else -%}<span>{{ b.settings.label | escape }}</span>{%- endif -%}</dt>
+                <dd>{{ val }}</dd>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </dl>
+        {%- if section.settings.total_label != blank -%}
+          <div class="lab-receipt__total" style="--i:{{ lines.size | plus: 1 }}">
+            <span>{{ section.settings.total_label | escape }}</span>
+            <strong>{{ section.settings.total_value | replace: '[0]', zero }}</strong>
+          </div>
+        {%- endif -%}
+        <p class="lab-receipt__foot">{{ 'lab.pdp.tax_note' | t }}{% if section.settings.foot != blank %} {{ section.settings.foot | escape }}{% endif %}</p>
+        <span class="lab-receipt__code" aria-hidden="true"></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Lab · Ticket de garantías",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Producto (importes)" },
+    { "type": "text", "id": "anchor", "label": "Ancla", "default": "garantias" },
+    { "type": "text", "id": "eyebrow", "label": "Ceja (opcional)" },
+    { "type": "inline_richtext", "id": "heading", "label": "Título", "default": "Tu pedido, <em>sin sorpresas.</em>" },
+    { "type": "inline_richtext", "id": "lead", "label": "Entradilla", "default": "Antes de pagar, esto es lo que incluye. Los plazos y condiciones enlazan a la página donde están publicados." },
+    { "type": "text", "id": "ticket_title", "label": "Ticket · cabecera", "info": "Vacío: el nombre de la tienda." },
+    { "type": "text", "id": "ticket_sub", "label": "Ticket · subtítulo", "default": "Lo que incluye tu pedido" },
+    { "type": "text", "id": "total_label", "label": "Ticket · total", "default": "Sorpresas" },
+    { "type": "text", "id": "total_value", "label": "Ticket · importe del total", "info": "[0] escribe cero con el formato de la tienda.", "default": "[0]" },
+    { "type": "text", "id": "foot", "label": "Ticket · pie" },
+    { "type": "checkbox", "id": "surface", "label": "Fondo blanco", "default": false }
+  ],
+  "blocks": [
+    {
+      "type": "line", "name": "Línea del ticket", "limit": 9,
+      "settings": [
+        { "type": "text", "id": "label", "label": "Concepto", "default": "Envío a península" },
+        { "type": "text", "id": "value", "label": "Importe o plazo", "info": "Marcas: [0] cero, [fee] recargo del contrareembolso, [desde] [p1]…", "default": "[0]" },
+        { "type": "page", "id": "page", "label": "Página con la prueba" },
+        { "type": "text", "id": "link", "label": "O enlace (/#ancla o URL)" }
+      ]
+    },
+    {
+      "type": "link", "name": "Enlace", "limit": 4,
+      "settings": [
+        { "type": "text", "id": "label", "label": "Texto", "default": "Ver envíos" },
+        { "type": "page", "id": "page", "label": "Página" },
+        { "type": "text", "id": "link", "label": "O enlace (/#ancla o URL)" }
+      ]
+    }
+  ],
+  "presets": [{
+    "name": "Lab · Ticket de garantías",
+    "blocks": [
+      { "type": "line", "settings": { "label": "Envío a península", "value": "[0]" } },
+      { "type": "line", "settings": { "label": "Entrega", "value": "24–48 h" } },
+      { "type": "line", "settings": { "label": "Devolución", "value": "30 días" } },
+      { "type": "line", "settings": { "label": "Garantía legal", "value": "3 años" } }
+    ]
+  }]
+}
+{% endschema %}

@@ -6,7 +6,7 @@
 <section class="lab lab-glow" id="{{ section.settings.anchor | default: 'luz-roja' | handleize }}">
   <span class="lab-glow__orb" aria-hidden="true"></span>
   <div class="lab-wrap">
-    <p class="lab-eyebrow" data-lab-reveal>{{ section.settings.eyebrow | escape }}</p>
+    {%- if section.settings.eyebrow != blank -%}<p class="lab-eyebrow" data-lab-reveal>{{ section.settings.eyebrow | escape }}</p>{%- endif -%}
     <h2 class="lab-glow__title" data-lab-reveal>{{ section.settings.heading }}</h2>
     <div class="lab-glow__img" data-lab-reveal>
       {%- if section.settings.image != blank -%}
@@ -30,7 +30,7 @@
   "name": "Lab · Banda luz roja",
   "settings": [
     { "type": "text", "id": "anchor", "label": "Ancla", "default": "luz-roja" },
-    { "type": "text", "id": "eyebrow", "label": "Ceja", "default": "Calor · luz roja · succión" },
+    { "type": "text", "id": "eyebrow", "label": "Ceja (opcional)", "info": "Úsala solo si añade un dato; vacía, no sale." },
     { "type": "inline_richtext", "id": "heading", "label": "Título", "default": "Calor y luz roja, <em>en el mismo aparato.</em>" },
     { "type": "image_picker", "id": "image", "label": "Imagen (mejor con fondo transparente)", "info": "Vacío: render del modelo 3D." },
     { "type": "text", "id": "alt", "label": "Texto alternativo", "default": "ReliefPath: cuerpo negro y rojo con copa transparente. Imagen ilustrativa." },

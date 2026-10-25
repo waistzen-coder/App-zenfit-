@@ -121,7 +121,7 @@
         {%- capture unit0 -%}{% render 'lab-pack-price', price: v.price, qty: start_q, show: 'unit' %}{%- endcapture -%}
         {%- capture cents0 -%}{% render 'lab-pack-price', price: v.price, qty: start_q, show: 'net_cents' %}{%- endcapture -%}
         {%- assign cod0 = cents0 | plus: fee | money -%}
-        <div class="lab-pdp__price">
+        <div class="lab-pdp__price" id="packs">
           <div class="lab-price">
             <span class="lab-price__now lab-roll{% if start_q > 1 %} is-sale{% endif %}" data-lab-now data-cents="{{ cents0 | strip }}">{{ net0 }}</span>
             <s class="lab-price__was" data-lab-was hidden></s>
