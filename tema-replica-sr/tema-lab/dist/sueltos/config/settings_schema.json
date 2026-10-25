@@ -62,6 +62,41 @@
       },
       {
         "type": "header",
+        "content": "Checkout y primera compra"
+      },
+      {
+        "type": "text",
+        "id": "lab_checkout_locale",
+        "label": "Idioma del checkout",
+        "default": "es",
+        "info": "El idioma principal de la tienda es el inglés: sin esto, al pagar desde el carrito el checkout sale en inglés. Vacío: no se fuerza."
+      },
+      {
+        "type": "text",
+        "id": "lab_first_code",
+        "label": "Código de primera compra",
+        "default": "RELIEF10",
+        "info": "Tiene que existir en Descuentos. Se enseña en la opción de 1 unidad (no se suma a los packs)."
+      },
+      {
+        "type": "range",
+        "id": "lab_first_pct",
+        "label": "Descuento del código",
+        "min": 0,
+        "max": 50,
+        "step": 1,
+        "unit": "%",
+        "default": 10
+      },
+      {
+        "type": "checkbox",
+        "id": "lab_first_auto",
+        "label": "Aplicarlo solo al comprar 1 unidad",
+        "default": true,
+        "info": "Va ya puesto en el checkout. Con 2 o 3 unidades manda el descuento del pack."
+      },
+      {
+        "type": "header",
         "content": "Movimiento y velocidad"
       },
       {

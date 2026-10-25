@@ -13,6 +13,11 @@
   function once(el, key) { if (el.dataset[key]) return false; el.dataset[key] = '1'; return true; }
   function clamp(v, a, b) { return Math.min(b, Math.max(a, v)); }
   function pad(n) { return (n < 10 ? '0' : '') + n; }
+  /* Eventos propios para Shopify (Ajustes › Eventos de clientes): miden qué
+     piezas ayudan a vender. No hacen nada si la tienda no los recoge. */
+  function track(name, data) {
+    try { if (window.Shopify && Shopify.analytics && Shopify.analytics.publish) Shopify.analytics.publish(name, data || {}); } catch (e) {}
+  }
 
   /* Un único bucle de scroll por fotograma para todos los módulos. */
   var scrollFns = [], sraf = 0;
@@ -265,6 +270,7 @@
           var m = b.getAttribute('data-rp3d-mode');
           if (root.dataset.mode === m) m = 'idle';
           show(m);
+          track('lab_3d_mode', { mode: m });
           if (api) api.setMode(m); else { pending = m; load(); }
         });
       });
@@ -350,7 +356,7 @@
         bars.forEach(function (b, j) { b.classList.toggle('is-on', j === +d.qty - 1); });
         if (live && animate) live.textContent = d.label + ': ' + d.net;
       }
-      inputs.forEach(function (i) { i.addEventListener('change', function () { paint(true); }); });
+      inputs.forEach(function (i) { i.addEventListener('change', function () { paint(true); track('lab_pack_select', { qty: +i.value, place: 'calculadora' }); }); });
       paint(false);
       var chart = root.querySelector('.lab-bars');
       if (chart && !reduce && 'IntersectionObserver' in window && chart.getBoundingClientRect().top > innerHeight * 0.8) {
@@ -384,13 +390,25 @@
         txt('[data-lab-cod-sub]', d.net);
         roll(root.querySelector('[data-lab-cod-total]'), +d.codCents, d.cod || d.net, animate);
         $$('[data-lab-buy]', root).forEach(function (a) { a.href = d.buy; });
+        $$('[data-lab-pick]', root).forEach(function (b) { b.hidden = d.qty !== '1'; });
         $$('[data-lab-cod-go]', root).forEach(function (a) { a.href = d.codUrl || d.buy; });
         if (sticky) {
           roll(sticky.querySelector('[data-lab-now]'), +d.netCents, d.net, animate);
           txt('[data-lab-sticky-label]', d.label, sticky);
         }
       }
-      pills.forEach(function (p) { p.addEventListener('change', function () { paint(true); }); });
+      pills.forEach(function (p) { p.addEventListener('change', function () { paint(true); track('lab_pack_select', { qty: +p.value, place: 'ficha' }); }); });
+      $$('[data-lab-pick]', root).forEach(function (b) {
+        b.addEventListener('click', function () {
+          var to = pills.filter(function (p) { return p.value === b.getAttribute('data-lab-pick') && !p.disabled; })[0];
+          if (!to) return;
+          to.checked = true;
+          to.dispatchEvent(new Event('change', { bubbles: true }));
+          to.closest('.lab-pill').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' });
+        });
+      });
+      $$('[data-lab-buy]', root).forEach(function (a) { a.addEventListener('click', function () { track('lab_buy_now', { qty: +(qty && qty.value || 1) }); }); });
+      $$('[data-lab-cod-go]', root).forEach(function (a) { a.addEventListener('click', function () { track('lab_cod_checkout', { qty: +(qty && qty.value || 1) }); }); });
       var start = parseInt(new URLSearchParams(location.search).get('pack'), 10);
       if (start) pills.forEach(function (p) { if (+p.dataset.qty === start && !p.disabled) p.checked = true; });
       paint(false);
@@ -401,36 +419,40 @@
         var open = codBox.hidden;
         codBox.hidden = !open;
         codBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
-        if (open) codBox.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'nearest' });
+        if (open) { codBox.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'nearest' }); track('lab_cod_open', {}); }
       });
 
-      var track = root.querySelector('.lab-gal__track');
+      var gal = root.querySelector('.lab-gal__track'), galCount = root.querySelector('[data-lab-gal-count]');
       var thumbs = $$('.lab-gal__thumbs button', root);
-      if (track && thumbs.length) {
+      if (gal && (thumbs.length || galCount)) {
         thumbs.forEach(function (b, i) {
           b.addEventListener('click', function () {
-            var slide = track.children[i];
-            if (slide) track.scrollTo({ left: slide.offsetLeft - track.offsetLeft, behavior: reduce ? 'auto' : 'smooth' });
+            var slide = gal.children[i];
+            if (slide) gal.scrollTo({ left: slide.offsetLeft - gal.offsetLeft, behavior: reduce ? 'auto' : 'smooth' });
           });
         });
         var raf = 0;
-        track.addEventListener('scroll', function () {
+        gal.addEventListener('scroll', function () {
           cancelAnimationFrame(raf);
           raf = requestAnimationFrame(function () {
-            var i = Math.round(track.scrollLeft / Math.max(1, track.clientWidth));
+            var i = Math.round(gal.scrollLeft / Math.max(1, gal.clientWidth));
             thumbs.forEach(function (b, j) { b.setAttribute('aria-current', j === i ? 'true' : 'false'); });
+            if (galCount) galCount.textContent = pad(i + 1) + ' / ' + pad(gal.children.length);
           });
         }, { passive: true });
       }
-      if (track) gallery(root, track);
+      if (gal) gallery(root, gal);
 
       var actions = root.querySelector('[data-lab-actions]');
       if (sticky && actions) {
-        /* Aparece cuando los botones de compra han quedado por encima. */
+        /* Visible siempre que los botones de compra no estén en pantalla (por
+           debajo, al entrar en el móvil, o por encima, al seguir bajando). */
         var toggle = function () {
-          var on = actions.getBoundingClientRect().bottom < 0;
+          var r = actions.getBoundingClientRect();
+          var on = r.bottom < 0 || r.top > window.innerHeight - 40;
           if (on === sticky.classList.contains('is-on')) return;
           sticky.classList.toggle('is-on', on);
+          document.documentElement.classList.toggle('lab-has-sticky', on);
           if (on) sticky.removeAttribute('inert'); else sticky.setAttribute('inert', '');
         };
         onScroll(toggle); toggle();
@@ -445,8 +467,8 @@
   }
 
   /* Galería: zoom que sigue al ratón y visor a pantalla completa (dialog). */
-  function gallery(root, track) {
-    var slides = $$('.lab-gal__slide', track);
+  function gallery(root, trk) {
+    var slides = $$('.lab-gal__slide', trk);
     if (fine) slides.forEach(function (sl) {
       var img = sl.querySelector('img');
       if (!img) return;
@@ -485,6 +507,7 @@
       var open = function () {
         if (!dlg) build();
         dlg.showModal();
+        track('lab_gallery_zoom', { image: i + 1 });
         var t = dlg.querySelector('.lab-lightbox__track');
         t.scrollLeft = i * t.clientWidth;
         dlg.querySelector('.lab-lightbox__count').textContent = pad(i + 1) + ' / ' + pad(t.children.length);
@@ -539,8 +562,46 @@
       var items = document.querySelector('cart-drawer-items') || document.querySelector('cart-items');
       if (!items || typeof items.updateQuantity !== 'function') return;
       b.setAttribute('aria-disabled', 'true');
+      track('lab_upsell', { qty: +b.getAttribute('data-qty') });
       items.updateQuantity(+b.getAttribute('data-line'), +b.getAttribute('data-qty'), e, 'updates[]', b.getAttribute('data-variant'));
     });
+  }
+
+  /* Pagar desde el carrito: el idioma principal de la tienda es el inglés, así
+     que el botón de Dawn llevaría a un checkout en inglés. Se va al checkout
+     con un enlace de carrito (las mismas líneas) en el idioma de los ajustes
+     y, si es 1 unidad, con el código de primera compra. Si algo falla, se
+     paga como siempre. */
+  function checkout() {
+    var cfg = window.labCfg || {};
+    if (!cfg.locale && !cfg.code) return;
+    document.addEventListener('click', function (e) {
+      var b = e.target.closest && e.target.closest('#CartDrawer-Checkout, #checkout');
+      if (!b || b.disabled || b.getAttribute('aria-disabled') === 'true') return;
+      e.preventDefault();
+      var base = (window.routes && window.routes.cart_url) || '/cart';
+      var fallback = function () {
+        var f = b.form || document.getElementById(b.getAttribute('form'));
+        if (!f) { location.href = base; return; }
+        var i = document.createElement('input'); i.type = 'hidden'; i.name = 'checkout'; f.appendChild(i);
+        HTMLFormElement.prototype.submit.call(f);
+      };
+      b.setAttribute('aria-disabled', 'true');
+      fetch(base + '.js', { credentials: 'same-origin', headers: { Accept: 'application/json' } })
+        .then(function (r) { return r.json(); })
+        .then(function (c) {
+          if (!c || !c.items || !c.items.length) return fallback();
+          var units = 0, lines = c.items.map(function (i) { units += i.quantity; return i.variant_id + ':' + i.quantity; }).join(',');
+          var q = [];
+          if (cfg.locale) q.push('locale=' + encodeURIComponent(cfg.locale));
+          if (cfg.code && units === 1) q.push('discount=' + encodeURIComponent(cfg.code));
+          Object.keys(c.attributes || {}).forEach(function (k) { q.push('attributes%5B' + encodeURIComponent(k) + '%5D=' + encodeURIComponent(c.attributes[k])); });
+          if (c.note) q.push('note=' + encodeURIComponent(c.note));
+          track('lab_checkout', { units: units });
+          location.href = base + '/' + lines + (q.length ? '?' + q.join('&') : '');
+        })
+        .catch(fallback);
+    }, true);
   }
 
   /* Transición entre páginas: la foto de la tarjeta pulsada recibe el nombre
@@ -575,7 +636,7 @@
   }
 
   function sections() { reveal(); offer(); drawer(); catbar(); counters(); pointerFx(); stage(); scrolly(); builder(); pdp(); footer(); }
-  function init() { sections(); progress(); header(); fly(); upsell(); transitions(); }
+  function init() { sections(); progress(); header(); fly(); upsell(); checkout(); transitions(); }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
   document.addEventListener('shopify:section:load', sections);
 })();

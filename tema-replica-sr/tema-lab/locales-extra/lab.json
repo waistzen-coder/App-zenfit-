@@ -4,7 +4,7 @@
     "meta_description": "ReliefPath™: ventosa eléctrica con calor y luz roja. Packs de 1, 2 y 3 con envío gratis desde España en 24–48 h y 30 días para devolver.",
     "offer": {
       "auto_long": "Packs con descuento automático: −{{ d2 }} % llevando 2 y −{{ d3 }} % llevando 3. Se aplica en el carrito.",
-      "auto_short": "Packs: −{{ d2 }} % en 2 · −{{ d3 }} % en 3",
+      "auto_short": "−{{ d2 }} % en 2 · −{{ d3 }} % en 3",
       "until": "Hasta el {{ date }} a medianoche.",
       "close": "Cerrar la barra de oferta"
     },
@@ -106,7 +106,9 @@
       "cod_go": "Continuar con contrareembolso",
       "cod_note": "Preferencia: contrareembolso. Elegir pago contra reembolso en el checkout.",
       "fee_eyebrow": "Contrareembolso",
-      "close": "Cerrar"
+      "close": "Cerrar",
+      "teaser": "o {{ unit }}/ud en el pack de 3",
+      "first_code": "1.ª compra: −{{ pct }} % con {{ code }}, se aplica al pagar"
     },
     "footer": {
       "packs": "Packs",
@@ -147,6 +149,11 @@
       "kicker": "Pack de {{ count }} · −{{ disc }} %",
       "text_html": "<strong>Llévate 1 más por {{ extra }}</strong> y paga {{ unit }}/ud.",
       "cta": "Llevar {{ count }}"
+    },
+    "cart": {
+      "ship": "Envío gratis a España",
+      "returns": "30 días para devolver",
+      "secure": "Pago seguro o al recibirlo"
     }
   }
 }

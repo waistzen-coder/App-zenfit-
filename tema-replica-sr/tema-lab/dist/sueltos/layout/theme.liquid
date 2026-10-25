@@ -5,6 +5,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="theme-color" content="#F6F7F9">
+    <script>
+      window.labCfg = { locale: {{ settings.lab_checkout_locale | strip | json }}, code: {% if settings.lab_first_auto %}{{ settings.lab_first_code | strip | json }}{% else %}""{% endif %} };
+    </script>
     {%- if settings.lab_transitions -%}
       <style>@media (prefers-reduced-motion: no-preference){@view-transition{navigation:auto}}</style>
       <script>

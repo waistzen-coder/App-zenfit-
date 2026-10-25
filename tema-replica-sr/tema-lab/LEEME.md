@@ -40,6 +40,18 @@ Shopify. Todo es mejora progresiva: sin soporte, sin JavaScript o con
 
 Se activan o desactivan en *Ajustes del tema › ReliefPath Lab*.
 
+## Conversión (25-10)
+
+| Cambio | Por qué |
+|---|---|
+| Al pagar desde el carrito se va al checkout en español (`locale=es`) con las mismas líneas | El idioma principal de la tienda es el inglés: el botón de Dawn llevaba a un checkout en inglés |
+| RELIEF10 se enseña en 1 unidad y va ya aplicado al pagar 1 unidad | Es la oferta real de primera compra; con 2 o 3 manda el descuento del pack |
+| Ficha en móvil: sin migas ni miniaturas (contador sobre la foto), título más compacto | Precio y compra en la primera pantalla |
+| Barra fija visible desde que se entra en la ficha (se oculta con los botones a la vista) | El botón de compra siempre a mano |
+| «o 34,97 €/ud en el pack de 3» bajo el precio | Lleva al pack con mejor precio por unidad |
+| Garantías debajo del botón de pagar del carrito | La duda aparece justo antes de pagar |
+| Eventos propios (`lab_pack_select`, `lab_buy_now`, `lab_cod_open`, `lab_cod_checkout`, `lab_upsell`, `lab_checkout`, `lab_3d_mode`, `lab_gallery_zoom`) | Para medir qué piezas venden |
+
 ## Reglas que sigue
 
 - Los precios de los packs se calculan con los descuentos de *Ajustes del
