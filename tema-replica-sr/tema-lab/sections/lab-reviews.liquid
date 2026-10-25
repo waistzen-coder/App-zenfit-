@@ -6,7 +6,7 @@
 <section class="lab lab-sec{% if section.settings.surface %} lab-sec--surface{% endif %}" id="opiniones">
   <div class="lab-wrap">
     <div data-lab-reveal>
-      <p class="lab-eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {%- if section.settings.eyebrow != blank -%}<p class="lab-eyebrow">{{ section.settings.eyebrow | escape }}</p>{%- endif -%}
       <h2 class="lab-h2">{{ section.settings.heading }}</h2>
     </div>
     <div class="lab-reviews__app">
@@ -26,7 +26,7 @@
 {
   "name": "Lab · Reseñas reales",
   "settings": [
-    { "type": "text", "id": "eyebrow", "label": "Ceja", "default": "Opiniones verificadas" },
+    { "type": "text", "id": "eyebrow", "label": "Ceja (opcional)", "info": "Úsala solo si añade un dato; vacía, no sale." },
     { "type": "inline_richtext", "id": "heading", "label": "Título", "default": "Lo que dicen <em>quienes lo usan</em>" },
     { "type": "checkbox", "id": "surface", "label": "Fondo blanco", "default": true }
   ],

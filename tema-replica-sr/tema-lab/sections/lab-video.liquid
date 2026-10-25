@@ -11,7 +11,7 @@
       {%- endif -%}
     </div>
     <div data-lab-reveal>
-      <p class="lab-eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {%- if section.settings.eyebrow != blank -%}<p class="lab-eyebrow">{{ section.settings.eyebrow | escape }}</p>{%- endif -%}
       <h2 class="lab-h2">{{ section.settings.heading }}</h2>
       {%- if section.blocks.size > 0 -%}
         <ul>
@@ -31,7 +31,7 @@
   "settings": [
     { "type": "video", "id": "video", "label": "Vídeo (grabado con el aparato real)" },
     { "type": "checkbox", "id": "muted", "label": "Sin sonido", "default": true },
-    { "type": "text", "id": "eyebrow", "label": "Ceja", "default": "En vídeo" },
+    { "type": "text", "id": "eyebrow", "label": "Ceja (opcional)", "info": "Úsala solo si añade un dato; vacía, no sale." },
     { "type": "inline_richtext", "id": "heading", "label": "Título", "default": "Así es el aparato, <em>sin filtros.</em>" },
     { "type": "checkbox", "id": "surface", "label": "Fondo blanco", "default": false }
   ],

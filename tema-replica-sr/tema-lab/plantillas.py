@@ -113,7 +113,7 @@ COLS = [
 
 
 def cols(**over):
-    s = {'anchor': 'por-que', 'eyebrow': 'Por qué comprar aquí', 'heading': 'Comprar fácil, <em>devolver fácil.</em>'}
+    s = {'anchor': 'por-que', 'heading': 'Comprar fácil, <em>devolver fácil.</em>'}
     s.update(over)
     return section('lab-cols', s, COLS)
 
@@ -195,16 +195,21 @@ def about(**over):
     ])
 
 
-def trust():
-    return section('lab-trust', {}, [
-        block('card', icon='doc', title='Todo por escrito',
-              text='Envíos, devoluciones y garantía, publicados en páginas abiertas.', link_label='Ver las pruebas', link='/#calidad'),
-        block('card', icon='lock', title='Pago seguro',
-              text='Checkout cifrado de Shopify. Si lo prefieres, paga al recibirlo con contrareembolso.', link_label=''),
-        block('card', icon='truck', title='Envío con seguimiento',
-              text='Gratis desde España. Península en 24–48 h.', link_label='Ver envíos', page='envios'),
-        block('card', icon='chat', title='¿Te ayudamos a elegir?',
-              text='Escríbenos y te decimos qué pack encaja contigo.', link_label='Escríbenos', page='contact'),
+def receipt(**over):
+    # Cierre de confianza en forma de ticket: cada línea enlaza a su prueba.
+    s = {'product': PRODUCT, 'surface': True}
+    s.update(over)
+    return section('lab-receipt', s, [
+        block('line', label='Envío a península y Baleares', value='[0]', page='envios'),
+        block('line', label='Entrega en península', value='24–48 h', page='envios'),
+        block('line', label='Plazo para devolver', value='30 días', page='devoluciones'),
+        block('line', label='Etiqueta de devolución', value='[0]', page='devoluciones'),
+        block('line', label='Garantía legal', value='3 años', page='devoluciones'),
+        block('line', label='Pago con tarjeta', value='Sin recargo'),
+        block('line', label='Pago al recibirlo', value='+[fee]'),
+        block('link', label='Ver envíos', page='envios'),
+        block('link', label='Ver devoluciones', page='devoluciones'),
+        block('link', label='¿Dudas? Escríbenos', page='contact'),
     ])
 
 
@@ -253,14 +258,28 @@ def scrolly(**over):
     ])
 
 
+def tour(**over):
+    # Visita 3D fija al bajar: un capítulo por función, con textos que solo
+    # describen el aparato (nada de resultados).
+    s = {'product': PRODUCT}
+    s.update(over)
+    return section('lab-tour', s, [
+        block('chapter', mode='succion', title='Succión que regulas tú.',
+              text='La intensidad se ajusta desde el panel superior. Empieza siempre por la más baja.'),
+        block('chapter', mode='calor', title='Calor en el mismo aparato.',
+              text='Sigue los tiempos que indica el manual del fabricante.'),
+        block('chapter', mode='luz', title='Luz roja dentro de la copa.',
+              text='Se enciende en el interior de la copa transparente.'),
+    ])
+
+
 # Portada ---------------------------------------------------------------------
 
 save('templates/index.json', template(
     ('hero', hero()),
     ('marquee', marquee()),
     ('catalog', catalog()),
-    ('bento', bento()),
-    ('glow', section('lab-glow', {})),
+    ('tour', tour()),
     ('scrolly', scrolly()),
     ('builder', section('lab-builder', {'product': PRODUCT, 'start': 2})),
     ('proof', proof()),
@@ -268,7 +287,7 @@ save('templates/index.json', template(
     ('reviews', section('lab-reviews', {})),
     ('faq', faq(FAQ_SHORT)),
     ('about', about()),
-    ('trust', trust()),
+    ('receipt', receipt()),
     ('legal', legal()),
 ))
 
@@ -295,12 +314,12 @@ PDP_TABS = [
 PDP = template(
     ('main', section('lab-product', {'default_pack': 1, 'cod': True}, PDP_TABS)),
     ('marquee', marquee()),
-    ('bento', bento(surface=True)),
+    ('tour', tour(cta='Elegir mi pack')),
     ('scrolly', scrolly(surface=False)),
     ('reviews', section('lab-reviews', {'surface': True})),
     ('proof', proof(surface=True)),
     ('faq', faq(FAQ_SHORT[:2] + [Q_CODE] + FAQ_SHORT[2:], schema=False)),
-    ('trust', trust()),
+    ('receipt', receipt()),
     ('legal', legal()),
 )
 save('templates/product.json', PDP)
@@ -322,22 +341,22 @@ save('templates/page.tracking.json', template(
                 '<a href="mailto:waistzen@gmail.com">waistzen@gmail.com</a> con tu número de pedido.</p>',
         'b1': 'Consultar mis pedidos', 'b1_link': '/account', 'b2': 'Escribirnos', 'b2_link': '/pages/contact',
     })),
-    ('trust', trust()),
+    ('receipt', receipt()),
 ))
 save('templates/page.calidad.json', template(
     ('proof', proof(as_h1=True, surface=False)),
-    ('trust', trust()),
+    ('receipt', receipt()),
     ('legal', legal()),
 ))
 save('templates/page.faq.json', template(
     ('faq', faq(FAQ_FULL, as_h1=True)),
-    ('trust', trust()),
+    ('receipt', receipt()),
     ('legal', legal()),
 ))
 save('templates/page.sobre.json', template(
     ('about', about(as_h1=True)),
     ('why', cols(surface=True)),
-    ('trust', trust()),
+    ('receipt', receipt()),
 ))
 save('templates/page.guia.json', template(
     ('guide', section('lab-guide', {'product': PRODUCT}, [
@@ -361,7 +380,7 @@ save('templates/page.guia.json', template(
               body='<p>14 días de desistimiento por ley, ampliados a 30 días desde la recepción. La etiqueta la pagamos nosotros. '
                    'Garantía legal de conformidad de 3 años. <a href="/pages/devoluciones">Ver devoluciones</a>.</p>'),
     ])),
-    ('trust', trust()),
+    ('receipt', receipt()),
     ('legal', legal()),
 ))
 save('templates/page.landing-espana.json', template(
@@ -383,7 +402,7 @@ save('templates/page.landing-espana.json', template(
            '<p>Tienes 30 días desde la recepción. La etiqueta la pagamos nosotros y la devolución va a Motril (Granada). '
            '<a href="/pages/devoluciones">Ver devoluciones</a>.</p>'),
     ], anchor='preguntas-espana', heading='Preguntas sobre el envío <em>en España</em>')),
-    ('trust', trust()),
+    ('receipt', receipt()),
     ('legal', legal()),
 ))
 

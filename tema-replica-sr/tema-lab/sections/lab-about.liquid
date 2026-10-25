@@ -11,7 +11,7 @@
   <div class="lab-wrap">
     <div class="lab-split">
       <div data-lab-reveal>
-        <p class="lab-eyebrow">{{ section.settings.eyebrow | escape }}</p>
+        {%- if section.settings.eyebrow != blank -%}<p class="lab-eyebrow">{{ section.settings.eyebrow | escape }}</p>{%- endif -%}
         <{{ heading_tag }} class="lab-h2">{{ section.settings.heading }}</{{ heading_tag }}>
         {%- if section.settings.text != blank -%}<div class="lab-prose lab-mt">{{ section.settings.text }}</div>{%- endif -%}
       </div>
@@ -43,7 +43,7 @@
   "name": "Lab · Sobre nosotros",
   "settings": [
     { "type": "text", "id": "anchor", "label": "Ancla", "default": "sobre" },
-    { "type": "text", "id": "eyebrow", "label": "Ceja", "default": "Sobre nosotros" },
+    { "type": "text", "id": "eyebrow", "label": "Ceja (opcional)", "info": "Úsala solo si añade un dato; vacía, no sale." },
     { "type": "inline_richtext", "id": "heading", "label": "Título", "default": "Quién está detrás de <em>Waistzen</em>" },
     { "type": "checkbox", "id": "as_h1", "label": "Usar H1 (página Sobre nosotros)", "default": false },
     { "type": "richtext", "id": "text", "label": "Texto", "default": "<p>Waistzen es la tienda online que vende ReliefPath™ en España. Vendemos un único aparato y lo explicamos sin rodeos: qué hace, qué no hace, cuánto cuesta y cómo se devuelve.</p><p>Si tienes una duda antes de comprar, escríbenos y te respondemos por escrito.</p>" },

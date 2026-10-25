@@ -14,7 +14,7 @@
 <section class="lab lab-sec{% if section.settings.surface %} lab-sec--surface{% endif %}" id="{{ section.settings.anchor | default: 'elige' | handleize }}" data-lab-builder>
   <div class="lab-wrap lab-builder__grid">
     <div data-lab-reveal>
-      <p class="lab-eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {%- if section.settings.eyebrow != blank -%}<p class="lab-eyebrow">{{ section.settings.eyebrow | escape }}</p>{%- endif -%}
       <h2 class="lab-h2">{{ section.settings.heading }}</h2>
       {%- if section.settings.lead != blank -%}<p class="lab-lead">{% render 'lab-fill', text: section.settings.lead, product: p %}</p>{%- endif -%}
 
@@ -118,7 +118,7 @@
     { "type": "product", "id": "product", "label": "Producto" },
     { "type": "text", "id": "anchor", "label": "Ancla", "default": "elige" },
     { "type": "range", "id": "start", "label": "Pack elegido al entrar", "min": 1, "max": 3, "step": 1, "default": 2 },
-    { "type": "text", "id": "eyebrow", "label": "Ceja", "default": "Calculadora de packs" },
+    { "type": "text", "id": "eyebrow", "label": "Ceja (opcional)", "info": "Úsala solo si añade un dato; vacía, no sale." },
     { "type": "inline_richtext", "id": "heading", "label": "Título", "default": "Cuantos más, <em>menos por unidad.</em>" },
     { "type": "inline_richtext", "id": "lead", "label": "Entradilla", "default": "Elige cuántos quieres y mira lo que pagas por cada uno. El descuento (−[d2] % y −[d3] %) se aplica solo en el carrito." },
     { "type": "text", "id": "link_label", "label": "Enlace a la ficha", "default": "Ver la ficha completa" },

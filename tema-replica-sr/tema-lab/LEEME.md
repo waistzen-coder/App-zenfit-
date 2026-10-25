@@ -8,8 +8,8 @@ otro tema de la tienda.
 
 | Página | Secciones |
 |---|---|
-| Portada (`index.json`) | Barra de oferta · cabecera fija · hero con cifras enlazadas · catálogo con barra fija (01 Packs, 02 El aparato) · calidad y documentos · vídeo real (solo si se sube) · por qué comprar aquí · reseñas (solo app real) · preguntas · sobre nosotros · cierre «Tu pedido, sin sorpresas.» · aviso del sector · pie |
-| Ficha (`product.json`, `product.reliefpatch.json`) | Galería · packs 1/2/3 · añadir al carrito (carrito lateral) · comprar ahora (checkout en español) · contrareembolso con su recargo · barra fija en móvil · acordeón · Product + Offer + Breadcrumb |
+| Portada (`index.json`) | Barra de oferta · cabecera fija · hero con cifras enlazadas · catálogo con barra fija (01 Packs, 02 El aparato) · visita 3D · cómo usarlo · calculadora de packs · calidad y documentos · vídeo real (solo si se sube) · reseñas (solo app real) · preguntas · sobre nosotros · ticket «Tu pedido, sin sorpresas.» · aviso del sector · pie |
+| Ficha (`product.json`, `product.reliefpatch.json`) | Galería · packs 1/2/3 · visita 3D · añadir al carrito (carrito lateral) · comprar ahora (checkout en español) · contrareembolso con su recargo · barra fija en móvil · acordeón · Product + Offer + Breadcrumb |
 | Páginas | `page.json` (envíos, devoluciones…), `page.contact`, `page.tracking`, `page.calidad`, `page.faq`, `page.guia`, `page.sobre`, `page.landing-espana` |
 
 ## Lab 2.0 (24-10): movimiento e interacción
@@ -29,7 +29,7 @@ Shopify. Todo es mejora progresiva: sin soporte, sin JavaScript o con
 | Banda oscura de luz roja ligada al scroll | Portada | `sections/lab-glow` (`animation-timeline: view()`) |
 | «Cómo usarlo» con imagen fija y pasos | Portada y ficha | `sections/lab-scrolly` |
 | Calculadora de packs con precio que rueda y barras | Portada | `sections/lab-builder` |
-| Pack de 3 con borde animado | Catálogo y ficha | `.lab-best` (`@property`) |
+| Pack de 3 con borde de color | Catálogo y ficha | `.lab-best` |
 | Vuelo al carrito y contador que salta | Todo «Añadir al carrito» | `lab.js` (`fly`) |
 | «Llévate 1 más por X €» dentro del carrito lateral | Carrito de Dawn | `snippets/lab-cart-upsell` + parche en `snippets/cart-drawer.liquid` |
 | Zoom al pasar el ratón y visor a pantalla completa | Galería de la ficha | `lab.js` (`gallery`) |
@@ -51,6 +51,29 @@ Se activan o desactivan en *Ajustes del tema › ReliefPath Lab*.
 | «o 34,97 €/ud en el pack de 3» bajo el precio | Lleva al pack con mejor precio por unidad |
 | Garantías debajo del botón de pagar del carrito | La duda aparece justo antes de pagar |
 | Eventos propios (`lab_pack_select`, `lab_buy_now`, `lab_cod_open`, `lab_cod_checkout`, `lab_upsell`, `lab_checkout`, `lab_3d_mode`, `lab_gallery_zoom`) | Para medir qué piezas venden |
+
+## Lab 3.0 (25-10): un solo momento y menos ruido
+
+Ideas de skills públicas para crear webs ([anthropics/skills · frontend-design](https://github.com/anthropics/skills),
+[iart-ai/web-animation-skills](https://github.com/iart-ai/web-animation-skills),
+[freshtechbro/claudedesignskills](https://github.com/freshtechbro/claudedesignskills),
+[nextlevelbuilder/ui-ux-pro-max-skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill)):
+un momento memorable bien orquestado vale más que efectos repartidos por
+todas las secciones, y solo se animan `transform` y `opacity`.
+
+| Cambio | Dónde |
+|---|---|
+| Visita 3D fija al bajar: el aparato se queda en pantalla y pasa por succión, calor y luz roja; la cámara, la luz y el tono del fondo cambian con cada capítulo; raíl con las tres funciones; botón a los packs con el precio desde | `sections/lab-tour`, `lab.js` (`tour`) |
+| Mientras la visita está fija se apartan la cabecera y la barra de compra | `html.lab-tour-on` |
+| El motor 3D se pide una sola vez (visor del hero y visita lo comparten) y la visita lo monta al acercarse, con el navegador libre | `lab.js` (`can3d`, `load3d`) |
+| Cierre de confianza en forma de ticket: envío 0,00 €, plazos, devolución, garantía, pago con tarjeta sin recargo, pago al recibirlo con su recargo real y «Sorpresas 0,00 €». Se imprime línea a línea una vez | `sections/lab-receipt` (sustituye a `lab-trust` en todas las plantillas) |
+| Apariciones al bajar apagadas por defecto | *Ajustes del tema › Aparición de los bloques al bajar* (`lab_reveals`) |
+| Fuera la inclinación 3D y el foco que sigue al ratón en las tarjetas, el borde que giraba sin parar en el pack de 3 y el pulso del «En stock» | `lab-card`, `.lab-best`, `.lab-stock` |
+| Flechas solo en los botones principales; los enlaces de texto van subrayados | `lab-cols`, `lab-faq`, `lab-bento` |
+| Cejas solo donde dan un dato (tienda, calidad, ficha); en el resto, opcionales y vacías | secciones `lab-*` |
+| Sin `filter: blur` animado (entrada del hero y aurora) y puntos del visor con `transform` en vez de `box-shadow` | `lab.css` |
+
+Eventos nuevos: `lab_tour_chapter`, `lab_tour_cta`, `lab_receipt_view`.
 
 ## Reglas que sigue
 

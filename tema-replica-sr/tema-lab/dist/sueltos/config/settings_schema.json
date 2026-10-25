@@ -111,6 +111,13 @@
         "id": "lab_progress",
         "label": "Barra de progreso de lectura",
         "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "lab_reveals",
+        "label": "Aparición de los bloques al bajar",
+        "default": false,
+        "info": "Apagado, la página se ve quieta y el movimiento se reserva para la visita 3D."
       }
     ]
   },
