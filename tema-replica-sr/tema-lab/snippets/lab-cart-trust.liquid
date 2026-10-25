@@ -1,0 +1,8 @@
+{%- comment -%} Garantías debajo del botón de pagar del carrito lateral: lo que el cliente quiere confirmar justo antes de pagar. {%- endcomment -%}
+{%- if cart != empty -%}
+  <ul class="lab lab-cart-trust" role="list">
+    <li>{% render 'lab-icon', name: 'truck' %}{{ 'lab.cart.ship' | t }}</li>
+    <li>{% render 'lab-icon', name: 'refresh' %}{{ 'lab.cart.returns' | t }}</li>
+    <li>{% render 'lab-icon', name: 'lock' %}{{ 'lab.cart.secure' | t }}</li>
+  </ul>
+{%- endif -%}

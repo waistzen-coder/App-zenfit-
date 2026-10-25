@@ -811,3 +811,34 @@ html.lab-scrolled .lab-header{box-shadow:0 12px 30px -24px rgba(11,18,32,.45)}
   .lab-seg__pill{transition:none}
   .lab-scrolly__frame img{transition:none}
 }
+
+/* =====================================================================
+   CRO (25-10): en móvil, la ficha enseña precio y compra en la primera
+   pantalla; el carrito confirma las garantías junto al botón de pagar.
+   ===================================================================== */
+.lab-gal__count{position:absolute;right:12px;bottom:12px;z-index:2;padding:5px 10px;border-radius:999px;background:rgba(10,11,13,.72);color:#fff;backdrop-filter:blur(6px);pointer-events:none}
+@media(min-width:750px){.lab-gal__count{display:none}}
+@media(max-width:749px){
+  .lab-pdp{padding-top:12px}
+  .lab-pdp__crumbs{display:none}
+  .lab-gal__thumbs{display:none}
+  .lab-pdp__grid{gap:18px}
+  .lab-pdp__info{gap:14px}
+  .lab-pdp__title{font-size:26px;line-height:1.12}
+  .lab-pdp__title span{margin-top:4px;font-size:15px}
+  .lab-pdp .lab-eyebrow{margin-bottom:8px}
+  .lab-pdp .lab-price__now{font-size:26px}
+  html.lab-has-sticky body.lab{padding-bottom:calc(72px + env(safe-area-inset-bottom))}
+}
+.lab-teaser{display:inline-flex;align-items:center;gap:6px;align-self:flex-start;margin:2px 0 0;padding:0;border:0;background:none;color:var(--accent);font:600 14px/1.3 var(--f-body);cursor:pointer;text-align:left}
+.lab-teaser svg{width:15px;height:15px;transition:transform .2s}
+.lab-teaser:hover svg{transform:translateX(3px)}
+.lab-teaser[hidden]{display:none}
+.lab-pill__code{display:block;margin-top:3px;color:var(--ok)!important;font-size:12px!important;font-weight:600}
+.lab-cart-trust{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 14px;margin:12px 0 0;padding:0;list-style:none;color:var(--muted);font:500 12px/1.3 var(--f-body);letter-spacing:normal}
+.lab-cart-trust li{display:inline-flex;align-items:center;gap:6px}
+.lab-cart-trust svg{width:15px;height:15px;color:var(--accent)}
+@media(max-width:749px){
+  .lab-offer__in{gap:8px;padding-left:12px;font-size:12px}
+  .lab-offer__tag{padding:2px 7px;font-size:10px}
+}

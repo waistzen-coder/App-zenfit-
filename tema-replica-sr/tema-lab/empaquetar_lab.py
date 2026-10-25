@@ -61,6 +61,14 @@ schema.insert(1, {
          'info': 'Sigue el ajuste claro/oscuro del móvil o del ordenador del cliente.'},
         {'type': 'product', 'id': 'lab_main_product', 'label': 'Producto de los packs',
          'info': 'El carrito lateral propone pasar al pack siguiente de este producto.'},
+        {'type': 'header', 'content': 'Checkout y primera compra'},
+        {'type': 'text', 'id': 'lab_checkout_locale', 'label': 'Idioma del checkout', 'default': 'es',
+         'info': 'El idioma principal de la tienda es el inglés: sin esto, al pagar desde el carrito el checkout sale en inglés. Vacío: no se fuerza.'},
+        {'type': 'text', 'id': 'lab_first_code', 'label': 'Código de primera compra', 'default': 'RELIEF10',
+         'info': 'Tiene que existir en Descuentos. Se enseña en la opción de 1 unidad (no se suma a los packs).'},
+        {'type': 'range', 'id': 'lab_first_pct', 'label': 'Descuento del código', 'min': 0, 'max': 50, 'step': 1, 'unit': '%', 'default': 10},
+        {'type': 'checkbox', 'id': 'lab_first_auto', 'label': 'Aplicarlo solo al comprar 1 unidad', 'default': True,
+         'info': 'Va ya puesto en el checkout. Con 2 o 3 unidades manda el descuento del pack.'},
         {'type': 'header', 'content': 'Movimiento y velocidad'},
         {'type': 'checkbox', 'id': 'lab_transitions', 'label': 'Transiciones entre páginas y precarga', 'default': True,
          'info': 'La foto pasa de la tarjeta a la ficha sin cortes y las páginas se precargan al pasar el ratón. Se ignora en navegadores sin soporte.'},
@@ -94,6 +102,7 @@ cur.update({
     'lab_disc_2': 20, 'lab_disc_3': 30, 'lab_fee_product': 'contrareembolso-gastos-de-gestion',
     'lab_show_compare': False, 'lab_dark': True,
     'lab_main_product': 'juego-de-ventosa-electrica-con-cable', 'lab_transitions': True, 'lab_progress': True,
+    'lab_checkout_locale': 'es', 'lab_first_code': 'RELIEF10', 'lab_first_pct': 10, 'lab_first_auto': True,
 })
 settings['current'] = cur
 save(sd_path, settings)
@@ -117,6 +126,12 @@ SEO = """{%- liquid
 # Transiciones entre páginas (se cancelan si el cliente toca algo, para no
 # frenar la respuesta) y precarga de enlaces al pasar el ratón, sin carrito,
 # checkout ni cuenta. Solo navegadores que lo soportan; el resto lo ignora.
+# Ajustes que usa assets/lab.js antes de cargar: idioma del checkout y código
+# de primera compra (solo si está activado aplicarlo en compras de 1 unidad).
+CFG = '''    <script>
+      window.labCfg = { locale: {{ settings.lab_checkout_locale | strip | json }}, code: {% if settings.lab_first_auto %}{{ settings.lab_first_code | strip | json }}{% else %}""{% endif %} };
+    </script>
+'''
 MODERN = '''    {%- if settings.lab_transitions -%}
       <style>@media (prefers-reduced-motion: no-preference){@view-transition{navigation:auto}}</style>
       <script>
@@ -132,7 +147,7 @@ MODERN = '''    {%- if settings.lab_transitions -%}
     {%- endif -%}
 '''
 patch('layout/theme.liquid', [
-    ('    <meta name="theme-color" content="">', '    <meta name="theme-color" content="#F6F7F9">\n' + MODERN.rstrip('\n')),
+    ('    <meta name="theme-color" content="">', '    <meta name="theme-color" content="#F6F7F9">\n' + CFG + MODERN.rstrip('\n')),
     ('    <title>\n      {{ page_title }}', SEO + '    <title>\n      {{ lab_title }}'),
     ('{%- unless page_title contains shop.name %}', '{%- unless lab_title contains shop.name %}'),
     ('    {% if page_description %}\n      <meta name="description" content="{{ page_description | escape }}">',
@@ -155,6 +170,8 @@ patch('layout/theme.liquid', [
 patch('snippets/cart-drawer.liquid', [
     ('                </table>\n              </div>\n            {%- endif -%}\n            <p id="CartDrawer-LiveRegionText"',
      '                </table>\n              </div>\n              {%- render \'lab-cart-upsell\' -%}\n            {%- endif -%}\n            <p id="CartDrawer-LiveRegionText"'),
+    ("            {{ 'sections.cart.checkout' | t }}\n          </button>\n        </div>\n      </div>\n    </div>\n  </div>\n</cart-drawer>",
+     "            {{ 'sections.cart.checkout' | t }}\n          </button>\n        </div>\n        {%- render 'lab-cart-trust' -%}\n      </div>\n    </div>\n  </div>\n</cart-drawer>"),
 ])
 patch('snippets/meta-tags.liquid', [
     ('  assign og_title = page_title | default: shop.name',
