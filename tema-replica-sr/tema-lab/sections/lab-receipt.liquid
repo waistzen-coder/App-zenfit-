@@ -7,7 +7,10 @@
 {%- endcomment -%}
 {%- liquid
   assign p = section.settings.product
-  assign zero = 0 | money
+  capture zero
+    render 'lab-money', v: 0
+  endcapture
+  assign zero = zero | strip
   assign lines = section.blocks | where: 'type', 'line'
   assign links = section.blocks | where: 'type', 'link'
 -%}

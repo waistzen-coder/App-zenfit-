@@ -35,10 +35,84 @@
         "default": 30
       },
       {
+        "type": "checkbox",
+        "id": "lab_price_es",
+        "label": "Precios con el formato de España («49,95 €»)",
+        "default": true,
+        "info": "Apagado, se usa el formato de moneda de la tienda (Configuración › General)."
+      },
+      {
+        "type": "header",
+        "content": "Pago al recibirlo"
+      },
+      {
+        "type": "checkbox",
+        "id": "lab_cod_fee",
+        "label": "Cobrar un recargo por pagar al recibirlo",
+        "default": false,
+        "info": "Apagado, el tema dice «sin recargo» en todas partes, como tu página de Envíos. Encendido, añade al pedido el producto de abajo y lo avisa antes de pagar."
+      },
+      {
         "type": "product",
         "id": "lab_fee_product",
-        "label": "Producto del recargo de contrareembolso",
-        "info": "Vacío: sin recargo y sin botón de contrareembolso en la ficha."
+        "label": "Producto del recargo",
+        "info": "Solo se usa si el recargo está encendido."
+      },
+      {
+        "type": "header",
+        "content": "Entrega estimada"
+      },
+      {
+        "type": "checkbox",
+        "id": "lab_eta",
+        "label": "Enseñar la fecha de entrega («Recíbelo entre el jueves 12 y el viernes 13»)",
+        "default": true,
+        "info": "Apagado, se enseña «Entrega en 24–48 h laborables». La fecha cuenta días laborables y festivos nacionales, con la hora de Madrid."
+      },
+      {
+        "type": "range",
+        "id": "lab_eta_cutoff",
+        "label": "Hora de corte",
+        "min": 0,
+        "max": 24,
+        "step": 1,
+        "unit": "h",
+        "default": 13,
+        "info": "Los pedidos hechos a partir de esta hora cuentan desde el siguiente día laborable."
+      },
+      {
+        "type": "range",
+        "id": "lab_eta_min",
+        "label": "Días laborables hasta la entrega (mínimo)",
+        "min": 0,
+        "max": 10,
+        "step": 1,
+        "unit": "d",
+        "default": 1
+      },
+      {
+        "type": "range",
+        "id": "lab_eta_max",
+        "label": "Días laborables hasta la entrega (máximo)",
+        "min": 1,
+        "max": 15,
+        "step": 1,
+        "unit": "d",
+        "default": 2
+      },
+      {
+        "type": "header",
+        "content": "Atención al cliente"
+      },
+      {
+        "type": "text",
+        "id": "lab_whatsapp",
+        "label": "WhatsApp de atención",
+        "info": "Con prefijo, p. ej. 34600111222. Vacío: no se enseña."
+      },
+      {
+        "type": "header",
+        "content": "Aspecto"
       },
       {
         "type": "checkbox",
@@ -93,7 +167,7 @@
         "id": "lab_first_auto",
         "label": "Aplicarlo solo al comprar 1 unidad",
         "default": true,
-        "info": "Va ya puesto en el checkout. Con 2 o 3 unidades manda el descuento del pack."
+        "info": "La ficha enseña el precio de 1 unidad ya con el código y lo deja puesto en el checkout. Con 2 o 3 unidades manda el descuento del pack."
       },
       {
         "type": "header",

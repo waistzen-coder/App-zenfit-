@@ -195,7 +195,14 @@
     "lab_checkout_locale": "es",
     "lab_first_code": "RELIEF10",
     "lab_first_pct": 10,
-    "lab_first_auto": true
+    "lab_first_auto": true,
+    "lab_price_es": true,
+    "lab_cod_fee": false,
+    "lab_eta": true,
+    "lab_eta_cutoff": 13,
+    "lab_eta_min": 1,
+    "lab_eta_max": 2,
+    "lab_whatsapp": ""
   },
   "presets": {
     "Default": {

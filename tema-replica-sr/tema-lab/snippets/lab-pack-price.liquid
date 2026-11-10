@@ -5,6 +5,7 @@
     was  · sin descuento         save · lo que se ahorra
     disc · % aplicado (número)
   Mismo cálculo que Shopify: el % se quita de cada unidad, redondeando abajo.
+  Los importes salen con el formato de snippets/lab-money.
   Uso: render 'lab-pack-price', price: variant.price, qty: 2, show: 'net'
 {%- endcomment -%}
 {%- liquid
@@ -22,13 +23,13 @@
   assign save = was | minus: net
   case show
     when 'net'
-      echo net | money
+      render 'lab-money', v: net
     when 'unit'
-      echo unit | money
+      render 'lab-money', v: unit
     when 'was'
-      echo was | money
+      render 'lab-money', v: was
     when 'save'
-      echo save | money
+      render 'lab-money', v: save
     when 'disc'
       echo d
     when 'net_cents'

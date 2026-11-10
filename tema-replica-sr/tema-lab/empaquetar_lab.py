@@ -54,7 +54,22 @@ schema.insert(1, {
         {'type': 'paragraph', 'content': 'Estos valores alimentan los precios de los packs en todo el tema. Deben coincidir con los descuentos automáticos de la tienda (Descuentos).'},
         {'type': 'range', 'id': 'lab_disc_2', 'label': 'Descuento del pack de 2', 'min': 0, 'max': 50, 'step': 1, 'unit': '%', 'default': 20},
         {'type': 'range', 'id': 'lab_disc_3', 'label': 'Descuento del pack de 3', 'min': 0, 'max': 50, 'step': 1, 'unit': '%', 'default': 30},
-        {'type': 'product', 'id': 'lab_fee_product', 'label': 'Producto del recargo de contrareembolso', 'info': 'Vacío: sin recargo y sin botón de contrareembolso en la ficha.'},
+        {'type': 'checkbox', 'id': 'lab_price_es', 'label': 'Precios con el formato de España («49,95 €»)', 'default': True,
+         'info': 'Apagado, se usa el formato de moneda de la tienda (Configuración › General).'},
+        {'type': 'header', 'content': 'Pago al recibirlo'},
+        {'type': 'checkbox', 'id': 'lab_cod_fee', 'label': 'Cobrar un recargo por pagar al recibirlo', 'default': False,
+         'info': 'Apagado, el tema dice «sin recargo» en todas partes, como tu página de Envíos. Encendido, añade al pedido el producto de abajo y lo avisa antes de pagar.'},
+        {'type': 'product', 'id': 'lab_fee_product', 'label': 'Producto del recargo', 'info': 'Solo se usa si el recargo está encendido.'},
+        {'type': 'header', 'content': 'Entrega estimada'},
+        {'type': 'checkbox', 'id': 'lab_eta', 'label': 'Enseñar la fecha de entrega («Recíbelo entre el jueves 12 y el viernes 13»)', 'default': True,
+         'info': 'Apagado, se enseña «Entrega en 24–48 h laborables». La fecha cuenta días laborables y festivos nacionales, con la hora de Madrid.'},
+        {'type': 'range', 'id': 'lab_eta_cutoff', 'label': 'Hora de corte', 'min': 0, 'max': 24, 'step': 1, 'unit': 'h', 'default': 13,
+         'info': 'Los pedidos hechos a partir de esta hora cuentan desde el siguiente día laborable.'},
+        {'type': 'range', 'id': 'lab_eta_min', 'label': 'Días laborables hasta la entrega (mínimo)', 'min': 0, 'max': 10, 'step': 1, 'unit': 'd', 'default': 1},
+        {'type': 'range', 'id': 'lab_eta_max', 'label': 'Días laborables hasta la entrega (máximo)', 'min': 1, 'max': 15, 'step': 1, 'unit': 'd', 'default': 2},
+        {'type': 'header', 'content': 'Atención al cliente'},
+        {'type': 'text', 'id': 'lab_whatsapp', 'label': 'WhatsApp de atención', 'info': 'Con prefijo, p. ej. 34600111222. Vacío: no se enseña.'},
+        {'type': 'header', 'content': 'Aspecto'},
         {'type': 'checkbox', 'id': 'lab_show_compare', 'label': 'Tachar el «precio comparado» del producto', 'default': False,
          'info': 'Solo si ese precio se ha aplicado de verdad: en la UE el precio anterior debe ser el más bajo de los últimos 30 días.'},
         {'type': 'checkbox', 'id': 'lab_dark', 'label': 'Modo oscuro automático', 'default': True,
@@ -68,7 +83,7 @@ schema.insert(1, {
          'info': 'Tiene que existir en Descuentos. Se enseña en la opción de 1 unidad (no se suma a los packs).'},
         {'type': 'range', 'id': 'lab_first_pct', 'label': 'Descuento del código', 'min': 0, 'max': 50, 'step': 1, 'unit': '%', 'default': 10},
         {'type': 'checkbox', 'id': 'lab_first_auto', 'label': 'Aplicarlo solo al comprar 1 unidad', 'default': True,
-         'info': 'Va ya puesto en el checkout. Con 2 o 3 unidades manda el descuento del pack.'},
+         'info': 'La ficha enseña el precio de 1 unidad ya con el código y lo deja puesto en el checkout. Con 2 o 3 unidades manda el descuento del pack.'},
         {'type': 'header', 'content': 'Movimiento y velocidad'},
         {'type': 'checkbox', 'id': 'lab_transitions', 'label': 'Transiciones entre páginas y precarga', 'default': True,
          'info': 'La foto pasa de la tarjeta a la ficha sin cortes y las páginas se precargan al pasar el ratón. Se ignora en navegadores sin soporte.'},
@@ -105,6 +120,8 @@ cur.update({
     'lab_show_compare': False, 'lab_dark': True,
     'lab_main_product': 'juego-de-ventosa-electrica-con-cable', 'lab_transitions': True, 'lab_progress': True, 'lab_reveals': False,
     'lab_checkout_locale': 'es', 'lab_first_code': 'RELIEF10', 'lab_first_pct': 10, 'lab_first_auto': True,
+    # Venta (10-11): formato de precio, contrareembolso sin recargo (como dice la página de Envíos) y fecha de entrega.
+    'lab_price_es': True, 'lab_cod_fee': False, 'lab_eta': True, 'lab_eta_cutoff': 13, 'lab_eta_min': 1, 'lab_eta_max': 2, 'lab_whatsapp': '',
 })
 settings['current'] = cur
 save(sd_path, settings)
@@ -175,6 +192,15 @@ patch('snippets/cart-drawer.liquid', [
     ("            {{ 'sections.cart.checkout' | t }}\n          </button>\n        </div>\n      </div>\n    </div>\n  </div>\n</cart-drawer>",
      "            {{ 'sections.cart.checkout' | t }}\n          </button>\n        </div>\n        {%- render 'lab-cart-trust' -%}\n      </div>\n    </div>\n  </div>\n</cart-drawer>"),
 ])
+
+# Importes del carrito lateral con el mismo formato que el resto del tema
+# («49,95 €» en vez de «€49,95» o «€49,95 EUR»): pasan por snippets/lab-money.
+cd_path = os.path.join(BUILD, 'snippets', 'cart-drawer.liquid')
+cd = open(cd_path, encoding='utf-8').read()
+cd, n_money = re.subn(r'\{\{(-?)\s*([\w.]+)\s*\|\s*money(?:_with_currency)?\s*(-?)\}\}',
+                      lambda m: "{%%%s render 'lab-money', v: %s %s%%}" % (m.group(1), m.group(2), m.group(3)), cd)
+assert n_money == 10 and '| money' not in cd, n_money
+open(cd_path, 'w', encoding='utf-8').write(cd)
 patch('snippets/meta-tags.liquid', [
     ('  assign og_title = page_title | default: shop.name',
      SEO.replace('{%- liquid\n', '').replace('\n-%}\n', '\n') + '  assign og_title = lab_title | default: shop.name'),

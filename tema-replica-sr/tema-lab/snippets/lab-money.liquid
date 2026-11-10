@@ -1,0 +1,39 @@
+{%- comment -%}
+  Importe con el formato que se usa en España («49,95 €»), aunque el formato
+  de moneda de la tienda sea otro («€49,95»). Solo con euros y si está activo
+  en Ajustes del tema › ReliefPath Lab; si no, el formato de la tienda.
+  Uso: render 'lab-money', v: importe_en_centimos
+{%- endcomment -%}
+{%- liquid
+  assign n = v | plus: 0
+  if settings.lab_price_es and cart.currency.iso_code == 'EUR'
+    assign a = n | abs
+    assign e = a | divided_by: 100
+    assign c = a | modulo: 100
+    if n < 0
+      echo '−'
+    endif
+    if e >= 1000
+      assign rest = e | modulo: 1000
+      echo e | divided_by: 1000
+      echo '.'
+      if rest < 100
+        echo '0'
+      endif
+      if rest < 10
+        echo '0'
+      endif
+      echo rest
+    else
+      echo e
+    endif
+    echo ','
+    if c < 10
+      echo '0'
+    endif
+    echo c
+    echo ' €'
+  else
+    echo n | money
+  endif
+-%}
