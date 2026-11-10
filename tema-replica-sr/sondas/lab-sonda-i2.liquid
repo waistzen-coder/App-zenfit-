@@ -1,0 +1,87 @@
+<div></div>
+{% schema %}
+{
+  "name": "Sonda i2",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Botones y pago"
+    },
+    {
+      "type": "checkbox",
+      "id": "cod",
+      "label": "Botón «Pagar al recibirlo»",
+      "info": "El recargo, si lo cobras, se activa en Ajustes del tema › ReliefPath Lab.",
+      "default": true
+    },
+    {
+      "type": "inline_richtext",
+      "id": "pay_note",
+      "label": "Nota bajo los botones",
+      "default": "Pagar al recibirlo no tiene recargo. También con tarjeta, Bizum, PayPal o Klarna: lo eliges en el último paso."
+    },
+    {
+      "type": "inline_richtext",
+      "id": "pay_note_fee",
+      "label": "Nota bajo los botones (con recargo)",
+      "info": "[fee] escribe el importe del recargo.",
+      "default": "Con tarjeta, Bizum, PayPal o Klarna no hay recargo. Al recibirlo se añaden [fee] de gestión."
+    },
+    {
+      "type": "inline_richtext",
+      "id": "pay_note_nocod",
+      "label": "Nota bajo los botones (sin contrareembolso)",
+      "default": "Pago seguro con tarjeta, Bizum, PayPal o Klarna."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@app"
+    },
+    {
+      "type": "description",
+      "name": "Descripción",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Título",
+          "default": "Descripción"
+        },
+        {
+          "type": "checkbox",
+          "id": "open",
+          "label": "Abierto",
+          "default": false
+        }
+      ]
+    },
+    {
+      "type": "tab",
+      "name": "Pestaña",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Título",
+          "default": "Modo de uso"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Texto",
+          "info": "Admite las marcas [p1] [p2] [p3] [u2] [u3] [cod] [fee].",
+          "default": "<p>Escribe aquí el contenido.</p>"
+        },
+        {
+          "type": "checkbox",
+          "id": "open",
+          "label": "Abierto",
+          "default": false
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

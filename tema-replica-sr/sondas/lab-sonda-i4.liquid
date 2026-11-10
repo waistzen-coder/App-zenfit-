@@ -1,0 +1,75 @@
+<div></div>
+{% schema %}
+{
+  "name": "Sonda i4",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Datos estructurados"
+    },
+    {
+      "type": "checkbox",
+      "id": "free_shipping",
+      "label": "Envío gratis a España",
+      "info": "Solo si el envío es gratis de verdad en el checkout.",
+      "default": true
+    },
+    {
+      "type": "number",
+      "id": "return_days",
+      "label": "Días para devolver",
+      "info": "0 para no publicarlo.",
+      "default": 30
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@app"
+    },
+    {
+      "type": "description",
+      "name": "Descripción",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Título",
+          "default": "Descripción"
+        },
+        {
+          "type": "checkbox",
+          "id": "open",
+          "label": "Abierto",
+          "default": false
+        }
+      ]
+    },
+    {
+      "type": "tab",
+      "name": "Pestaña",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Título",
+          "default": "Modo de uso"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Texto",
+          "info": "Admite las marcas [p1] [p2] [p3] [u2] [u3] [cod] [fee].",
+          "default": "<p>Escribe aquí el contenido.</p>"
+        },
+        {
+          "type": "checkbox",
+          "id": "open",
+          "label": "Abierto",
+          "default": false
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
