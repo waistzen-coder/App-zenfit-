@@ -64,8 +64,12 @@
     assign first_pct = settings.lab_first_pct
   endif
   assign first_code_enc = first_code | url_encode
-  assign ret_page = section.settings.ret_page | default: pages['devoluciones']
-  assign help_page = section.settings.help_page | default: pages['contact']
+  comment
+    Enlaces como texto: una sección que acepta bloques de apps no puede llevar
+    selectores de página.
+  endcomment
+  assign ret_url = section.settings.ret_link | default: pages['devoluciones'].url
+  assign help_url = section.settings.help_link | default: pages['contact'].url
   assign wa = settings.lab_whatsapp | remove: ' ' | remove: '+' | remove: '-' | strip
 -%}
 
@@ -322,7 +326,7 @@
           {%- if section.settings.g_ret != blank -%}
             <li>
               {% render 'lab-icon', name: 'refresh' %}
-              <span><strong>{{ section.settings.g_ret | escape }}</strong><small>{{ section.settings.g_ret_sub | escape }}{% if ret_page != blank %} <a href="{{ ret_page.url }}">{{ 'lab.pdp.terms' | t }}</a>{% endif %}</small></span>
+              <span><strong>{{ section.settings.g_ret | escape }}</strong><small>{{ section.settings.g_ret_sub | escape }}{% if ret_url != blank %} <a href="{{ ret_url }}">{{ 'lab.pdp.terms' | t }}</a>{% endif %}</small></span>
             </li>
           {%- endif -%}
           {%- if section.settings.g_war != blank -%}
@@ -337,8 +341,8 @@
               <span><strong>{{ section.settings.g_help | escape }}</strong>
                 <small>
                   {%- if section.settings.g_help_sub != blank -%}{{ section.settings.g_help_sub | escape }} {% endif -%}
-                  {%- if wa != blank -%}<a href="https://wa.me/{{ wa }}" target="_blank" rel="noopener" data-lab-wa>{{ 'lab.pdp.whatsapp' | t }}</a>{% if help_page != blank %} · {% endif %}{%- endif -%}
-                  {%- if help_page != blank -%}<a href="{{ help_page.url }}">{{ 'lab.pdp.write_us' | t }}</a>{%- endif -%}
+                  {%- if wa != blank -%}<a href="https://wa.me/{{ wa }}" target="_blank" rel="noopener" data-lab-wa>{{ 'lab.pdp.whatsapp' | t }}</a>{% if help_url != blank %} · {% endif %}{%- endif -%}
+                  {%- if help_url != blank -%}<a href="{{ help_url }}">{{ 'lab.pdp.write_us' | t }}</a>{%- endif -%}
                 </small>
               </span>
             </li>
@@ -473,12 +477,12 @@
     { "type": "text", "id": "g_ship", "label": "Entrega · detalle", "info": "La fecha se calcula sola (Ajustes del tema › Entrega estimada).", "default": "Envío gratis desde España. Estimación para península." },
     { "type": "text", "id": "g_ret", "label": "Devolución", "default": "30 días para devolverlo" },
     { "type": "text", "id": "g_ret_sub", "label": "Devolución · detalle", "default": "La etiqueta de vuelta la pagamos nosotros." },
-    { "type": "page", "id": "ret_page", "label": "Devolución · página", "info": "Vacío: la página «devoluciones»." },
+    { "type": "text", "id": "ret_link", "label": "Devolución · enlace", "info": "Vacío: la página «devoluciones».", "default": "/pages/devoluciones" },
     { "type": "text", "id": "g_war", "label": "Garantía", "default": "3 años de garantía legal" },
     { "type": "text", "id": "g_war_sub", "label": "Garantía · detalle", "default": "Si falla, se repara o se cambia." },
     { "type": "text", "id": "g_help", "label": "Ayuda", "default": "¿Dudas antes de comprar?" },
     { "type": "text", "id": "g_help_sub", "label": "Ayuda · detalle", "default": "Te respondemos en español." },
-    { "type": "page", "id": "help_page", "label": "Ayuda · página", "info": "Vacío: la página «contact». El WhatsApp se pone en Ajustes del tema." },
+    { "type": "text", "id": "help_link", "label": "Ayuda · enlace", "info": "Vacío: la página «contact». El WhatsApp se pone en Ajustes del tema.", "default": "/pages/contact" },
     { "type": "header", "content": "Datos estructurados" },
     { "type": "checkbox", "id": "free_shipping", "label": "Envío gratis a España", "info": "Solo si el envío es gratis de verdad en el checkout.", "default": true },
     { "type": "number", "id": "return_days", "label": "Días para devolver", "info": "0 para no publicarlo.", "default": 30 }
