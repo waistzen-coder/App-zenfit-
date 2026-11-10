@@ -1,10 +1,14 @@
 {%- comment -%}
-  Ficha de producto Lab: galería con miniaturas y deslizamiento, H1 SEO,
-  valoración (solo con reseñas reales), packs en píldoras con precio y precio
-  por unidad, «Añadir al carrito» (carrito lateral de Dawn), «Comprar ahora»
-  (checkout en español), contrareembolso con el recargo en una línea, chips
-  de confianza, acordeón, barra fija en móvil y Product + Offer + Breadcrumb.
+  Ficha de producto Lab, pensada para vender desde el móvil:
+  galería → título → precio (el de primer pedido si hay código) → packs con
+  lo que se ahorra → un botón principal «Comprar ahora» que va directo al
+  checkout en español → «Pagar al recibirlo» → fecha de entrega estimada,
+  devolución y garantía → formas de pago → acordeón. «Añadir al carrito»
+  queda como opción secundaria. Barra fija de compra en móvil y escritorio y
+  Product + Offer + Breadcrumb.
   Los importes de cada pack se calculan aquí; el JS solo los cambia de sitio.
+  No hay precios tachados inventados: lo tachado es el precio de la unidad
+  suelta, que es el que se cobra sin pack ni código.
 {%- endcomment -%}
 {%- liquid
   assign p = product
@@ -16,7 +20,7 @@
     assign is_fee = true
   endif
   assign fee = 0
-  if section.settings.cod and fee_p != blank and is_fee == false
+  if section.settings.cod and settings.lab_cod_fee and fee_p != blank and is_fee == false
     assign fee_v = fee_p.selected_or_first_available_variant
     if fee_v.available
       assign fee = fee_v.price
@@ -40,17 +44,29 @@
   endif
   assign cod_note = 'lab.pdp.cod_note' | t | url_encode
   assign cod_attr = 'Contrareembolso' | url_encode
-  assign fee_f = fee | money
+  capture fee_f
+    render 'lab-money', v: fee
+  endcapture
   assign loc = settings.lab_checkout_locale | strip
   assign qs = '?ref=lab'
   if loc != blank
     assign qs = '?locale=' | append: loc
   endif
+  comment
+    Código de primer pedido: solo vale con 1 unidad (no se suma a los packs).
+    Va puesto en el enlace de compra, así que el precio de 1 unidad se enseña
+    ya con él, diciendo de dónde sale.
+  endcomment
   assign first_code = ''
+  assign first_pct = 0
   if settings.lab_first_auto and settings.lab_first_code != blank and settings.lab_first_pct > 0
     assign first_code = settings.lab_first_code | strip
+    assign first_pct = settings.lab_first_pct
   endif
   assign first_code_enc = first_code | url_encode
+  assign ret_page = section.settings.ret_page | default: pages['devoluciones']
+  assign help_page = section.settings.help_page | default: pages['contact']
+  assign wa = settings.lab_whatsapp | remove: ' ' | remove: '+' | remove: '-' | strip
 -%}
 
 {%- if is_fee -%}
@@ -63,7 +79,125 @@
     </div>
   </section>
 {%- else -%}
-<section class="lab lab-pdp" id="{{ pid }}" data-lab-pdp data-lab-gallery-label="{{ 'lab.pdp.gallery' | t }}" data-lab-close-label="{{ 'lab.pdp.close' | t }}">
+
+{%- comment -%} Packs: se calculan antes para poder pintar arriba el precio del pack elegido al entrar. {%- endcomment -%}
+{%- capture pills_html -%}
+  {%- for q in (1..3) -%}
+    {%- liquid
+      assign key = 's' | append: q
+      assign d = 0
+      if q >= 3
+        assign d = settings.lab_disc_3
+      elsif q >= 2
+        assign d = settings.lab_disc_2
+      endif
+      assign ok = v.available
+      if tracked and v.inventory_quantity < q
+        assign ok = false
+      endif
+      assign cut = v.price | times: d | divided_by: 100
+      assign unit = v.price | minus: cut
+      assign pay = unit | times: q
+      assign was = 0
+      assign is_first = false
+      if q == 1 and first_code != blank
+        assign first_cut = v.price | times: first_pct | divided_by: 100
+        assign pay = v.price | minus: first_cut
+        assign unit = pay
+        assign d = first_pct
+        assign is_first = true
+      endif
+      if settings.lab_show_compare and v.compare_at_price > v.price
+        assign was = v.compare_at_price | times: q
+      elsif d > 0
+        assign was = v.price | times: q
+      endif
+      assign save = 0
+      if was > pay
+        assign save = was | minus: pay
+      endif
+      if q == 1
+        assign label = 'lab.hero.one' | t
+      else
+        assign label = 'lab.hero.many' | t: count: q
+      endif
+      capture pay_f
+        render 'lab-money', v: pay
+      endcapture
+      capture unit_f
+        render 'lab-money', v: unit
+      endcapture
+      assign was_f = ''
+      assign save_f = ''
+      if save > 0
+        capture was_f
+          render 'lab-money', v: was
+        endcapture
+        capture save_f
+          render 'lab-money', v: save
+        endcapture
+        assign save_f = 'lab.card.save' | t | append: ' ' | append: save_f
+      endif
+      assign badge = ''
+      if d > 0 and save > 0
+        assign badge = '−' | append: d | append: ' %'
+      endif
+      assign cod_c = pay | plus: fee
+      capture cod_f
+        render 'lab-money', v: cod_c
+      endcapture
+      assign extra = ''
+      if is_first
+        assign extra = '&discount=' | append: first_code_enc
+      endif
+      assign buy = routes.cart_url | append: '/' | append: v.id | append: ':' | append: q | append: qs | append: extra
+      assign cod_items = v.id | append: ':' | append: q
+      if fee > 0
+        assign cod_items = cod_items | append: ',' | append: fee_v.id | append: ':1'
+      endif
+      assign cod_url = routes.cart_url | append: '/' | append: cod_items | append: qs | append: extra | append: '&attributes%5BPago%20preferido%5D=' | append: cod_attr | append: '&note=' | append: cod_note
+      if q == start_q
+        assign i_pay = pay
+        assign i_pay_f = pay_f
+        assign i_was_f = was_f
+        assign i_save_f = save_f
+        assign i_unit_f = unit_f
+        assign i_badge = badge
+        assign i_buy = buy
+        assign i_cod_url = cod_url
+        assign i_cod_f = cod_f
+        assign i_cod_c = cod_c
+        assign i_label = label
+        assign i_first = is_first
+      endif
+    -%}
+    <label class="lab-pill{% if q == start_q %} is-on{% endif %}{% if q == 3 and badge != blank %} lab-best{% endif %}">
+      <input type="radio" name="lab-pack" value="{{ q }}"{% if q == start_q %} checked{% endif %}{% unless ok %} disabled{% endunless %}
+        data-qty="{{ q }}" data-label="{{ label | escape }}" data-pay="{{ pay_f | strip | escape }}" data-pay-cents="{{ pay }}" data-unit="{{ unit_f | strip | escape }}"
+        {% if save > 0 %}data-was="{{ was_f | strip | escape }}" data-save="{{ save_f | strip | escape }}" data-badge="{{ badge | escape }}"{% endif %}
+        {% if is_first %}data-first="1"{% endif %}
+        data-cod="{{ cod_f | strip | escape }}" data-cod-cents="{{ cod_c }}" data-buy="{{ buy }}" data-cod-url="{{ cod_url }}">
+      <span class="lab-pill__dot" aria-hidden="true"></span>
+      <span class="lab-pill__main">
+        <strong>{{ label }}</strong>
+        <span>{% if ok %}{{ section.settings[key] | escape }}{% else %}{{ 'lab.pdp.not_enough' | t }}{% endif %}</span>
+        {%- if ok and is_first -%}
+          <span class="lab-pill__code">{{ 'lab.pdp.first_code' | t: code: first_code }}</span>
+        {%- elsif ok and save > 0 -%}
+          <span class="lab-pill__code">{{ save_f | strip }}</span>
+        {%- endif -%}
+      </span>
+      <span class="lab-pill__price">
+        <strong>{{ pay_f | strip }}</strong>
+        {%- if save > 0 -%}<s><span class="visually-hidden">{{ 'lab.card.was' | t }}</span>{{ was_f | strip }}</s>{%- endif -%}
+        {%- if q > 1 -%}<span class="lab-unit">{{ unit_f | strip }}{{ 'lab.card.per_unit' | t }}</span>{%- endif -%}
+      </span>
+      {%- if badge != blank -%}<span class="lab-pill__tag">{{ badge }}</span>{%- endif -%}
+    </label>
+  {%- endfor -%}
+{%- endcapture -%}
+
+<section class="lab lab-pdp" id="{{ pid }}" data-lab-pdp data-variant="{{ v.id }}" data-lab-gallery-label="{{ 'lab.pdp.gallery' | t }}" data-lab-close-label="{{ 'lab.pdp.close' | t }}">
   <div class="lab-wrap">
     <nav class="lab-pdp__crumbs" aria-label="{{ 'lab.crumbs.label' | t }}">
       <ol class="lab-crumbs">
@@ -83,9 +217,9 @@
                 {%- liquid
                   assign alt = m.alt | default: p.title
                   if forloop.first
-                    echo img | image_url: width: 1200, height: 1200, crop: 'center' | image_tag: widths: '400, 600, 800, 1000, 1200', sizes: '(min-width: 1240px) 600px, (min-width: 990px) 50vw, 100vw', loading: 'eager', fetchpriority: 'high', alt: alt, width: 1200, height: 1200
+                    echo img | image_url: width: 1200, height: 1200, crop: 'center' | image_tag: widths: '400, 600, 800, 1000, 1200', sizes: '(min-width: 1240px) 600px, (min-width: 990px) 50vw, 88vw', loading: 'eager', fetchpriority: 'high', alt: alt, width: 1200, height: 1200
                   else
-                    echo img | image_url: width: 1200, height: 1200, crop: 'center' | image_tag: widths: '400, 600, 800, 1000, 1200', sizes: '(min-width: 1240px) 600px, (min-width: 990px) 50vw, 100vw', loading: 'lazy', alt: alt, width: 1200, height: 1200
+                    echo img | image_url: width: 1200, height: 1200, crop: 'center' | image_tag: widths: '400, 600, 800, 1000, 1200', sizes: '(min-width: 1240px) 600px, (min-width: 990px) 50vw, 88vw', loading: 'lazy', alt: alt, width: 1200, height: 1200
                   endif
                 -%}
               {%- endif -%}
@@ -117,19 +251,19 @@
           <a class="lab-rating" href="#opiniones">{% render 'lab-icon', name: 'star' %}<strong>{{ r | replace: '.', ',' }}</strong><span>({{ 'lab.pdp.reviews' | t: count: rating_count }})</span></a>
         {%- endif -%}
 
-        {%- capture net0 -%}{% render 'lab-pack-price', price: v.price, qty: start_q, show: 'net' %}{%- endcapture -%}
-        {%- capture unit0 -%}{% render 'lab-pack-price', price: v.price, qty: start_q, show: 'unit' %}{%- endcapture -%}
-        {%- capture cents0 -%}{% render 'lab-pack-price', price: v.price, qty: start_q, show: 'net_cents' %}{%- endcapture -%}
-        {%- assign cod0 = cents0 | plus: fee | money -%}
         <div class="lab-pdp__price" id="packs">
           <div class="lab-price">
-            <span class="lab-price__now lab-roll{% if start_q > 1 %} is-sale{% endif %}" data-lab-now data-cents="{{ cents0 | strip }}">{{ net0 }}</span>
-            <s class="lab-price__was" data-lab-was hidden></s>
+            <span class="lab-price__now lab-roll{% if i_was_f != blank %} is-sale{% endif %}" data-lab-now data-cents="{{ i_pay }}">{{ i_pay_f | strip }}</span>
+            <s class="lab-price__was" data-lab-was{% if i_was_f == blank %} hidden{% endif %}>{{ i_was_f | strip }}</s>
+            <span class="lab-price__badge" data-lab-badge{% if i_badge == blank %} hidden{% endif %}>{{ i_badge }}</span>
           </div>
-          <span class="lab-unit"><span data-lab-unit>{{ unit0 }}</span>{{ 'lab.card.per_unit' | t }} <span class="lab-save" data-lab-save hidden></span></span>
+          <span class="lab-unit" data-lab-unitline{% if start_q == 1 %} hidden{% endif %}><span data-lab-unit>{{ i_unit_f | strip }}</span>{{ 'lab.card.per_unit' | t }} · <span class="lab-save" data-lab-save>{{ i_save_f | strip }}</span></span>
+          {%- if first_code != blank -%}
+            <p class="lab-first" data-lab-first{% unless i_first %} hidden{% endunless %}>{{ 'lab.pdp.first_note_html' | t: pct: first_pct, code: first_code }}</p>
+          {%- endif -%}
           {%- if settings.lab_disc_3 > 0 and v.available -%}
             {%- capture u3 -%}{% render 'lab-pack-price', price: v.price, qty: 3, show: 'unit' %}{%- endcapture -%}
-            <button type="button" class="lab-teaser" data-lab-pick="3"{% if start_q != 1 %} hidden{% endif %}>{{ 'lab.pdp.teaser' | t: unit: u3 }}{% render 'lab-icon', name: 'arrow' %}</button>
+            <button type="button" class="lab-teaser" data-lab-pick="3"{% if start_q != 1 %} hidden{% endif %}>{{ 'lab.pdp.teaser' | t: unit: u3 }}</button>
           {%- endif -%}
           <p class="lab-note">{{ 'lab.pdp.tax_note' | t }}{% if section.settings.ship_note != blank %} {{ section.settings.ship_note | escape }}{% endif %}</p>
         </div>
@@ -142,104 +276,79 @@
 
         <fieldset class="lab-pills">
           <legend>{{ 'lab.pdp.choose' | t }}</legend>
-          {%- for q in (1..3) -%}
-            {%- liquid
-              assign key = 's' | append: q
-              assign d = 0
-              if q >= 3
-                assign d = settings.lab_disc_3
-              elsif q >= 2
-                assign d = settings.lab_disc_2
-              endif
-              assign ok = v.available
-              if tracked and v.inventory_quantity < q
-                assign ok = false
-              endif
-              assign cut = v.price | times: d | divided_by: 100
-              assign unit = v.price | minus: cut
-              assign net = unit | times: q
-              assign was = 0
-              if settings.lab_show_compare and v.compare_at_price > v.price
-                assign was = v.compare_at_price | times: q
-              elsif q > 1
-                assign was = v.price | times: q
-              endif
-              assign save = 0
-              if was > net
-                assign save = was | minus: net
-              endif
-              if q == 1
-                assign label = 'lab.hero.one' | t
-              else
-                assign label = 'lab.hero.many' | t: count: q
-              endif
-              assign extra = ''
-              if q == 1 and first_code != blank
-                assign extra = '&discount=' | append: first_code_enc
-              endif
-              assign buy = routes.cart_url | append: '/' | append: v.id | append: ':' | append: q | append: qs | append: extra
-              assign cod_url = buy
-              if fee > 0
-                assign cod_url = routes.cart_url | append: '/' | append: v.id | append: ':' | append: q | append: ',' | append: fee_v.id | append: ':1' | append: qs | append: extra | append: '&attributes%5BPago%20preferido%5D=' | append: cod_attr | append: '&note=' | append: cod_note
-              endif
-            -%}
-            <label class="lab-pill{% if q == start_q %} is-on{% endif %}{% if q == 3 and d > 0 %} lab-best{% endif %}">
-              <input type="radio" name="lab-pack" value="{{ q }}"{% if q == start_q %} checked{% endif %}{% unless ok %} disabled{% endunless %}
-                data-qty="{{ q }}" data-label="{{ label | escape }}" data-net="{{ net | money | strip_html | escape }}" data-net-cents="{{ net }}" data-unit="{{ unit | money | strip_html | escape }}"
-                {% if was > net %}data-was="{{ was | money | strip_html | escape }}" data-save="{{ 'lab.card.save' | t }} {{ save | money | strip_html | escape }}"{% endif %}
-                data-cod="{{ net | plus: fee | money | strip_html | escape }}" data-cod-cents="{{ net | plus: fee }}" data-buy="{{ buy }}" data-cod-url="{{ cod_url }}">
-              <span class="lab-pill__dot" aria-hidden="true"></span>
-              <span class="lab-pill__main">
-                <strong>{{ label }}</strong>
-                <span>{% if ok %}{{ section.settings[key] | escape }}{% else %}{{ 'lab.pdp.not_enough' | t }}{% endif %}</span>
-                {%- if q == 1 and first_code != blank and ok -%}<span class="lab-pill__code">{{ 'lab.pdp.first_code' | t: pct: settings.lab_first_pct, code: first_code }}</span>{%- endif -%}
-              </span>
-              <span class="lab-pill__price">
-                <strong>{{ net | money }}</strong>
-                {%- if was > net -%}<s><span class="visually-hidden">{{ 'lab.card.was' | t }}</span>{{ was | money }}</s>{%- endif -%}
-                <span class="lab-unit">{{ unit | money }}{{ 'lab.card.per_unit' | t }}</span>
-              </span>
-              {%- if d > 0 -%}<span class="lab-pill__tag">−{{ d }} %</span>{%- endif -%}
-            </label>
-          {%- endfor -%}
+          {{ pills_html }}
         </fieldset>
 
         <div class="lab-pdp__actions" data-lab-actions>
-          {%- assign fid = pid | append: '-form' -%}
-          {% render 'lab-atc', product: p, variant: v, qty: start_q, form_id: fid, btn: 'lab-btn--accent', qty_input: true %}
           {%- if v.available -%}
+            <a class="lab-btn lab-btn--accent lab-btn--block lab-btn--xl" data-lab-buy data-variant="{{ v.id }}" data-qty="{{ start_q }}" href="{{ i_buy }}"><span>{{ 'lab.pdp.buy_now' | t }}</span><span aria-hidden="true">·</span><span class="lab-roll" data-lab-now data-cents="{{ i_pay }}">{{ i_pay_f | strip }}</span></a>
+            {%- if section.settings.cod -%}
+              {%- if fee > 0 -%}
+                <button type="button" class="lab-btn lab-btn--ghost lab-btn--block" data-lab-cod-open aria-expanded="false" aria-controls="{{ pid }}-cod">{% render 'lab-icon', name: 'cash' %}{{ 'lab.pdp.cod_open' | t: fee: fee_f }}</button>
+              {%- else -%}
+                <a class="lab-btn lab-btn--ghost lab-btn--block" data-lab-cod-go data-variant="{{ v.id }}" data-qty="{{ start_q }}" href="{{ i_cod_url }}">{% render 'lab-icon', name: 'cash' %}{{ 'lab.pdp.cod_btn' | t }}</a>
+              {%- endif -%}
+            {%- endif -%}
             {%- liquid
-              assign extra0 = ''
-              if start_q == 1 and first_code != blank
-                assign extra0 = '&discount=' | append: first_code_enc
+              assign pay_note = section.settings.pay_note
+              if section.settings.cod and fee > 0
+                assign pay_note = section.settings.pay_note_fee
+              elsif section.settings.cod == false
+                assign pay_note = section.settings.pay_note_nocod
               endif
             -%}
-            <a class="lab-btn lab-btn--primary lab-btn--block" data-lab-buy href="{{ routes.cart_url }}/{{ v.id }}:{{ start_q }}{{ qs }}{{ extra0 }}">{{ 'lab.pdp.buy_now' | t }}</a>
-            {%- if fee > 0 -%}
-              <button type="button" class="lab-btn lab-btn--ghost lab-btn--block" data-lab-cod-open aria-expanded="false" aria-controls="{{ pid }}-cod">{% render 'lab-icon', name: 'cash' %}{{ 'lab.pdp.cod_open' | t: fee: fee_f }}</button>
-            {%- endif -%}
+            {%- if pay_note != blank -%}<p class="lab-paynote">{% render 'lab-fill', text: pay_note, product: p %}</p>{%- endif -%}
           {%- endif -%}
+          {%- assign fid = pid | append: '-form' -%}
+          {%- capture add_lbl -%}{{ 'lab.pdp.add_link' | t }}{%- endcapture -%}
+          {% render 'lab-atc', product: p, variant: v, qty: start_q, form_id: fid, label: add_lbl, btn: 'lab-btn--text', qty_input: true %}
         </div>
 
         {%- if fee > 0 and v.available -%}
           <div class="lab-cod" id="{{ pid }}-cod" data-lab-cod hidden>
-            <div class="lab-cod__row"><span>{{ 'lab.pdp.cod_pack' | t }}</span><span data-lab-cod-sub>{{ net0 }}</span></div>
-            <div class="lab-cod__row"><span>{{ 'lab.pdp.cod_fee' | t }}</span><span>{{ fee | money }}</span></div>
-            <div class="lab-cod__row"><strong>{{ 'lab.pdp.cod_total' | t }}</strong><strong class="lab-roll" data-lab-cod-total data-cents="{{ cents0 | plus: fee }}">{{ cod0 }}</strong></div>
+            <div class="lab-cod__row"><span>{{ 'lab.pdp.cod_pack' | t }}</span><span data-lab-cod-sub>{{ i_pay_f | strip }}</span></div>
+            <div class="lab-cod__row"><span>{{ 'lab.pdp.cod_fee' | t }}</span><span>{{ fee_f | strip }}</span></div>
+            <div class="lab-cod__row"><strong>{{ 'lab.pdp.cod_total' | t }}</strong><strong class="lab-roll" data-lab-cod-total data-cents="{{ i_cod_c }}">{{ i_cod_f | strip }}</strong></div>
             <p>{{ 'lab.pdp.cod_help' | t }}</p>
-            <a class="lab-btn lab-btn--primary lab-btn--block" data-lab-cod-go href="{{ routes.cart_url }}">{{ 'lab.pdp.cod_go' | t }}{% render 'lab-icon', name: 'arrow' %}</a>
+            <a class="lab-btn lab-btn--primary lab-btn--block" data-lab-cod-go data-variant="{{ v.id }}" data-qty="{{ start_q }}" href="{{ i_cod_url }}">{{ 'lab.pdp.cod_go' | t }}{% render 'lab-icon', name: 'arrow' %}</a>
           </div>
         {%- endif -%}
 
-        <ul class="lab-trustrow" role="list">
-          {%- for i in (1..4) -%}
-            {%- assign tk = 't' | append: i -%}{%- assign ik = 'ti' | append: i -%}
-            {%- if section.settings[tk] != blank -%}<li>{% render 'lab-icon', name: section.settings[ik] %}{{ section.settings[tk] | escape }}</li>{%- endif -%}
-          {%- endfor -%}
+        <ul class="lab-assure" role="list">
+          <li>
+            {% render 'lab-icon', name: 'truck' %}
+            <span><strong>{% render 'lab-eta' %}</strong>{% if section.settings.g_ship != blank %}<small>{{ section.settings.g_ship | escape }}</small>{% endif %}</span>
+          </li>
+          {%- if section.settings.g_ret != blank -%}
+            <li>
+              {% render 'lab-icon', name: 'refresh' %}
+              <span><strong>{{ section.settings.g_ret | escape }}</strong><small>{{ section.settings.g_ret_sub | escape }}{% if ret_page != blank %} <a href="{{ ret_page.url }}">{{ 'lab.pdp.terms' | t }}</a>{% endif %}</small></span>
+            </li>
+          {%- endif -%}
+          {%- if section.settings.g_war != blank -%}
+            <li>
+              {% render 'lab-icon', name: 'shield' %}
+              <span><strong>{{ section.settings.g_war | escape }}</strong>{% if section.settings.g_war_sub != blank %}<small>{{ section.settings.g_war_sub | escape }}</small>{% endif %}</span>
+            </li>
+          {%- endif -%}
+          {%- if section.settings.g_help != blank -%}
+            <li>
+              {% render 'lab-icon', name: 'chat' %}
+              <span><strong>{{ section.settings.g_help | escape }}</strong>
+                <small>
+                  {%- if section.settings.g_help_sub != blank -%}{{ section.settings.g_help_sub | escape }} {% endif -%}
+                  {%- if wa != blank -%}<a href="https://wa.me/{{ wa }}" target="_blank" rel="noopener" data-lab-wa>{{ 'lab.pdp.whatsapp' | t }}</a>{% if help_page != blank %} · {% endif %}{%- endif -%}
+                  {%- if help_page != blank -%}<a href="{{ help_page.url }}">{{ 'lab.pdp.write_us' | t }}</a>{%- endif -%}
+                </small>
+              </span>
+            </li>
+          {%- endif -%}
         </ul>
+
         {%- if shop.enabled_payment_types.size > 0 -%}
           <ul class="lab-pay" aria-label="{{ 'lab.footer.pay' | t }}">
             {%- for type in shop.enabled_payment_types -%}<li>{{ type | payment_type_svg_tag }}</li>{%- endfor -%}
+            {%- if section.settings.cod -%}<li class="lab-pay__cod">{% render 'lab-icon', name: 'cash' %}{{ 'lab.pdp.cod_chip' | t }}</li>{%- endif -%}
           </ul>
         {%- endif -%}
 
@@ -272,12 +381,14 @@
 
 {%- if v.available -%}
   <div class="lab lab-sticky" data-lab-sticky="{{ pid }}" inert>
-    <div class="lab-sticky__txt"><span data-lab-sticky-label>{% if start_q == 1 %}{{ 'lab.hero.one' | t }}{% else %}{{ 'lab.hero.many' | t: count: start_q }}{% endif %}</span><strong class="lab-roll" data-lab-now data-cents="{{ cents0 | strip }}">{{ net0 }}</strong></div>
-    <button type="button" class="lab-btn lab-btn--accent" data-lab-sticky-add>{{ 'lab.card.add' | t }}</button>
+    <div class="lab-sticky__txt"><span data-lab-sticky-label>{{ i_label }}</span><strong class="lab-roll" data-lab-now data-cents="{{ i_pay }}">{{ i_pay_f | strip }}</strong></div>
+    <a class="lab-btn lab-btn--accent" data-lab-buy data-lab-place="barra" data-variant="{{ v.id }}" data-qty="{{ start_q }}" href="{{ i_buy }}">{{ 'lab.pdp.buy_now' | t }}</a>
   </div>
 {%- endif -%}
 
 <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+{%- comment -%} Datos estructurados: precio de la unidad sin códigos y solo el primer párrafo de la descripción. {%- endcomment -%}
+{%- assign ld_desc = p.description | split: '</p>' | first | strip_html | strip_newlines | strip | truncate: 300 -%}
 <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -287,7 +398,7 @@
         "@id": {{ request.origin | append: p.url | append: '#product' | json }},
         "name": {{ p.title | json }},
         "url": {{ request.origin | append: p.url | json }},
-        "description": {{ p.description | strip_html | strip_newlines | truncate: 500 | json }},
+        "description": {{ ld_desc | json }},
         {%- if v.sku != blank %}"sku": {{ v.sku | json }},{% endif %}
         {%- if v.barcode != blank %}"gtin": {{ v.barcode | json }},{% endif %}
         {%- if section.settings.brand != blank %}"brand": {"@type": "Brand", "name": {{ section.settings.brand | json }}},{% endif %}
@@ -345,25 +456,32 @@
   "class": "lab-pdp-section",
   "settings": [
     { "type": "text", "id": "eyebrow", "label": "Ceja", "default": "Aparato de bienestar · uso doméstico" },
-    { "type": "text", "id": "subtitle", "label": "Subtítulo del H1", "default": "Ventosa eléctrica con succión regulable, calor y luz roja" },
+    { "type": "text", "id": "subtitle", "label": "Subtítulo del H1 (opcional)", "info": "Vacío, el precio sube en la primera pantalla del móvil." },
     { "type": "text", "id": "brand", "label": "Marca (datos estructurados)", "default": "ReliefPath" },
-    { "type": "text", "id": "ship_note", "label": "Nota bajo el precio", "default": "Envío gratis a España." },
+    { "type": "text", "id": "ship_note", "label": "Nota bajo el precio", "default": "Envío gratis." },
     { "type": "range", "id": "default_pack", "label": "Pack elegido al entrar", "min": 1, "max": 3, "step": 1, "default": 1 },
     { "type": "range", "id": "low_stock", "label": "Avisar de pocas unidades por debajo de", "min": 0, "max": 50, "step": 1, "default": 10 },
     { "type": "text", "id": "s1", "label": "1 unidad · texto", "default": "Un aparato" },
-    { "type": "text", "id": "s2", "label": "Pack de 2 · texto", "default": "Dos aparatos · uno para regalar" },
+    { "type": "text", "id": "s2", "label": "Pack de 2 · texto", "default": "Uno para ti y otro para regalar" },
     { "type": "text", "id": "s3", "label": "Pack de 3 · texto", "default": "El precio más bajo por unidad" },
-    { "type": "checkbox", "id": "cod", "label": "Contrareembolso", "info": "Usa el producto del recargo de Ajustes del tema › ReliefPath Lab.", "default": true },
-    { "type": "select", "id": "ti1", "label": "Chip 1 · icono", "default": "truck", "options": [{ "value": "truck", "label": "Camión" }, { "value": "refresh", "label": "Devolución" }, { "value": "shield", "label": "Garantía" }, { "value": "lock", "label": "Candado" }, { "value": "chat", "label": "Soporte" }] },
-    { "type": "text", "id": "t1", "label": "Chip 1", "default": "Envío gratis desde España" },
-    { "type": "select", "id": "ti2", "label": "Chip 2 · icono", "default": "refresh", "options": [{ "value": "truck", "label": "Camión" }, { "value": "refresh", "label": "Devolución" }, { "value": "shield", "label": "Garantía" }, { "value": "lock", "label": "Candado" }, { "value": "chat", "label": "Soporte" }] },
-    { "type": "text", "id": "t2", "label": "Chip 2", "default": "30 días para devolver" },
-    { "type": "select", "id": "ti3", "label": "Chip 3 · icono", "default": "shield", "options": [{ "value": "truck", "label": "Camión" }, { "value": "refresh", "label": "Devolución" }, { "value": "shield", "label": "Garantía" }, { "value": "lock", "label": "Candado" }, { "value": "chat", "label": "Soporte" }] },
-    { "type": "text", "id": "t3", "label": "Chip 3", "default": "3 años de garantía legal" },
-    { "type": "select", "id": "ti4", "label": "Chip 4 · icono", "default": "lock", "options": [{ "value": "truck", "label": "Camión" }, { "value": "refresh", "label": "Devolución" }, { "value": "shield", "label": "Garantía" }, { "value": "lock", "label": "Candado" }, { "value": "chat", "label": "Soporte" }] },
-    { "type": "text", "id": "t4", "label": "Chip 4", "default": "Pago seguro" },
-    { "type": "checkbox", "id": "free_shipping", "label": "Datos estructurados: envío gratis a España", "info": "Solo si el envío es gratis de verdad en el checkout.", "default": true },
-    { "type": "number", "id": "return_days", "label": "Datos estructurados: días para devolver", "info": "0 para no publicarlo.", "default": 30 }
+    { "type": "header", "content": "Botones y pago" },
+    { "type": "checkbox", "id": "cod", "label": "Botón «Pagar al recibirlo»", "info": "El recargo, si lo cobras, se activa en Ajustes del tema › ReliefPath Lab.", "default": true },
+    { "type": "inline_richtext", "id": "pay_note", "label": "Nota bajo los botones", "default": "Pagar al recibirlo no tiene recargo. También con tarjeta, Bizum, PayPal o Klarna: lo eliges en el último paso." },
+    { "type": "inline_richtext", "id": "pay_note_fee", "label": "Nota bajo los botones (con recargo)", "info": "[fee] escribe el importe del recargo.", "default": "Con tarjeta, Bizum, PayPal o Klarna no hay recargo. Al recibirlo se añaden [fee] de gestión." },
+    { "type": "inline_richtext", "id": "pay_note_nocod", "label": "Nota bajo los botones (sin contrareembolso)", "default": "Pago seguro con tarjeta, Bizum, PayPal o Klarna." },
+    { "type": "header", "content": "Garantías junto al botón" },
+    { "type": "text", "id": "g_ship", "label": "Entrega · detalle", "info": "La fecha se calcula sola (Ajustes del tema › Entrega estimada).", "default": "Envío gratis desde España. Estimación para península." },
+    { "type": "text", "id": "g_ret", "label": "Devolución", "default": "30 días para devolverlo" },
+    { "type": "text", "id": "g_ret_sub", "label": "Devolución · detalle", "default": "La etiqueta de vuelta la pagamos nosotros." },
+    { "type": "page", "id": "ret_page", "label": "Devolución · página", "info": "Vacío: la página «devoluciones»." },
+    { "type": "text", "id": "g_war", "label": "Garantía", "default": "3 años de garantía legal" },
+    { "type": "text", "id": "g_war_sub", "label": "Garantía · detalle", "default": "Si falla, se repara o se cambia." },
+    { "type": "text", "id": "g_help", "label": "Ayuda", "default": "¿Dudas antes de comprar?" },
+    { "type": "text", "id": "g_help_sub", "label": "Ayuda · detalle", "default": "Te respondemos en español." },
+    { "type": "page", "id": "help_page", "label": "Ayuda · página", "info": "Vacío: la página «contact». El WhatsApp se pone en Ajustes del tema." },
+    { "type": "header", "content": "Datos estructurados" },
+    { "type": "checkbox", "id": "free_shipping", "label": "Envío gratis a España", "info": "Solo si el envío es gratis de verdad en el checkout.", "default": true },
+    { "type": "number", "id": "return_days", "label": "Días para devolver", "info": "0 para no publicarlo.", "default": 30 }
   ],
   "blocks": [
     { "type": "@app" },
@@ -378,7 +496,7 @@
       "type": "tab", "name": "Pestaña",
       "settings": [
         { "type": "text", "id": "title", "label": "Título", "default": "Modo de uso" },
-        { "type": "richtext", "id": "text", "label": "Texto", "info": "Admite las marcas de precio [p1] [p2] [p3] [u2] [u3] [fee].", "default": "<p>Escribe aquí el contenido.</p>" },
+        { "type": "richtext", "id": "text", "label": "Texto", "info": "Admite las marcas [p1] [p2] [p3] [u2] [u3] [cod] [fee].", "default": "<p>Escribe aquí el contenido.</p>" },
         { "type": "checkbox", "id": "open", "label": "Abierto", "default": false }
       ]
     }

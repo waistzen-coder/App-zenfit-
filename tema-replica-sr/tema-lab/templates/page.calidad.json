@@ -177,7 +177,7 @@
           "type": "line",
           "settings": {
             "label": "Pago al recibirlo",
-            "value": "+[fee]"
+            "value": "[codfee]"
           }
         },
         "b8": {

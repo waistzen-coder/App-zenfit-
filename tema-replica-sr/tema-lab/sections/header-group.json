@@ -5,8 +5,9 @@
     "offer": {
       "type": "lab-offer",
       "settings": {
-        "tag": "PACKS",
-        "cta": "Lo quiero",
+        "tag": "ENVÍO GRATIS",
+        "text_short": "24–48 h · Paga al recibirlo",
+        "cta": "Ver packs",
         "closable": true
       }
     },

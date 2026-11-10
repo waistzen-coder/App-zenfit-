@@ -41,15 +41,15 @@
         "b4": {
           "type": "chip",
           "settings": {
-            "icon": "lock",
-            "text": "Pago 100 % seguro"
+            "icon": "cash",
+            "text": "Paga al recibirlo"
           }
         },
         "b5": {
           "type": "chip",
           "settings": {
             "icon": "truck",
-            "text": "Envío 24–48 h"
+            "text": "Envío gratis en 24–48 h"
           }
         },
         "b6": {
@@ -168,7 +168,7 @@
           "type": "qa",
           "settings": {
             "q": "¿Puedo pagar al recibirlo?",
-            "a": "<p>Sí, con contrareembolso si tu dirección tiene cobertura. Se añade un recargo de gestión de <strong>[fee]</strong> por pedido, que verás como una línea más antes de pagar.</p>"
+            "a": "<p>Sí. Pagas en efectivo al repartidor, [cod]. En el último paso de la compra elige <strong>«Pago contra entrega»</strong>. Para Canarias, Ceuta y Melilla, escríbenos antes de pedir.</p>"
           }
         },
         "b4": {
@@ -244,7 +244,7 @@
           "type": "line",
           "settings": {
             "label": "Pago al recibirlo",
-            "value": "+[fee]"
+            "value": "[codfee]"
           }
         },
         "b8": {

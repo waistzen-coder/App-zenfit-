@@ -19,6 +19,31 @@
     try { if (window.Shopify && Shopify.analytics && Shopify.analytics.publish) Shopify.analytics.publish(name, data || {}); } catch (e) {}
   }
 
+  /* Foto visible de una galería horizontal (las fotos pueden no ocupar todo el ancho). */
+  function slideAt(track) {
+    var first = track.children[0];
+    if (!first) return 0;
+    var step = first.offsetWidth + (parseFloat(getComputedStyle(track).columnGap) || 0);
+    return clamp(Math.round(track.scrollLeft / Math.max(1, step)), 0, track.children.length - 1);
+  }
+  /* Ir al checkout con un enlace de carrito. Antes se añade el pack con la API
+     del carrito, para que la tienda y sus píxeles (TikTok, Meta…) registren el
+     «añadido al carrito» y puedan optimizar los anuncios; el enlace deja luego
+     el carrito justo con ese pack. Si la llamada tarda o falla, se sigue igual. */
+  function toCheckout(url, variant, q) {
+    var gone = false, go = function () { if (gone) return; gone = true; location.href = url; };
+    var add = window.routes && window.routes.cart_add_url;
+    if (!add || !variant || !window.fetch) return go();
+    try {
+      fetch(add + '.js', {
+        method: 'POST', credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({ items: [{ id: +variant, quantity: q }] })
+      }).then(go, go);
+    } catch (e) { go(); }
+    setTimeout(go, 1400);
+  }
+
   /* Un único bucle de scroll por fotograma para todos los módulos. */
   var scrollFns = [], sraf = 0;
   function onScroll(fn) { scrollFns.push(fn); }
@@ -468,17 +493,20 @@
         var d = on.dataset;
         pills.forEach(function (p) { p.closest('.lab-pill').classList.toggle('is-on', p === on); });
         if (qty) qty.value = d.qty;
-        $$('[data-lab-now]', root).forEach(function (el) { roll(el, +d.netCents, d.net, animate); el.classList.toggle('is-sale', !!d.was); });
+        $$('[data-lab-now]', root).forEach(function (el) { roll(el, +d.payCents, d.pay, animate); if (el.classList.contains('lab-price__now')) el.classList.toggle('is-sale', !!d.was); });
         txt('[data-lab-was]', d.was || ''); show('[data-lab-was]', !!d.was);
-        txt('[data-lab-unit]', d.unit);
-        txt('[data-lab-save]', d.save || ''); show('[data-lab-save]', !!d.save);
-        txt('[data-lab-cod-sub]', d.net);
-        roll(root.querySelector('[data-lab-cod-total]'), +d.codCents, d.cod || d.net, animate);
-        $$('[data-lab-buy]', root).forEach(function (a) { a.href = d.buy; });
+        txt('[data-lab-badge]', d.badge || ''); show('[data-lab-badge]', !!d.badge);
+        txt('[data-lab-unit]', d.unit); txt('[data-lab-save]', d.save || '');
+        show('[data-lab-unitline]', d.qty !== '1' && !!d.save);
+        show('[data-lab-first]', d.first === '1');
+        txt('[data-lab-cod-sub]', d.pay);
+        roll(root.querySelector('[data-lab-cod-total]'), +d.codCents, d.cod || d.pay, animate);
         $$('[data-lab-pick]', root).forEach(function (b) { b.hidden = d.qty !== '1'; });
-        $$('[data-lab-cod-go]', root).forEach(function (a) { a.href = d.codUrl || d.buy; });
+        /* Los enlaces de compra (ficha y barra fija) llevan siempre el pack elegido. */
+        $$('[data-lab-buy]', root).concat(sticky ? $$('[data-lab-buy]', sticky) : []).forEach(function (a) { a.href = d.buy; a.setAttribute('data-qty', d.qty); });
+        $$('[data-lab-cod-go]', root).forEach(function (a) { a.href = d.codUrl || d.buy; a.setAttribute('data-qty', d.qty); });
         if (sticky) {
-          roll(sticky.querySelector('[data-lab-now]'), +d.netCents, d.net, animate);
+          roll(sticky.querySelector('[data-lab-now]'), +d.payCents, d.pay, animate);
           txt('[data-lab-sticky-label]', d.label, sticky);
         }
       }
@@ -492,8 +520,6 @@
           to.closest('.lab-pill').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' });
         });
       });
-      $$('[data-lab-buy]', root).forEach(function (a) { a.addEventListener('click', function () { track('lab_buy_now', { qty: +(qty && qty.value || 1) }); }); });
-      $$('[data-lab-cod-go]', root).forEach(function (a) { a.addEventListener('click', function () { track('lab_cod_checkout', { qty: +(qty && qty.value || 1) }); }); });
       var start = parseInt(new URLSearchParams(location.search).get('pack'), 10);
       if (start) pills.forEach(function (p) { if (+p.dataset.qty === start && !p.disabled) p.checked = true; });
       paint(false);
@@ -520,7 +546,7 @@
         gal.addEventListener('scroll', function () {
           cancelAnimationFrame(raf);
           raf = requestAnimationFrame(function () {
-            var i = Math.round(gal.scrollLeft / Math.max(1, gal.clientWidth));
+            var i = slideAt(gal);
             thumbs.forEach(function (b, j) { b.setAttribute('aria-current', j === i ? 'true' : 'false'); });
             if (galCount) galCount.textContent = pad(i + 1) + ' / ' + pad(gal.children.length);
           });
@@ -530,23 +556,23 @@
 
       var actions = root.querySelector('[data-lab-actions]');
       if (sticky && actions) {
-        /* Visible siempre que los botones de compra no estén en pantalla (por
-           debajo, al entrar en el móvil, o por encima, al seguir bajando). */
+        /* En móvil, visible siempre que los botones de compra no estén en
+           pantalla (por debajo, al entrar, o por encima, al seguir bajando).
+           En escritorio solo cuando ya han quedado arriba: al entrar, el
+           precio y los packs están a la vista y la barra los taparía. */
+        var wide = window.matchMedia ? matchMedia('(min-width: 990px)') : { matches: false };
+        var closing = document.querySelector('.lab-close');
         var toggle = function () {
           var r = actions.getBoundingClientRect();
-          var on = r.bottom < 0 || r.top > window.innerHeight - 40;
+          var on = r.bottom < 0 || (!wide.matches && r.top > window.innerHeight - 40);
+          /* Con el cierre de packs en pantalla sobra: ya hay tres botones. */
+          if (on && closing) { var c = closing.getBoundingClientRect(); if (c.top < window.innerHeight - 160 && c.bottom > 160) on = false; }
           if (on === sticky.classList.contains('is-on')) return;
           sticky.classList.toggle('is-on', on);
           document.documentElement.classList.toggle('lab-has-sticky', on);
           if (on) sticky.removeAttribute('inert'); else sticky.setAttribute('inert', '');
         };
         onScroll(toggle); toggle();
-        var go = sticky.querySelector('[data-lab-sticky-add]');
-        if (go) go.addEventListener('click', function () {
-          var btn = root.querySelector('product-form [type="submit"]');
-          if (btn && btn.getAttribute('aria-disabled') !== 'true' && !btn.disabled) btn.click();
-          else actions.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' });
-        });
       }
     });
   }
@@ -613,8 +639,7 @@
       if (card) img = card.querySelector('.lab-pc__media img');
       else if (page) {
         var tr = page.querySelector('.lab-gal__track');
-        var i = tr ? Math.round(tr.scrollLeft / Math.max(1, tr.clientWidth)) : 0;
-        img = tr && (tr.children[i] || tr.children[0]).querySelector('img');
+        img = tr && (tr.children[slideAt(tr)] || tr.children[0]).querySelector('img');
       } else if (calc) img = calc.querySelector('[data-lab-fly-src]');
       var cart = document.getElementById('cart-icon-bubble');
       if (!img || !cart) return;
@@ -636,6 +661,84 @@
       anim.onfinish = function () { el.remove(); bump(cart); };
     }, true);
     function bump(cart) { cart.classList.remove('is-bump'); void cart.offsetWidth; cart.classList.add('is-bump'); }
+  }
+
+  /* «Comprar ahora» y «Pagar al recibirlo» (ficha, barra fija y cierre): un
+     solo manejador. Sin JS son enlaces normales al checkout. */
+  function buy() {
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest && e.target.closest('a[data-lab-buy], a[data-lab-cod-go]');
+      if (!a || e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || a.target === '_blank') return;
+      e.preventDefault();
+      if (a.getAttribute('aria-busy') === 'true') return;
+      a.setAttribute('aria-busy', 'true');
+      var q = +a.getAttribute('data-qty') || 1, cod = a.hasAttribute('data-lab-cod-go');
+      track(cod ? 'lab_cod_checkout' : 'lab_buy_now', { qty: q, place: a.getAttribute('data-lab-place') || 'ficha' });
+      toCheckout(a.href, a.getAttribute('data-variant'), q);
+    });
+    /* Al volver atrás desde el checkout, los botones vuelven a estar listos. */
+    window.addEventListener('pageshow', function () {
+      $$('[aria-busy="true"]').forEach(function (el) { el.removeAttribute('aria-busy'); });
+    });
+  }
+
+  /* Entrega estimada: una fecha concreta en lugar de «24–48 h». Hora de
+     Madrid, días laborables y festivos nacionales. Es prudente a propósito:
+     si se pide tarde o en fin de semana, cuenta desde el siguiente día
+     laborable, porque una fecha se lee como una promesa. */
+  function eta() {
+    var els = $$('[data-lab-eta]').filter(function (el) { return once(el, 'labEta'); });
+    if (!els.length || !window.Intl || !Intl.DateTimeFormat.prototype.formatToParts) return;
+    var day = 864e5, now = {};
+    try {
+      new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Madrid', year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', hour12: false })
+        .formatToParts(new Date()).forEach(function (x) { now[x.type] = parseInt(x.value, 10); });
+    } catch (e) { return; }
+    if (!now.year) return;
+    var today = new Date(Date.UTC(now.year, now.month - 1, now.day)), hour = now.hour % 24;
+    function goodFriday(y) {
+      var a = y % 19, b = Math.floor(y / 100), c = y % 100, d = Math.floor(b / 4), e = b % 4, f = Math.floor((b + 8) / 25);
+      var g = Math.floor((b - f + 1) / 3), h = (19 * a + b - d - g + 15) % 30, i = Math.floor(c / 4), k = c % 4;
+      var l = (32 + 2 * e + 2 * i - h - k) % 7, m = Math.floor((a + 11 * h + 22 * l) / 451);
+      var mo = Math.floor((h + l - 7 * m + 114) / 31), da = (h + l - 7 * m + 114) % 31 + 1;
+      return Date.UTC(y, mo - 1, da) - 2 * day;
+    }
+    var fixed = ['1-1', '1-6', '5-1', '8-15', '10-12', '11-1', '12-6', '12-8', '12-25'];
+    function work(d) {
+      var w = d.getUTCDay();
+      if (w === 0 || w === 6) return false;
+      if (fixed.indexOf((d.getUTCMonth() + 1) + '-' + d.getUTCDate()) > -1) return false;
+      return d.getTime() !== goodFriday(d.getUTCFullYear());
+    }
+    function plus(d, n) { var r = new Date(d.getTime()); while (n > 0) { r = new Date(r.getTime() + day); if (work(r)) n--; } return r; }
+    var fw = new Intl.DateTimeFormat('es-ES', { weekday: 'long', timeZone: 'UTC' }), fm = new Intl.DateTimeFormat('es-ES', { month: 'long', timeZone: 'UTC' });
+    function esc(t) { return String(t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+    els.forEach(function (el) {
+      var cut = parseInt(el.getAttribute('data-cutoff'), 10), min = parseInt(el.getAttribute('data-min'), 10), max = parseInt(el.getAttribute('data-max'), 10);
+      if (isNaN(cut)) cut = 13;
+      if (!(min >= 0)) min = 1;
+      if (!(max >= min)) max = min;
+      /* Día en que se prepara: hoy si es laborable y aún es pronto. */
+      var start = work(today) && hour < cut ? today : plus(today, 1);
+      var a = plus(start, min), b = plus(start, max), same = a.getTime() === b.getTime();
+      var sameMonth = a.getUTCMonth() === b.getUTCMonth();
+      var A = fw.format(a) + ' ' + a.getUTCDate() + (sameMonth && !same ? '' : ' de ' + fm.format(a));
+      var B = fw.format(b) + ' ' + b.getUTCDate() + ' de ' + fm.format(b);
+      var tpl = el.getAttribute(same ? 'data-single' : 'data-range') || '';
+      if (!tpl) return;
+      el.innerHTML = esc(tpl).replace('%a', '<b>' + esc(A) + '</b>').replace('%b', '<b>' + esc(B) + '</b>');
+      el.setAttribute('data-eta-from', a.toISOString().slice(0, 10));
+      el.setAttribute('data-eta-to', b.toISOString().slice(0, 10));
+    });
+  }
+
+  /* El carrito lateral se vuelve a pintar entero al añadir o cambiar
+     cantidades: la fecha de entrega que lleva dentro se recalcula entonces. */
+  function cartWatch() {
+    var cd = document.querySelector('cart-drawer');
+    if (!cd || !window.MutationObserver) return;
+    var t = 0;
+    new MutationObserver(function () { clearTimeout(t); t = setTimeout(eta, 60); }).observe(cd, { childList: true, subtree: true });
   }
 
   /* Carrito lateral: «Pasa al pack de 2/3» cambia la cantidad de la línea con
@@ -720,8 +823,8 @@
     if (!check()) window.addEventListener('load', function () { if (!check()) setTimeout(check, 2500); });
   }
 
-  function sections() { reveal(); offer(); drawer(); catbar(); counters(); pointerFx(); stage(); tour(); scrolly(); builder(); receipt(); pdp(); footer(); }
-  function init() { sections(); progress(); header(); fly(); upsell(); checkout(); transitions(); }
+  function sections() { reveal(); offer(); drawer(); catbar(); counters(); pointerFx(); stage(); tour(); scrolly(); builder(); receipt(); pdp(); eta(); footer(); }
+  function init() { sections(); progress(); header(); fly(); upsell(); buy(); checkout(); cartWatch(); transitions(); }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
   document.addEventListener('shopify:section:load', sections);
 })();

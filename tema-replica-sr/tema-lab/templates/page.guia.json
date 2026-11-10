@@ -45,7 +45,7 @@
           "type": "chapter",
           "settings": {
             "title": "Pago",
-            "body": "<p>Con tarjeta en el checkout o al recibirlo con contrareembolso, con un recargo de gestión de [fee] por pedido.</p>"
+            "body": "<p>Con tarjeta, Bizum, PayPal o Klarna en el checkout, o al recibirlo en efectivo, [cod].</p>"
           }
         },
         "b7": {
@@ -124,7 +124,7 @@
           "type": "line",
           "settings": {
             "label": "Pago al recibirlo",
-            "value": "+[fee]"
+            "value": "[codfee]"
           }
         },
         "b8": {

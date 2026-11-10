@@ -1,0 +1,17 @@
+{%- comment -%}
+  Entrega estimada con fecha («Recíbelo entre el jueves 12 y el viernes 13»).
+  Sin JS, o si se apaga en Ajustes del tema › ReliefPath Lab, queda el plazo
+  publicado. assets/lab.js calcula la fecha con la hora de Madrid, días
+  laborables y festivos nacionales; si se pide tarde o en fin de semana,
+  cuenta desde el siguiente día laborable para no prometer de más.
+  Uso: render 'lab-eta'   ·   render 'lab-eta', short: true (carrito)
+{%- endcomment -%}
+{%- liquid
+  assign range = 'lab.eta.range' | t
+  assign single = 'lab.eta.single' | t
+  if short
+    assign range = 'lab.eta.range_short' | t
+    assign single = 'lab.eta.single_short' | t
+  endif
+-%}
+<span class="lab-eta"{% if settings.lab_eta %} data-lab-eta data-cutoff="{{ settings.lab_eta_cutoff | default: 13 }}" data-min="{{ settings.lab_eta_min | default: 1 }}" data-max="{{ settings.lab_eta_max | default: 2 }}" data-range="{{ range | escape }}" data-single="{{ single | escape }}"{% endif %}>{{ 'lab.eta.fallback' | t }}</span>

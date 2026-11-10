@@ -35,15 +35,15 @@
         "b4": {
           "type": "chip",
           "settings": {
-            "icon": "lock",
-            "text": "Pago 100 % seguro"
+            "icon": "cash",
+            "text": "Paga al recibirlo"
           }
         },
         "b5": {
           "type": "chip",
           "settings": {
             "icon": "truck",
-            "text": "Envío 24–48 h"
+            "text": "Envío gratis en 24–48 h"
           }
         },
         "b6": {
@@ -498,29 +498,43 @@
           "type": "qa",
           "settings": {
             "q": "¿Puedo pagar al recibirlo?",
-            "a": "<p>Sí, con contrareembolso si tu dirección tiene cobertura. Se añade un recargo de gestión de <strong>[fee]</strong> por pedido, que verás como una línea más antes de pagar.</p>"
+            "a": "<p>Sí. Pagas en efectivo al repartidor, [cod]. En el último paso de la compra elige <strong>«Pago contra entrega»</strong>. Para Canarias, Ceuta y Melilla, escríbenos antes de pedir.</p>"
           }
         },
         "b7": {
+          "type": "qa",
+          "settings": {
+            "q": "¿Es seguro comprar aquí?",
+            "a": "<p>El pago se hace en el checkout de Shopify, cifrado: nosotros no vemos ni guardamos los datos de tu tarjeta. Si prefieres no pagar por adelantado, puedes pagar al recibirlo. Vendemos desde Motril (Granada) y respondemos por escrito en <a href=\"mailto:waistzen@gmail.com\">waistzen@gmail.com</a>.</p>"
+          }
+        },
+        "b8": {
           "type": "group",
           "settings": {
             "title": "Devoluciones"
           }
         },
-        "b8": {
+        "b9": {
           "type": "qa",
           "settings": {
             "q": "¿Puedo devolverlo?",
             "a": "<p>Tienes 14 días de desistimiento por ley y lo ampliamos a <strong>30 días</strong> desde que lo recibes. La etiqueta de devolución la pagamos nosotros. <a href=\"/pages/devoluciones\">Ver devoluciones</a>.</p>"
           }
         },
-        "b9": {
+        "b10": {
           "type": "group",
           "settings": {
             "title": "Producto"
           }
         },
-        "b10": {
+        "b11": {
+          "type": "qa",
+          "settings": {
+            "q": "¿Deja marcas en la piel?",
+            "a": "<p>Las ventosas trabajan por succión y pueden dejar marcas circulares temporales en la piel. Empieza siempre por el nivel más bajo, respeta los tiempos del manual y, si tienes la piel sensible o cualquier duda, consulta antes a un profesional sanitario.</p>"
+          }
+        },
+        "b12": {
           "type": "qa",
           "settings": {
             "q": "¿Sustituye a un fisioterapeuta o a un tratamiento?",
@@ -538,7 +552,9 @@
         "b7",
         "b8",
         "b9",
-        "b10"
+        "b10",
+        "b11",
+        "b12"
       ]
     },
     "about": {
@@ -686,7 +702,7 @@
           "type": "line",
           "settings": {
             "label": "Pago al recibirlo",
-            "value": "+[fee]"
+            "value": "[codfee]"
           }
         },
         "b8": {
@@ -724,6 +740,13 @@
         "b10"
       ]
     },
+    "close": {
+      "type": "lab-close",
+      "settings": {
+        "product": "juego-de-ventosa-electrica-con-cable",
+        "surface": false
+      }
+    },
     "legal": {
       "type": "lab-legal",
       "settings": {}
@@ -742,6 +765,7 @@
     "faq",
     "about",
     "receipt",
+    "close",
     "legal"
   ]
 }

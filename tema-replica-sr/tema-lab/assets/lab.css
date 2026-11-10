@@ -370,9 +370,6 @@ body.lab .lab, body.lab .lab *{box-sizing:border-box}
 .lab-cod__row{display:flex;justify-content:space-between;gap:12px;font-variant-numeric:tabular-nums}
 .lab-cod__row strong{font-weight:700}
 .lab-cod p{margin:0;color:var(--muted);font-size:14px}
-.lab-trustrow{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:0;padding:0;list-style:none}
-.lab-trustrow li{display:flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--surface);font-size:13px;line-height:1.35}
-.lab-trustrow svg{width:18px;height:18px;flex:none;color:var(--accent)}
 .lab-acc{border-top:1px solid var(--line)}
 .lab-acc details{border-bottom:1px solid var(--line)}
 .lab-acc summary{display:flex;align-items:center;justify-content:space-between;min-height:56px;cursor:pointer;list-style:none;font:600 16px/1.3 var(--f-head)}
@@ -388,7 +385,11 @@ body.lab .lab, body.lab .lab *{box-sizing:border-box}
 .lab-sticky__txt{flex:1;min-width:0;font-size:13px;line-height:1.3}
 .lab-sticky__txt strong{display:block;font:700 16px/1.2 var(--f-head);font-variant-numeric:tabular-nums}
 .lab-sticky .lab-btn{min-height:46px;padding:0 20px}
-@media(min-width:990px){.lab-sticky{display:none}}
+@media(min-width:990px){
+  .lab-sticky{left:50%;right:auto;bottom:20px;width:min(560px,calc(100% - 48px));padding:10px 10px 10px 24px;border:1px solid var(--line);border-radius:999px;
+    box-shadow:0 18px 40px -18px rgba(11,18,32,.45);transform:translate(-50%,180%)}
+  .lab-sticky.is-on{transform:translate(-50%,0)}
+}
 
 /* Landing por país: tabla de precios */
 .lab-table{width:100%;border-collapse:collapse;margin-top:24px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;font-variant-numeric:tabular-nums}
@@ -820,8 +821,7 @@ html.lab-scrolled .lab-header{box-shadow:0 12px 30px -24px rgba(11,18,32,.45)}
   html.lab-has-sticky body.lab{padding-bottom:calc(72px + env(safe-area-inset-bottom))}
 }
 .lab-teaser{display:inline-flex;align-items:center;gap:6px;align-self:flex-start;margin:2px 0 0;padding:0;border:0;background:none;color:var(--accent);font:600 14px/1.3 var(--f-body);cursor:pointer;text-align:left}
-.lab-teaser svg{width:15px;height:15px;transition:transform .2s}
-.lab-teaser:hover svg{transform:translateX(3px)}
+.lab-teaser:hover{text-decoration:underline;text-underline-offset:3px}
 .lab-teaser[hidden]{display:none}
 .lab-pill__code{display:block;margin-top:3px;color:var(--ok)!important;font-size:12px!important;font-weight:600}
 .lab-cart-trust{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 14px;margin:12px 0 0;padding:0;list-style:none;color:var(--muted);font:500 12px/1.3 var(--f-body);letter-spacing:normal}
@@ -957,3 +957,75 @@ html.lab-tour-on .lab-sticky{transform:translateY(110%)}
   .lab-receipt.is-printed .lab-receipt__paper,.lab-receipt.is-printed .lab-receipt__line,.lab-receipt.is-printed .lab-receipt__total{opacity:1;transform:none}
 }
 .lab-pdp__price{scroll-margin-top:calc(var(--header-h) + 24px)}
+
+/* =====================================================================
+   Venta (10-11): caja de compra con un botón principal, pago al recibir,
+   fecha de entrega y garantías; cierre con la oferta. Todo lo que el
+   cliente quiere saber antes de pagar, junto al botón.
+   ===================================================================== */
+.lab-price__badge{align-self:center;padding:3px 9px;border-radius:999px;background:var(--sale);color:var(--on-sale);font:500 12px/1.3 var(--f-mono);letter-spacing:.04em}
+.lab-price__badge[hidden],.lab-first[hidden],.lab-unit[hidden]{display:none}
+.lab-first{margin:0;color:var(--ok);font-size:13px;line-height:1.45}
+.lab-first strong{font-weight:700}
+.lab-pdp .lab-price__now{font-size:32px;letter-spacing:-.02em}
+.lab-pdp .lab-price__was{font-size:17px}
+.lab-pill__main{min-width:0}
+.lab-btn--xl{min-height:60px!important;font-size:18px!important;font-weight:700;font-variant-numeric:tabular-nums}
+.lab-btn--text{min-height:44px!important;padding:0 8px;background:none;border-color:transparent;color:var(--muted);font-weight:600;font-size:15px!important;text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:4px}
+.lab-btn--text:hover{color:var(--ink);text-decoration-color:currentColor}
+.lab-btn[aria-busy="true"]{opacity:.7;cursor:progress;transform:none}
+.lab-paynote{margin:0;color:var(--muted);font-size:13px;line-height:1.5;text-align:center}
+.lab-paynote strong{color:var(--ink)}
+.lab-pdp__actions .lab-atc{margin-top:-4px}
+.lab-assure{display:grid;gap:0;margin:0;padding:0;list-style:none;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+.lab-assure li{display:grid;grid-template-columns:22px minmax(0,1fr);gap:12px;align-items:start;padding:13px 16px}
+.lab-assure li+li{border-top:1px solid var(--line)}
+.lab-assure svg{width:22px;height:22px;margin-top:1px;color:var(--accent)}
+.lab-assure strong{display:block;font:600 15px/1.35 var(--f-head);color:var(--ink)}
+.lab-assure small{display:block;margin-top:2px;color:var(--muted);font-size:13px;line-height:1.45}
+.lab-assure a{color:inherit;text-decoration:underline;text-underline-offset:3px}
+.lab-assure a:hover{color:var(--ink)}
+.lab-eta b{font-weight:inherit;white-space:nowrap}
+.lab-pay{align-items:center}
+.lab-pay svg{width:35px;height:22px}
+.lab-pay__cod{display:inline-flex;align-items:center;gap:5px;height:22px;padding:0 8px;border:1px solid var(--line);border-radius:4px;background:var(--surface);color:var(--ink);font:600 11px/1 var(--f-body);white-space:nowrap}
+.lab-pay__cod svg{width:14px;height:14px;color:var(--accent)}
+@media(max-width:749px){
+  /* Asoma la foto siguiente: se ve que hay más sin gastar pantalla en miniaturas. */
+  .lab-gal__slide{flex-basis:86%}
+  .lab-gal__slide:only-child{flex-basis:100%}
+  .lab-gal__count{right:auto;left:12px}
+  .lab-pdp .lab-price__now{font-size:30px}
+}
+
+/* Cierre con la oferta */
+.lab-close__head{max-width:640px}
+.lab-close__grid{display:grid;gap:14px;margin-top:28px}
+@media(min-width:750px){.lab-close__grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-items:stretch}}
+.lab-close__card{position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"name price" "desc meta" "btn btn";gap:2px 16px;align-items:baseline;padding:20px;border:1px solid var(--line);border-radius:var(--r);
+  background:var(--surface);color:var(--ink);text-decoration:none;transition:border-color .15s,transform .15s,box-shadow .15s}
+.lab-sec--surface .lab-close__card{background:var(--bg)}
+.lab-close__card:hover{border-color:var(--ink);transform:translateY(-2px);box-shadow:var(--shadow)}
+.lab-close__name{grid-area:name;font:700 19px/1.25 var(--f-head);letter-spacing:-.01em}
+.lab-close__desc{grid-area:desc;color:var(--muted);font-size:13px;line-height:1.4}
+.lab-close__price{grid-area:price;font:700 24px/1.1 var(--f-head);letter-spacing:-.02em;font-variant-numeric:tabular-nums;text-align:right}
+.lab-close__meta{grid-area:meta;color:var(--muted);font-size:13px;font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+.lab-close__card .lab-btn{grid-area:btn;margin-top:14px;pointer-events:none}
+.lab-close__card .lab-pill__tag{top:-10px;right:16px}
+@media(min-width:750px){
+  .lab-close__card{grid-template-columns:minmax(0,1fr);grid-template-areas:"name" "desc" "price" "meta" "btn";gap:4px;padding:24px}
+  .lab-close__price{margin-top:14px;font-size:34px;text-align:left}
+  .lab-close__meta{text-align:left}
+  .lab-close__card .lab-btn{margin-top:18px}
+}
+.lab-close__notes{display:grid;gap:10px;margin:24px 0 0;padding:0;list-style:none;color:var(--muted);font-size:14px;line-height:1.5}
+@media(min-width:990px){.lab-close__notes{grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}}
+.lab-close__notes li{display:grid;grid-template-columns:20px minmax(0,1fr);gap:10px;align-items:start}
+.lab-close__notes svg{width:20px;height:20px;color:var(--accent)}
+.lab-close__notes strong{color:var(--ink);font-weight:600}
+.lab-close__notes a{color:inherit;text-decoration:underline;text-underline-offset:3px}
+@media (prefers-reduced-motion: reduce){.lab-close__card{transition:none}.lab-close__card:hover{transform:none}}
+.lab-cart-first{display:grid;grid-template-columns:18px minmax(0,1fr);gap:8px;align-items:start;margin:14px 0 0;padding:10px 12px;border-radius:12px;background:color-mix(in srgb,var(--ok) 9%,transparent);color:var(--ink);font-size:13px;line-height:1.45;letter-spacing:normal}
+.lab-cart-first svg{width:18px;height:18px;margin-top:1px;color:var(--ok)}
+.lab-cart-first strong{font-weight:700}
+@media(max-width:479px){.lab-offer__cta{display:none}}

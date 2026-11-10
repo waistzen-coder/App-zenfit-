@@ -1,0 +1,123 @@
+{%- comment -%}
+  Cierre con la oferta: los tres packs otra vez, cada uno con su precio y un
+  botón que va directo al checkout (assets/lab.js registra antes el «añadido
+  al carrito»), más la fecha de entrega, el pago al recibirlo y la devolución.
+  Es para quien ha leído hasta abajo y ya no tiene los botones a la vista.
+  Mismos importes que la ficha: descuento del pack de Ajustes del tema y, en
+  1 unidad, el código de primer pedido.
+{%- endcomment -%}
+{%- liquid
+  assign p = section.settings.product | default: product
+  assign v = p.selected_or_first_available_variant
+  assign tracked = false
+  if v.inventory_management == 'shopify' and v.inventory_policy == 'deny'
+    assign tracked = true
+  endif
+  assign loc = settings.lab_checkout_locale | strip
+  assign qs = '?ref=lab'
+  if loc != blank
+    assign qs = '?locale=' | append: loc
+  endif
+  assign first_code = ''
+  assign first_pct = 0
+  if settings.lab_first_auto and settings.lab_first_code != blank and settings.lab_first_pct > 0
+    assign first_code = settings.lab_first_code | strip
+    assign first_pct = settings.lab_first_pct
+  endif
+  assign fee_on = false
+  assign fee_p = settings.lab_fee_product
+  if settings.lab_cod_fee and fee_p != blank and fee_p.selected_or_first_available_variant.available
+    assign fee_on = true
+  endif
+  assign ret_page = section.settings.ret_page | default: pages['devoluciones']
+-%}
+{%- if p != blank and v.available -%}
+<section class="lab lab-sec lab-close{% if section.settings.surface %} lab-sec--surface{% endif %}" id="{{ section.settings.anchor | default: 'comprar' | handleize }}" aria-labelledby="LabClose-{{ section.id }}">
+  <div class="lab-wrap">
+    <div class="lab-close__head">
+      <h2 class="lab-h2" id="LabClose-{{ section.id }}">{{ section.settings.heading }}</h2>
+      {%- if section.settings.lead != blank -%}<p class="lab-lead">{{ section.settings.lead }}</p>{%- endif -%}
+    </div>
+    <div class="lab-close__grid">
+      {%- for q in (1..3) -%}
+        {%- liquid
+          assign key = 's' | append: q
+          assign d = 0
+          if q >= 3
+            assign d = settings.lab_disc_3
+          elsif q >= 2
+            assign d = settings.lab_disc_2
+          endif
+          assign ok = true
+          if tracked and v.inventory_quantity < q
+            assign ok = false
+          endif
+          assign cut = v.price | times: d | divided_by: 100
+          assign unit = v.price | minus: cut
+          assign pay = unit | times: q
+          assign extra = ''
+          if q == 1 and first_code != blank
+            assign first_cut = v.price | times: first_pct | divided_by: 100
+            assign pay = v.price | minus: first_cut
+            assign unit = pay
+            assign d = first_pct
+            assign extra = first_code | url_encode | prepend: '&discount='
+          endif
+          assign was = v.price | times: q
+          assign save = was | minus: pay
+          if q == 1
+            assign label = 'lab.hero.one' | t
+          else
+            assign label = 'lab.hero.many' | t: count: q
+          endif
+          assign buy = routes.cart_url | append: '/' | append: v.id | append: ':' | append: q | append: qs | append: extra
+        -%}
+        {%- if ok -%}
+          <a class="lab-close__card{% if q == 3 and d > 0 %} lab-best{% endif %}" href="{{ buy }}" data-lab-buy data-lab-place="cierre" data-variant="{{ v.id }}" data-qty="{{ q }}">
+            {%- if d > 0 and save > 0 -%}<span class="lab-pill__tag">−{{ d }} %</span>{%- endif -%}
+            <span class="lab-close__name">{{ label }}</span>
+            <span class="lab-close__desc">{% if q == 1 and first_code != blank %}{{ 'lab.pdp.first_code' | t: code: first_code }}{% else %}{{ section.settings[key] | escape }}{% endif %}</span>
+            <strong class="lab-close__price">{% render 'lab-money', v: pay %}</strong>
+            <span class="lab-close__meta">
+              {%- if save > 0 -%}<s><span class="visually-hidden">{{ 'lab.card.was' | t }}</span>{% render 'lab-money', v: was %}</s>{%- endif -%}
+              {%- if q > 1 %} <span>{% render 'lab-money', v: unit %}{{ 'lab.card.per_unit' | t }}</span>{% endif -%}
+            </span>
+            <span class="lab-btn {% if q == 3 %}lab-btn--accent{% else %}lab-btn--primary{% endif %} lab-btn--block">{{ 'lab.close.buy' | t }}</span>
+          </a>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+    <ul class="lab-close__notes" role="list">
+      <li>{% render 'lab-icon', name: 'truck' %}<span><strong>{% render 'lab-eta' %}.</strong>{% if section.settings.ship != blank %} {{ section.settings.ship | escape }}{% endif %}</span></li>
+      {%- if section.settings.cod and fee_on == false -%}
+        {%- assign cod_txt = 'lab.pdp.cod_free' | t -%}
+        <li>{% render 'lab-icon', name: 'cash' %}<span>{{ 'lab.close.cod' | t: cod: cod_txt }}</span></li>
+      {%- endif -%}
+      {%- if section.settings.ret != blank -%}
+        <li>{% render 'lab-icon', name: 'refresh' %}<span>{{ section.settings.ret | escape }}{% if ret_page != blank %} <a href="{{ ret_page.url }}">{{ 'lab.pdp.terms' | t }}</a>{% endif %}</span></li>
+      {%- endif -%}
+    </ul>
+  </div>
+</section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Lab · Cierre con oferta",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Producto", "info": "En la ficha, vacío: el producto de la página." },
+    { "type": "text", "id": "anchor", "label": "Ancla", "default": "comprar" },
+    { "type": "inline_richtext", "id": "heading", "label": "Título", "default": "Elige tu <em>pack.</em>" },
+    { "type": "inline_richtext", "id": "lead", "label": "Entradilla", "default": "El precio por unidad baja con cada aparato. El envío es gratis en los tres." },
+    { "type": "text", "id": "s1", "label": "1 unidad · texto", "default": "Un aparato" },
+    { "type": "text", "id": "s2", "label": "Pack de 2 · texto", "default": "Uno para ti y otro para regalar" },
+    { "type": "text", "id": "s3", "label": "Pack de 3 · texto", "default": "El precio más bajo por unidad" },
+    { "type": "text", "id": "ship", "label": "Entrega · detalle", "default": "Envío gratis desde España (estimación para península)." },
+    { "type": "checkbox", "id": "cod", "label": "Decir que se puede pagar al recibirlo", "default": true },
+    { "type": "text", "id": "ret", "label": "Devolución", "default": "30 días para devolverlo, con la etiqueta de vuelta pagada." },
+    { "type": "page", "id": "ret_page", "label": "Devolución · página", "info": "Vacío: la página «devoluciones»." },
+    { "type": "checkbox", "id": "surface", "label": "Fondo blanco", "default": false }
+  ],
+  "presets": [{ "name": "Lab · Cierre con oferta" }]
+}
+{% endschema %}

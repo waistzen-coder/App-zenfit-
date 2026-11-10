@@ -3,6 +3,7 @@
   el pack siguiente con lo que cuesta de más y el precio por unidad. El botón
   cambia la cantidad con el método de Dawn (assets/lab.js) y el descuento
   automático de la tienda hace el resto. Importes calculados, no escritos.
+  Con 1 sola unidad recuerda además el precio con el código de primer pedido.
 {%- endcomment -%}
 {%- liquid
   assign mp = settings.lab_main_product
@@ -32,11 +33,25 @@
     endcapture
     assign d = d | plus: 0
     assign extra = next_c | minus: now_c
-    assign extra_f = extra | money
+    capture extra_f
+      render 'lab-money', v: extra
+    endcapture
     capture unit
       render 'lab-pack-price', price: base, qty: next, show: 'unit'
     endcapture
   -%}
+  {%- comment -%} Con 1 unidad, el código de primer pedido se aplica al pagar: se dice aquí para que el total del carrito no despiste. {%- endcomment -%}
+  {%- if it.quantity == 1 and cart.item_count == 1 and settings.lab_first_auto and settings.lab_first_code != blank and settings.lab_first_pct > 0 -%}
+    {%- liquid
+      assign first_cut = base | times: settings.lab_first_pct | divided_by: 100
+      assign first_net = base | minus: first_cut
+      capture first_f
+        render 'lab-money', v: first_net
+      endcapture
+      assign first_code = settings.lab_first_code | strip
+    -%}
+    <p class="lab lab-cart-first">{% render 'lab-icon', name: 'tag' %}<span>{{ 'lab.cart.first_html' | t: code: first_code, price: first_f }}</span></p>
+  {%- endif -%}
   {%- if d > 0 -%}
     <div class="lab lab-upsell">
       <div>

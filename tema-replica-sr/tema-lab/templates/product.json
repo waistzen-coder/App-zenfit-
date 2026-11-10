@@ -8,10 +8,11 @@
       },
       "blocks": {
         "b1": {
-          "type": "description",
+          "type": "tab",
           "settings": {
-            "title": "Descripción",
-            "open": true
+            "title": "Qué es y qué hace",
+            "open": true,
+            "text": "<p>ReliefPath™ es un aparato de bienestar para usar en casa. Reúne tres funciones en uno: <strong>ventosa eléctrica</strong> de succión regulable, <strong>calor</strong> y <strong>luz roja</strong> dentro de la copa transparente. Se maneja desde el panel superior.</p><p>No es un producto sanitario ni sustituye un tratamiento.</p>"
           }
         },
         "b2": {
@@ -35,15 +36,15 @@
           "settings": {
             "title": "Envío, devoluciones y garantía",
             "open": false,
-            "text": "<p><strong>Envío:</strong> gratis desde un almacén en España, con seguimiento. Península en 24–48 h; Baleares en 2–4 días laborables; Canarias, Ceuta y Melilla, consúltanos antes.</p><p><strong>Devoluciones:</strong> 14 días de desistimiento por ley, ampliados a 30 días desde la recepción. La etiqueta la pagamos nosotros.</p><p><strong>Garantía:</strong> 3 años de garantía legal de conformidad.</p><p><a href=\"/pages/envios\">Envíos</a> · <a href=\"/pages/devoluciones\">Devoluciones</a></p>"
+            "text": "<p><strong>Envío:</strong> gratis desde un almacén en España, con seguimiento. Península en 24–48 h laborables; Baleares en 2–4 días laborables; Canarias, Ceuta y Melilla, consúltanos antes.</p><p><strong>Devoluciones:</strong> 14 días de desistimiento por ley, ampliados a 30 días desde la recepción. La etiqueta la pagamos nosotros.</p><p><strong>Garantía:</strong> 3 años de garantía legal de conformidad.</p><p><a href=\"/pages/envios\">Envíos</a> · <a href=\"/pages/devoluciones\">Devoluciones</a></p>"
           }
         },
         "b5": {
           "type": "tab",
           "settings": {
-            "title": "Pago contra reembolso",
+            "title": "Formas de pago",
             "open": false,
-            "text": "<p>Si tu dirección tiene cobertura, puedes pagar al recibirlo. Se añade un recargo de gestión de <strong>[fee]</strong> por pedido, que aparece como una línea más antes de confirmar.</p>"
+            "text": "<p>Tarjeta, Bizum, PayPal, Klarna, Apple Pay y Google Pay. También puedes <strong>pagar al recibirlo</strong> en efectivo, [cod]: en el último paso elige «Pago contra entrega».</p>"
           }
         }
       },
@@ -392,29 +393,43 @@
           "type": "qa",
           "settings": {
             "q": "¿Puedo pagar al recibirlo?",
-            "a": "<p>Sí, con contrareembolso si tu dirección tiene cobertura. Se añade un recargo de gestión de <strong>[fee]</strong> por pedido, que verás como una línea más antes de pagar.</p>"
+            "a": "<p>Sí. Pagas en efectivo al repartidor, [cod]. En el último paso de la compra elige <strong>«Pago contra entrega»</strong>. Para Canarias, Ceuta y Melilla, escríbenos antes de pedir.</p>"
           }
         },
         "b8": {
+          "type": "qa",
+          "settings": {
+            "q": "¿Es seguro comprar aquí?",
+            "a": "<p>El pago se hace en el checkout de Shopify, cifrado: nosotros no vemos ni guardamos los datos de tu tarjeta. Si prefieres no pagar por adelantado, puedes pagar al recibirlo. Vendemos desde Motril (Granada) y respondemos por escrito en <a href=\"mailto:waistzen@gmail.com\">waistzen@gmail.com</a>.</p>"
+          }
+        },
+        "b9": {
           "type": "group",
           "settings": {
             "title": "Devoluciones"
           }
         },
-        "b9": {
+        "b10": {
           "type": "qa",
           "settings": {
             "q": "¿Puedo devolverlo?",
             "a": "<p>Tienes 14 días de desistimiento por ley y lo ampliamos a <strong>30 días</strong> desde que lo recibes. La etiqueta de devolución la pagamos nosotros. <a href=\"/pages/devoluciones\">Ver devoluciones</a>.</p>"
           }
         },
-        "b10": {
+        "b11": {
           "type": "group",
           "settings": {
             "title": "Producto"
           }
         },
-        "b11": {
+        "b12": {
+          "type": "qa",
+          "settings": {
+            "q": "¿Deja marcas en la piel?",
+            "a": "<p>Las ventosas trabajan por succión y pueden dejar marcas circulares temporales en la piel. Empieza siempre por el nivel más bajo, respeta los tiempos del manual y, si tienes la piel sensible o cualquier duda, consulta antes a un profesional sanitario.</p>"
+          }
+        },
+        "b13": {
           "type": "qa",
           "settings": {
             "q": "¿Sustituye a un fisioterapeuta o a un tratamiento?",
@@ -433,7 +448,9 @@
         "b8",
         "b9",
         "b10",
-        "b11"
+        "b11",
+        "b12",
+        "b13"
       ]
     },
     "receipt": {
@@ -494,7 +511,7 @@
           "type": "line",
           "settings": {
             "label": "Pago al recibirlo",
-            "value": "+[fee]"
+            "value": "[codfee]"
           }
         },
         "b8": {
@@ -532,6 +549,12 @@
         "b10"
       ]
     },
+    "close": {
+      "type": "lab-close",
+      "settings": {
+        "product": ""
+      }
+    },
     "legal": {
       "type": "lab-legal",
       "settings": {}
@@ -546,6 +569,7 @@
     "proof",
     "faq",
     "receipt",
+    "close",
     "legal"
   ]
 }

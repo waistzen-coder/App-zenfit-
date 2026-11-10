@@ -45,8 +45,8 @@ FIGURES = [
     block('figure', value='3 años', label='De garantía legal', page='devoluciones'),
 ]
 CHIPS = [
-    block('chip', icon='lock', text='Pago 100 % seguro'),
-    block('chip', icon='truck', text='Envío 24–48 h'),
+    block('chip', icon='cash', text='Paga al recibirlo'),
+    block('chip', icon='truck', text='Envío gratis en 24–48 h'),
     block('chip', icon='refresh', text='30 días para devolver'),
     block('chip', icon='chat', text='Atención en español'),
 ]
@@ -133,10 +133,18 @@ Q_SHIP_TIME = qa('¿Cuánto tarda en llegar?',
 Q_SHIP_COST = qa('¿Cuánto cuesta el envío?',
                  '<p>El envío estándar es gratis a las direcciones de España que admite el checkout. Revisa el total antes de confirmar.</p>')
 Q_COD = qa('¿Puedo pagar al recibirlo?',
-           '<p>Sí, con contrareembolso si tu dirección tiene cobertura. Se añade un recargo de gestión de <strong>[fee]</strong> por pedido, '
-           'que verás como una línea más antes de pagar.</p>')
+           '<p>Sí. Pagas en efectivo al repartidor, [cod]. En el último paso de la compra elige <strong>«Pago contra entrega»</strong>. '
+           'Para Canarias, Ceuta y Melilla, escríbenos antes de pedir.</p>')
 Q_PAY = qa('¿Cómo puedo pagar?',
-           '<p>Con tarjeta y con los métodos que muestra el checkout (los ves en el pie de esta página), o al recibirlo con contrareembolso.</p>')
+           '<p>Con tarjeta, Bizum, PayPal, Klarna, Apple Pay o Google Pay, o al recibirlo en efectivo ([cod]). '
+           'La forma de pago se elige en el último paso.</p>')
+Q_SAFE = qa('¿Es seguro comprar aquí?',
+            '<p>El pago se hace en el checkout de Shopify, cifrado: nosotros no vemos ni guardamos los datos de tu tarjeta. '
+            'Si prefieres no pagar por adelantado, puedes pagar al recibirlo. Vendemos desde Motril (Granada) y respondemos por escrito en '
+            '<a href="mailto:waistzen@gmail.com">waistzen@gmail.com</a>.</p>')
+Q_MARKS = qa('¿Deja marcas en la piel?',
+             '<p>Las ventosas trabajan por succión y pueden dejar marcas circulares temporales en la piel. Empieza siempre por el nivel más bajo, '
+             'respeta los tiempos del manual y, si tienes la piel sensible o cualquier duda, consulta antes a un profesional sanitario.</p>')
 Q_RETURN = qa('¿Puedo devolverlo?',
               '<p>Tienes 14 días de desistimiento por ley y lo ampliamos a <strong>30 días</strong> desde que lo recibes. '
               'La etiqueta de devolución la pagamos nosotros. <a href="/pages/devoluciones">Ver devoluciones</a>.</p>')
@@ -163,15 +171,15 @@ def faq(blocks, **over):
 FAQ_SHORT = [
     block('group', title='Pedidos'), Q_PRICE,
     block('group', title='Envíos'), Q_SHIP_TIME,
-    block('group', title='Pagos'), Q_COD,
+    block('group', title='Pagos'), Q_COD, Q_SAFE,
     block('group', title='Devoluciones'), Q_RETURN,
-    block('group', title='Producto'), Q_MED,
+    block('group', title='Producto'), Q_MARKS, Q_MED,
 ]
 FAQ_FULL = [
     block('group', title='Pedidos'), Q_PRICE, Q_CODE, Q_BOX,
     block('group', title='Envíos'), Q_SHIP_TIME, Q_SHIP_COST,
-    block('group', title='Producto'), Q_WHAT, Q_USE, Q_MED,
-    block('group', title='Pagos'), Q_PAY, Q_COD,
+    block('group', title='Producto'), Q_WHAT, Q_USE, Q_MARKS, Q_MED,
+    block('group', title='Pagos'), Q_PAY, Q_COD, Q_SAFE,
     block('group', title='Devoluciones'), Q_RETURN, Q_WARRANTY,
 ]
 
@@ -206,11 +214,18 @@ def receipt(**over):
         block('line', label='Etiqueta de devolución', value='[0]', page='devoluciones'),
         block('line', label='Garantía legal', value='3 años', page='devoluciones'),
         block('line', label='Pago con tarjeta', value='Sin recargo'),
-        block('line', label='Pago al recibirlo', value='+[fee]'),
+        block('line', label='Pago al recibirlo', value='[codfee]'),
         block('link', label='Ver envíos', page='envios'),
         block('link', label='Ver devoluciones', page='devoluciones'),
         block('link', label='¿Dudas? Escríbenos', page='contact'),
     ])
+
+
+def close(**over):
+    # Los tres packs otra vez al final, con enlace directo al checkout.
+    s = {'product': PRODUCT}
+    s.update(over)
+    return section('lab-close', s)
 
 
 def legal():
@@ -288,13 +303,17 @@ save('templates/index.json', template(
     ('faq', faq(FAQ_SHORT)),
     ('about', about()),
     ('receipt', receipt()),
+    ('close', close(surface=False)),
     ('legal', legal()),
 ))
 
 # Ficha de producto -------------------------------------------------------------
 
 PDP_TABS = [
-    block('description', title='Descripción', open=True),
+    block('tab', title='Qué es y qué hace', open=True,
+          text='<p>ReliefPath™ es un aparato de bienestar para usar en casa. Reúne tres funciones en uno: <strong>ventosa eléctrica</strong> '
+               'de succión regulable, <strong>calor</strong> y <strong>luz roja</strong> dentro de la copa transparente. Se maneja desde el panel superior.</p>'
+               '<p>No es un producto sanitario ni sustituye un tratamiento.</p>'),
     block('tab', title='Modo de uso', open=False,
           text='<p>Antes del primer uso, lee el manual del fabricante: zonas permitidas, duración, frecuencia, niveles y contraindicaciones. '
                'Empieza siempre por el nivel más bajo de succión y calor.</p><p>Ante dolor, una lesión o una reacción inesperada, deja de usarlo '
@@ -303,13 +322,13 @@ PDP_TABS = [
           text='<p>La cantidad de aparatos ReliefPath™ del pack que elijas. Para confirmar accesorios, alimentación o tipo de cable antes de comprar, '
                'escríbenos a <a href="mailto:waistzen@gmail.com">waistzen@gmail.com</a>.</p>'),
     block('tab', title='Envío, devoluciones y garantía', open=False,
-          text='<p><strong>Envío:</strong> gratis desde un almacén en España, con seguimiento. Península en 24–48 h; Baleares en 2–4 días laborables; '
+          text='<p><strong>Envío:</strong> gratis desde un almacén en España, con seguimiento. Península en 24–48 h laborables; Baleares en 2–4 días laborables; '
                'Canarias, Ceuta y Melilla, consúltanos antes.</p><p><strong>Devoluciones:</strong> 14 días de desistimiento por ley, ampliados a 30 días '
                'desde la recepción. La etiqueta la pagamos nosotros.</p><p><strong>Garantía:</strong> 3 años de garantía legal de conformidad.</p>'
                '<p><a href="/pages/envios">Envíos</a> · <a href="/pages/devoluciones">Devoluciones</a></p>'),
-    block('tab', title='Pago contra reembolso', open=False,
-          text='<p>Si tu dirección tiene cobertura, puedes pagar al recibirlo. Se añade un recargo de gestión de <strong>[fee]</strong> por pedido, '
-               'que aparece como una línea más antes de confirmar.</p>'),
+    block('tab', title='Formas de pago', open=False,
+          text='<p>Tarjeta, Bizum, PayPal, Klarna, Apple Pay y Google Pay. También puedes <strong>pagar al recibirlo</strong> en efectivo, [cod]: '
+               'en el último paso elige «Pago contra entrega».</p>'),
 ]
 PDP = template(
     ('main', section('lab-product', {'default_pack': 1, 'cod': True}, PDP_TABS)),
@@ -320,6 +339,7 @@ PDP = template(
     ('proof', proof(surface=True)),
     ('faq', faq(FAQ_SHORT[:2] + [Q_CODE] + FAQ_SHORT[2:], schema=False)),
     ('receipt', receipt()),
+    ('close', close(product='')),
     ('legal', legal()),
 )
 save('templates/product.json', PDP)
@@ -375,7 +395,7 @@ save('templates/page.guia.json', template(
               body='<p>Gratis desde un almacén en España, con seguimiento. Península: 24–48 h. Baleares: 2–4 días laborables. '
                    'Canarias, Ceuta y Melilla: escríbenos antes de pedir. <a href="/pages/envios">Ver envíos</a>.</p>'),
         block('chapter', title='Pago',
-              body='<p>Con tarjeta en el checkout o al recibirlo con contrareembolso, con un recargo de gestión de [fee] por pedido.</p>'),
+              body='<p>Con tarjeta, Bizum, PayPal o Klarna en el checkout, o al recibirlo en efectivo, [cod].</p>'),
         block('chapter', title='Devoluciones y garantía',
               body='<p>14 días de desistimiento por ley, ampliados a 30 días desde la recepción. La etiqueta la pagamos nosotros. '
                    'Garantía legal de conformidad de 3 años. <a href="/pages/devoluciones">Ver devoluciones</a>.</p>'),
@@ -411,7 +431,7 @@ save('templates/page.landing-espana.json', template(
 save('sections/header-group.json', {
     'type': 'header', 'name': 'Header group',
     'sections': {
-        'offer': section('lab-offer', {'tag': 'PACKS', 'cta': 'Lo quiero', 'closable': True}),
+        'offer': section('lab-offer', {'tag': 'ENVÍO GRATIS', 'text_short': '24–48 h · Paga al recibirlo', 'cta': 'Ver packs', 'closable': True}),
         'header': section('lab-header', {'buy_label': 'Comprar'}),
     },
     'order': ['offer', 'header'],
