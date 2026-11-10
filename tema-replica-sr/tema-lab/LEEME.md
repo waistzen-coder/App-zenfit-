@@ -75,6 +75,35 @@ todas las secciones, y solo se animan `transform` y `opacity`.
 
 Eventos nuevos: `lab_tour_chapter`, `lab_tour_cta`, `lab_receipt_view`.
 
+## Venta (10-11): la caja de compra y el camino al pago
+
+Se comprobó la tienda real antes de tocar nada: el checkout ya está en
+español y ofrece tarjeta, PayPal, Bizum, Klarna y «Pago contra entrega» sin
+recargo; la página de Envíos promete contrareembolso «sin recargo» y entrega
+en 24–48 h laborables. La ficha anterior decía lo contrario (recargo de 5 €)
+y obligaba a pasar por el carrito.
+
+| Cambio | Por qué | Dónde |
+|---|---|---|
+| Botón principal «Comprar ahora · total» que va directo al checkout con el pack elegido; «Añadir al carrito» pasa a enlace de texto | Un paso menos entre la decisión y el pago | `sections/lab-product`, `lab.js` (`buy`, `toCheckout`) |
+| «Pagar al recibirlo» sin recargo como segundo botón, que abre el mismo checkout | Coincide con lo que ya ofrece la tienda. El recargo vuelve con un interruptor | *Ajustes del tema › Pago al recibirlo* (`lab_cod_fee`) |
+| Fecha de entrega estimada («Recíbelo entre el martes 11 y el miércoles 12») con hora de corte, fines de semana y festivos nacionales | Una fecha se entiende mejor que «24–48 h» ([Baymard](https://baymard.com/blog/shipping-speed-vs-delivery-date)) | `snippets/lab-eta`, `lab.js` (`eta`), *Ajustes del tema › Entrega estimada* |
+| Precio de 1 unidad con el código de primer pedido ya restado (44,96 €, 49,95 € tachado, «−10 %») y la condición escrita debajo | Es el precio que se paga de verdad en el checkout | `lab-product`, `lab-close` |
+| Devolución, garantía y ayuda justo debajo de los botones, con enlace a la página que lo prueba | La duda aparece al lado del botón ([pruebas de Blend Commerce](https://blendcommerce.com/blogs/ab-tests-shopify/30-33-increase-in-conversion-rate)) | `.lab-assure` |
+| Sección de cierre con los tres packs y su botón al checkout, en ficha y portada | Quien lee hasta abajo ya no tiene los botones a la vista | `sections/lab-close` |
+| Barra fija: en móvil sale al perder de vista los botones; en ordenador es una píldora centrada; se aparta en el cierre | [Prueba de barra fija](https://blendcommerce.com/blogs/ab-tests-shopify/better-placed-sticky-add-to-cart-product-page-conversion) | `lab.css`, `lab.js` (`pdp`) |
+| Importes en formato español («44,96 €») también en el carrito | El formato de la tienda es «€44,96» | `snippets/lab-money`, *Ajustes del tema › Precios* (`lab_price_es`) |
+| Carrito: aviso del código de primer pedido, fecha de entrega y garantías junto al botón de pagar | Lo mismo que en la ficha, en el último paso | `lab-cart-upsell`, `lab-cart-trust` |
+| Galería en móvil con la foto siguiente asomando y contador | Se ve que hay más fotos ([Baymard](https://baymard.com/blog/always-use-thumbnails-additional-images)) | `lab.css` |
+| Iconos de pago: solo los que se usan en España | Menos ruido bajo el botón | ajuste `pay_hide` de la ficha |
+
+Eventos: `lab_buy_now` y `lab_cod_checkout` llevan ahora `qty` y `place`
+(`ficha`, `barra` o `cierre`).
+
+Una limitación de Shopify que conviene recordar: una sección con bloque de
+app (`@app`) no admite ajustes de tipo «página». Por eso los enlaces de
+devolución y ayuda de la ficha son de texto.
+
 ## Reglas que sigue
 
 - Los precios de los packs se calculan con los descuentos de *Ajustes del
@@ -82,7 +111,9 @@ Eventos nuevos: `lab_tour_chapter`, `lab_tour_cta`, `lab_receipt_view`.
   cambia también esos dos números.
 - Los textos editables admiten marcas que se cambian por el importe real:
   `[p1] [p2] [p3]` total del pack, `[u2] [u3]` o `[desde]` precio por unidad,
-  `[d2] [d3]` descuento y `[fee]` recargo del contrareembolso.
+  `[d2] [d3]` descuento, `[fee]` recargo del contrareembolso (vacío si no
+  hay), `[cod]` «sin recargo» o el recargo en frase y `[codfee]` lo mismo en
+  corto.
 - No hay reseñas, notas ni certificados inventados. Los documentos sin enlace
   (manual, declaración CE) y el vídeo solo se ven en el editor, marcados como
   PENDIENTE.

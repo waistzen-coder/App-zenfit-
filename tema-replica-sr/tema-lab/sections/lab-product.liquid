@@ -351,7 +351,9 @@
 
         {%- if shop.enabled_payment_types.size > 0 -%}
           <ul class="lab-pay" aria-label="{{ 'lab.footer.pay' | t }}">
-            {%- for type in shop.enabled_payment_types -%}<li>{{ type | payment_type_svg_tag }}</li>{%- endfor -%}
+            {%- for type in shop.enabled_payment_types -%}
+              {%- unless section.settings.pay_hide contains type -%}<li>{{ type | payment_type_svg_tag }}</li>{%- endunless -%}
+            {%- endfor -%}
             {%- if section.settings.cod -%}<li class="lab-pay__cod">{% render 'lab-icon', name: 'cash' %}{{ 'lab.pdp.cod_chip' | t }}</li>{%- endif -%}
           </ul>
         {%- endif -%}
@@ -473,6 +475,7 @@
     { "type": "inline_richtext", "id": "pay_note", "label": "Nota bajo los botones", "default": "Pagar al recibirlo no tiene recargo. También con tarjeta, Bizum, PayPal o Klarna: lo eliges en el último paso." },
     { "type": "inline_richtext", "id": "pay_note_fee", "label": "Nota bajo los botones (con recargo)", "info": "[fee] escribe el importe del recargo.", "default": "Con tarjeta, Bizum, PayPal o Klarna no hay recargo. Al recibirlo se añaden [fee] de gestión." },
     { "type": "inline_richtext", "id": "pay_note_nocod", "label": "Nota bajo los botones (sin contrareembolso)", "default": "Pago seguro con tarjeta, Bizum, PayPal o Klarna." },
+    { "type": "text", "id": "pay_hide", "label": "Formas de pago que no se enseñan", "info": "Separadas por comas. Siguen activas en el checkout; solo se quitan del listado de la ficha.", "default": "bancontact,mobilepay,satispay,maestro" },
     { "type": "header", "content": "Garantías junto al botón" },
     { "type": "text", "id": "g_ship", "label": "Entrega · detalle", "info": "La fecha se calcula sola (Ajustes del tema › Entrega estimada).", "default": "Envío gratis desde España. Estimación para península." },
     { "type": "text", "id": "g_ret", "label": "Devolución", "default": "30 días para devolverlo" },

@@ -177,8 +177,8 @@ patch('layout/theme.liquid', [
     ("    {{ 'base.css' | asset_url | stylesheet_tag }}",
      "    {{ 'base.css' | asset_url | stylesheet_tag }}\n"
      "    {{ 'lab.css' | asset_url | stylesheet_tag }}\n"
-     "    {{ 'lab-inter.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2' }}\n"
-     "    {{ 'lab-intertight.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2' }}"),
+     "    {{ 'lab-inter.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}\n"
+     "    {{ 'lab-intertight.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}"),
     ('  <body class="gradient', '  <body class="lab{% if settings.lab_dark %} lab-dark-ok{% endif %}{% if settings.lab_reveals %} lab-rv{% endif %} gradient'),
     ('    <a class="skip-to-content-link button visually-hidden" href="#MainContent">',
      '    {%- if settings.lab_progress -%}<div class="lab-progress" aria-hidden="true"></div>{%- endif -%}\n'
