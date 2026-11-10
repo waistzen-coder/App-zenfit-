@@ -573,6 +573,15 @@
           if (on) sticky.removeAttribute('inert'); else sticky.setAttribute('inert', '');
         };
         onScroll(toggle); toggle();
+        /* El alto de la página cambia sin que nadie haga scroll (fotos que
+           cargan, acordeones): se vuelve a mirar cuando los botones o el
+           cierre entran o salen de la pantalla. */
+        if ('IntersectionObserver' in window) {
+          var io = new IntersectionObserver(toggle, { rootMargin: '-160px 0px -160px 0px' });
+          io.observe(actions);
+          if (closing) io.observe(closing);
+        }
+        window.addEventListener('resize', toggle, { passive: true });
       }
     });
   }
