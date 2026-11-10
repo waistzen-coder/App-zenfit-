@@ -74,7 +74,9 @@
       {%- endif -%}
       {%- if shop.enabled_payment_types.size > 0 -%}
         <ul class="lab-pay" aria-label="{{ 'lab.footer.pay' | t }}">
-          {%- for type in shop.enabled_payment_types -%}<li>{{ type | payment_type_svg_tag }}</li>{%- endfor -%}
+          {%- for type in shop.enabled_payment_types -%}
+            {%- unless section.settings.pay_hide contains type -%}<li>{{ type | payment_type_svg_tag }}</li>{%- endunless -%}
+          {%- endfor -%}
         </ul>
       {%- endif -%}
       {%- if localization.available_languages.size > 1 -%}
@@ -104,7 +106,8 @@
     { "type": "text", "id": "title_2", "label": "Columna 2 · título", "default": "Ayuda" },
     { "type": "link_list", "id": "menu_2", "label": "Columna 2 · menú", "info": "Vacío: contacto, seguimiento, envíos y devoluciones." },
     { "type": "text", "id": "title_3", "label": "Columna 3 · título", "default": "Legal" },
-    { "type": "link_list", "id": "menu_3", "label": "Columna 3 · menú", "info": "Vacío: condiciones, privacidad, cookies, devoluciones, envíos y aviso legal." }
+    { "type": "link_list", "id": "menu_3", "label": "Columna 3 · menú", "info": "Vacío: condiciones, privacidad, cookies, devoluciones, envíos y aviso legal." },
+    { "type": "text", "id": "pay_hide", "label": "Formas de pago que no se enseñan", "info": "Separadas por comas. Siguen activas en el checkout; solo se quitan del listado del pie.", "default": "bancontact,mobilepay,satispay,maestro" }
   ]
 }
 {% endschema %}
