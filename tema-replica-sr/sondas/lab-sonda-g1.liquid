@@ -1,0 +1,68 @@
+<div></div>
+{% schema %}
+{
+  "name": "Sonda g1",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Ceja",
+      "default": "Aparato de bienestar · uso doméstico"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtítulo del H1 (opcional)",
+      "info": "Vacío, el precio sube en la primera pantalla del móvil."
+    },
+    {
+      "type": "text",
+      "id": "brand",
+      "label": "Marca (datos estructurados)",
+      "default": "ReliefPath"
+    },
+    {
+      "type": "text",
+      "id": "ship_note",
+      "label": "Nota bajo el precio",
+      "default": "Envío gratis."
+    },
+    {
+      "type": "range",
+      "id": "default_pack",
+      "label": "Pack elegido al entrar",
+      "min": 1,
+      "max": 3,
+      "step": 1,
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "low_stock",
+      "label": "Avisar de pocas unidades por debajo de",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "default": 10
+    },
+    {
+      "type": "text",
+      "id": "s1",
+      "label": "1 unidad · texto",
+      "default": "Un aparato"
+    },
+    {
+      "type": "text",
+      "id": "s2",
+      "label": "Pack de 2 · texto",
+      "default": "Uno para ti y otro para regalar"
+    },
+    {
+      "type": "text",
+      "id": "s3",
+      "label": "Pack de 3 · texto",
+      "default": "El precio más bajo por unidad"
+    }
+  ]
+}
+{% endschema %}
