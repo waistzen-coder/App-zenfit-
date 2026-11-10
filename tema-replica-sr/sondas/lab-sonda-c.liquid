@@ -1,0 +1,73 @@
+{%- comment -%}
+  Ficha de producto Lab, pensada para vender desde el móvil:
+  galería → título → precio (el de primer pedido si hay código) → packs con
+  lo que se ahorra → un botón principal «Comprar ahora» que va directo al
+  checkout en español → «Pagar al recibirlo» → fecha de entrega estimada,
+  devolución y garantía → formas de pago → acordeón. «Añadir al carrito»
+  queda como opción secundaria. Barra fija de compra en móvil y escritorio y
+  Product + Offer + Breadcrumb.
+  Los importes de cada pack se calculan aquí; el JS solo los cambia de sitio.
+  No hay precios tachados inventados: lo tachado es el precio de la unidad
+  suelta, que es el que se cobra sin pack ni código.
+{%- endcomment -%}
+{%- liquid
+  assign p = product
+  assign v = p.selected_or_first_available_variant
+  assign pid = 'LabPdp-' | append: section.id
+  assign fee_p = settings.lab_fee_product
+  assign is_fee = false
+  if fee_p != blank and fee_p.id == p.id
+    assign is_fee = true
+  endif
+  assign fee = 0
+  if section.settings.cod and settings.lab_cod_fee and fee_p != blank and is_fee == false
+    assign fee_v = fee_p.selected_or_first_available_variant
+    if fee_v.available
+      assign fee = fee_v.price
+    endif
+  endif
+  assign tracked = false
+  if v.inventory_management == 'shopify' and v.inventory_policy == 'deny'
+    assign tracked = true
+  endif
+  assign rating_count = p.metafields.reviews.rating_count.value | default: 0
+  assign root = routes.root_url
+  if root == '/'
+    assign root = ''
+  endif
+  assign start_q = 1
+  if section.settings.default_pack > 1 and v.available
+    assign start_q = section.settings.default_pack
+    if tracked and v.inventory_quantity < start_q
+      assign start_q = 1
+    endif
+  endif
+  assign cod_note = 'lab.pdp.cod_note' | t | url_encode
+  assign cod_attr = 'Contrareembolso' | url_encode
+  capture fee_f
+    render 'lab-money', v: fee
+  endcapture
+  assign loc = settings.lab_checkout_locale | strip
+  assign qs = '?ref=lab'
+  if loc != blank
+    assign qs = '?locale=' | append: loc
+  endif
+  comment
+    Código de primer pedido: solo vale con 1 unidad (no se suma a los packs).
+    Va puesto en el enlace de compra, así que el precio de 1 unidad se enseña
+    ya con él, diciendo de dónde sale.
+  endcomment
+  assign first_code = ''
+  assign first_pct = 0
+  if settings.lab_first_auto and settings.lab_first_code != blank and settings.lab_first_pct > 0
+    assign first_code = settings.lab_first_code | strip
+    assign first_pct = settings.lab_first_pct
+  endif
+  assign first_code_enc = first_code | url_encode
+  assign ret_page = section.settings.ret_page | default: pages['devoluciones']
+  assign help_page = section.settings.help_page | default: pages['contact']
+  assign wa = settings.lab_whatsapp | remove: ' ' | remove: '+' | remove: '-' | strip
+-%}
+{% schema %}
+{ "name": "Sonda", "settings": [] }
+{% endschema %}
