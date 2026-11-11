@@ -158,6 +158,14 @@
     var box = document.getElementById('LabMenu');
     if (!open || !box || !once(box, 'labInit')) return;
     var panel = box.querySelector('.lab-drawer__panel');
+    /* La cabecera lleva backdrop-filter y a veces transform: los dos encierran
+       a los hijos con position:fixed dentro de su caja, y el cajón solo
+       pintaba su fondo en la franja de la cabecera. Se cuelga del body para
+       que ocupe la pantalla entera. En el editor la cabecera se vuelve a
+       pintar: se quita el cajón anterior. */
+    $$('.lab-drawer[data-lab-moved]').forEach(function (prev) { if (prev !== box) prev.parentNode.removeChild(prev); });
+    box.setAttribute('data-lab-moved', '');
+    document.body.appendChild(box);
     function close() {
       if (!box.hasAttribute('open')) return;
       box.removeAttribute('open');
