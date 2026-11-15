@@ -820,9 +820,6 @@ html.lab-scrolled .lab-header{box-shadow:0 12px 30px -24px rgba(11,18,32,.45)}
   .lab-pdp .lab-price__now{font-size:26px}
   html.lab-has-sticky body.lab{padding-bottom:calc(72px + env(safe-area-inset-bottom))}
 }
-.lab-teaser{display:inline-flex;align-items:center;gap:6px;align-self:flex-start;margin:2px 0 0;padding:0;border:0;background:none;color:var(--accent);font:600 14px/1.3 var(--f-body);cursor:pointer;text-align:left}
-.lab-teaser:hover{text-decoration:underline;text-underline-offset:3px}
-.lab-teaser[hidden]{display:none}
 .lab-pill__code{display:block;margin-top:3px;color:var(--ok)!important;font-size:12px!important;font-weight:600}
 .lab-cart-trust{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 14px;margin:12px 0 0;padding:0;list-style:none;color:var(--muted);font:500 12px/1.3 var(--f-body);letter-spacing:normal}
 .lab-cart-trust li{display:inline-flex;align-items:center;gap:6px}
@@ -1029,3 +1026,114 @@ html.lab-tour-on .lab-sticky{transform:translateY(110%)}
 .lab-cart-first svg{width:18px;height:18px;margin-top:1px;color:var(--ok)}
 .lab-cart-first strong{font-weight:700}
 @media(max-width:479px){.lab-offer__cta{display:none}}
+
+/* =====================================================================
+   Auditoría (15-11): lo que salió al recorrer la tienda real pantalla a
+   pantalla (móvil, ordenador y modo oscuro) y al compararla con las
+   fichas que mejor venden.
+   ===================================================================== */
+
+/* Las tres funciones con icono, bajo el precio */
+.lab-feats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:0;padding:0;list-style:none}
+.lab-feats li{display:grid;align-content:start;justify-items:start;gap:1px;min-width:0;padding:11px 11px 12px;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+.lab-feats svg{width:20px;height:20px;margin-bottom:5px;color:var(--accent)}
+.lab-feats strong{color:var(--ink);font:600 14px/1.2 var(--f-head);letter-spacing:-.01em}
+.lab-feats span{color:var(--muted);font-size:12px;line-height:1.3}
+
+/* «En stock» con la fecha de entrega, antes de los packs */
+.lab-avail{display:grid;gap:6px}
+.lab-avail p{margin:0}
+.lab-avail .lab-stock,.lab-avail__eta{display:grid;grid-template-columns:18px minmax(0,1fr);gap:8px;align-items:start}
+.lab-avail .lab-stock{align-items:center}
+.lab-avail .lab-stock::before{justify-self:center}
+.lab-avail__eta{color:var(--ink);font-size:14px;line-height:1.4}
+.lab-avail__eta svg{width:18px;height:18px;margin-top:1px;color:var(--muted)}
+.lab-avail__eta .lab-eta b{font-weight:700}
+
+/* Pie: los iconos de pago en fila (la regla de las listas del pie los apilaba) */
+.lab-footer .lab-pay{display:flex;gap:6px}
+
+/* Aviso de cookies de Shopify: el original ocupaba más de media pantalla del
+   móvil y tapaba el precio y el botón. Queda abajo, compacto, con «Aceptar»
+   y «Rechazar» iguales y al mismo nivel. */
+body.lab .shopify-pc__banner__dialog{left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));width:auto;min-width:0;max-width:460px;max-height:70%;margin:0 auto;padding:16px;
+  border:1px solid var(--line);border-radius:16px;background:var(--surface);color:var(--ink);box-shadow:0 18px 48px -16px rgba(11,18,32,.5);font-family:var(--f-body)}
+body.lab .shopify-pc__banner__dialog h2{margin:0 0 4px;color:var(--ink);font:600 15px/1.3 var(--f-head);letter-spacing:-.01em}
+body.lab .shopify-pc__banner__dialog p{color:var(--muted);font-size:12.5px;line-height:1.45;letter-spacing:normal}
+body.lab .shopify-pc__banner__dialog a{color:var(--ink)}
+body.lab .shopify-pc__banner__body{margin-bottom:12px}
+body.lab .shopify-pc__banner__btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;align-items:center}
+body.lab .shopify-pc__banner__dialog button{margin:0;min-height:44px;padding:0 14px;border-radius:999px;font:600 14px/1 var(--f-body);letter-spacing:0}
+body.lab .shopify-pc__banner__dialog button.shopify-pc__banner__btn-accept,
+body.lab .shopify-pc__banner__dialog button.shopify-pc__banner__btn-decline{border:1px solid var(--ink);background:var(--surface);color:var(--ink)}
+body.lab .shopify-pc__banner__dialog button.shopify-pc__banner__btn-manage-prefs{grid-column:1/-1;order:3;min-height:30px;padding:0;color:var(--muted);font-weight:500;font-size:13px}
+@media(max-width:749px){
+  /* En el móvil cada línea cuenta: sin el titular (queda para lectores de pantalla) el aviso no llega al precio. */
+  body.lab .shopify-pc__banner__dialog{left:8px;right:8px;bottom:calc(8px + env(safe-area-inset-bottom));padding:14px}
+  body.lab .shopify-pc__banner__dialog h2{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+  body.lab .shopify-pc__banner__dialog p{font-size:12px;line-height:1.4}
+  body.lab .shopify-pc__banner__body{margin-bottom:10px}
+  body.lab .shopify-pc__banner__dialog button.shopify-pc__banner__btn-manage-prefs{min-height:26px}
+}
+@media(min-width:750px){body.lab .shopify-pc__banner__dialog{left:24px;right:auto;bottom:24px;margin:0;width:420px}}
+
+/* Comparativa con las ventosas manuales */
+.lab-cmp__wrap{display:grid;gap:28px}
+.lab-cmp__cta{display:flex;flex-wrap:wrap;align-items:center;gap:12px 16px}
+.lab-cmp__from{color:var(--muted);font-size:14px}
+.lab-cmp__from strong{color:var(--ink)}
+.lab-cmp{position:relative;border:1px solid var(--line);border-radius:var(--r);background:var(--surface);overflow:hidden}
+.lab-sec--surface .lab-cmp{background:var(--bg)}
+/* La columna de ReliefPath, resaltada de arriba abajo */
+.lab-cmp::before{content:"";position:absolute;inset:0 50% 0 0;background:color-mix(in srgb,var(--accent) 6%,transparent);pointer-events:none}
+.lab-cmp__head,.lab-cmp__row{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.lab-cmp__row{border-top:1px solid var(--line)}
+.lab-cmp__corner{display:none}
+.lab-cmp__head>span{padding:13px 14px;font:600 13px/1.2 var(--f-head)}
+.lab-cmp__head .lab-cmp__us{color:var(--accent);font-weight:700}
+.lab-cmp__head .lab-cmp__them{color:var(--muted)}
+.lab-cmp__label{grid-column:1/-1;padding:12px 14px 0;color:var(--muted);font:500 11px/1.3 var(--f-mono);letter-spacing:.08em;text-transform:uppercase}
+.lab-cmp__row>.lab-cmp__us,.lab-cmp__row>.lab-cmp__them{display:grid;grid-template-columns:18px minmax(0,1fr);gap:8px;align-items:start;padding:6px 14px 13px;font-size:14px;line-height:1.35}
+.lab-cmp__row>.lab-cmp__us{color:var(--ink);font-weight:600}
+.lab-cmp__row>.lab-cmp__them{color:var(--muted)}
+.lab-cmp svg{width:18px;height:18px;margin-top:1px}
+.lab-cmp__us svg{color:var(--ok)}
+.lab-cmp__them svg{color:var(--muted)}
+.lab-cmp__them i{display:block;width:10px;height:2px;margin:9px 4px 0;border-radius:2px;background:color-mix(in srgb,var(--muted) 55%,transparent)}
+.lab-cmp__note{margin-top:-12px}
+@media(min-width:750px){
+  .lab-cmp::before{inset:0 auto 0 27.3%;width:36.35%}
+  .lab-cmp__head,.lab-cmp__row{grid-template-columns:minmax(0,.9fr) minmax(0,1.2fr) minmax(0,1.2fr)}
+  .lab-cmp__corner{display:block}
+  .lab-cmp__head>span{padding:15px 18px;font-size:14px}
+  .lab-cmp__label{grid-column:auto;align-self:center;padding:16px 18px;font-size:12px}
+  .lab-cmp__row>.lab-cmp__us,.lab-cmp__row>.lab-cmp__them{align-content:center;padding:16px 18px;font-size:15px}
+}
+@media(max-width:989px){.lab-cmp__cta .lab-btn{flex:1 1 auto}}
+@media(min-width:990px){
+  .lab-cmp__wrap{grid-template-columns:minmax(0,5fr) minmax(0,7fr);grid-template-areas:"intro table" "cta table" ". note";gap:20px 64px}
+  .lab-cmp__intro{grid-area:intro;align-self:end}
+  .lab-cmp{grid-area:table;align-self:center}
+  .lab-cmp__cta{grid-area:cta;align-self:start;margin-top:8px}
+  .lab-cmp__note{grid-area:note;margin-top:0}
+}
+
+/* Texto que hace de cabecera de la sección siguiente (colecciones) */
+.lab-sec--flush{padding-bottom:0}
+
+/* Carrito, lateral y página: el botón de pagar es el principal (rojo) y la
+   propuesta de pack, secundaria. */
+body.lab .cart__checkout-button{min-height:56px;border-radius:999px;background:var(--accent);color:var(--on-accent);font:700 17px/1.2 var(--f-body);letter-spacing:0}
+body.lab .cart__checkout-button::before,body.lab .cart__checkout-button::after{box-shadow:none}
+body.lab .cart__checkout-button:not([disabled]):hover{filter:brightness(.95)}
+.lab-upsell .lab-btn--ghost{border-color:var(--ink);background:var(--surface)}
+/* Página del carrito */
+body.lab .cart__warnings .cart__login-title,body.lab .cart__warnings .cart__login-paragraph{display:none}
+body.lab cart-items .title--primary{font:700 clamp(28px,3.5vw,40px)/1.1 var(--f-head);letter-spacing:-.02em}
+body.lab cart-items .cart__empty-text{font:700 clamp(26px,3.2vw,36px)/1.15 var(--f-head);letter-spacing:-.02em}
+body.lab cart-items .lab-upsell,body.lab cart-items .lab-cart-first{max-width:520px}
+body.lab .cart__footer .cart__ctas{margin-top:8px}
+@media(min-width:750px){
+  body.lab cart-items .lab-upsell,body.lab cart-items .lab-cart-first{margin-left:auto}
+  body.lab .cart__footer .lab-cart-trust{justify-content:flex-end}
+}

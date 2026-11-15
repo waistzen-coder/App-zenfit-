@@ -5,9 +5,20 @@
   actualizar el contador.
 {%- endcomment -%}
 {%- liquid
+  comment
+    El boton Comprar lleva a los packs de la ficha. En la propia ficha baja a
+    ellos sin salir de la pagina. Desde el resto de la tienda va a la ficha
+    del producto principal de Ajustes del tema, que es donde se compra.
+  endcomment
   assign buy = section.settings.buy_link
   if buy == blank
-    assign buy = routes.root_url | append: '#packs'
+    if request.page_type == 'product'
+      assign buy = '#packs'
+    elsif settings.lab_main_product != blank
+      assign buy = settings.lab_main_product.url | append: '#packs'
+    else
+      assign buy = routes.root_url | append: '#packs'
+    endif
   endif
   assign root = routes.root_url
   if root == '/'
@@ -45,7 +56,9 @@
     </a>
     <nav class="lab-nav" aria-label="{{ 'lab.header.nav' | t }}">{{ links }}</nav>
     <div class="lab-header__tools">
-      <a class="lab-icon-btn" href="{{ routes.search_url }}" aria-label="{{ 'lab.header.search' | t }}">{% render 'lab-icon', name: 'search' %}</a>
+      {%- if section.settings.search -%}
+        <a class="lab-icon-btn" href="{{ routes.search_url }}" aria-label="{{ 'lab.header.search' | t }}">{% render 'lab-icon', name: 'search' %}</a>
+      {%- endif -%}
       {%- if shop.customer_accounts_enabled -%}
         <a class="lab-icon-btn" href="{{ routes.account_url }}" aria-label="{{ 'lab.header.account' | t }}">{% render 'lab-icon', name: 'user' %}</a>
       {%- endif -%}
@@ -78,8 +91,9 @@
     { "type": "range", "id": "logo_height", "label": "Alto del logo", "min": 20, "max": 36, "step": 2, "unit": "px", "default": 28 },
     { "type": "text", "id": "logo_text", "label": "Texto del logo (sin imagen)", "info": "Vacío: el nombre de la tienda." },
     { "type": "link_list", "id": "menu", "label": "Menú", "info": "Vacío: Tienda, Calidad, Preguntas, Sobre nosotros, Contacto y Seguir mi pedido." },
+    { "type": "checkbox", "id": "search", "label": "Lupa de búsqueda", "info": "Con un solo producto no hace falta y quita sitio en el móvil. La página de búsqueda sigue existiendo.", "default": false },
     { "type": "text", "id": "buy_label", "label": "Botón", "default": "Comprar" },
-    { "type": "url", "id": "buy_link", "label": "Enlace del botón", "info": "Vacío: los packs de la portada." }
+    { "type": "url", "id": "buy_link", "label": "Enlace del botón", "info": "Vacío: los packs de la ficha del producto." }
   ]
 }
 {% endschema %}

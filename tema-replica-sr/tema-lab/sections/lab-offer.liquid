@@ -21,7 +21,13 @@
   endif
   assign link = section.settings.link
   if link == blank
-    assign link = routes.root_url | append: '#packs'
+    if request.page_type == 'product'
+      assign link = '#packs'
+    elsif settings.lab_main_product != blank
+      assign link = settings.lab_main_product.url | append: '#packs'
+    else
+      assign link = routes.root_url | append: '#packs'
+    endif
   endif
   assign key = long | append: end | handleize | slice: 0, 40
 -%}
@@ -59,7 +65,7 @@
     { "type": "text", "id": "text_long", "label": "Texto (escritorio)", "info": "Vacío: se escribe solo con los descuentos de Ajustes del tema › ReliefPath Lab." },
     { "type": "text", "id": "text_short", "label": "Texto corto (móvil)", "info": "Vacío: se escribe solo." },
     { "type": "text", "id": "cta", "label": "Botón", "default": "Lo quiero" },
-    { "type": "url", "id": "link", "label": "Enlace del botón", "info": "Vacío: lleva a los packs de la portada." },
+    { "type": "url", "id": "link", "label": "Enlace del botón", "info": "Vacío: lleva a los packs de la ficha del producto." },
     { "type": "text", "id": "end_date", "label": "Fecha de fin (AAAA-MM-DD)", "info": "Solo si la oferta termina de verdad ese día. Con fecha se ve la cuenta atrás; al pasar, la barra desaparece." },
     { "type": "checkbox", "id": "closable", "label": "Se puede cerrar", "default": true }
   ],

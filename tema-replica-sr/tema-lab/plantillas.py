@@ -59,6 +59,7 @@ PACKS = [
 
 def hero(**over):
     s = {'product': PRODUCT, 'crumbs': True, 'crumb': 'Tienda'}
+    # Las migas tienen sentido en las landings; la portada pasa crumbs=False.
     s.update(over)
     return section('lab-hero', s, FIGURES + CHIPS + PACKS)
 
@@ -184,23 +185,27 @@ FAQ_FULL = [
 ]
 
 
-def about(**over):
+def about(milestones=True, **over):
     s = {'anchor': 'sobre', 'surface': False, 'steps_title': 'Cómo llega tu pedido'}
     s.update(over)
-    return section('lab-about', s, [
+    blocks = [
         block('fact', label='Tienda', value='Waistzen'),
         block('fact', label='Producto', value='ReliefPath™ · 1 aparato, 3 packs'),
         block('fact', label='Contacto', value='<a href="mailto:waistzen@gmail.com">waistzen@gmail.com</a>'),
         block('fact', label='Envíos', value='Desde un almacén en España'),
         block('fact', label='Devoluciones', value='España'),
         block('fact', label='Garantía', value='3 años (legal)'),
-        block('milestone', label='Hoy', title='Eliges tu pack',
-              text='Pagas con tarjeta en el checkout o eliges pagar al recibirlo.'),
-        block('milestone', label='24–48 h', title='Llega a casa',
-              text='Envío gratis con seguimiento desde España a la península.'),
-        block('milestone', label='30 días', title='Si no te convence',
-              text='Tienes 30 días desde que lo recibes para pedir la devolución.'),
-    ])
+    ]
+    if milestones:
+        blocks += [
+            block('milestone', label='Hoy', title='Eliges tu pack',
+                  text='Pagas con tarjeta en el checkout o eliges pagar al recibirlo.'),
+            block('milestone', label='24–48 h', title='Llega a casa',
+                  text='Envío gratis con seguimiento desde España a la península.'),
+            block('milestone', label='30 días', title='Si no te convence',
+                  text='Tienes 30 días desde que lo recibes para pedir la devolución.'),
+        ]
+    return section('lab-about', s, blocks)
 
 
 def receipt(**over):
@@ -258,18 +263,38 @@ def bento(**over):
         block('tile', size='m', art='light', kicker='03 · LUZ ROJA', title='Luz roja en la copa',
               text='La copa transparente lleva la luz roja en su interior.'),
         block('tile', size='m', art='doc', kicker='TODO POR ESCRITO', title='Lee antes de usar',
-              text='Zonas, tiempos, niveles y precauciones: en el manual del fabricante.', link_label='Cómo usarlo', link='#como-usarlo'),
+              text='Zonas, tiempos, niveles y precauciones: en el manual del fabricante.', link_label='Cómo llega', link='#como-llega'),
     ])
 
 
 def scrolly(**over):
-    s = {'product': PRODUCT}
+    # Del pedido a casa: qué pasa desde que compras hasta que lo usas, con los
+    # plazos publicados (Envíos y Devoluciones) como etiqueta de cada paso.
+    s = {'product': PRODUCT, 'anchor': 'como-llega', 'heading': 'Lo pides hoy, <em>llega en 24–48 h.</em>',
+         'lead': 'Sale de un almacén en España. Esto es lo que pasa desde que eliges tu pack.'}
     s.update(over)
     return section('lab-scrolly', s, [
-        block('step', title='Comprueba el pedido', text='Que llegan las unidades de tu pack y el manual del fabricante.', media_index=1),
-        block('step', title='Lee el manual', text='Zonas permitidas, duración, frecuencia y contraindicaciones de tu modelo.', media_index=7),
-        block('step', title='Empieza por lo más suave', text='Nivel más bajo de succión y calor; sube solo si el manual lo permite.', media_index=4),
-        block('step', title='Si algo no va, escríbenos', text='Tienes 30 días desde que lo recibes para devolverlo y la etiqueta la pagamos nosotros.', media_index=6),
+        block('step', label='Hoy', title='Eliges tu pack',
+              text='Pagas con tarjeta, Bizum, PayPal o Klarna. O no pagas nada ahora y lo haces al recibirlo.', media_index=5),
+        block('step', label='En 24–48 h', title='Llega a casa',
+              text='Envío gratis y con seguimiento. El plazo es para península y cuenta días laborables.', media_index=6),
+        block('step', label='Primer uso', title='Empiezas por lo más suave',
+              text='Lee el manual del fabricante y empieza por el nivel más bajo de succión y calor.', media_index=7),
+        block('step', label='Hasta 30 días', title='Si no te convence, lo devuelves',
+              text='Tienes 30 días desde que lo recibes y la etiqueta de vuelta la pagamos nosotros.', media_index=1),
+    ])
+
+
+def compare(**over):
+    # Frente a la alternativa genérica (las ventosas manuales), no a otras
+    # marcas: solo funciones que el aparato tiene, sin comparar resultados.
+    s = {'product': PRODUCT}
+    s.update(over)
+    return section('lab-compare', s, [
+        block('row', label='Cómo hace el vacío', us='Con un botón: bomba eléctrica', them='A mano: apretando o bombeando', them_no=False),
+        block('row', label='Intensidad', us='La eliges en el panel', them='La que hagas con la mano', them_no=False),
+        block('row', label='Calor', us='Integrado', them='No', them_no=True),
+        block('row', label='Luz roja', us='Dentro de la copa', them='No', them_no=True),
     ])
 
 
@@ -291,17 +316,21 @@ def tour(**over):
 # Portada ---------------------------------------------------------------------
 
 save('templates/index.json', template(
-    ('hero', hero()),
+    ('hero', hero(crumbs=False, heading='Ventosas eléctricas con <em>calor y luz roja</em>',
+                  sub='ReliefPath™ reúne succión regulable, calor y luz roja en un aparato para usar en casa. '
+                      'Envío gratis desde España en 24–48 h y puedes pagarlo al recibirlo. Desde [desde]/ud.',
+                  cta1='Comprar ahora', cta1_link='/products/' + PRODUCT + '#packs', cta2='Ver los packs', cta2_link='#packs')),
     ('marquee', marquee()),
     ('catalog', catalog()),
     ('tour', tour()),
-    ('scrolly', scrolly()),
+    ('compare', compare(cta_link='/products/' + PRODUCT + '#packs')),
+    ('scrolly', scrolly(surface=True)),
     ('builder', section('lab-builder', {'product': PRODUCT, 'start': 2})),
-    ('proof', proof()),
+    ('proof', proof(guide='')),
     ('video', section('lab-video', {})),
     ('reviews', section('lab-reviews', {})),
     ('faq', faq(FAQ_SHORT)),
-    ('about', about()),
+    ('about', about(milestones=False)),
     ('receipt', receipt()),
     ('close', close(surface=False)),
     ('legal', legal()),
@@ -330,13 +359,15 @@ PDP_TABS = [
           text='<p>Tarjeta, Bizum, PayPal, Klarna, Apple Pay y Google Pay. También puedes <strong>pagar al recibirlo</strong> en efectivo, [cod]: '
                'en el último paso elige «Pago contra entrega».</p>'),
 ]
+# Las «pruebas» (políticas y guía) ya no van en la ficha: lo mismo lo dicen, más corto, las garantías
+# junto al botón, las preguntas y el ticket. Siguen en la portada y en la página de calidad.
 PDP = template(
     ('main', section('lab-product', {'default_pack': 1, 'cod': True}, PDP_TABS)),
     ('marquee', marquee()),
     ('tour', tour(cta='Elegir mi pack')),
-    ('scrolly', scrolly(surface=False)),
-    ('reviews', section('lab-reviews', {'surface': True})),
-    ('proof', proof(surface=True)),
+    ('compare', compare(product='')),
+    ('scrolly', scrolly(surface=True)),
+    ('reviews', section('lab-reviews', {'surface': False})),
     ('faq', faq(FAQ_SHORT[:2] + [Q_CODE] + FAQ_SHORT[2:], schema=False)),
     ('receipt', receipt()),
     ('close', close(product='')),
@@ -344,6 +375,36 @@ PDP = template(
 )
 save('templates/product.json', PDP)
 save('templates/product.reliefpatch.json', PDP)
+
+# Carrito, colecciones -----------------------------------------------------------
+
+# Página del carrito: las secciones de Dawn (con los importes, la propuesta de
+# pack y las garantías que les añade empaquetar_lab.py), sin la «colección
+# destacada» que Dawn pone debajo.
+save('templates/cart.json', {
+    'sections': {
+        'cart-items': {'type': 'main-cart-items', 'settings': {'padding_top': 36, 'padding_bottom': 20}},
+        'cart-footer': {'type': 'main-cart-footer', 'settings': {},
+                        'blocks': {'subtotal': {'type': 'subtotal', 'settings': {}}, 'buttons': {'type': 'buttons', 'settings': {}}},
+                        'block_order': ['subtotal', 'buttons']},
+    },
+    'order': ['cart-items', 'cart-footer'],
+})
+
+# «Todos los productos» y las colecciones: la tienda vende un aparato en tres
+# packs, así que enseñan eso (el catálogo de la portada) y no la rejilla de
+# Dawn, que listaba también el producto del recargo de contrareembolso.
+SHOP = template(
+    ('intro', section('lab-text', {
+        'eyebrow': 'Tienda', 'heading': 'ReliefPath™, <em>suelto o en pack</em>', 'as_h1': True, 'flush': True,
+        'text': '<p>Un solo aparato y tres formas de comprarlo. El envío es gratis desde España y puedes pagarlo al recibirlo.</p>',
+    })),
+    ('catalog', catalog()),
+    ('receipt', receipt()),
+    ('legal', legal()),
+)
+save('templates/collection.json', SHOP)
+save('templates/list-collections.json', SHOP)
 
 # Páginas ---------------------------------------------------------------------
 

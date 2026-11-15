@@ -238,7 +238,9 @@ function mount(root, opts = {}) {
   // Bucle
   let raf = 0, last = performance.now();
   function frame(now) {
-    raf = 0; const dt = Math.min(0.05, (now - last) / 1000); last = now; state.t += dt;
+    // La marca de tiempo del fotograma puede ser anterior a «last» (p. ej. justo después de montar,
+    // que ocupa el hilo un rato): sin el mínimo en 0 el paso salía negativo y la cámara se alejaba de golpe.
+    raf = 0; const dt = Math.min(0.05, Math.max(0, (now - last) / 1000)); last = now; state.t += dt;
     const idle = now - state.userAt > 12000;
     // Ciclo automático de funciones mientras nadie toca
     if (!poster && !reduce && idle && opts.autoCycle !== false) {
@@ -292,6 +294,8 @@ function mount(root, opts = {}) {
   addEventListener('scroll', () => { const r = root.getBoundingClientRect(); state.p = Math.min(1, Math.max(0, -r.top / Math.max(1, r.height))); }, { passive: true });
 
   setMode(opts.mode || 'idle');
+  // El primer fotograma ya sale con la vista y el tono de la función pedida, sin viaje desde la vista de reposo.
+  camera.position.copy(camTarget); look.copy(lookTarget); camera.lookAt(look); state.color.copy(state.target);
   if (poster) { frame(performance.now()); }
   else { play(); requestAnimationFrame(() => root.classList.add('is-3d-ready')); }
   const api = { setMode: m => setMode(m, true), renderer, state };

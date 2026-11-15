@@ -509,7 +509,6 @@
         show('[data-lab-first]', d.first === '1');
         txt('[data-lab-cod-sub]', d.pay);
         roll(root.querySelector('[data-lab-cod-total]'), +d.codCents, d.cod || d.pay, animate);
-        $$('[data-lab-pick]', root).forEach(function (b) { b.hidden = d.qty !== '1'; });
         /* Los enlaces de compra (ficha y barra fija) llevan siempre el pack elegido. */
         $$('[data-lab-buy]', root).concat(sticky ? $$('[data-lab-buy]', sticky) : []).forEach(function (a) { a.href = d.buy; a.setAttribute('data-qty', d.qty); });
         $$('[data-lab-cod-go]', root).forEach(function (a) { a.href = d.codUrl || d.buy; a.setAttribute('data-qty', d.qty); });
@@ -519,15 +518,6 @@
         }
       }
       pills.forEach(function (p) { p.addEventListener('change', function () { paint(true); track('lab_pack_select', { qty: +p.value, place: 'ficha' }); }); });
-      $$('[data-lab-pick]', root).forEach(function (b) {
-        b.addEventListener('click', function () {
-          var to = pills.filter(function (p) { return p.value === b.getAttribute('data-lab-pick') && !p.disabled; })[0];
-          if (!to) return;
-          to.checked = true;
-          to.dispatchEvent(new Event('change', { bubbles: true }));
-          to.closest('.lab-pill').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' });
-        });
-      });
       var start = parseInt(new URLSearchParams(location.search).get('pack'), 10);
       if (start) pills.forEach(function (p) { if (+p.dataset.qty === start && !p.disabled) p.checked = true; });
       paint(false);
@@ -569,12 +559,14 @@
            En escritorio solo cuando ya han quedado arriba: al entrar, el
            precio y los packs están a la vista y la barra los taparía. */
         var wide = window.matchMedia ? matchMedia('(min-width: 990px)') : { matches: false };
-        var closing = document.querySelector('.lab-close');
+        var closing = document.querySelector('.lab-close'), foot = document.querySelector('.lab-footer');
         var toggle = function () {
           var r = actions.getBoundingClientRect();
           var on = r.bottom < 0 || (!wide.matches && r.top > window.innerHeight - 40);
           /* Con el cierre de packs en pantalla sobra: ya hay tres botones. */
           if (on && closing) { var c = closing.getBoundingClientRect(); if (c.top < window.innerHeight - 160 && c.bottom > 160) on = false; }
+          /* En escritorio la píldora flota sobre la página: en el pie taparía los enlaces. */
+          if (on && foot && wide.matches && foot.getBoundingClientRect().top < window.innerHeight - 120) on = false;
           if (on === sticky.classList.contains('is-on')) return;
           sticky.classList.toggle('is-on', on);
           document.documentElement.classList.toggle('lab-has-sticky', on);
@@ -588,6 +580,7 @@
           var io = new IntersectionObserver(toggle, { rootMargin: '-160px 0px -160px 0px' });
           io.observe(actions);
           if (closing) io.observe(closing);
+          if (foot) io.observe(foot);
         }
         window.addEventListener('resize', toggle, { passive: true });
       }
@@ -683,6 +676,10 @@
   /* «Comprar ahora» y «Pagar al recibirlo» (ficha, barra fija y cierre): un
      solo manejador. Sin JS son enlaces normales al checkout. */
   function buy() {
+    /* Botón de la comparativa: solo se mide; el enlace hace el resto. */
+    document.addEventListener('click', function (e) {
+      if (e.target.closest && e.target.closest('[data-lab-cmp-cta]')) track('lab_compare_cta', {});
+    });
     document.addEventListener('click', function (e) {
       var a = e.target.closest && e.target.closest('a[data-lab-buy], a[data-lab-cod-go]');
       if (!a || e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || a.target === '_blank') return;

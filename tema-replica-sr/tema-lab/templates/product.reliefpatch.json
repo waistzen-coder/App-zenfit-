@@ -171,43 +171,100 @@
         "b3"
       ]
     },
+    "compare": {
+      "type": "lab-compare",
+      "settings": {
+        "product": ""
+      },
+      "blocks": {
+        "b1": {
+          "type": "row",
+          "settings": {
+            "label": "Cómo hace el vacío",
+            "us": "Con un botón: bomba eléctrica",
+            "them": "A mano: apretando o bombeando",
+            "them_no": false
+          }
+        },
+        "b2": {
+          "type": "row",
+          "settings": {
+            "label": "Intensidad",
+            "us": "La eliges en el panel",
+            "them": "La que hagas con la mano",
+            "them_no": false
+          }
+        },
+        "b3": {
+          "type": "row",
+          "settings": {
+            "label": "Calor",
+            "us": "Integrado",
+            "them": "No",
+            "them_no": true
+          }
+        },
+        "b4": {
+          "type": "row",
+          "settings": {
+            "label": "Luz roja",
+            "us": "Dentro de la copa",
+            "them": "No",
+            "them_no": true
+          }
+        }
+      },
+      "block_order": [
+        "b1",
+        "b2",
+        "b3",
+        "b4"
+      ]
+    },
     "scrolly": {
       "type": "lab-scrolly",
       "settings": {
         "product": "juego-de-ventosa-electrica-con-cable",
-        "surface": false
+        "anchor": "como-llega",
+        "heading": "Lo pides hoy, <em>llega en 24–48 h.</em>",
+        "lead": "Sale de un almacén en España. Esto es lo que pasa desde que eliges tu pack.",
+        "surface": true
       },
       "blocks": {
         "b1": {
           "type": "step",
           "settings": {
-            "title": "Comprueba el pedido",
-            "text": "Que llegan las unidades de tu pack y el manual del fabricante.",
-            "media_index": 1
+            "label": "Hoy",
+            "title": "Eliges tu pack",
+            "text": "Pagas con tarjeta, Bizum, PayPal o Klarna. O no pagas nada ahora y lo haces al recibirlo.",
+            "media_index": 5
           }
         },
         "b2": {
           "type": "step",
           "settings": {
-            "title": "Lee el manual",
-            "text": "Zonas permitidas, duración, frecuencia y contraindicaciones de tu modelo.",
-            "media_index": 7
+            "label": "En 24–48 h",
+            "title": "Llega a casa",
+            "text": "Envío gratis y con seguimiento. El plazo es para península y cuenta días laborables.",
+            "media_index": 6
           }
         },
         "b3": {
           "type": "step",
           "settings": {
-            "title": "Empieza por lo más suave",
-            "text": "Nivel más bajo de succión y calor; sube solo si el manual lo permite.",
-            "media_index": 4
+            "label": "Primer uso",
+            "title": "Empiezas por lo más suave",
+            "text": "Lee el manual del fabricante y empieza por el nivel más bajo de succión y calor.",
+            "media_index": 7
           }
         },
         "b4": {
           "type": "step",
           "settings": {
-            "title": "Si algo no va, escríbenos",
-            "text": "Tienes 30 días desde que lo recibes para devolverlo y la etiqueta la pagamos nosotros.",
-            "media_index": 6
+            "label": "Hasta 30 días",
+            "title": "Si no te convence, lo devuelves",
+            "text": "Tienes 30 días desde que lo recibes y la etiqueta de vuelta la pagamos nosotros.",
+            "media_index": 1
           }
         }
       },
@@ -221,126 +278,8 @@
     "reviews": {
       "type": "lab-reviews",
       "settings": {
-        "surface": true
+        "surface": false
       }
-    },
-    "proof": {
-      "type": "lab-proof",
-      "settings": {
-        "anchor": "calidad",
-        "surface": true
-      },
-      "blocks": {
-        "b1": {
-          "type": "step",
-          "settings": {
-            "title": "Lo publicamos por escrito",
-            "text": "Plazos de envío, devoluciones y garantía están en páginas públicas. Lo que pone ahí es lo que se aplica a tu pedido."
-          }
-        },
-        "b2": {
-          "type": "step",
-          "settings": {
-            "title": "Te enseñamos el aparato real",
-            "text": "La primera foto de la ficha es del aparato real. Las ilustraciones se indican como tales en su texto alternativo."
-          }
-        },
-        "b3": {
-          "type": "step",
-          "settings": {
-            "title": "Respondemos por escrito",
-            "text": "Dudas sobre el aparato, el pedido o una devolución: <a href=\"mailto:waistzen@gmail.com\">waistzen@gmail.com</a>. Si ya compraste, indica tu número de pedido."
-          }
-        },
-        "b4": {
-          "type": "doc",
-          "settings": {
-            "kind": "Política",
-            "title": "Envíos y entregas",
-            "l1": "Zona",
-            "v1": "España",
-            "l2": "Península",
-            "v2": "24–48 h",
-            "l3": "Baleares",
-            "v3": "2–4 días laborables",
-            "status": "Publicada",
-            "page": "envios",
-            "button": "Ver la política"
-          }
-        },
-        "b5": {
-          "type": "doc",
-          "settings": {
-            "kind": "Política",
-            "title": "Devoluciones y desistimiento",
-            "l1": "Desistimiento",
-            "v1": "14 días (legal)",
-            "l2": "Plazo de la tienda",
-            "v2": "30 días",
-            "l3": "Etiqueta",
-            "v3": "La pagamos nosotros",
-            "status": "Publicada",
-            "page": "devoluciones",
-            "button": "Ver la política"
-          }
-        },
-        "b6": {
-          "type": "doc",
-          "settings": {
-            "kind": "Garantía",
-            "title": "Garantía legal de conformidad",
-            "l1": "Plazo",
-            "v1": "3 años",
-            "l2": "Devoluciones",
-            "v2": "España",
-            "l3": "",
-            "v3": "",
-            "status": "Publicada",
-            "page": "devoluciones",
-            "button": "Ver la garantía"
-          }
-        },
-        "b7": {
-          "type": "doc",
-          "settings": {
-            "kind": "Manual",
-            "title": "Instrucciones del fabricante",
-            "l1": "Formato",
-            "v1": "PDF",
-            "l2": "",
-            "v2": "",
-            "l3": "",
-            "v3": "",
-            "status": "Publicado",
-            "button": "Descargar el manual"
-          }
-        },
-        "b8": {
-          "type": "doc",
-          "settings": {
-            "kind": "Conformidad",
-            "title": "Declaración CE del fabricante",
-            "l1": "Formato",
-            "v1": "PDF",
-            "l2": "",
-            "v2": "",
-            "l3": "",
-            "v3": "",
-            "status": "Publicada",
-            "button": "Ver la declaración"
-          }
-        }
-      },
-      "block_order": [
-        "b1",
-        "b2",
-        "b3",
-        "b4",
-        "b5",
-        "b6",
-        "b7",
-        "b8"
-      ]
     },
     "faq": {
       "type": "lab-faq",
@@ -564,9 +503,9 @@
     "main",
     "marquee",
     "tour",
+    "compare",
     "scrolly",
     "reviews",
-    "proof",
     "faq",
     "receipt",
     "close",

@@ -193,14 +193,95 @@ patch('snippets/cart-drawer.liquid', [
      "            {{ 'sections.cart.checkout' | t }}\n          </button>\n        </div>\n        {%- render 'lab-cart-trust' -%}\n      </div>\n    </div>\n  </div>\n</cart-drawer>"),
 ])
 
-# Importes del carrito lateral con el mismo formato que el resto del tema
-# («49,95 €» en vez de «€49,95» o «€49,95 EUR»): pasan por snippets/lab-money.
-cd_path = os.path.join(BUILD, 'snippets', 'cart-drawer.liquid')
-cd = open(cd_path, encoding='utf-8').read()
-cd, n_money = re.subn(r'\{\{(-?)\s*([\w.]+)\s*\|\s*money(?:_with_currency)?\s*(-?)\}\}',
-                      lambda m: "{%%%s render 'lab-money', v: %s %s%%}" % (m.group(1), m.group(2), m.group(3)), cd)
-assert n_money == 10 and '| money' not in cd, n_money
-open(cd_path, 'w', encoding='utf-8').write(cd)
+# Importes de Dawn con el mismo formato que el resto del tema («49,95 €» en
+# vez de «€49,95» o «€49,95 EUR»): cada {{ x | money }} pasa por
+# snippets/lab-money. «expected» es cuántos debe haber, para enterarse si una
+# versión nueva de Dawn los cambia.
+MONEY = re.compile(r'\{\{(-?)\s*([\w.]+)\s*\|\s*money(?:_with_currency)?\s*(-?)\}\}')
+
+
+def lab_money(rel, expected):
+    path = os.path.join(BUILD, rel)
+    s = open(path, encoding='utf-8').read()
+    s, n = MONEY.subn(lambda m: "{%%%s render 'lab-money', v: %s %s%%}" % (m.group(1), m.group(2), m.group(3)), s)
+    assert n == expected, (rel, n)
+    open(path, 'w', encoding='utf-8').write(s)
+    return s
+
+
+assert '| money' not in lab_money('snippets/cart-drawer.liquid', 10)
+
+# Página del carrito (/cart). Se llega a ella al volver del checkout («Carrito»)
+# o sin JavaScript, así que lleva lo mismo que el carrito lateral: importes en
+# formato español, la propuesta de subir de pack, las garantías junto al botón
+# y «Seguir comprando» hacia la ficha. Sin botones de pago exprés: saltarían
+# el checkout en español y el código de primer pedido que pone assets/lab.js
+# (están igualmente en el primer paso del checkout).
+SHOP_URL = '{{ settings.lab_main_product.url | default: routes.all_products_collection_url }}'
+lab_money('sections/main-cart-items.liquid', 9)
+patch('sections/main-cart-items.liquid', [
+    ('      <a href="{{ routes.all_products_collection_url }}" class="underlined-link">',
+     '      <a href="%s" class="underlined-link">' % SHOP_URL),
+    ('      <a href="{{ routes.all_products_collection_url }}" class="button">',
+     '      <a href="%s" class="button">' % SHOP_URL),
+    ('              </tbody>\n            </table>\n          {%- endif -%}\n        </div>\n      </div>\n\n      <p class="visually-hidden" id="cart-live-region-text"',
+     '              </tbody>\n            </table>\n            {%- render \'lab-cart-upsell\' -%}\n          {%- endif -%}\n        </div>\n      </div>\n\n'
+     '      <p class="visually-hidden" id="cart-live-region-text"'),
+])
+lab_money('sections/main-cart-footer.liquid', 2)
+patch('sections/main-cart-footer.liquid', [
+    ('              {%- if additional_checkout_buttons -%}\n'
+     '                <div class="cart__dynamic-checkout-buttons additional-checkout-buttons">\n'
+     '                  {{ content_for_additional_checkout_buttons }}\n'
+     '                </div>\n'
+     '              {%- endif -%}\n',
+     "              {%- render 'lab-cart-trust' -%}\n"),
+])
+patch('sections/main-404.liquid', [
+    ('  <a href="{{ routes.all_products_collection_url }}" class="button">', '  <a href="%s" class="button">' % SHOP_URL),
+])
+
+# Tarjetas de producto de Dawn (búsqueda y colecciones): mismo criterio que la
+# ficha. El precio comparado solo se tacha, y la insignia «Oferta» solo sale,
+# si se activa en Ajustes del tema (en la UE el precio anterior debe ser el
+# más bajo de los últimos 30 días); y los importes van en formato español.
+patch('snippets/price.liquid', [
+    ("  if target == product and product.price_varies\n"
+     "    assign money_price = 'products.product.price.from_price_html' | t: price: money_price\n"
+     "  endif\n-%}\n",
+     "  unless settings.lab_show_compare\n"
+     "    assign compare_at_price = nil\n"
+     "  endunless\n-%}\n"
+     "{%- if settings.lab_price_es -%}\n"
+     "  {%- capture money_price -%}{% render 'lab-money', v: price %}{%- endcapture -%}\n"
+     "  {%- capture money_price_min -%}{% render 'lab-money', v: price_min %}{%- endcapture -%}\n"
+     "  {%- capture money_price_max -%}{% render 'lab-money', v: price_max %}{%- endcapture -%}\n"
+     "  {%- assign money_price = money_price | strip -%}\n"
+     "  {%- assign money_price_min = money_price_min | strip -%}\n"
+     "  {%- assign money_price_max = money_price_max | strip -%}\n"
+     "{%- endif -%}\n"
+     "{%- if target == product and product.price_varies -%}\n"
+     "  {%- assign money_price = 'products.product.price.from_price_html' | t: price: money_price -%}\n"
+     "{%- endif -%}\n"),
+])
+lab_money('snippets/price.liquid', 4)
+cp_path = os.path.join(BUILD, 'snippets', 'card-product.liquid')
+cp = open(cp_path, encoding='utf-8').read()
+SALE = 'card_product.compare_at_price > card_product.price and card_product.available'
+assert cp.count(SALE) == 2
+open(cp_path, 'w', encoding='utf-8').write(cp.replace(SALE, 'settings.lab_show_compare and ' + SALE))
+
+# El producto del recargo de contrareembolso no es un artículo a la venta: no
+# sale en los resultados de búsqueda ni en las sugerencias.
+FEE_SKIP = ("{%%- if settings.lab_fee_product != blank and %s.id == settings.lab_fee_product.id -%%}{%%- continue -%%}{%%- endif -%%}\n")
+patch('sections/main-search.liquid', [
+    ('                {%- for item in search.results -%}\n',
+     '                {%- for item in search.results -%}\n                  ' + FEE_SKIP % 'item'),
+])
+patch('sections/predictive-search.liquid', [
+    ('              {%- for product in predictive_search.resources.products -%}\n',
+     '              {%- for product in predictive_search.resources.products -%}\n                ' + FEE_SKIP % 'product'),
+])
 patch('snippets/meta-tags.liquid', [
     ('  assign og_title = page_title | default: shop.name',
      SEO.replace('{%- liquid\n', '').replace('\n-%}\n', '\n') + '  assign og_title = lab_title | default: shop.name'),
@@ -215,6 +296,12 @@ patch('snippets/meta-tags.liquid', [
 extra = load(os.path.join(HERE, 'locales-extra', 'lab.json'))
 extra.update(load(os.path.join(PARENT, 'locales-extra', 'waistzen.json')))
 es = load(os.path.join(BUILD, 'locales', 'es.json'))
+# Castellano de Dawn: una errata, y el botón de pagar del carrito, que con
+# «Pagar pedido» parecía pedir el pago ya a quien va a pagar al recibirlo.
+assert es['sections']['cart']['empty'] == 'Tu carrito esta vacío'
+es['sections']['cart']['empty'] = 'Tu carrito está vacío'
+assert es['sections']['cart']['checkout'] == 'Pagar pedido'
+es['sections']['cart']['checkout'] = 'Tramitar pedido'
 es.update(extra)
 save(os.path.join(BUILD, 'locales', 'es.json'), es)
 save(os.path.join(BUILD, 'locales', 'en.default.json'), es)
@@ -240,6 +327,9 @@ for f in sorted(os.listdir(os.path.join(BUILD, 'locales'))):
 # subirlos uno a uno (themeFilesUpsert) a un tema que ya existe.
 LOOSE = os.path.join(OUT, 'sueltos')
 for rel in ['layout/theme.liquid', 'snippets/meta-tags.liquid', 'snippets/cart-drawer.liquid',
+            'sections/main-cart-items.liquid', 'sections/main-cart-footer.liquid', 'sections/main-404.liquid',
+            'sections/main-search.liquid', 'sections/predictive-search.liquid',
+            'snippets/price.liquid', 'snippets/card-product.liquid',
             'config/settings_schema.json', 'config/settings_data.json'] + \
            ['locales/' + f for f in sorted(os.listdir(os.path.join(BUILD, 'locales'))) if f.endswith('.json') and '.schema.' not in f]:
     os.makedirs(os.path.dirname(os.path.join(LOOSE, rel)), exist_ok=True)

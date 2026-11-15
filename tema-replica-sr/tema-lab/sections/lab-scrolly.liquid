@@ -1,7 +1,9 @@
 {%- comment -%}
-  «Cómo usarlo»: en escritorio, la imagen se queda fija y cambia con cada
-  paso mientras una línea se llena al bajar. En móvil, cada paso lleva su
-  propia imagen. Sin JS se leen todos los pasos con su texto.
+  Pasos con imagen («Del pedido a tu casa», «Cómo usarlo»…): en escritorio,
+  la imagen se queda fija y cambia con cada paso mientras una línea se llena
+  al bajar. En móvil, cada paso lleva su propia imagen. Sin JS se leen todos
+  los pasos con su texto. Cada paso puede llevar su etiqueta («Hoy»,
+  «En 24–48 h»); sin ella sale «Paso 01», «Paso 02»…
 {%- endcomment -%}
 {%- assign p = section.settings.product -%}
 <section class="lab lab-sec{% if section.settings.surface %} lab-sec--surface{% endif %}" id="{{ section.settings.anchor | default: 'como-usarlo' | handleize }}" data-lab-scrolly>
@@ -43,7 +45,7 @@
             endif
           -%}
           <li class="lab-scrolly__step{% if forloop.first %} is-on{% endif %}" {{ b.shopify_attributes }}>
-            <span class="lab-mono">{{ 'lab.proof.step' | t }} {% if forloop.index < 10 %}0{% endif %}{{ forloop.index }}</span>
+            <span class="lab-mono">{% if b.settings.label != blank %}{{ b.settings.label | escape }}{% else %}{{ 'lab.proof.step' | t }} {% if forloop.index < 10 %}0{% endif %}{{ forloop.index }}{% endif %}</span>
             <h3 class="lab-h3">{{ b.settings.title | escape }}</h3>
             <p>{{ b.settings.text }}</p>
             {%- if img != blank -%}
@@ -71,6 +73,7 @@
     {
       "type": "step", "name": "Paso",
       "settings": [
+        { "type": "text", "id": "label", "label": "Etiqueta", "info": "P. ej. «Hoy» o «En 24–48 h». Vacía: «Paso 01», «Paso 02»…" },
         { "type": "text", "id": "title", "label": "Título", "default": "Lee el manual" },
         { "type": "inline_richtext", "id": "text", "label": "Texto", "default": "Zonas permitidas, duración, frecuencia y contraindicaciones." },
         { "type": "image_picker", "id": "image", "label": "Imagen" },

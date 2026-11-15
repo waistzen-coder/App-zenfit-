@@ -1,0 +1,27 @@
+{%- comment -%}
+  Qué es el aparato, de un vistazo: sus tres funciones con icono, bajo el
+  precio de la ficha. Solo lo que tiene, sin promesas de resultado. Los textos
+  salen de los ajustes de la sección (f1…f3 y su detalle); vacíos, no salen.
+  Uso: render 'lab-feats', s: section.settings
+{%- endcomment -%}
+{%- if s.f1 != blank or s.f2 != blank or s.f3 != blank -%}
+  <ul class="lab-feats" role="list">
+    {%- for i in (1..3) -%}
+      {%- liquid
+        assign fk = 'f' | append: i
+        assign fs = fk | append: '_sub'
+        case i
+          when 1
+            assign fi = 'wave'
+          when 2
+            assign fi = 'flame'
+          else
+            assign fi = 'sun'
+        endcase
+      -%}
+      {%- if s[fk] != blank -%}
+        <li>{% render 'lab-icon', name: fi %}<strong>{{ s[fk] | escape }}</strong>{% if s[fs] != blank %}<span>{{ s[fs] | escape }}</span>{% endif %}</li>
+      {%- endif -%}
+    {%- endfor -%}
+  </ul>
+{%- endif -%}

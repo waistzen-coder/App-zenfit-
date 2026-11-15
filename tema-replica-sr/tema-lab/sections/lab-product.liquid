@@ -1,9 +1,10 @@
 {%- comment -%}
   Ficha de producto Lab, pensada para vender desde el móvil:
-  galería → título → precio (el de primer pedido si hay código) → packs con
-  lo que se ahorra → un botón principal «Comprar ahora» que va directo al
-  checkout en español → «Pagar al recibirlo» → fecha de entrega estimada,
-  devolución y garantía → formas de pago → acordeón. «Añadir al carrito»
+  galería → título → precio (el de primer pedido si hay código) → las tres
+  funciones con icono → «En stock» con la fecha de entrega → packs con lo que
+  se ahorra → un botón principal «Comprar ahora» que va directo al checkout
+  en español → «Pagar al recibirlo» → envío, devolución y garantía → formas
+  de pago → acordeón. «Añadir al carrito»
   queda como opción secundaria. Barra fija de compra en móvil y escritorio y
   Product + Offer + Breadcrumb.
   Los importes de cada pack se calculan aquí; el JS solo los cambia de sitio.
@@ -265,18 +266,21 @@
           {%- if first_code != blank -%}
             <p class="lab-first" data-lab-first{% unless i_first %} hidden{% endunless %}>{{ 'lab.pdp.first_note_html' | t: pct: first_pct, code: first_code }}</p>
           {%- endif -%}
-          {%- if settings.lab_disc_3 > 0 and v.available -%}
-            {%- capture u3 -%}{% render 'lab-pack-price', price: v.price, qty: 3, show: 'unit' %}{%- endcapture -%}
-            <button type="button" class="lab-teaser" data-lab-pick="3"{% if start_q != 1 %} hidden{% endif %}>{{ 'lab.pdp.teaser' | t: unit: u3 }}</button>
-          {%- endif -%}
           <p class="lab-note">{{ 'lab.pdp.tax_note' | t }}{% if section.settings.ship_note != blank %} {{ section.settings.ship_note | escape }}{% endif %}</p>
         </div>
 
-        {%- if v.available -%}
-          <p class="lab-stock">{% if tracked and v.inventory_quantity <= section.settings.low_stock %}{{ 'lab.pdp.low_stock' | t: count: v.inventory_quantity }}{% else %}{{ 'lab.pdp.in_stock' | t }}{% endif %}</p>
-        {%- else -%}
-          <p class="lab-stock is-out">{{ 'lab.card.sold_out' | t }}</p>
-        {%- endif -%}
+        {%- comment -%} Qué es, de un vistazo: las tres funciones del aparato (solo lo que tiene, sin promesas). {%- endcomment -%}
+        {% render 'lab-feats', s: section.settings %}
+
+        {%- comment -%} Disponibilidad y fecha de entrega juntas, antes de elegir pack. {%- endcomment -%}
+        <div class="lab-avail">
+          {%- if v.available -%}
+            <p class="lab-stock">{% if tracked and v.inventory_quantity <= section.settings.low_stock %}{{ 'lab.pdp.low_stock' | t: count: v.inventory_quantity }}{% else %}{{ 'lab.pdp.in_stock' | t }}{% endif %}</p>
+            <p class="lab-avail__eta">{% render 'lab-icon', name: 'truck' %}<span>{% render 'lab-eta' %}</span></p>
+          {%- else -%}
+            <p class="lab-stock is-out">{{ 'lab.card.sold_out' | t }}</p>
+          {%- endif -%}
+        </div>
 
         <fieldset class="lab-pills">
           <legend>{{ 'lab.pdp.choose' | t }}</legend>
@@ -319,10 +323,12 @@
         {%- endif -%}
 
         <ul class="lab-assure" role="list">
-          <li>
-            {% render 'lab-icon', name: 'truck' %}
-            <span><strong>{% render 'lab-eta' %}</strong>{% if section.settings.g_ship != blank %}<small>{{ section.settings.g_ship | escape }}</small>{% endif %}</span>
-          </li>
+          {%- if section.settings.g_ship_title != blank -%}
+            <li>
+              {% render 'lab-icon', name: 'truck' %}
+              <span><strong>{{ section.settings.g_ship_title | escape }}</strong>{% if section.settings.g_ship != blank %}<small>{{ section.settings.g_ship | escape }}</small>{% endif %}</span>
+            </li>
+          {%- endif -%}
           {%- if section.settings.g_ret != blank -%}
             <li>
               {% render 'lab-icon', name: 'refresh' %}
@@ -465,6 +471,14 @@
     { "type": "text", "id": "subtitle", "label": "Subtítulo del H1 (opcional)", "info": "Vacío, el precio sube en la primera pantalla del móvil." },
     { "type": "text", "id": "brand", "label": "Marca (datos estructurados)", "default": "ReliefPath" },
     { "type": "text", "id": "ship_note", "label": "Nota bajo el precio", "default": "Envío gratis." },
+    { "type": "header", "content": "Las tres funciones, bajo el precio", "info": "Solo lo que el aparato tiene. Vacías, no salen." },
+    { "type": "text", "id": "f1", "label": "Función 1", "default": "Succión regulable" },
+    { "type": "text", "id": "f1_sub", "label": "Función 1 · detalle", "default": "desde el panel" },
+    { "type": "text", "id": "f2", "label": "Función 2", "default": "Calor" },
+    { "type": "text", "id": "f2_sub", "label": "Función 2 · detalle", "default": "en el mismo aparato" },
+    { "type": "text", "id": "f3", "label": "Función 3", "default": "Luz roja" },
+    { "type": "text", "id": "f3_sub", "label": "Función 3 · detalle", "default": "dentro de la copa" },
+    { "type": "header", "content": "Packs" },
     { "type": "range", "id": "default_pack", "label": "Pack elegido al entrar", "min": 1, "max": 3, "step": 1, "default": 1 },
     { "type": "range", "id": "low_stock", "label": "Avisar de pocas unidades por debajo de", "min": 0, "max": 50, "step": 1, "default": 10 },
     { "type": "text", "id": "s1", "label": "1 unidad · texto", "default": "Un aparato" },
@@ -477,7 +491,8 @@
     { "type": "inline_richtext", "id": "pay_note_nocod", "label": "Nota bajo los botones (sin contrareembolso)", "default": "Pago seguro con tarjeta, Bizum, PayPal o Klarna." },
     { "type": "text", "id": "pay_hide", "label": "Formas de pago que no se enseñan", "info": "Separadas por comas. Siguen activas en el checkout; solo se quitan del listado de la ficha.", "default": "bancontact,mobilepay,satispay,maestro" },
     { "type": "header", "content": "Garantías junto al botón" },
-    { "type": "text", "id": "g_ship", "label": "Entrega · detalle", "info": "La fecha se calcula sola (Ajustes del tema › Entrega estimada).", "default": "Envío gratis desde España. Estimación para península." },
+    { "type": "text", "id": "g_ship_title", "label": "Envío", "info": "La fecha de entrega va arriba, junto a «En stock», y se calcula sola (Ajustes del tema › Entrega estimada).", "default": "Envío gratis desde España" },
+    { "type": "text", "id": "g_ship", "label": "Envío · detalle", "default": "Con seguimiento. La fecha es para península; Baleares, 2–4 días laborables." },
     { "type": "text", "id": "g_ret", "label": "Devolución", "default": "30 días para devolverlo" },
     { "type": "text", "id": "g_ret_sub", "label": "Devolución · detalle", "default": "La etiqueta de vuelta la pagamos nosotros." },
     { "type": "text", "id": "ret_link", "label": "Devolución · enlace", "info": "Vacío: la página «devoluciones».", "default": "/pages/devoluciones" },

@@ -1,0 +1,84 @@
+{%- comment -%}
+  Comparativa con la alternativa genérica (las ventosas manuales), no con
+  otras marcas: una tabla corta de funciones, fila a fila. Solo dice lo que
+  cada una tiene; no compara resultados. En móvil cada fila pone el concepto
+  arriba y las dos columnas debajo; en escritorio, tres columnas.
+  Cada fila es un bloque: «Las manuales no lo tienen» pinta una equis.
+{%- endcomment -%}
+{%- liquid
+  assign p = section.settings.product | default: product
+  assign rows = section.blocks | where: 'type', 'row'
+-%}
+{%- if rows.size > 0 -%}
+<section class="lab lab-sec{% if section.settings.surface %} lab-sec--surface{% endif %}" id="{{ section.settings.anchor | default: 'comparativa' | handleize }}" aria-labelledby="LabCmp-{{ section.id }}">
+  <div class="lab-wrap lab-cmp__wrap">
+    <div class="lab-cmp__intro">
+      <h2 class="lab-h2" id="LabCmp-{{ section.id }}">{{ section.settings.heading }}</h2>
+      {%- if section.settings.lead != blank -%}<p class="lab-lead">{{ section.settings.lead }}</p>{%- endif -%}
+    </div>
+    <div class="lab-cmp" role="table" aria-labelledby="LabCmp-{{ section.id }}">
+      <div class="lab-cmp__head" role="row">
+        <span class="lab-cmp__corner" role="columnheader"><span class="visually-hidden">{{ 'lab.compare.feature' | t }}</span></span>
+        <span class="lab-cmp__us" role="columnheader">{{ section.settings.us_label | escape }}</span>
+        <span class="lab-cmp__them" role="columnheader">{{ section.settings.them_label | escape }}</span>
+      </div>
+      {%- for b in rows -%}
+        <div class="lab-cmp__row" role="row" {{ b.shopify_attributes }}>
+          <span class="lab-cmp__label" role="rowheader">{{ b.settings.label | escape }}</span>
+          <span class="lab-cmp__us" role="cell">{% render 'lab-icon', name: 'check' %}<span>{{ b.settings.us | escape }}</span></span>
+          <span class="lab-cmp__them{% if b.settings.them_no %} is-no{% endif %}" role="cell">{% if b.settings.them_no %}{% render 'lab-icon', name: 'x' %}{% else %}<i aria-hidden="true"></i>{% endif %}<span>{{ b.settings.them | escape }}</span></span>
+        </div>
+      {%- endfor -%}
+    </div>
+    {%- if section.settings.note != blank -%}<p class="lab-note lab-cmp__note">{{ section.settings.note | escape }}</p>{%- endif -%}
+    {%- comment -%} En móvil el botón va después de la tabla; en escritorio, bajo el titular (assets/lab.css lo coloca). {%- endcomment -%}
+    {%- if section.settings.cta != blank -%}
+      <div class="lab-cmp__cta">
+        <a class="lab-btn lab-btn--accent" href="{{ section.settings.cta_link | default: '#packs' }}" data-lab-cmp-cta>{{ section.settings.cta | escape }}{% render 'lab-icon', name: 'arrow' %}</a>
+        {%- if section.settings.price_line != blank and p != blank -%}
+          <span class="lab-cmp__from">{% render 'lab-fill', text: section.settings.price_line, product: p %}</span>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Lab · Comparativa",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Producto (precio)", "info": "En la ficha, vacío: el producto de la página." },
+    { "type": "text", "id": "anchor", "label": "Ancla", "default": "comparativa" },
+    { "type": "inline_richtext", "id": "heading", "label": "Título", "default": "Frente a las <em>ventosas manuales.</em>" },
+    { "type": "inline_richtext", "id": "lead", "label": "Entradilla", "default": "Las de siempre hacen el vacío a mano. ReliefPath™ lo hace con un botón y suma calor y luz roja en el mismo aparato." },
+    { "type": "text", "id": "us_label", "label": "Columna 1", "default": "ReliefPath™" },
+    { "type": "text", "id": "them_label", "label": "Columna 2", "default": "Ventosas manuales" },
+    { "type": "text", "id": "note", "label": "Nota al pie", "info": "Di qué se compara. No compares resultados ni nombres otras marcas.", "default": "Comparamos funciones, no resultados. «Ventosas manuales»: las de silicona y las de copa con bomba de mano." },
+    { "type": "text", "id": "cta", "label": "Botón", "default": "Elegir mi pack" },
+    { "type": "text", "id": "cta_link", "label": "Enlace del botón", "default": "#packs" },
+    { "type": "inline_richtext", "id": "price_line", "label": "Línea de precio", "info": "Marcas: [desde] [u2] [u3] [p1] [p2] [p3] [d2] [d3].", "default": "Desde <strong>[desde]/ud</strong> llevando 3" },
+    { "type": "checkbox", "id": "surface", "label": "Fondo blanco", "default": false }
+  ],
+  "blocks": [
+    {
+      "type": "row", "name": "Fila", "limit": 8,
+      "settings": [
+        { "type": "text", "id": "label", "label": "Qué se compara", "default": "Cómo hace el vacío" },
+        { "type": "text", "id": "us", "label": "Columna 1", "default": "Con un botón: bomba eléctrica" },
+        { "type": "text", "id": "them", "label": "Columna 2", "default": "A mano: apretando o bombeando" },
+        { "type": "checkbox", "id": "them_no", "label": "Las manuales no lo tienen (pinta una equis)", "default": false }
+      ]
+    }
+  ],
+  "presets": [{
+    "name": "Lab · Comparativa",
+    "blocks": [
+      { "type": "row", "settings": { "label": "Cómo hace el vacío", "us": "Con un botón: bomba eléctrica", "them": "A mano: apretando o bombeando" } },
+      { "type": "row", "settings": { "label": "Intensidad", "us": "La eliges en el panel", "them": "La que hagas con la mano" } },
+      { "type": "row", "settings": { "label": "Calor", "us": "Integrado", "them": "No", "them_no": true } },
+      { "type": "row", "settings": { "label": "Luz roja", "us": "Dentro de la copa", "them": "No", "them_no": true } }
+    ]
+  }]
+}
+{% endschema %}

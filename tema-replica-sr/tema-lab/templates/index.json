@@ -4,8 +4,14 @@
       "type": "lab-hero",
       "settings": {
         "product": "juego-de-ventosa-electrica-con-cable",
-        "crumbs": true,
-        "crumb": "Tienda"
+        "crumbs": false,
+        "crumb": "Tienda",
+        "heading": "Ventosas eléctricas con <em>calor y luz roja</em>",
+        "sub": "ReliefPath™ reúne succión regulable, calor y luz roja en un aparato para usar en casa. Envío gratis desde España en 24–48 h y puedes pagarlo al recibirlo. Desde [desde]/ud.",
+        "cta1": "Comprar ahora",
+        "cta1_link": "/products/juego-de-ventosa-electrica-con-cable#packs",
+        "cta2": "Ver los packs",
+        "cta2_link": "#packs"
       },
       "blocks": {
         "b1": {
@@ -275,42 +281,101 @@
         "b3"
       ]
     },
+    "compare": {
+      "type": "lab-compare",
+      "settings": {
+        "product": "juego-de-ventosa-electrica-con-cable",
+        "cta_link": "/products/juego-de-ventosa-electrica-con-cable#packs"
+      },
+      "blocks": {
+        "b1": {
+          "type": "row",
+          "settings": {
+            "label": "Cómo hace el vacío",
+            "us": "Con un botón: bomba eléctrica",
+            "them": "A mano: apretando o bombeando",
+            "them_no": false
+          }
+        },
+        "b2": {
+          "type": "row",
+          "settings": {
+            "label": "Intensidad",
+            "us": "La eliges en el panel",
+            "them": "La que hagas con la mano",
+            "them_no": false
+          }
+        },
+        "b3": {
+          "type": "row",
+          "settings": {
+            "label": "Calor",
+            "us": "Integrado",
+            "them": "No",
+            "them_no": true
+          }
+        },
+        "b4": {
+          "type": "row",
+          "settings": {
+            "label": "Luz roja",
+            "us": "Dentro de la copa",
+            "them": "No",
+            "them_no": true
+          }
+        }
+      },
+      "block_order": [
+        "b1",
+        "b2",
+        "b3",
+        "b4"
+      ]
+    },
     "scrolly": {
       "type": "lab-scrolly",
       "settings": {
-        "product": "juego-de-ventosa-electrica-con-cable"
+        "product": "juego-de-ventosa-electrica-con-cable",
+        "anchor": "como-llega",
+        "heading": "Lo pides hoy, <em>llega en 24–48 h.</em>",
+        "lead": "Sale de un almacén en España. Esto es lo que pasa desde que eliges tu pack.",
+        "surface": true
       },
       "blocks": {
         "b1": {
           "type": "step",
           "settings": {
-            "title": "Comprueba el pedido",
-            "text": "Que llegan las unidades de tu pack y el manual del fabricante.",
-            "media_index": 1
+            "label": "Hoy",
+            "title": "Eliges tu pack",
+            "text": "Pagas con tarjeta, Bizum, PayPal o Klarna. O no pagas nada ahora y lo haces al recibirlo.",
+            "media_index": 5
           }
         },
         "b2": {
           "type": "step",
           "settings": {
-            "title": "Lee el manual",
-            "text": "Zonas permitidas, duración, frecuencia y contraindicaciones de tu modelo.",
-            "media_index": 7
+            "label": "En 24–48 h",
+            "title": "Llega a casa",
+            "text": "Envío gratis y con seguimiento. El plazo es para península y cuenta días laborables.",
+            "media_index": 6
           }
         },
         "b3": {
           "type": "step",
           "settings": {
-            "title": "Empieza por lo más suave",
-            "text": "Nivel más bajo de succión y calor; sube solo si el manual lo permite.",
-            "media_index": 4
+            "label": "Primer uso",
+            "title": "Empiezas por lo más suave",
+            "text": "Lee el manual del fabricante y empieza por el nivel más bajo de succión y calor.",
+            "media_index": 7
           }
         },
         "b4": {
           "type": "step",
           "settings": {
-            "title": "Si algo no va, escríbenos",
-            "text": "Tienes 30 días desde que lo recibes para devolverlo y la etiqueta la pagamos nosotros.",
-            "media_index": 6
+            "label": "Hasta 30 días",
+            "title": "Si no te convence, lo devuelves",
+            "text": "Tienes 30 días desde que lo recibes y la etiqueta de vuelta la pagamos nosotros.",
+            "media_index": 1
           }
         }
       },
@@ -332,7 +397,8 @@
       "type": "lab-proof",
       "settings": {
         "anchor": "calidad",
-        "surface": true
+        "surface": true,
+        "guide": ""
       },
       "blocks": {
         "b1": {
@@ -606,30 +672,6 @@
             "label": "Garantía",
             "value": "3 años (legal)"
           }
-        },
-        "b7": {
-          "type": "milestone",
-          "settings": {
-            "label": "Hoy",
-            "title": "Eliges tu pack",
-            "text": "Pagas con tarjeta en el checkout o eliges pagar al recibirlo."
-          }
-        },
-        "b8": {
-          "type": "milestone",
-          "settings": {
-            "label": "24–48 h",
-            "title": "Llega a casa",
-            "text": "Envío gratis con seguimiento desde España a la península."
-          }
-        },
-        "b9": {
-          "type": "milestone",
-          "settings": {
-            "label": "30 días",
-            "title": "Si no te convence",
-            "text": "Tienes 30 días desde que lo recibes para pedir la devolución."
-          }
         }
       },
       "block_order": [
@@ -638,10 +680,7 @@
         "b3",
         "b4",
         "b5",
-        "b6",
-        "b7",
-        "b8",
-        "b9"
+        "b6"
       ]
     },
     "receipt": {
@@ -757,6 +796,7 @@
     "marquee",
     "catalog",
     "tour",
+    "compare",
     "scrolly",
     "builder",
     "proof",

@@ -58,7 +58,7 @@
         <span class="lab-mono">{{ 'lab.upsell.kicker' | t: count: next, disc: d }}</span>
         <p>{{ 'lab.upsell.text_html' | t: extra: extra_f, unit: unit }}</p>
       </div>
-      <button type="button" class="lab-btn lab-btn--accent" data-lab-upsell data-line="{{ line }}" data-qty="{{ next }}" data-variant="{{ it.variant_id }}">{{ 'lab.upsell.cta' | t: count: next }}</button>
+      <button type="button" class="lab-btn lab-btn--ghost" data-lab-upsell data-line="{{ line }}" data-qty="{{ next }}" data-variant="{{ it.variant_id }}">{{ 'lab.upsell.cta' | t: count: next }}</button>
     </div>
   {%- endif -%}
 {%- endif -%}

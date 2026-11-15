@@ -5,7 +5,7 @@
     assign heading_tag = 'h1'
   endif
 -%}
-<section class="lab lab-sec{% if section.settings.surface %} lab-sec--surface{% endif %}"{% if section.settings.anchor != blank %} id="{{ section.settings.anchor | handleize }}"{% endif %}>
+<section class="lab lab-sec{% if section.settings.surface %} lab-sec--surface{% endif %}{% if section.settings.flush %} lab-sec--flush{% endif %}"{% if section.settings.anchor != blank %} id="{{ section.settings.anchor | handleize }}"{% endif %}>
   <div class="lab-wrap">
     <div class="lab-text{% if section.settings.center %} lab-text--center{% endif %}" data-lab-reveal>
       {%- if section.settings.eyebrow != blank -%}<p class="lab-eyebrow">{{ section.settings.eyebrow | escape }}</p>{%- endif -%}
@@ -33,6 +33,7 @@
     { "type": "text", "id": "b2", "label": "Botón 2" },
     { "type": "url", "id": "b2_link", "label": "Botón 2 · enlace" },
     { "type": "checkbox", "id": "center", "label": "Centrado", "default": false },
+    { "type": "checkbox", "id": "flush", "label": "Pegado a la sección siguiente", "info": "Quita el espacio de debajo, para usarlo como cabecera de lo que sigue.", "default": false },
     { "type": "checkbox", "id": "surface", "label": "Fondo blanco", "default": false }
   ],
   "presets": [{ "name": "Lab · Texto" }]

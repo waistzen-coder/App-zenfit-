@@ -88,7 +88,8 @@
       {%- endfor -%}
     </div>
     <ul class="lab-close__notes" role="list">
-      <li>{% render 'lab-icon', name: 'truck' %}<span><strong>{% render 'lab-eta' %}.</strong>{% if section.settings.ship != blank %} {{ section.settings.ship | escape }}{% endif %}</span></li>
+      {%- capture eta_html -%}{% render 'lab-eta' %}{%- endcapture -%}
+      <li>{% render 'lab-icon', name: 'truck' %}<span><strong>{{ eta_html | strip }}.</strong>{% if section.settings.ship != blank %} {{ section.settings.ship | escape }}{% endif %}</span></li>
       {%- if section.settings.cod and fee_on == false -%}
         {%- assign cod_txt = 'lab.pdp.cod_free' | t -%}
         <li>{% render 'lab-icon', name: 'cash' %}<span>{{ 'lab.close.cod' | t: cod: cod_txt }}</span></li>

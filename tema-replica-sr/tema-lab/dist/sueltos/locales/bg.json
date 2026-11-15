@@ -647,7 +647,6 @@
       "cod_note": "Preferencia: contrareembolso. Elegir pago contra reembolso en el checkout.",
       "fee_eyebrow": "Contrareembolso",
       "close": "Cerrar",
-      "teaser": "o {{ unit }}/ud en el pack de 3",
       "first_code": "Primer pedido: código {{ code }} aplicado",
       "cod_btn": "Pagar al recibirlo",
       "cod_free": "sin recargo",
@@ -705,6 +704,9 @@
       "returns": "30 días para devolver",
       "secure": "Pago seguro o al recibirlo",
       "first_html": "Primer pedido: con el código <strong>{{ code }}</strong> se queda en <strong>{{ price }}</strong>. Se aplica al pagar."
+    },
+    "compare": {
+      "feature": "Qué se compara"
     },
     "eta": {
       "range": "Recíbelo entre el %a y el %b",

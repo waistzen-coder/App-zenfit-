@@ -1,0 +1,183 @@
+{
+  "sections": {
+    "intro": {
+      "type": "lab-text",
+      "settings": {
+        "eyebrow": "Tienda",
+        "heading": "ReliefPath™, <em>suelto o en pack</em>",
+        "as_h1": true,
+        "flush": true,
+        "text": "<p>Un solo aparato y tres formas de comprarlo. El envío es gratis desde España y puedes pagarlo al recibirlo.</p>"
+      }
+    },
+    "catalog": {
+      "type": "lab-catalog",
+      "settings": {
+        "product": "juego-de-ventosa-electrica-con-cable",
+        "title": "Catálogo",
+        "anchor": "catalogo"
+      },
+      "blocks": {
+        "b1": {
+          "type": "category",
+          "settings": {
+            "name": "Packs",
+            "slug": "packs",
+            "line": "El precio más bajo del catálogo: −[d2] % llevando 2 y −[d3] % llevando 3, aplicado en el carrito."
+          }
+        },
+        "b2": {
+          "type": "item",
+          "settings": {
+            "qty": 2,
+            "title": "Pack 2 ReliefPath™",
+            "benefit": "Uno para ti y otro para regalar",
+            "media_index": 2,
+            "badge": ""
+          }
+        },
+        "b3": {
+          "type": "item",
+          "settings": {
+            "qty": 3,
+            "title": "Pack 3 ReliefPath™",
+            "benefit": "El precio más bajo por unidad",
+            "media_index": 3,
+            "badge": ""
+          }
+        },
+        "b4": {
+          "type": "category",
+          "settings": {
+            "name": "El aparato",
+            "slug": "aparato",
+            "line": "Ventosa eléctrica de succión regulable, calor y luz roja en un mismo aparato de uso doméstico."
+          }
+        },
+        "b5": {
+          "type": "item",
+          "settings": {
+            "qty": 1,
+            "title": "ReliefPath™ 1 unidad",
+            "benefit": "Ventosa, calor y luz roja",
+            "media_index": 1,
+            "badge": ""
+          }
+        }
+      },
+      "block_order": [
+        "b1",
+        "b2",
+        "b3",
+        "b4",
+        "b5"
+      ]
+    },
+    "receipt": {
+      "type": "lab-receipt",
+      "settings": {
+        "product": "juego-de-ventosa-electrica-con-cable",
+        "surface": true
+      },
+      "blocks": {
+        "b1": {
+          "type": "line",
+          "settings": {
+            "label": "Envío a península y Baleares",
+            "value": "[0]",
+            "page": "envios"
+          }
+        },
+        "b2": {
+          "type": "line",
+          "settings": {
+            "label": "Entrega en península",
+            "value": "24–48 h",
+            "page": "envios"
+          }
+        },
+        "b3": {
+          "type": "line",
+          "settings": {
+            "label": "Plazo para devolver",
+            "value": "30 días",
+            "page": "devoluciones"
+          }
+        },
+        "b4": {
+          "type": "line",
+          "settings": {
+            "label": "Etiqueta de devolución",
+            "value": "[0]",
+            "page": "devoluciones"
+          }
+        },
+        "b5": {
+          "type": "line",
+          "settings": {
+            "label": "Garantía legal",
+            "value": "3 años",
+            "page": "devoluciones"
+          }
+        },
+        "b6": {
+          "type": "line",
+          "settings": {
+            "label": "Pago con tarjeta",
+            "value": "Sin recargo"
+          }
+        },
+        "b7": {
+          "type": "line",
+          "settings": {
+            "label": "Pago al recibirlo",
+            "value": "[codfee]"
+          }
+        },
+        "b8": {
+          "type": "link",
+          "settings": {
+            "label": "Ver envíos",
+            "page": "envios"
+          }
+        },
+        "b9": {
+          "type": "link",
+          "settings": {
+            "label": "Ver devoluciones",
+            "page": "devoluciones"
+          }
+        },
+        "b10": {
+          "type": "link",
+          "settings": {
+            "label": "¿Dudas? Escríbenos",
+            "page": "contact"
+          }
+        }
+      },
+      "block_order": [
+        "b1",
+        "b2",
+        "b3",
+        "b4",
+        "b5",
+        "b6",
+        "b7",
+        "b8",
+        "b9",
+        "b10"
+      ]
+    },
+    "legal": {
+      "type": "lab-legal",
+      "settings": {}
+    }
+  },
+  "order": [
+    "intro",
+    "catalog",
+    "receipt",
+    "legal"
+  ]
+}
