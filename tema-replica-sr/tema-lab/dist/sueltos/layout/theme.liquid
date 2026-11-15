@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="theme-color" content="#F6F7F9">
     <script>
-      window.labCfg = { locale: {{ settings.lab_checkout_locale | strip | json }}, code: {% if settings.lab_first_auto %}{{ settings.lab_first_code | strip | json }}{% else %}""{% endif %} };
+      window.labCfg = { locale: {{ settings.lab_checkout_locale | strip | json }}, code: {% if settings.lab_first_auto %}{{ settings.lab_first_code | strip | json }}{% else %}""{% endif %}, privacy: {{ shop.privacy_policy.url | default: '' | json }} };
     </script>
     {%- if settings.lab_transitions -%}
       <style>@media (prefers-reduced-motion: no-preference){@view-transition{navigation:auto}}</style>
@@ -25,6 +25,8 @@
 
     {%- if settings.favicon != blank -%}
       <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
+    {%- else -%}
+      <link rel="icon" type="image/svg+xml" href="{{ 'lab-favicon.svg' | asset_url }}">
     {%- endif -%}
 
     {%- unless settings.type_header_font.system? and settings.type_body_font.system? -%}

@@ -104,6 +104,45 @@ Una limitación de Shopify que conviene recordar: una sección con bloque de
 app (`@app`) no admite ajustes de tipo «página». Por eso los enlaces de
 devolución y ayuda de la ficha son de texto.
 
+## Auditoría (15-11): la tienda real, pantalla a pantalla
+
+Se recorrió la tienda real con el tema en vista previa, como un visitante de
+España: todas las páginas, en móvil y en ordenador, en claro y en oscuro, y
+todos los enlaces. Esto es lo que salió y lo que se cambió.
+
+| Defecto | Arreglo | Dónde |
+|---|---|---|
+| El aviso de cookies de Shopify ocupaba el 59 % de la pantalla del móvil (496 px) y tapaba el precio y el botón | Queda abajo, compacto (219 px), con «Aceptar» y «Rechazar» iguales y en la misma fila | `lab.css` |
+| El enlace «Política de privacidad» del aviso daba 404 (Shopify lo pone con «/es/», que en esta tienda no existe) | Se cambia por la dirección buena al aparecer el aviso | `lab.js` (`cookieLink`) |
+| Los iconos de pago del pie salían apilados en columna | En fila | `lab.css` |
+| El visor 3D arrancaba con el aparato diminuto: el primer fotograma podía llevar un paso de tiempo negativo y la cámara se alejaba | El paso nunca baja de cero y el primer fotograma ya sale con la vista de su función | `src/lab-3d/main.js` |
+| «Comprar» de la cabecera y de la barra de oferta sacaban de la ficha a la portada | En la ficha bajan a los packs; desde el resto de la tienda llevan a la ficha | `lab-header`, `lab-offer` |
+| La página del carrito era la de Dawn: «Featured collection» en inglés con el producto del recargo, importes «€49,95 EUR» y botón de Shop Pay que saltaba el checkout en español | Importes en formato español, propuesta de pack, garantías bajo el botón y «Tramitar pedido»; sin colección ni pago exprés | `empaquetar_lab.py`, `templates/cart.json` |
+| «Todos los productos» y la búsqueda listaban el producto del recargo y tachaban 99,95 € con la insignia «Oferta» | La colección enseña los tres packs; la búsqueda usa las reglas de precio de la ficha y no lista el recargo | `templates/collection.json`, `snippets/price`, `card-product` |
+| La barra fija de ordenador tapaba el pie | Se aparta al llegar al pie | `lab.js` (`pdp`) |
+| Sin icono en la pestaña del navegador | El punto rojo del logo, hasta que se suba uno en Ajustes del tema | `assets/lab-favicon.svg` |
+
+Y lo que se añadió tras comparar con las fichas de dropshipping que mejor
+venden (son cifras de agencias: orientación, no garantía):
+
+| Cambio | Por qué | Dónde |
+|---|---|---|
+| Las tres funciones con icono bajo el precio, en la primera pantalla | Poner los beneficios junto a la caja de compra subió la conversión en móvil en las pruebas de [Bluestout](https://bluestout.com/cro-wins/we-increased-mobile-conversions-by-moving-2-icons/) | `snippets/lab-feats` |
+| La fecha de entrega sube junto a «En stock», antes de los packs | Es lo primero que se pregunta quien desconfía de una tienda nueva | `lab-product` |
+| Comparativa con las ventosas manuales: cuatro filas de funciones, sin nombrar marcas ni comparar resultados | Una tabla frente a la alternativa genérica ayudó; nombrando competidores, empeoró ([AdsX](https://www.adsx.com/blog/shopify-comparison-table-pdp-conversion)) | `sections/lab-compare` |
+| «Lo pides hoy, llega en 24–48 h»: del pedido a casa en cuatro pasos (hoy, 24–48 h, primer uso, 30 días) | Sustituye a «Cuatro pasos, con cabeza», que hablaba de revisar el paquete | `lab-scrolly`, `plantillas.py` |
+| Fuera de la ficha el bloque «Pruebas, no promesas» y su guía de revisión | Repetía lo que ya dicen las garantías, las preguntas y el ticket; sigue en la portada y en la página de calidad | `plantillas.py` |
+| En el carrito, el botón rojo es el de pagar y «Llevar 2» pasa a secundario | Antes el botón que más llamaba era el de añadir, no el de pagar | `lab.css`, `lab-cart-upsell` |
+| Cabecera sin lupa | Con un solo producto no hace falta y quita sitio en el móvil | `lab-header` (ajuste «Lupa de búsqueda») |
+
+Evento nuevo: `lab_compare_cta`.
+
+Cosas de la tienda (no del tema) que salieron en la auditoría y que el tema
+no puede arreglar: las páginas de Envíos y Devoluciones tienen una
+traducción «al español» que en realidad es un borrador antiguo en inglés, y
+es la que ve el cliente; y la política de reembolso de Shopify dice que la
+devolución la paga el cliente, al revés que la página de Devoluciones.
+
 ## Reglas que sigue
 
 - Los precios de los packs se calculan con los descuentos de *Ajustes del

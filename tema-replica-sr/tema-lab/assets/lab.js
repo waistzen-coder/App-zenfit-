@@ -838,7 +838,23 @@
   }
 
   function sections() { reveal(); offer(); drawer(); catbar(); counters(); pointerFx(); stage(); tour(); scrolly(); builder(); receipt(); pdp(); eta(); footer(); }
-  function init() { sections(); progress(); header(); fly(); upsell(); buy(); checkout(); cartWatch(); transitions(); }
+  /* Aviso de cookies de Shopify: su enlace a la política de privacidad sale
+     con el prefijo del idioma («/es/policies/…»), que en esta tienda no
+     existe y da 404. Se cambia por la dirección que da el tema, tanto en el
+     aviso como en el panel de preferencias. */
+  function cookieLink() {
+    var url = (window.labCfg || {}).privacy;
+    if (!url || !window.MutationObserver) return;
+    var fix = function () {
+      $$('[id^="shopify-pc__"] a[href*="/policies/privacy-policy"]').forEach(function (a) {
+        if (a.getAttribute('href') !== url) a.setAttribute('href', url);
+      });
+    };
+    fix();
+    new MutationObserver(fix).observe(document.body, { childList: true });
+  }
+
+  function init() { sections(); progress(); header(); fly(); upsell(); buy(); checkout(); cartWatch(); transitions(); cookieLink(); }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
   document.addEventListener('shopify:section:load', sections);
 })();

@@ -145,10 +145,11 @@ SEO = """{%- liquid
 # Transiciones entre páginas (se cancelan si el cliente toca algo, para no
 # frenar la respuesta) y precarga de enlaces al pasar el ratón, sin carrito,
 # checkout ni cuenta. Solo navegadores que lo soportan; el resto lo ignora.
-# Ajustes que usa assets/lab.js antes de cargar: idioma del checkout y código
-# de primera compra (solo si está activado aplicarlo en compras de 1 unidad).
+# Ajustes que usa assets/lab.js antes de cargar: idioma del checkout, código
+# de primera compra (solo si está activado aplicarlo en compras de 1 unidad) y
+# la dirección de la política de privacidad (para el aviso de cookies).
 CFG = '''    <script>
-      window.labCfg = { locale: {{ settings.lab_checkout_locale | strip | json }}, code: {% if settings.lab_first_auto %}{{ settings.lab_first_code | strip | json }}{% else %}""{% endif %} };
+      window.labCfg = { locale: {{ settings.lab_checkout_locale | strip | json }}, code: {% if settings.lab_first_auto %}{{ settings.lab_first_code | strip | json }}{% else %}""{% endif %}, privacy: {{ shop.privacy_policy.url | default: '' | json }} };
     </script>
 '''
 MODERN = '''    {%- if settings.lab_transitions -%}
@@ -166,6 +167,10 @@ MODERN = '''    {%- if settings.lab_transitions -%}
     {%- endif -%}
 '''
 patch('layout/theme.liquid', [
+    # Sin icono subido en Ajustes del tema, la pestaña del navegador lleva el punto rojo del logo.
+    ('      <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">\n    {%- endif -%}',
+     '      <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">\n    {%- else -%}\n'
+     "      <link rel=\"icon\" type=\"image/svg+xml\" href=\"{{ 'lab-favicon.svg' | asset_url }}\">\n    {%- endif -%}"),
     ('    <meta name="theme-color" content="">', '    <meta name="theme-color" content="#F6F7F9">\n' + CFG + MODERN.rstrip('\n')),
     ('    <title>\n      {{ page_title }}', SEO + '    <title>\n      {{ lab_title }}'),
     ('{%- unless page_title contains shop.name %}', '{%- unless lab_title contains shop.name %}'),
