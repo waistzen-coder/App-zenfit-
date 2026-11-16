@@ -9,8 +9,9 @@ otro tema de la tienda.
 | Página | Secciones |
 |---|---|
 | Portada (`index.json`) | Barra de oferta · cabecera fija · hero con cifras enlazadas · catálogo con barra fija (01 Packs, 02 El aparato) · visita 3D · cómo usarlo · calculadora de packs · calidad y documentos · vídeo real (solo si se sube) · reseñas (solo app real) · preguntas · sobre nosotros · ticket «Tu pedido, sin sorpresas.» · aviso del sector · pie |
-| Ficha (`product.json`, `product.reliefpatch.json`) | Galería · packs 1/2/3 · visita 3D · añadir al carrito (carrito lateral) · comprar ahora (checkout en español) · contrareembolso con su recargo · barra fija en móvil · acordeón · Product + Offer + Breadcrumb |
+| Ficha (`product.json`, `product.reliefpatch.json`) | Galería · precio de primer pedido · las tres funciones · «En stock» con fecha de entrega · packs 1/2/3 · comprar ahora (checkout en español) · pagar al recibirlo · garantías · acordeón · visita 3D · comparativa · del pedido a casa · preguntas · ticket · cierre con los packs · barra fija · Product + Offer + Breadcrumb |
 | Páginas | `page.json` (envíos, devoluciones…), `page.contact`, `page.tracking`, `page.calidad`, `page.faq`, `page.guia`, `page.sobre`, `page.landing-espana` |
+| Carrito y colecciones | `cart.json` (página del carrito con las piezas del carrito lateral) · `collection.json` y `list-collections.json` (los tres packs) |
 
 ## Lab 2.0 (24-10): movimiento e interacción
 

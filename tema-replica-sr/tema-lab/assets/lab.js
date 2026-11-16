@@ -761,7 +761,10 @@
     document.addEventListener('click', function (e) {
       var b = e.target.closest && e.target.closest('[data-lab-upsell]');
       if (!b) return;
-      var items = document.querySelector('cart-drawer-items') || document.querySelector('cart-items');
+      /* El carrito que contiene el botón: en la página del carrito conviven la
+         lista de la página y la del carrito lateral, y hay que avisar a la que
+         se ve para que se vuelva a pintar. */
+      var items = b.closest('cart-drawer-items, cart-items') || document.querySelector('cart-drawer-items') || document.querySelector('cart-items');
       if (!items || typeof items.updateQuantity !== 'function') return;
       b.setAttribute('aria-disabled', 'true');
       track('lab_upsell', { qty: +b.getAttribute('data-qty') });
