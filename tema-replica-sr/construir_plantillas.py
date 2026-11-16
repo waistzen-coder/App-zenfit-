@@ -175,7 +175,7 @@ STORY = section('sr-story', {
     'tag': 'España', 'caption': '',
     'eyebrow': 'Quiénes somos',
     'heading': 'Una tienda pequeña,', 'heading_accent': 'una idea concreta',
-    'text': '<p>Somos Waistzen, una tienda de España. Elegimos ReliefPath™ pensando en una rutina que se repite en muchas casas: días enteros de silla, temario y temporizador.</p><p>No te prometemos aprobar ni quitarte ningún dolor. Te proponemos algo más sencillo: tomarte las pausas en serio, con un aparato que te espera en la mesa.</p>',
+    'text': '<p>Somos Waistzen, una tienda española. Elegimos ReliefPath™ pensando en una rutina que se repite en muchas casas: días enteros de silla, temario y temporizador.</p><p>No te prometemos aprobar ni quitarte ningún dolor. Te proponemos algo más sencillo: tomarte las pausas en serio, con un aparato que te espera en la mesa.</p>',
     'quote': 'Estudiar muchas horas es parte de opositar. Descansar bien, también.',
     'name': 'El equipo de Waistzen', 'role': 'Atención en español · waistzen@gmail.com',
     'cta_text': '', 'cta_link': '', 'bg': '#ffffff',

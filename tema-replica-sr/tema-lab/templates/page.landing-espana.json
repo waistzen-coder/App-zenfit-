@@ -175,7 +175,7 @@
           "type": "qa",
           "settings": {
             "q": "¿Dónde se devuelve?",
-            "a": "<p>Tienes 30 días desde la recepción. La etiqueta la pagamos nosotros y la devolución va a España. <a href=\"/pages/devoluciones\">Ver devoluciones</a>.</p>"
+            "a": "<p>Dentro de España. Tienes 30 días desde la recepción: escríbenos y te enviamos la etiqueta, que pagamos nosotros, con la dirección de devolución. <a href=\"/pages/devoluciones\">Ver devoluciones</a>.</p>"
           }
         }
       },

@@ -91,8 +91,8 @@ def proof(**over):
         block('doc', kind='Política', title='Devoluciones y desistimiento', l1='Desistimiento', v1='14 días (legal)',
               l2='Plazo de la tienda', v2='30 días', l3='Etiqueta', v3='La pagamos nosotros', status='Publicada',
               page='devoluciones', button='Ver la política'),
-        block('doc', kind='Garantía', title='Garantía legal de conformidad', l1='Plazo', v1='3 años', l2='Devoluciones',
-              v2='España', l3='', v3='', status='Publicada', page='devoluciones', button='Ver la garantía'),
+        block('doc', kind='Garantía', title='Garantía legal de conformidad', l1='Plazo', v1='3 años', l2='Cómo reclamar',
+              v2='Por correo', l3='', v3='', status='Publicada', page='devoluciones', button='Ver la garantía'),
         block('doc', kind='Manual', title='Instrucciones del fabricante', l1='Formato', v1='PDF', l2='', v2='', l3='', v3='',
               status='Publicado', button='Descargar el manual'),
         block('doc', kind='Conformidad', title='Declaración CE del fabricante', l1='Formato', v1='PDF', l2='', v2='', l3='',
@@ -193,7 +193,7 @@ def about(milestones=True, **over):
         block('fact', label='Producto', value='ReliefPath™ · 1 aparato, 3 packs'),
         block('fact', label='Contacto', value='<a href="mailto:waistzen@gmail.com">waistzen@gmail.com</a>'),
         block('fact', label='Envíos', value='Desde un almacén en España'),
-        block('fact', label='Devoluciones', value='España'),
+        block('fact', label='Devoluciones', value='30 días, con etiqueta prepagada'),
         block('fact', label='Garantía', value='3 años (legal)'),
     ]
     if milestones:
@@ -480,8 +480,8 @@ save('templates/page.landing-espana.json', template(
         qa('¿Desde dónde se envía?', '<p>Desde un almacén en España, con seguimiento.</p>'),
         Q_COD,
         qa('¿Dónde se devuelve?',
-           '<p>Tienes 30 días desde la recepción. La etiqueta la pagamos nosotros y la devolución va a España. '
-           '<a href="/pages/devoluciones">Ver devoluciones</a>.</p>'),
+           '<p>Dentro de España. Tienes 30 días desde la recepción: escríbenos y te enviamos la etiqueta, que pagamos nosotros, '
+           'con la dirección de devolución. <a href="/pages/devoluciones">Ver devoluciones</a>.</p>'),
     ], anchor='preguntas-espana', heading='Preguntas sobre el envío <em>en España</em>')),
     ('receipt', receipt()),
     ('legal', legal()),

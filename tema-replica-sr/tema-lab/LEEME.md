@@ -160,6 +160,11 @@ devolución la paga el cliente, al revés que la página de Devoluciones.
 - El precio comparado del producto (99,95 €) no se tacha salvo que se active
   en los ajustes: en la UE el precio anterior debe ser el más bajo de los
   últimos 30 días.
+- No publica datos personales del titular: ni calle, ni localidad, ni
+  teléfono. Los textos dicen «España» y la dirección de devolución se da por
+  correo, con la etiqueta. El WhatsApp solo sale si se rellena en los ajustes
+  del tema. Los datos de identificación que pide la ley van en el aviso legal
+  de la tienda, no en el tema.
 
 ## Cómo se genera
 

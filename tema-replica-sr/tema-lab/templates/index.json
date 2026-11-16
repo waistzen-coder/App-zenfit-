@@ -461,8 +461,8 @@
             "title": "Garantía legal de conformidad",
             "l1": "Plazo",
             "v1": "3 años",
-            "l2": "Devoluciones",
-            "v2": "España",
+            "l2": "Cómo reclamar",
+            "v2": "Por correo",
             "l3": "",
             "v3": "",
             "status": "Publicada",
@@ -663,7 +663,7 @@
           "type": "fact",
           "settings": {
             "label": "Devoluciones",
-            "value": "España"
+            "value": "30 días, con etiqueta prepagada"
           }
         },
         "b6": {
