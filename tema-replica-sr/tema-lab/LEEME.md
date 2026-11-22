@@ -181,3 +181,11 @@ cd <carpeta con node_modules de three y esbuild> && sh <tema-lab>/src/lab-3d/bui
 ```
 
 El zip se sube como tema nuevo con `themeCreate`.
+
+Los cambios sueltos se suben con `themeFilesUpsert`. Con el repositorio
+público vale el enlace «raw» de GitHub fijado a un commit (`type: URL`); si
+el repositorio pasa a privado, se manda el contenido en la propia llamada
+(`type: TEXT`, o `BASE64` para fuentes e imágenes). Ese camino es práctico
+para plantillas, secciones, `lab.css` y `lab.js`; `lab-3d.js` (≈600 KB) es
+demasiado grande para mandarlo así y solo hay que volver a subirlo si se
+recompila el visor 3D.
