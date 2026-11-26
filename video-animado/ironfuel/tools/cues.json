@@ -1,0 +1,485 @@
+{
+  "duracion": 45.4,
+  "voz": "assets/audio/voz.wav",
+  "musica": {
+    "archivo": "assets/music/basketball-training.mp3",
+    "desde": 4,
+    "db": -27
+  },
+  "efectos": [
+    {
+      "t": 0,
+      "archivo": "assets/sfx/whoosh-1.mp3",
+      "db": -8,
+      "que": "golpe de cámara inicial",
+      "dur": null
+    },
+    {
+      "t": 0.28,
+      "archivo": "assets/sfx/campanilla.mp3",
+      "db": -12,
+      "que": "entra en la tienda",
+      "dur": null
+    },
+    {
+      "t": 0.564,
+      "archivo": "assets/sfx/portazo.mp3",
+      "db": -10,
+      "que": "la puerta se abre de golpe",
+      "dur": null
+    },
+    {
+      "t": 0.664,
+      "archivo": "assets/sfx/boing.mp3",
+      "db": -9,
+      "que": "se da con el marco",
+      "dur": null
+    },
+    {
+      "t": 0.945,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -10,
+      "que": "saca bíceps",
+      "dur": null
+    },
+    {
+      "t": 1.411,
+      "archivo": "assets/sfx/rebobinado.mp3",
+      "db": -9,
+      "que": "12 semanas antes",
+      "dur": null
+    },
+    {
+      "t": 2.006,
+      "archivo": "assets/sfx/whoosh-2.mp3",
+      "db": -12,
+      "que": "la cámara entra en la tienda",
+      "dur": null
+    },
+    {
+      "t": 2.982,
+      "archivo": "assets/sfx/teclado-1.mp3",
+      "db": -16,
+      "que": "el bocadillo se escribe",
+      "dur": 2.054
+    },
+    {
+      "t": 5.224,
+      "archivo": "assets/sfx/teclado-2.mp3",
+      "db": -18,
+      "que": "…¡y rápido!",
+      "dur": 0.646
+    },
+    {
+      "t": 7.145,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -10,
+      "que": "el bote mágico se apaga",
+      "dur": null
+    },
+    {
+      "t": 7.777,
+      "archivo": "assets/sfx/golpe-madera.mp3",
+      "db": -6,
+      "que": "cae la creatina",
+      "dur": null
+    },
+    {
+      "t": 7.937,
+      "archivo": "assets/sfx/golpe-madera.mp3",
+      "db": -6,
+      "que": "cae la proteína",
+      "dur": null
+    },
+    {
+      "t": 8.458,
+      "archivo": "assets/sfx/whoosh-3.mp3",
+      "db": -12,
+      "que": "viaje a la creatina",
+      "dur": null
+    },
+    {
+      "t": 8.658,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -10,
+      "que": "1",
+      "dur": null
+    },
+    {
+      "t": 9.526,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -9,
+      "que": "tarjeta de la creatina",
+      "dur": null
+    },
+    {
+      "t": 10.6,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -14,
+      "que": "días",
+      "dur": null
+    },
+    {
+      "t": 12.075,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -12,
+      "que": "descanso",
+      "dur": null
+    },
+    {
+      "t": 12.978,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -11,
+      "que": "gráfica",
+      "dur": null
+    },
+    {
+      "t": 14.448,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -12,
+      "que": "rayo",
+      "dur": null
+    },
+    {
+      "t": 15.569,
+      "archivo": "assets/sfx/whoosh-1.mp3",
+      "db": -12,
+      "que": "viaje a la proteína",
+      "dur": null
+    },
+    {
+      "t": 15.689,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -10,
+      "que": "2",
+      "dur": null
+    },
+    {
+      "t": 16.706,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -9,
+      "que": "tarjeta de la proteína",
+      "dur": null
+    },
+    {
+      "t": 18.302,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -11,
+      "que": "escudo",
+      "dur": null
+    },
+    {
+      "t": 19.118,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -12,
+      "que": "cacito",
+      "dur": null
+    },
+    {
+      "t": 20.37,
+      "archivo": "assets/sfx/click-2.mp3",
+      "db": -12,
+      "que": "agita el shaker",
+      "dur": null
+    },
+    {
+      "t": 20.863,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -11,
+      "que": "tras entrenar",
+      "dur": null
+    },
+    {
+      "t": 21.776,
+      "archivo": "assets/sfx/whoosh-2.mp3",
+      "db": -13,
+      "que": "cámara al dependiente",
+      "dur": null
+    },
+    {
+      "t": 23.345,
+      "archivo": "assets/sfx/whoosh-3.mp3",
+      "db": -11,
+      "que": "la cámara se aleja",
+      "dur": null
+    },
+    {
+      "t": 23.601,
+      "archivo": "assets/sfx/click-1.mp3",
+      "db": -9,
+      "que": "se enciende el neón del gimnasio",
+      "dur": null
+    },
+    {
+      "t": 25.035,
+      "archivo": "assets/sfx/whoosh-1.mp3",
+      "db": -13,
+      "que": "vuelta al mostrador",
+      "dur": null
+    },
+    {
+      "t": 25.136,
+      "archivo": "assets/sfx/datafono.mp3",
+      "db": -10,
+      "que": "pago aceptado",
+      "dur": null
+    },
+    {
+      "t": 25.6,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -11,
+      "que": "a la bolsa",
+      "dur": null
+    },
+    {
+      "t": 26.035,
+      "archivo": "assets/sfx/whoosh-2.mp3",
+      "db": -10,
+      "que": "sale corriendo",
+      "dur": null
+    },
+    {
+      "t": 26.435,
+      "archivo": "assets/sfx/campanilla.mp3",
+      "db": -14,
+      "que": "sale por la puerta",
+      "dur": null
+    },
+    {
+      "t": 27.895,
+      "archivo": "assets/sfx/click-2.mp3",
+      "db": -11,
+      "que": "marcador: 1",
+      "dur": null
+    },
+    {
+      "t": 29.018,
+      "archivo": "assets/sfx/disco-metal.mp3",
+      "db": -13,
+      "que": "la barra le pesa",
+      "dur": null
+    },
+    {
+      "t": 30.118,
+      "archivo": "assets/sfx/click-2.mp3",
+      "db": -11,
+      "que": "marcador: 4",
+      "dur": null
+    },
+    {
+      "t": 31.135,
+      "archivo": "assets/sfx/disco-metal.mp3",
+      "db": -9,
+      "que": "más discos",
+      "dur": null
+    },
+    {
+      "t": 31.972,
+      "archivo": "assets/sfx/click-2.mp3",
+      "db": -11,
+      "que": "marcador: 8",
+      "dur": null
+    },
+    {
+      "t": 32.429,
+      "archivo": "assets/sfx/whoosh-3.mp3",
+      "db": -13,
+      "que": "le quita las pesas",
+      "dur": null
+    },
+    {
+      "t": 32.879,
+      "archivo": "assets/sfx/disco-metal.mp3",
+      "db": -10,
+      "que": "disco 1",
+      "dur": null
+    },
+    {
+      "t": 33.476,
+      "archivo": "assets/sfx/disco-metal.mp3",
+      "db": -10,
+      "que": "disco 2",
+      "dur": null
+    },
+    {
+      "t": 34.682,
+      "archivo": "assets/sfx/click-2.mp3",
+      "db": -11,
+      "que": "marcador: 12",
+      "dur": null
+    },
+    {
+      "t": 35.499,
+      "archivo": "assets/sfx/golpe-climax.mp3",
+      "db": -5,
+      "que": "la barra se dobla (clímax)",
+      "dur": 2.6
+    },
+    {
+      "t": 36.005,
+      "archivo": "assets/sfx/whoosh-1.mp3",
+      "db": -10,
+      "que": "vuelve a la tienda",
+      "dur": null
+    },
+    {
+      "t": 36.505,
+      "archivo": "assets/sfx/campanilla.mp3",
+      "db": -14,
+      "que": "entra",
+      "dur": null
+    },
+    {
+      "t": 37.029,
+      "archivo": "assets/sfx/choque-manos.mp3",
+      "db": -9,
+      "que": "choca la mano",
+      "dur": null
+    },
+    {
+      "t": 37.548,
+      "archivo": "assets/sfx/whoosh-2.mp3",
+      "db": -12,
+      "que": "la cámara se aleja",
+      "dur": null
+    },
+    {
+      "t": 39.894,
+      "archivo": "assets/sfx/campanilla.mp3",
+      "db": -15,
+      "que": "entra el compañero",
+      "dur": null
+    },
+    {
+      "t": 40.911,
+      "archivo": "assets/sfx/campanilla.mp3",
+      "db": -15,
+      "que": "entra la vecina",
+      "dur": null
+    },
+    {
+      "t": 42.216,
+      "archivo": "assets/sfx/campanilla.mp3",
+      "db": -15,
+      "que": "entra el abuelo",
+      "dur": null
+    },
+    {
+      "t": 43.016,
+      "archivo": "assets/sfx/boing.mp3",
+      "db": -12,
+      "que": "el abuelo levanta el bastón",
+      "dur": null
+    },
+    {
+      "t": 42.965,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -9,
+      "que": "caja de comentario",
+      "dur": null
+    },
+    {
+      "t": 43.4,
+      "archivo": "assets/sfx/teclado-2.mp3",
+      "db": -14,
+      "que": "escribe FUERTE",
+      "dur": 0.407
+    },
+    {
+      "t": 44.377,
+      "archivo": "assets/sfx/click-1.mp3",
+      "db": -9,
+      "que": "enviar",
+      "dur": null
+    },
+    {
+      "t": 44.417,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -10,
+      "que": "corazón",
+      "dur": null
+    }
+  ],
+  "apariciones": {
+    "entro": 0,
+    "y1": 0.5,
+    "salio": 0.564,
+    "asi2": 0.895,
+    "esto": 1.411,
+    "dentro": 2.106,
+    "pidio": 2.982,
+    "dependiente1": 3.334,
+    "fuerte": 4.499,
+    "fuerteFin": 5.036,
+    "y2": 5.224,
+    "rapido": 5.302,
+    "rapidoFin": 5.77,
+    "dependiente2": 6.186,
+    "no1": 6.661,
+    "vendio": 6.819,
+    "magia": 7.125,
+    "saco": 7.578,
+    "dos1": 7.777,
+    "botes": 7.937,
+    "uno1": 8.658,
+    "creatina": 8.936,
+    "tres": 9.576,
+    "dia": 10.193,
+    "todos": 10.6,
+    "tambien": 11.399,
+    "descanso": 12.075,
+    "rendir": 12.978,
+    "mas1": 13.312,
+    "cortos": 14.448,
+    "intensos": 14.649,
+    "dos2": 15.669,
+    "proteina": 16.014,
+    "ayuda2": 16.756,
+    "ganar": 17.124,
+    "perderlo": 18.302,
+    "cacito": 19.118,
+    "agua": 19.592,
+    "leche": 20.009,
+    "despues": 20.37,
+    "entrenar1": 20.863,
+    "pero1": 21.776,
+    "dijo": 22.107,
+    "cosa": 22.498,
+    "sin": 23.345,
+    "entrenar2": 23.601,
+    "esto2": 24.021,
+    "nada": 24.541,
+    "nadaFin": 24.898,
+    "pago": 25.136,
+    "llevo": 25.6,
+    "fue": 25.985,
+    "gimnasio": 26.58,
+    "semana1": 27.534,
+    "uno2": 27.895,
+    "barra1": 29.018,
+    "semana2": 29.718,
+    "cuatro": 30.118,
+    "peso": 31.135,
+    "semana3": 31.621,
+    "ocho": 31.972,
+    "quitaba": 32.479,
+    "pesas": 33.076,
+    "lado": 33.514,
+    "semana4": 34.204,
+    "doce": 34.682,
+    "barra2": 35.23,
+    "doblaba": 35.499,
+    "volvio": 36.005,
+    "tienda": 36.536,
+    "mas4": 37.029,
+    "pero2": 37.448,
+    "solo": 38.384,
+    "companero": 39.894,
+    "vecina": 40.911,
+    "abuelo": 42.216,
+    "comenta": 43.015,
+    "fuerte2": 43.4,
+    "fuerte2Fin": 43.657,
+    "botes2": 44.377
+  }
+}
