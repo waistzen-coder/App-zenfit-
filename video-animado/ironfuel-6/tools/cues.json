@@ -1,0 +1,441 @@
+{
+  "duracion": 43.8,
+  "voz": "assets/audio/voz.wav",
+  "musica": {
+    "archivo": "assets/music/basketball-training.mp3",
+    "desde": 20,
+    "db": -27
+  },
+  "efectos": [
+    {
+      "t": 0,
+      "archivo": "assets/sfx/whoosh-1.mp3",
+      "db": -9,
+      "que": "golpe de cámara inicial",
+      "dur": null
+    },
+    {
+      "t": 0.062,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -10,
+      "que": "20 años",
+      "dur": null
+    },
+    {
+      "t": 0.639,
+      "archivo": "assets/sfx/disco-metal.mp3",
+      "db": -14,
+      "que": "la barra",
+      "dur": null
+    },
+    {
+      "t": 2.093,
+      "archivo": "assets/sfx/crujido.mp3",
+      "db": -9,
+      "que": "crujen las rodillas",
+      "dur": null
+    },
+    {
+      "t": 2.927,
+      "archivo": "assets/sfx/crujido.mp3",
+      "db": -11,
+      "que": "se quejan",
+      "dur": null
+    },
+    {
+      "t": 3.934,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -11,
+      "que": "médico",
+      "dur": null
+    },
+    {
+      "t": 4.539,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -10,
+      "que": "luz verde",
+      "dur": null
+    },
+    {
+      "t": 4.93,
+      "archivo": "assets/sfx/whoosh-3.mp3",
+      "db": -11,
+      "que": "va a la tienda",
+      "dur": null
+    },
+    {
+      "t": 5.951,
+      "archivo": "assets/sfx/campanilla.mp3",
+      "db": -14,
+      "que": "entra",
+      "dur": null
+    },
+    {
+      "t": 7.428,
+      "archivo": "assets/sfx/golpe-madera.mp3",
+      "db": -6,
+      "que": "cae IFLEX PRIME",
+      "dur": null
+    },
+    {
+      "t": 7.632,
+      "archivo": "assets/sfx/golpe-madera.mp3",
+      "db": -7,
+      "que": "cae la caja de VitoBest",
+      "dur": null
+    },
+    {
+      "t": 8.023,
+      "archivo": "assets/sfx/whoosh-1.mp3",
+      "db": -12,
+      "que": "viaje a IFLEX",
+      "dur": null
+    },
+    {
+      "t": 8.223,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -10,
+      "que": "1",
+      "dur": null
+    },
+    {
+      "t": 10.183,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -9,
+      "que": "tarjeta de IFLEX",
+      "dur": null
+    },
+    {
+      "t": 11.084,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -14,
+      "que": "membrana de huevo",
+      "dur": null
+    },
+    {
+      "t": 11.998,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -14,
+      "que": "glucosamina",
+      "dur": null
+    },
+    {
+      "t": 12.454,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -14,
+      "que": "condroitina",
+      "dur": null
+    },
+    {
+      "t": 13.332,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -14,
+      "que": "ácido hialurónico",
+      "dur": null
+    },
+    {
+      "t": 14.561,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -12,
+      "que": "1 cacito",
+      "dur": null
+    },
+    {
+      "t": 15.202,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -12,
+      "que": "en agua",
+      "dur": null
+    },
+    {
+      "t": 16.006,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -11,
+      "que": "vitamina C",
+      "dur": null
+    },
+    {
+      "t": 17.982,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -12,
+      "que": "forma colágeno",
+      "dur": null
+    },
+    {
+      "t": 19.117,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -11,
+      "que": "cartílagos",
+      "dur": null
+    },
+    {
+      "t": 20.868,
+      "archivo": "assets/sfx/whoosh-2.mp3",
+      "db": -12,
+      "que": "viaje a VitoBest",
+      "dur": null
+    },
+    {
+      "t": 20.988,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -10,
+      "que": "2",
+      "dur": null
+    },
+    {
+      "t": 21.332,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -9,
+      "que": "tarjeta de VitoBest",
+      "dur": null
+    },
+    {
+      "t": 22.097,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -14,
+      "que": "condroitina",
+      "dur": null
+    },
+    {
+      "t": 22.934,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -13,
+      "que": "MSM",
+      "dur": null
+    },
+    {
+      "t": 24.474,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -12,
+      "que": "en cápsulas",
+      "dur": null
+    },
+    {
+      "t": 25.743,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -12,
+      "que": "sin batidos",
+      "dur": null
+    },
+    {
+      "t": 26.851,
+      "archivo": "assets/sfx/whoosh-3.mp3",
+      "db": -12,
+      "que": "la cámara se aleja",
+      "dur": null
+    },
+    {
+      "t": 27.482,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -10,
+      "que": "no hace milagros",
+      "dur": null
+    },
+    {
+      "t": 28.318,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -11,
+      "que": "calienta bien",
+      "dur": null
+    },
+    {
+      "t": 29.425,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -11,
+      "que": "cuida la técnica",
+      "dur": null
+    },
+    {
+      "t": 29.879,
+      "archivo": "assets/sfx/whoosh-1.mp3",
+      "db": -13,
+      "que": "vuelta al mostrador",
+      "dur": null
+    },
+    {
+      "t": 29.979,
+      "archivo": "assets/sfx/datafono.mp3",
+      "db": -10,
+      "que": "pago aceptado",
+      "dur": null
+    },
+    {
+      "t": 30.334,
+      "archivo": "assets/sfx/campanilla.mp3",
+      "db": -14,
+      "que": "sale por la puerta",
+      "dur": null
+    },
+    {
+      "t": 31.457,
+      "archivo": "assets/sfx/golpe-madera.mp3",
+      "db": -13,
+      "que": "deja la bolsa",
+      "dur": null
+    },
+    {
+      "t": 31.571,
+      "archivo": "assets/sfx/click-2.mp3",
+      "db": -11,
+      "que": "marcador: 1",
+      "dur": null
+    },
+    {
+      "t": 31.826,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -12,
+      "que": "10 min",
+      "dur": null
+    },
+    {
+      "t": 33.821,
+      "archivo": "assets/sfx/click-2.mp3",
+      "db": -11,
+      "que": "marcador: 4",
+      "dur": null
+    },
+    {
+      "t": 34.116,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -12,
+      "que": "técnica",
+      "dur": null
+    },
+    {
+      "t": 35.638,
+      "archivo": "assets/sfx/click-2.mp3",
+      "db": -11,
+      "que": "marcador: 8",
+      "dur": null
+    },
+    {
+      "t": 36.574,
+      "archivo": "assets/sfx/golpe-climax.mp3",
+      "db": -8,
+      "que": "el profe es él (clímax)",
+      "dur": 2.2
+    },
+    {
+      "t": 38.646,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -11,
+      "que": "polvo",
+      "dur": null
+    },
+    {
+      "t": 38.758,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -11,
+      "que": "cápsulas",
+      "dur": null
+    },
+    {
+      "t": 39.428,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -11,
+      "que": "pregunta",
+      "dur": null
+    },
+    {
+      "t": 40.941,
+      "archivo": "assets/sfx/whoosh-2.mp3",
+      "db": -12,
+      "que": "vuelta a la tienda",
+      "dur": null
+    },
+    {
+      "t": 41.217,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -9,
+      "que": "tarjeta final",
+      "dur": null
+    },
+    {
+      "t": 41.397,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -12,
+      "que": "parte 6",
+      "dur": null
+    },
+    {
+      "t": 41.851,
+      "archivo": "assets/sfx/click-1.mp3",
+      "db": -8,
+      "que": "seguir",
+      "dur": null
+    },
+    {
+      "t": 41.901,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -11,
+      "que": "siguiendo",
+      "dur": null
+    },
+    {
+      "t": 42.832,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -11,
+      "que": "parte 7",
+      "dur": null
+    }
+  ],
+  "apariciones": {
+    "veinte": 0.062,
+    "levantando": 0.639,
+    "rodillas": 2.093,
+    "quejaban": 2.927,
+    "medico": 3.934,
+    "verde": 4.539,
+    "asi1": 4.93,
+    "tienda": 5.851,
+    "dependiente": 6.784,
+    "saco": 7.211,
+    "dos1": 7.428,
+    "botes1": 7.632,
+    "uno1": 8.223,
+    "aiflex": 8.235,
+    "mtxFin": 10.033,
+    "colageno1": 10.233,
+    "membrana": 11.084,
+    "glucosamina1": 11.998,
+    "condroitina1": 12.454,
+    "hialuronico": 13.332,
+    "cacito": 14.561,
+    "agua": 15.202,
+    "vitamina": 16.006,
+    "colageno2": 17.982,
+    "cartilagos": 19.117,
+    "normalidadFin": 20.728,
+    "dos2": 20.968,
+    "glucosamina2": 21.382,
+    "condroitina2": 22.097,
+    "msm": 22.934,
+    "vitobest": 23.21,
+    "capsulas1": 24.474,
+    "batidos": 25.743,
+    "siempre": 26.851,
+    "esto": 27.272,
+    "no2": 27.482,
+    "calienta": 28.318,
+    "tecnica1": 29.425,
+    "pago": 29.979,
+    "volvio": 30.084,
+    "semana1": 31.507,
+    "uno2": 31.571,
+    "diez": 31.826,
+    "semana2": 33.71,
+    "cuatro": 33.821,
+    "tecnica2": 34.116,
+    "semana3": 35.577,
+    "ocho": 35.638,
+    "clases": 36.574,
+    "calentamiento2": 36.987,
+    "polvo": 38.646,
+    "capsulas2": 38.758,
+    "pregunta": 39.428,
+    "encajaFin": 41.041,
+    "siguenos": 41.247,
+    "perderte": 41.851,
+    "siete": 42.832
+  }
+}

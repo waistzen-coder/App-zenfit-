@@ -1,0 +1,393 @@
+{
+  "duracion": 39.13333333333333,
+  "voz": "assets/audio/voz.wav",
+  "musica": {
+    "archivo": "assets/music/basketball-training.mp3",
+    "desde": 32,
+    "db": -27
+  },
+  "efectos": [
+    {
+      "t": 0,
+      "archivo": "assets/sfx/whoosh-1.mp3",
+      "db": -9,
+      "que": "golpe de cámara inicial",
+      "dur": null
+    },
+    {
+      "t": 0.524,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -10,
+      "que": "bote 1",
+      "dur": null
+    },
+    {
+      "t": 0.604,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -11,
+      "que": "bote 2",
+      "dur": null
+    },
+    {
+      "t": 0.684,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -11,
+      "que": "bote 3",
+      "dur": null
+    },
+    {
+      "t": 0.962,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -12,
+      "que": "iguales",
+      "dur": null
+    },
+    {
+      "t": 1.815,
+      "archivo": "assets/sfx/whoosh-3.mp3",
+      "db": -13,
+      "que": "la cámara busca al flaco",
+      "dur": null
+    },
+    {
+      "t": 3.504,
+      "archivo": "assets/sfx/whoosh-2.mp3",
+      "db": -12,
+      "que": "aparta los botes",
+      "dur": null
+    },
+    {
+      "t": 3.935,
+      "archivo": "assets/sfx/punch.mp3",
+      "db": -9,
+      "que": "Pro Tella",
+      "dur": null
+    },
+    {
+      "t": 5.761,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -10,
+      "que": "sello",
+      "dur": null
+    },
+    {
+      "t": 7.083,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -13,
+      "que": "fabricante japonés",
+      "dur": null
+    },
+    {
+      "t": 8.697,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -13,
+      "que": "fermentación",
+      "dur": null
+    },
+    {
+      "t": 9.67,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -12,
+      "que": "100 %",
+      "dur": null
+    },
+    {
+      "t": 11.307,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -13,
+      "que": "sin sabor",
+      "dur": null
+    },
+    {
+      "t": 12.045,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -13,
+      "que": "sin aromas",
+      "dur": null
+    },
+    {
+      "t": 12.567,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -13,
+      "que": "sin aditivos",
+      "dur": null
+    },
+    {
+      "t": 13.778,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -12,
+      "que": "300 g",
+      "dur": null
+    },
+    {
+      "t": 15.381,
+      "archivo": "assets/sfx/whoosh-2.mp3",
+      "db": -12,
+      "que": "viaje a la otra tarjeta",
+      "dur": null
+    },
+    {
+      "t": 15.731,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -10,
+      "que": "aminoácido",
+      "dur": null
+    },
+    {
+      "t": 16.74,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -13,
+      "que": "más abundante",
+      "dur": null
+    },
+    {
+      "t": 17.292,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -13,
+      "que": "de tu cuerpo",
+      "dur": null
+    },
+    {
+      "t": 18.03,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -12,
+      "que": "5 g",
+      "dur": null
+    },
+    {
+      "t": 19.4,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -12,
+      "que": "batido o agua",
+      "dur": null
+    },
+    {
+      "t": 21.053,
+      "archivo": "assets/sfx/whoosh-3.mp3",
+      "db": -12,
+      "que": "la cámara se aleja",
+      "dur": null
+    },
+    {
+      "t": 21.682,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -10,
+      "que": "sin entrenar",
+      "dur": null
+    },
+    {
+      "t": 22.294,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -11,
+      "que": "sin comer bien",
+      "dur": null
+    },
+    {
+      "t": 23.112,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -11,
+      "que": "ningún bote",
+      "dur": null
+    },
+    {
+      "t": 24.231,
+      "archivo": "assets/sfx/whoosh-1.mp3",
+      "db": -13,
+      "que": "vuelta al mostrador",
+      "dur": null
+    },
+    {
+      "t": 24.331,
+      "archivo": "assets/sfx/datafono.mp3",
+      "db": -10,
+      "que": "pago aceptado",
+      "dur": null
+    },
+    {
+      "t": 25.005,
+      "archivo": "assets/sfx/campanilla.mp3",
+      "db": -14,
+      "que": "sale por la puerta",
+      "dur": null
+    },
+    {
+      "t": 25.675,
+      "archivo": "assets/sfx/golpe-madera.mp3",
+      "db": -13,
+      "que": "deja la bolsa",
+      "dur": null
+    },
+    {
+      "t": 26.218,
+      "archivo": "assets/sfx/click-2.mp3",
+      "db": -11,
+      "que": "marcador: 1",
+      "dur": null
+    },
+    {
+      "t": 26.446,
+      "archivo": "assets/sfx/whoosh-3.mp3",
+      "db": -16,
+      "que": "el cacito",
+      "dur": null
+    },
+    {
+      "t": 26.993,
+      "archivo": "assets/sfx/whoosh-3.mp3",
+      "db": -15,
+      "que": "agita el batido",
+      "dur": null
+    },
+    {
+      "t": 28.68,
+      "archivo": "assets/sfx/click-2.mp3",
+      "db": -11,
+      "que": "marcador: 4",
+      "dur": null
+    },
+    {
+      "t": 29.787,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -11,
+      "que": "¿a qué sabe?",
+      "dur": null
+    },
+    {
+      "t": 31.266,
+      "archivo": "assets/sfx/boing.mp3",
+      "db": -12,
+      "que": "a nada",
+      "dur": null
+    },
+    {
+      "t": 32.107,
+      "archivo": "assets/sfx/click-2.mp3",
+      "db": -11,
+      "que": "marcador: 8",
+      "dur": null
+    },
+    {
+      "t": 32.298,
+      "archivo": "assets/sfx/golpe-climax.mp3",
+      "db": -8,
+      "que": "medio gimnasio (clímax)",
+      "dur": 2.2
+    },
+    {
+      "t": 33.634,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -12,
+      "que": "la lupa",
+      "dur": null
+    },
+    {
+      "t": 34.497,
+      "archivo": "assets/sfx/whoosh-2.mp3",
+      "db": -12,
+      "que": "zoom al bote",
+      "dur": null
+    },
+    {
+      "t": 35.066,
+      "archivo": "assets/sfx/punch.mp3",
+      "db": -9,
+      "que": "el sello",
+      "dur": null
+    },
+    {
+      "t": 36.389,
+      "archivo": "assets/sfx/whoosh-1.mp3",
+      "db": -12,
+      "que": "vuelta a la tienda",
+      "dur": null
+    },
+    {
+      "t": 36.604,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -9,
+      "que": "tarjeta final",
+      "dur": null
+    },
+    {
+      "t": 36.784,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -12,
+      "que": "parte 7",
+      "dur": null
+    },
+    {
+      "t": 37.145,
+      "archivo": "assets/sfx/click-1.mp3",
+      "db": -8,
+      "que": "seguir",
+      "dur": null
+    },
+    {
+      "t": 37.195,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -11,
+      "que": "siguiendo",
+      "dur": null
+    },
+    {
+      "t": 38.378,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -11,
+      "que": "parte 8",
+      "dur": null
+    }
+  ],
+  "apariciones": {
+    "toda": 0.053,
+    "glutamina1": 0.524,
+    "igual": 0.962,
+    "flaco": 1.915,
+    "creia": 2.128,
+    "ensenaron": 3.504,
+    "esta": 3.935,
+    "glutamina2": 4.52,
+    "protela": 5.229,
+    "sello1": 5.761,
+    "fabricante": 7.083,
+    "fermentacion": 8.697,
+    "cien1": 9.67,
+    "sabor": 11.307,
+    "aromas": 12.045,
+    "aditivos": 12.567,
+    "trescientos": 13.778,
+    "gramosFin": 14.74,
+    "glutamina4": 15.148,
+    "aminoacido": 15.731,
+    "abunda": 16.74,
+    "cuerpo": 17.292,
+    "cinco": 18.03,
+    "batido1": 19.4,
+    "agua": 19.82,
+    "siempre1": 21.053,
+    "entrenar1": 21.682,
+    "comer": 22.294,
+    "ningun": 23.112,
+    "nada1": 23.697,
+    "pago": 24.331,
+    "fue": 24.705,
+    "semana1": 25.726,
+    "uno": 26.218,
+    "echaba": 26.446,
+    "batido2": 26.993,
+    "semana2": 28.246,
+    "cuatro": 28.68,
+    "companero": 28.924,
+    "pregunto": 29.787,
+    "nada2": 31.266,
+    "semana3": 31.726,
+    "ocho1": 32.107,
+    "medio": 32.298,
+    "etiqueta": 33.634,
+    "fijate": 34.547,
+    "sello2": 35.066,
+    "comprarFin": 36.389,
+    "siguenos": 36.634,
+    "perderte": 37.145,
+    "ocho2": 38.378
+  }
+}

@@ -1,0 +1,350 @@
+[
+  {
+    "text": "1",
+    "start": 0.06,
+    "end": 0.57,
+    "id": "w0"
+  },
+  {
+    "text": "iFlex",
+    "start": 0.68,
+    "end": 1.69,
+    "id": "w1"
+  },
+  {
+    "text": "Prime",
+    "start": 1.69,
+    "end": 2.69,
+    "id": "w2"
+  },
+  {
+    "text": "de",
+    "start": 2.8,
+    "end": 3.17,
+    "id": "w3"
+  },
+  {
+    "text": "MTX,",
+    "start": 3.17,
+    "end": 3.84,
+    "id": "w4"
+  },
+  {
+    "text": "1",
+    "start": 3.84,
+    "end": 3.84,
+    "id": "w5"
+  },
+  {
+    "text": "iFlex",
+    "start": 3.84,
+    "end": 3.84,
+    "id": "w6"
+  },
+  {
+    "text": "Prime",
+    "start": 3.84,
+    "end": 3.84,
+    "id": "w7"
+  },
+  {
+    "text": "de",
+    "start": 3.84,
+    "end": 3.84,
+    "id": "w8"
+  },
+  {
+    "text": "MTX,",
+    "start": 3.84,
+    "end": 3.88,
+    "id": "w9"
+  },
+  {
+    "text": "glucosamina",
+    "start": 3.88,
+    "end": 4.71,
+    "id": "w10"
+  },
+  {
+    "text": "con",
+    "start": 4.71,
+    "end": 4.96,
+    "id": "w11"
+  },
+  {
+    "text": "droitina",
+    "start": 4.96,
+    "end": 5.54,
+    "id": "w12"
+  },
+  {
+    "text": "y",
+    "start": 5.54,
+    "end": 5.61,
+    "id": "w13"
+  },
+  {
+    "text": "MSM",
+    "start": 5.61,
+    "end": 5.83,
+    "id": "w14"
+  },
+  {
+    "text": "de",
+    "start": 5.83,
+    "end": 5.98,
+    "id": "w15"
+  },
+  {
+    "text": "VitoVest,",
+    "start": 5.98,
+    "end": 6.71,
+    "id": "w16"
+  },
+  {
+    "text": "glucosamina",
+    "start": 6.92,
+    "end": 7.43,
+    "id": "w17"
+  },
+  {
+    "text": "con",
+    "start": 7.54,
+    "end": 7.69,
+    "id": "w18"
+  },
+  {
+    "text": "droitina",
+    "start": 7.69,
+    "end": 8.22,
+    "id": "w19"
+  },
+  {
+    "text": "y",
+    "start": 8.22,
+    "end": 8.28,
+    "id": "w20"
+  },
+  {
+    "text": "MSM",
+    "start": 8.28,
+    "end": 8.45,
+    "id": "w21"
+  },
+  {
+    "text": "de",
+    "start": 8.48,
+    "end": 8.6,
+    "id": "w22"
+  },
+  {
+    "text": "VitoVest,",
+    "start": 8.6,
+    "end": 9.25,
+    "id": "w23"
+  },
+  {
+    "text": "glutamina",
+    "start": 9.25,
+    "end": 9.85,
+    "id": "w24"
+  },
+  {
+    "text": "protea",
+    "start": 9.85,
+    "end": 10.22,
+    "id": "w25"
+  },
+  {
+    "text": "con",
+    "start": 10.3,
+    "end": 10.45,
+    "id": "w26"
+  },
+  {
+    "text": "sello",
+    "start": 10.45,
+    "end": 10.76,
+    "id": "w27"
+  },
+  {
+    "text": "Kioa",
+    "start": 10.84,
+    "end": 11.03,
+    "id": "w28"
+  },
+  {
+    "text": "Quality,",
+    "start": 11.03,
+    "end": 11.86,
+    "id": "w29"
+  },
+  {
+    "text": "glutamina",
+    "start": 11.86,
+    "end": 12.6,
+    "id": "w30"
+  },
+  {
+    "text": "protela",
+    "start": 12.66,
+    "end": 13.06,
+    "id": "w31"
+  },
+  {
+    "text": "con",
+    "start": 13.12,
+    "end": 13.3,
+    "id": "w32"
+  },
+  {
+    "text": "sello",
+    "start": 13.3,
+    "end": 13.65,
+    "id": "w33"
+  },
+  {
+    "text": "Kioa",
+    "start": 13.65,
+    "end": 13.93,
+    "id": "w34"
+  },
+  {
+    "text": "Quality,",
+    "start": 13.93,
+    "end": 14.57,
+    "id": "w35"
+  },
+  {
+    "text": "NAD",
+    "start": 14.64,
+    "end": 14.78,
+    "id": "w36"
+  },
+  {
+    "text": "más",
+    "start": 14.78,
+    "end": 14.99,
+    "id": "w37"
+  },
+  {
+    "text": "con",
+    "start": 14.99,
+    "end": 15.19,
+    "id": "w38"
+  },
+  {
+    "text": "resveratrol",
+    "start": 15.25,
+    "end": 15.96,
+    "id": "w39"
+  },
+  {
+    "text": "de",
+    "start": 15.97,
+    "end": 16.11,
+    "id": "w40"
+  },
+  {
+    "text": "Applied",
+    "start": 16.11,
+    "end": 16.5,
+    "id": "w41"
+  },
+  {
+    "text": "Nutrition,",
+    "start": 16.77,
+    "end": 17.37,
+    "id": "w42"
+  },
+  {
+    "text": "NAD",
+    "start": 17.37,
+    "end": 17.57,
+    "id": "w43"
+  },
+  {
+    "text": "más",
+    "start": 17.58,
+    "end": 17.9,
+    "id": "w44"
+  },
+  {
+    "text": "con",
+    "start": 17.96,
+    "end": 18.11,
+    "id": "w45"
+  },
+  {
+    "text": "resveratrol",
+    "start": 18.11,
+    "end": 18.86,
+    "id": "w46"
+  },
+  {
+    "text": "de",
+    "start": 18.88,
+    "end": 19.02,
+    "id": "w47"
+  },
+  {
+    "text": "Applied",
+    "start": 19.02,
+    "end": 19.36,
+    "id": "w48"
+  },
+  {
+    "text": "Nutrition,",
+    "start": 19.52,
+    "end": 20.29,
+    "id": "w49"
+  },
+  {
+    "text": "extracto",
+    "start": 20.29,
+    "end": 20.86,
+    "id": "w50"
+  },
+  {
+    "text": "de",
+    "start": 20.86,
+    "end": 21,
+    "id": "w51"
+  },
+  {
+    "text": "agrasejo",
+    "start": 21,
+    "end": 21.51,
+    "id": "w52"
+  },
+  {
+    "text": "con",
+    "start": 21.58,
+    "end": 21.77,
+    "id": "w53"
+  },
+  {
+    "text": "un",
+    "start": 21.77,
+    "end": 21.8,
+    "id": "w54"
+  },
+  {
+    "text": "97%",
+    "start": 22.07,
+    "end": 22.4,
+    "id": "w55"
+  },
+  {
+    "text": "de",
+    "start": 22.41,
+    "end": 22.55,
+    "id": "w56"
+  },
+  {
+    "text": "berberina.",
+    "start": 22.55,
+    "end": 23.56,
+    "id": "w57"
+  }
+]

@@ -1,0 +1,400 @@
+{
+  "duracion": 39.266666666666666,
+  "voz": "assets/audio/voz.wav",
+  "musica": {
+    "archivo": "assets/music/basketball-training.mp3",
+    "desde": 46,
+    "db": -27
+  },
+  "efectos": [
+    {
+      "t": 0,
+      "archivo": "assets/sfx/whoosh-1.mp3",
+      "db": -9,
+      "que": "golpe de cámara inicial",
+      "dur": null
+    },
+    {
+      "t": 0.102,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -11,
+      "que": "¡berberina! 1",
+      "dur": null
+    },
+    {
+      "t": 0.313,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -12,
+      "que": "¡berberina! 2",
+      "dur": null
+    },
+    {
+      "t": 0.595,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -12,
+      "que": "¡berberina! 3",
+      "dur": null
+    },
+    {
+      "t": 3.41,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -10,
+      "que": "el móvil",
+      "dur": null
+    },
+    {
+      "t": 3.99,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -12,
+      "que": "fuego",
+      "dur": null
+    },
+    {
+      "t": 4.613,
+      "archivo": "assets/sfx/boing.mp3",
+      "db": -12,
+      "que": "¡de todo!",
+      "dur": null
+    },
+    {
+      "t": 5.043,
+      "archivo": "assets/sfx/whoosh-3.mp3",
+      "db": -12,
+      "que": "baja a la tienda",
+      "dur": null
+    },
+    {
+      "t": 6.017,
+      "archivo": "assets/sfx/campanilla.mp3",
+      "db": -14,
+      "que": "entra",
+      "dur": null
+    },
+    {
+      "t": 6.268,
+      "archivo": "assets/sfx/teclado-1.mp3",
+      "db": -16,
+      "que": "escribe la pregunta",
+      "dur": 0.923
+    },
+    {
+      "t": 7.934,
+      "archivo": "assets/sfx/golpe-madera.mp3",
+      "db": -6,
+      "que": "cae la berberina",
+      "dur": null
+    },
+    {
+      "t": 8.231,
+      "archivo": "assets/sfx/whoosh-1.mp3",
+      "db": -12,
+      "que": "viaje a la tarjeta",
+      "dur": null
+    },
+    {
+      "t": 8.431,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -10,
+      "que": "lo que es",
+      "dur": null
+    },
+    {
+      "t": 8.677,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -13,
+      "que": "extracto",
+      "dur": null
+    },
+    {
+      "t": 10.011,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -13,
+      "que": "una planta",
+      "dur": null
+    },
+    {
+      "t": 11.081,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -12,
+      "que": "97 %",
+      "dur": null
+    },
+    {
+      "t": 13.006,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -12,
+      "que": "970 mg",
+      "dur": null
+    },
+    {
+      "t": 15.451,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -12,
+      "que": "2 cápsulas",
+      "dur": null
+    },
+    {
+      "t": 16.967,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -12,
+      "que": "con una comida",
+      "dur": null
+    },
+    {
+      "t": 18.312,
+      "archivo": "assets/sfx/whoosh-2.mp3",
+      "db": -12,
+      "que": "viaje a lo que no es",
+      "dur": null
+    },
+    {
+      "t": 18.612,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -10,
+      "que": "lo que no es",
+      "dur": null
+    },
+    {
+      "t": 19.456,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -11,
+      "que": "magia",
+      "dur": null
+    },
+    {
+      "t": 19.917,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -12,
+      "que": "no sustituye",
+      "dur": null
+    },
+    {
+      "t": 21.248,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -12,
+      "que": "moverte",
+      "dur": null
+    },
+    {
+      "t": 22.303,
+      "archivo": "assets/sfx/whoosh-3.mp3",
+      "db": -12,
+      "que": "la cámara se aleja",
+      "dur": null
+    },
+    {
+      "t": 22.51,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -10,
+      "que": "medicación",
+      "dur": null
+    },
+    {
+      "t": 23.527,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -11,
+      "que": "embarazo o lactancia",
+      "dur": null
+    },
+    {
+      "t": 25.203,
+      "archivo": "assets/sfx/punch.mp3",
+      "db": -10,
+      "que": "pregunta a tu médico",
+      "dur": null
+    },
+    {
+      "t": 26.588,
+      "archivo": "assets/sfx/whoosh-1.mp3",
+      "db": -13,
+      "que": "vuelta al mostrador",
+      "dur": null
+    },
+    {
+      "t": 26.688,
+      "archivo": "assets/sfx/datafono.mp3",
+      "db": -10,
+      "que": "pago aceptado",
+      "dur": null
+    },
+    {
+      "t": 27.259,
+      "archivo": "assets/sfx/campanilla.mp3",
+      "db": -14,
+      "que": "sale por la puerta",
+      "dur": null
+    },
+    {
+      "t": 27.559,
+      "archivo": "assets/sfx/whoosh-2.mp3",
+      "db": -11,
+      "que": "a la calle",
+      "dur": null
+    },
+    {
+      "t": 27.99,
+      "archivo": "assets/sfx/click-2.mp3",
+      "db": -11,
+      "que": "semana 1",
+      "dur": null
+    },
+    {
+      "t": 28.559,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -12,
+      "que": "tras comer",
+      "dur": null
+    },
+    {
+      "t": 30.093,
+      "archivo": "assets/sfx/click-2.mp3",
+      "db": -11,
+      "que": "semana 4",
+      "dur": null
+    },
+    {
+      "t": 30.601,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -11,
+      "que": "se une la vecina",
+      "dur": null
+    },
+    {
+      "t": 31.986,
+      "archivo": "assets/sfx/click-2.mp3",
+      "db": -11,
+      "que": "semana 8",
+      "dur": null
+    },
+    {
+      "t": 32.5,
+      "archivo": "assets/sfx/golpe-climax.mp3",
+      "db": -8,
+      "que": "medio barrio (clímax)",
+      "dur": 2.2
+    },
+    {
+      "t": 33.657,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -11,
+      "que": "medio barrio",
+      "dur": null
+    },
+    {
+      "t": 34.358,
+      "archivo": "assets/sfx/whoosh-1.mp3",
+      "db": -11,
+      "que": "vuelta a la tienda",
+      "dur": null
+    },
+    {
+      "t": 34.938,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -10,
+      "que": "1 la información",
+      "dur": null
+    },
+    {
+      "t": 36.334,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -10,
+      "que": "2 el bote",
+      "dur": null
+    },
+    {
+      "t": 36.648,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -9,
+      "que": "tarjeta final",
+      "dur": null
+    },
+    {
+      "t": 36.828,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -12,
+      "que": "parte 8",
+      "dur": null
+    },
+    {
+      "t": 37.578,
+      "archivo": "assets/sfx/click-1.mp3",
+      "db": -8,
+      "que": "seguir",
+      "dur": null
+    },
+    {
+      "t": 37.628,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -11,
+      "que": "siguiendo",
+      "dur": null
+    },
+    {
+      "t": 38.452,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -11,
+      "que": "parte 9",
+      "dur": null
+    }
+  ],
+  "apariciones": {
+    "todo1": 0.052,
+    "mundo": 0.313,
+    "habla": 0.595,
+    "berberina1": 1.065,
+    "madre": 2.197,
+    "flaco": 2.581,
+    "movil": 3.41,
+    "prometian": 3.99,
+    "todo2": 4.613,
+    "asi1": 5.043,
+    "tienda": 5.917,
+    "preguntar": 6.268,
+    "preguntarFin": 6.791,
+    "dependiente": 7.228,
+    "conto": 7.934,
+    "es1": 8.431,
+    "extracto": 8.677,
+    "agracejo": 9.193,
+    "planta": 10.011,
+    "noventa": 11.081,
+    "berberina2": 11.88,
+    "novecientos": 13.006,
+    "dos": 15.451,
+    "comida": 16.967,
+    "comidaFin": 17.375,
+    "despues1": 17.674,
+    "es2": 18.612,
+    "magia": 19.456,
+    "sustituye": 19.917,
+    "comer1": 20.631,
+    "moverte": 21.248,
+    "moverteFin": 21.798,
+    "tomas": 22.303,
+    "medicacion": 22.51,
+    "embarazada": 23.527,
+    "pregunta": 25.203,
+    "medico": 25.937,
+    "pago": 26.688,
+    "fue": 27.059,
+    "semana1": 27.645,
+    "uno": 27.99,
+    "paseo1": 28.352,
+    "despues2": 28.559,
+    "semana2": 29.635,
+    "cuatro": 30.093,
+    "unio": 30.601,
+    "vecina": 30.911,
+    "semana3": 31.616,
+    "ocho": 31.986,
+    "grupo": 32.5,
+    "barrio": 33.657,
+    "barrioFin": 34.211,
+    "primero": 34.458,
+    "informacion": 34.938,
+    "bote": 36.334,
+    "siguenos": 36.678,
+    "perderte": 37.578,
+    "nueve": 38.452
+  }
+}
