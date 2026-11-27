@@ -15,7 +15,7 @@ done
 # capturas de 10 momentos clave del primero
 mkdir -p renders/capturas
 i=0
-for t in 0.3 1.2 4.6 7.5 12.9 19.8 25.3 31.2 35.6 44.8; do
+for t in 0.3 1.6 2.9 5.4 8.4 12.9 17.6 20.4 26.3 30.8; do
   ffmpeg -v error -y -ss "$t" -i "$1" -frames:v 1 -vf scale=360:-1 "renders/capturas/c$(printf %02d $i).png"
   i=$((i+1))
 done

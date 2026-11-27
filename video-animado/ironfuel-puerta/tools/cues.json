@@ -1,0 +1,566 @@
+{
+  "duracion": 35.3,
+  "voz": "assets/audio/voz.wav",
+  "musica": {
+    "archivo": "assets/music/a-game.mp3",
+    "desde": 53.032,
+    "db": -24,
+    "curva": [
+      [
+        0,
+        -23
+      ],
+      [
+        22.405717608146468,
+        -23
+      ],
+      [
+        23.00571760814647,
+        -27
+      ],
+      [
+        28.919,
+        -27
+      ],
+      [
+        28.969,
+        -20
+      ],
+      [
+        31.313,
+        -21
+      ],
+      [
+        35.3,
+        -21
+      ]
+    ]
+  },
+  "efectos": [
+    {
+      "t": 1.37,
+      "archivo": "assets/sfx/click-1.mp3",
+      "db": -15,
+      "que": "se enciende la tira de FUERZA",
+      "dur": null
+    },
+    {
+      "t": 1.47,
+      "archivo": "assets/sfx/click-2.mp3",
+      "db": -15,
+      "que": "se enciende la tira de RESISTENCIA",
+      "dur": null
+    },
+    {
+      "t": 1.57,
+      "archivo": "assets/sfx/click-1.mp3",
+      "db": -15,
+      "que": "se enciende la tira de ENERGÍA",
+      "dur": null
+    },
+    {
+      "t": 1.67,
+      "archivo": "assets/sfx/click-2.mp3",
+      "db": -15,
+      "que": "se enciende la tira de RENDIMIENTO",
+      "dur": null
+    },
+    {
+      "t": 1.77,
+      "archivo": "assets/sfx/click-1.mp3",
+      "db": -15,
+      "que": "se enciende la tira de RECUPERACIÓN",
+      "dur": null
+    },
+    {
+      "t": 2.297,
+      "archivo": "assets/sfx/whoosh-1.mp3",
+      "db": -10,
+      "que": "zum a través del cartel",
+      "dur": null
+    },
+    {
+      "t": 2.717,
+      "archivo": "assets/sfx/disco-metal.mp3",
+      "db": -8,
+      "que": "FUERZA: golpe de acero",
+      "dur": null
+    },
+    {
+      "t": 2.717,
+      "archivo": "assets/sfx/punch.mp3",
+      "db": -11,
+      "que": "FUERZA: la palabra cae",
+      "dur": null
+    },
+    {
+      "t": 3.354,
+      "archivo": "assets/sfx/whoosh-2.mp3",
+      "db": -14,
+      "que": "barrido a RESISTENCIA",
+      "dur": null
+    },
+    {
+      "t": 3.654,
+      "archivo": "assets/sfx/whoosh-3.mp3",
+      "db": -11,
+      "que": "RESISTENCIA: estelas",
+      "dur": null
+    },
+    {
+      "t": 3.654,
+      "archivo": "assets/sfx/punch.mp3",
+      "db": -15,
+      "que": "RESISTENCIA: la palabra cae",
+      "dur": null
+    },
+    {
+      "t": 4.761,
+      "archivo": "assets/sfx/whoosh-2.mp3",
+      "db": -14,
+      "que": "barrido a ENERGÍA",
+      "dur": null
+    },
+    {
+      "t": 5.061,
+      "archivo": "assets/sfx/golpe-climax.mp3",
+      "db": -15,
+      "que": "ENERGÍA: el rayo",
+      "dur": 1
+    },
+    {
+      "t": 5.101,
+      "archivo": "assets/sfx/click-2.mp3",
+      "db": -10,
+      "que": "ENERGÍA: chispazo",
+      "dur": null
+    },
+    {
+      "t": 6.167,
+      "archivo": "assets/sfx/whoosh-2.mp3",
+      "db": -14,
+      "que": "barrido a RENDIMIENTO",
+      "dur": null
+    },
+    {
+      "t": 6.467,
+      "archivo": "assets/sfx/disco-metal.mp3",
+      "db": -13,
+      "que": "RENDIMIENTO: engranajes",
+      "dur": null
+    },
+    {
+      "t": 6.627,
+      "archivo": "assets/sfx/click-1.mp3",
+      "db": -17,
+      "que": "RENDIMIENTO: diente",
+      "dur": null
+    },
+    {
+      "t": 6.787,
+      "archivo": "assets/sfx/click-1.mp3",
+      "db": -18,
+      "que": "RENDIMIENTO: diente",
+      "dur": null
+    },
+    {
+      "t": 7.573,
+      "archivo": "assets/sfx/whoosh-2.mp3",
+      "db": -15,
+      "que": "barrido a RECUPERACIÓN",
+      "dur": null
+    },
+    {
+      "t": 7.873,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -13,
+      "que": "RECUPERACIÓN: amanece",
+      "dur": null
+    },
+    {
+      "t": 9.33,
+      "archivo": "assets/sfx/rebobinado.mp3",
+      "db": -13,
+      "que": "las cinco caen en franjas",
+      "dur": null
+    },
+    {
+      "t": 11.74,
+      "archivo": "assets/sfx/whoosh-3.mp3",
+      "db": -16,
+      "que": "las palabras se apartan",
+      "dur": null
+    },
+    {
+      "t": 12.72,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -15,
+      "que": "plan de la franja 1",
+      "dur": null
+    },
+    {
+      "t": 12.79,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -15,
+      "que": "plan de la franja 2",
+      "dur": null
+    },
+    {
+      "t": 12.86,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -15,
+      "que": "plan de la franja 3",
+      "dur": null
+    },
+    {
+      "t": 12.93,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -15,
+      "que": "plan de la franja 4",
+      "dur": null
+    },
+    {
+      "t": 13,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -15,
+      "que": "plan de la franja 5",
+      "dur": null
+    },
+    {
+      "t": 13.968,
+      "archivo": "assets/sfx/whoosh-1.mp3",
+      "db": -12,
+      "que": "las franjas se funden en el rodillo",
+      "dur": null
+    },
+    {
+      "t": 14.418,
+      "archivo": "assets/sfx/click-1.mp3",
+      "db": -21,
+      "que": "el rodillo gira",
+      "dur": null
+    },
+    {
+      "t": 14.568,
+      "archivo": "assets/sfx/click-2.mp3",
+      "db": -21,
+      "que": "el rodillo gira",
+      "dur": null
+    },
+    {
+      "t": 14.718,
+      "archivo": "assets/sfx/click-1.mp3",
+      "db": -21,
+      "que": "el rodillo gira",
+      "dur": null
+    },
+    {
+      "t": 14.868,
+      "archivo": "assets/sfx/click-2.mp3",
+      "db": -21,
+      "que": "el rodillo gira",
+      "dur": null
+    },
+    {
+      "t": 15.018,
+      "archivo": "assets/sfx/click-1.mp3",
+      "db": -21,
+      "que": "el rodillo gira",
+      "dur": null
+    },
+    {
+      "t": 15.168,
+      "archivo": "assets/sfx/click-2.mp3",
+      "db": -21,
+      "que": "el rodillo gira",
+      "dur": null
+    },
+    {
+      "t": 15.368,
+      "archivo": "assets/sfx/click-1.mp3",
+      "db": -21,
+      "que": "el rodillo gira",
+      "dur": null
+    },
+    {
+      "t": 15.618,
+      "archivo": "assets/sfx/click-2.mp3",
+      "db": -21,
+      "que": "el rodillo gira",
+      "dur": null
+    },
+    {
+      "t": 15.918,
+      "archivo": "assets/sfx/click-1.mp3",
+      "db": -21,
+      "que": "el rodillo gira",
+      "dur": null
+    },
+    {
+      "t": 16.268,
+      "archivo": "assets/sfx/click-2.mp3",
+      "db": -21,
+      "que": "el rodillo gira",
+      "dur": null
+    },
+    {
+      "t": 16.955,
+      "archivo": "assets/sfx/punch.mp3",
+      "db": -10,
+      "que": "¿PARA QUÉ",
+      "dur": null
+    },
+    {
+      "t": 17.331,
+      "archivo": "assets/sfx/disco-metal.mp3",
+      "db": -13,
+      "que": "ENTRENAS?",
+      "dur": null
+    },
+    {
+      "t": 17.867,
+      "archivo": "assets/sfx/whoosh-2.mp3",
+      "db": -11,
+      "que": "barrido al mostrador",
+      "dur": null
+    },
+    {
+      "t": 18.427,
+      "archivo": "assets/sfx/click-2.mp3",
+      "db": -10,
+      "que": "se enciende el foco",
+      "dur": null
+    },
+    {
+      "t": 18.78,
+      "archivo": "assets/sfx/whoosh-3.mp3",
+      "db": -15,
+      "que": "sube el bote",
+      "dur": null
+    },
+    {
+      "t": 19.526,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -13,
+      "que": "etiqueta: colágeno",
+      "dur": null
+    },
+    {
+      "t": 19.826,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -13,
+      "que": "etiqueta: glucosamina",
+      "dur": null
+    },
+    {
+      "t": 20.117,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -13,
+      "que": "etiqueta: ácido hialurónico",
+      "dur": null
+    },
+    {
+      "t": 21.185,
+      "archivo": "assets/sfx/click-1.mp3",
+      "db": -8,
+      "que": "se apaga el foco",
+      "dur": null
+    },
+    {
+      "t": 21.78,
+      "archivo": "assets/sfx/whoosh-3.mp3",
+      "db": -14,
+      "que": "el bote baja",
+      "dur": null
+    },
+    {
+      "t": 22.343,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -11,
+      "que": "bocadillo: esto no te hace falta",
+      "dur": null
+    },
+    {
+      "t": 23.578,
+      "archivo": "assets/sfx/teclado-2.mp3",
+      "db": -17,
+      "que": "imprime el tique",
+      "dur": 2.2
+    },
+    {
+      "t": 25.901,
+      "archivo": "assets/sfx/datafono.mp3",
+      "db": -10,
+      "que": "TOTAL 0,00 €",
+      "dur": null
+    },
+    {
+      "t": 26.321,
+      "archivo": "assets/sfx/golpe-madera.mp3",
+      "db": -11,
+      "que": "sello: gracias por preguntar",
+      "dur": null
+    },
+    {
+      "t": 26.382,
+      "archivo": "assets/sfx/whoosh-1.mp3",
+      "db": -11,
+      "que": "vuelta al cartel",
+      "dur": null
+    },
+    {
+      "t": 27.482,
+      "archivo": "assets/sfx/click-1.mp3",
+      "db": -16,
+      "que": "tira de FUERZA",
+      "dur": null
+    },
+    {
+      "t": 27.542,
+      "archivo": "assets/sfx/click-2.mp3",
+      "db": -16,
+      "que": "tira de RESISTENCIA",
+      "dur": null
+    },
+    {
+      "t": 27.602,
+      "archivo": "assets/sfx/click-1.mp3",
+      "db": -16,
+      "que": "tira de ENERGÍA",
+      "dur": null
+    },
+    {
+      "t": 27.662,
+      "archivo": "assets/sfx/click-2.mp3",
+      "db": -16,
+      "que": "tira de RENDIMIENTO",
+      "dur": null
+    },
+    {
+      "t": 27.722,
+      "archivo": "assets/sfx/click-1.mp3",
+      "db": -16,
+      "que": "tira de RECUPERACIÓN",
+      "dur": null
+    },
+    {
+      "t": 28.969,
+      "archivo": "assets/sfx/golpe-climax.mp3",
+      "db": -6,
+      "que": "CONSTRUYE (la música vuelve)",
+      "dur": 2.4
+    },
+    {
+      "t": 29.81,
+      "archivo": "assets/sfx/punch.mp3",
+      "db": -10,
+      "que": "TU MEJOR",
+      "dur": null
+    },
+    {
+      "t": 30.299,
+      "archivo": "assets/sfx/disco-metal.mp3",
+      "db": -10,
+      "que": "VERSIÓN",
+      "dur": null
+    },
+    {
+      "t": 30.973,
+      "archivo": "assets/sfx/whoosh-2.mp3",
+      "db": -10,
+      "que": "barrido hasta el rótulo",
+      "dur": null
+    },
+    {
+      "t": 31.313,
+      "archivo": "assets/sfx/click-2.mp3",
+      "db": -11,
+      "que": "se enciende el rótulo",
+      "dur": null
+    },
+    {
+      "t": 32.132,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -12,
+      "que": "logo",
+      "dur": null
+    },
+    {
+      "t": 33.188,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -10,
+      "que": "botón SÍGUENOS",
+      "dur": null
+    },
+    {
+      "t": 33.468,
+      "archivo": "assets/sfx/click-1.mp3",
+      "db": -8,
+      "que": "pulsa SÍGUENOS",
+      "dur": null
+    },
+    {
+      "t": 33.859,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -12,
+      "que": "VEN A VERNOS",
+      "dur": null
+    }
+  ],
+  "apariciones": {
+    "puerta": 0.63,
+    "cinco1": 1.37,
+    "palabras": 1.84,
+    "fuerza": 2.717,
+    "resistencia": 3.654,
+    "energia": 5.061,
+    "rendimiento": 6.467,
+    "recuperacion": 7.873,
+    "cinco2": 9.28,
+    "objetivos": 9.663,
+    "distintos": 10.318,
+    "cada": 11.74,
+    "plan": 12.72,
+    "distinto": 12.968,
+    "por1": 13.968,
+    "antes": 14.612,
+    "venderte1": 15.053,
+    "nada1": 15.501,
+    "preguntamos": 16.29,
+    "para2": 16.955,
+    "que1": 17.2,
+    "entrenas": 17.331,
+    "si1": 18.187,
+    "algo": 18.427,
+    "sirve": 18.78,
+    "explicamos": 19.526,
+    "por2": 20.117,
+    "que2": 20.33,
+    "si2": 20.999,
+    "no1": 21.185,
+    "falta": 21.78,
+    "lo": 22.443,
+    "decimos": 22.57,
+    "aunque": 23.578,
+    "eso2": 24.092,
+    "signifique": 24.394,
+    "no2": 25.137,
+    "venderte2": 25.305,
+    "nada2": 25.901,
+    "debajo": 26.702,
+    "cinco3": 27.482,
+    "una": 28.019,
+    "frase": 28.2,
+    "construye": 28.969,
+    "tu": 29.81,
+    "mejor": 29.91,
+    "version": 30.299,
+    "airon": 31.313,
+    "fiul": 31.72,
+    "nutrishon": 32.132,
+    "siguenos": 33.188,
+    "ven": 33.859,
+    "vernos": 34.205,
+    "finVoz": 34.748
+  }
+}

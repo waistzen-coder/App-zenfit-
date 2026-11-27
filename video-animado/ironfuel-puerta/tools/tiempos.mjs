@@ -227,8 +227,14 @@ export function cargar({
     gw[k].interpolada = true;
   }
 
-  refinar(gw, audio);
-  encajarMontaje(gw);
+  // transcript.json de tools/alinear.py (cada palabra ya con su frase): sus tiempos ya están
+  // anclados al audio, no se tocan. Con una transcripción de whisper, se corrigen.
+  const alineada = (Array.isArray(raw) ? raw : raw.words).every((w) => w.frase !== undefined);
+  if (alineada) for (const w of gw) (w.whisper = w.start), (w.whisperFin = w.end);
+  else {
+    refinar(gw, audio);
+    encajarMontaje(gw);
+  }
 
   const fin = Math.max(...tw.map((w) => w.end));
   const fraseIni = frases.map((_, fi) => gw.find((w) => w.frase === fi).start);

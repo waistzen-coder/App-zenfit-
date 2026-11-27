@@ -62,7 +62,13 @@ def main():
     fi, fo = int(0.25 * SR), int(1.4 * SR)
     env[:fi] = np.linspace(0, 1, fi)
     env[-fo:] = np.linspace(1, 0.35, fo)
-    mezcla += mus * env[:, None] * db(m["db"])
+    # nivel de la música: fijo (db) o una curva [[segundo, dB], …] para subirla en el golpe
+    if m.get("curva"):
+        ts = np.arange(n) / SR
+        ganancia = db(np.interp(ts, [p[0] for p in m["curva"]], [p[1] for p in m["curva"]]))
+    else:
+        ganancia = np.full(n, db(m["db"]))
+    mezcla += mus * (env * ganancia)[:, None]
 
     # efectos
     cache = {}
