@@ -1,0 +1,101 @@
+{
+ "frases": [
+  {
+   "n": 1,
+   "texto": "Mito: la creatina engorda.",
+   "inicio": 0.12,
+   "fin": 1.81
+  },
+  {
+   "n": 2,
+   "texto": "Laura lo leyó en un foro.",
+   "inicio": 2.05,
+   "fin": 3.67
+  },
+  {
+   "n": 3,
+   "texto": "Y se imaginó así.",
+   "inicio": 3.91,
+   "fin": 5.21
+  },
+  {
+   "n": 4,
+   "texto": "Por si acaso, se lo preguntó al dependiente.",
+   "inicio": 5.45,
+   "fin": 8.07
+  },
+  {
+   "n": 5,
+   "texto": "¿Engorda? No.",
+   "inicio": 8.31,
+   "fin": 9.31
+  },
+  {
+   "n": 6,
+   "texto": "La creatina mete agua dentro del músculo.",
+   "inicio": 9.55,
+   "fin": 12.08
+  },
+  {
+   "n": 7,
+   "texto": "Por eso la báscula puede subir uno o dos kilos al principio.",
+   "inicio": 12.32,
+   "fin": 15.78
+  },
+  {
+   "n": 8,
+   "texto": "Es agua en el músculo, no grasa.",
+   "inicio": 16.02,
+   "fin": 17.94
+  },
+  {
+   "n": 9,
+   "texto": "Tres gramos al día, todos los días.",
+   "inicio": 18.18,
+   "fin": 20.42
+  },
+  {
+   "n": 10,
+   "texto": "Y te ayuda a rendir más en los esfuerzos cortos e intensos.",
+   "inicio": 20.66,
+   "fin": 24.191
+  },
+  {
+   "n": 11,
+   "texto": "Laura se la llevó.",
+   "inicio": 24.431,
+   "fin": 25.631
+  },
+  {
+   "n": 12,
+   "texto": "Un mes después ya no miraba la báscula.",
+   "inicio": 25.871,
+   "fin": 28.211
+  },
+  {
+   "n": 13,
+   "texto": "Miraba la barra.",
+   "inicio": 28.451,
+   "fin": 29.571
+  },
+  {
+   "n": 14,
+   "texto": "Veredicto: mito.",
+   "inicio": 30.071,
+   "fin": 31.277
+  },
+  {
+   "n": 15,
+   "texto": "¿Qué mito desmontamos en el siguiente? Déjalo en los comentarios.",
+   "inicio": 31.777,
+   "fin": 35.337
+  },
+  {
+   "n": 16,
+   "texto": "Y síguenos para no perdértelo.",
+   "inicio": 35.577,
+   "fin": 37.397
+  }
+ ],
+ "duracion": 37.947
+}

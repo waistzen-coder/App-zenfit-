@@ -1,0 +1,608 @@
+[
+ {
+  "text": "Mito:",
+  "start": 0.12,
+  "end": 0.548,
+  "frase": 1
+ },
+ {
+  "text": "la",
+  "start": 0.558,
+  "end": 0.68,
+  "frase": 1
+ },
+ {
+  "text": "creatina",
+  "start": 0.69,
+  "end": 1.277,
+  "frase": 1
+ },
+ {
+  "text": "engorda.",
+  "start": 1.287,
+  "end": 1.81,
+  "frase": 1
+ },
+ {
+  "text": "Laura",
+  "start": 2.05,
+  "end": 2.42,
+  "frase": 2
+ },
+ {
+  "text": "lo",
+  "start": 2.43,
+  "end": 2.584,
+  "frase": 2
+ },
+ {
+  "text": "leyó",
+  "start": 2.594,
+  "end": 2.97,
+  "frase": 2
+ },
+ {
+  "text": "en",
+  "start": 2.98,
+  "end": 3.128,
+  "frase": 2
+ },
+ {
+  "text": "un",
+  "start": 3.138,
+  "end": 3.22,
+  "frase": 2
+ },
+ {
+  "text": "foro.",
+  "start": 3.23,
+  "end": 3.67,
+  "frase": 2
+ },
+ {
+  "text": "Y",
+  "start": 3.91,
+  "end": 4.0,
+  "frase": 3
+ },
+ {
+  "text": "se",
+  "start": 4.01,
+  "end": 4.277,
+  "frase": 3
+ },
+ {
+  "text": "imaginó",
+  "start": 4.287,
+  "end": 4.874,
+  "frase": 3
+ },
+ {
+  "text": "así.",
+  "start": 4.884,
+  "end": 5.21,
+  "frase": 3
+ },
+ {
+  "text": "Por",
+  "start": 5.45,
+  "end": 5.56,
+  "frase": 4
+ },
+ {
+  "text": "si",
+  "start": 5.57,
+  "end": 5.756,
+  "frase": 4
+ },
+ {
+  "text": "acaso,",
+  "start": 5.766,
+  "end": 6.3,
+  "frase": 4
+ },
+ {
+  "text": "se",
+  "start": 6.31,
+  "end": 6.46,
+  "frase": 4
+ },
+ {
+  "text": "lo",
+  "start": 6.47,
+  "end": 6.61,
+  "frase": 4
+ },
+ {
+  "text": "preguntó",
+  "start": 6.62,
+  "end": 7.137,
+  "frase": 4
+ },
+ {
+  "text": "al",
+  "start": 7.147,
+  "end": 7.26,
+  "frase": 4
+ },
+ {
+  "text": "dependiente.",
+  "start": 7.27,
+  "end": 8.07,
+  "frase": 4
+ },
+ {
+  "text": "¿Engorda?",
+  "start": 8.31,
+  "end": 8.98,
+  "frase": 5
+ },
+ {
+  "text": "No.",
+  "start": 8.99,
+  "end": 9.31,
+  "frase": 5
+ },
+ {
+  "text": "La",
+  "start": 9.55,
+  "end": 9.68,
+  "frase": 6
+ },
+ {
+  "text": "creatina",
+  "start": 9.69,
+  "end": 10.205,
+  "frase": 6
+ },
+ {
+  "text": "mete",
+  "start": 10.215,
+  "end": 10.69,
+  "frase": 6
+ },
+ {
+  "text": "agua",
+  "start": 10.7,
+  "end": 10.981,
+  "frase": 6
+ },
+ {
+  "text": "dentro",
+  "start": 10.991,
+  "end": 11.348,
+  "frase": 6
+ },
+ {
+  "text": "del",
+  "start": 11.358,
+  "end": 11.539,
+  "frase": 6
+ },
+ {
+  "text": "músculo.",
+  "start": 11.549,
+  "end": 12.08,
+  "frase": 6
+ },
+ {
+  "text": "Por",
+  "start": 12.32,
+  "end": 12.448,
+  "frase": 7
+ },
+ {
+  "text": "eso",
+  "start": 12.458,
+  "end": 12.648,
+  "frase": 7
+ },
+ {
+  "text": "la",
+  "start": 12.658,
+  "end": 12.764,
+  "frase": 7
+ },
+ {
+  "text": "báscula",
+  "start": 12.774,
+  "end": 13.23,
+  "frase": 7
+ },
+ {
+  "text": "puede",
+  "start": 13.24,
+  "end": 13.578,
+  "frase": 7
+ },
+ {
+  "text": "subir",
+  "start": 13.588,
+  "end": 13.947,
+  "frase": 7
+ },
+ {
+  "text": "uno",
+  "start": 13.957,
+  "end": 14.29,
+  "frase": 7
+ },
+ {
+  "text": "o",
+  "start": 14.3,
+  "end": 14.376,
+  "frase": 7
+ },
+ {
+  "text": "dos",
+  "start": 14.386,
+  "end": 14.631,
+  "frase": 7
+ },
+ {
+  "text": "kilos",
+  "start": 14.641,
+  "end": 14.996,
+  "frase": 7
+ },
+ {
+  "text": "al",
+  "start": 15.006,
+  "end": 15.15,
+  "frase": 7
+ },
+ {
+  "text": "principio.",
+  "start": 15.16,
+  "end": 15.78,
+  "frase": 7
+ },
+ {
+  "text": "Es",
+  "start": 16.02,
+  "end": 16.177,
+  "frase": 8
+ },
+ {
+  "text": "agua",
+  "start": 16.187,
+  "end": 16.472,
+  "frase": 8
+ },
+ {
+  "text": "en",
+  "start": 16.482,
+  "end": 16.584,
+  "frase": 8
+ },
+ {
+  "text": "el",
+  "start": 16.594,
+  "end": 16.696,
+  "frase": 8
+ },
+ {
+  "text": "músculo,",
+  "start": 16.706,
+  "end": 17.376,
+  "frase": 8
+ },
+ {
+  "text": "no",
+  "start": 17.386,
+  "end": 17.508,
+  "frase": 8
+ },
+ {
+  "text": "grasa.",
+  "start": 17.518,
+  "end": 17.94,
+  "frase": 8
+ },
+ {
+  "text": "Tres",
+  "start": 18.18,
+  "end": 18.436,
+  "frase": 9
+ },
+ {
+  "text": "gramos",
+  "start": 18.446,
+  "end": 18.859,
+  "frase": 9
+ },
+ {
+  "text": "al",
+  "start": 18.869,
+  "end": 18.991,
+  "frase": 9
+ },
+ {
+  "text": "día,",
+  "start": 19.001,
+  "end": 19.49,
+  "frase": 9
+ },
+ {
+  "text": "todos",
+  "start": 19.5,
+  "end": 19.749,
+  "frase": 9
+ },
+ {
+  "text": "los",
+  "start": 19.759,
+  "end": 19.985,
+  "frase": 9
+ },
+ {
+  "text": "días.",
+  "start": 19.995,
+  "end": 20.42,
+  "frase": 9
+ },
+ {
+  "text": "Y",
+  "start": 20.66,
+  "end": 20.75,
+  "frase": 10
+ },
+ {
+  "text": "te",
+  "start": 20.76,
+  "end": 20.95,
+  "frase": 10
+ },
+ {
+  "text": "ayuda",
+  "start": 20.96,
+  "end": 21.396,
+  "frase": 10
+ },
+ {
+  "text": "a",
+  "start": 21.406,
+  "end": 21.475,
+  "frase": 10
+ },
+ {
+  "text": "rendir",
+  "start": 21.485,
+  "end": 21.811,
+  "frase": 10
+ },
+ {
+  "text": "más",
+  "start": 21.821,
+  "end": 22.033,
+  "frase": 10
+ },
+ {
+  "text": "en",
+  "start": 22.043,
+  "end": 22.132,
+  "frase": 10
+ },
+ {
+  "text": "los",
+  "start": 22.142,
+  "end": 22.293,
+  "frase": 10
+ },
+ {
+  "text": "esfuerzos",
+  "start": 22.303,
+  "end": 22.881,
+  "frase": 10
+ },
+ {
+  "text": "cortos",
+  "start": 22.891,
+  "end": 23.346,
+  "frase": 10
+ },
+ {
+  "text": "e",
+  "start": 23.356,
+  "end": 23.486,
+  "frase": 10
+ },
+ {
+  "text": "intensos.",
+  "start": 23.496,
+  "end": 24.191,
+  "frase": 10
+ },
+ {
+  "text": "Laura",
+  "start": 24.431,
+  "end": 24.88,
+  "frase": 11
+ },
+ {
+  "text": "se",
+  "start": 24.89,
+  "end": 25.073,
+  "frase": 11
+ },
+ {
+  "text": "la",
+  "start": 25.083,
+  "end": 25.216,
+  "frase": 11
+ },
+ {
+  "text": "llevó.",
+  "start": 25.226,
+  "end": 25.631,
+  "frase": 11
+ },
+ {
+  "text": "Un",
+  "start": 25.871,
+  "end": 25.983,
+  "frase": 12
+ },
+ {
+  "text": "mes",
+  "start": 25.993,
+  "end": 26.175,
+  "frase": 12
+ },
+ {
+  "text": "después",
+  "start": 26.185,
+  "end": 26.737,
+  "frase": 12
+ },
+ {
+  "text": "ya",
+  "start": 26.747,
+  "end": 26.905,
+  "frase": 12
+ },
+ {
+  "text": "no",
+  "start": 26.915,
+  "end": 27.061,
+  "frase": 12
+ },
+ {
+  "text": "miraba",
+  "start": 27.071,
+  "end": 27.482,
+  "frase": 12
+ },
+ {
+  "text": "la",
+  "start": 27.492,
+  "end": 27.639,
+  "frase": 12
+ },
+ {
+  "text": "báscula.",
+  "start": 27.649,
+  "end": 28.211,
+  "frase": 12
+ },
+ {
+  "text": "Miraba",
+  "start": 28.451,
+  "end": 28.94,
+  "frase": 13
+ },
+ {
+  "text": "la",
+  "start": 28.95,
+  "end": 29.124,
+  "frase": 13
+ },
+ {
+  "text": "barra.",
+  "start": 29.134,
+  "end": 29.571,
+  "frase": 13
+ },
+ {
+  "text": "Veredicto:",
+  "start": 30.071,
+  "end": 30.916,
+  "frase": 14
+ },
+ {
+  "text": "mito.",
+  "start": 30.926,
+  "end": 31.277,
+  "frase": 14
+ },
+ {
+  "text": "¿Qué",
+  "start": 31.777,
+  "end": 31.901,
+  "frase": 15
+ },
+ {
+  "text": "mito",
+  "start": 31.911,
+  "end": 32.152,
+  "frase": 15
+ },
+ {
+  "text": "desmontamos",
+  "start": 32.162,
+  "end": 32.886,
+  "frase": 15
+ },
+ {
+  "text": "en",
+  "start": 32.896,
+  "end": 32.992,
+  "frase": 15
+ },
+ {
+  "text": "el",
+  "start": 33.002,
+  "end": 33.08,
+  "frase": 15
+ },
+ {
+  "text": "siguiente?",
+  "start": 33.09,
+  "end": 33.65,
+  "frase": 15
+ },
+ {
+  "text": "Déjalo",
+  "start": 33.66,
+  "end": 34.18,
+  "frase": 15
+ },
+ {
+  "text": "en",
+  "start": 34.19,
+  "end": 34.321,
+  "frase": 15
+ },
+ {
+  "text": "los",
+  "start": 34.331,
+  "end": 34.547,
+  "frase": 15
+ },
+ {
+  "text": "comentarios.",
+  "start": 34.557,
+  "end": 35.337,
+  "frase": 15
+ },
+ {
+  "text": "Y",
+  "start": 35.577,
+  "end": 35.66,
+  "frase": 16
+ },
+ {
+  "text": "síguenos",
+  "start": 35.67,
+  "end": 36.236,
+  "frase": 16
+ },
+ {
+  "text": "para",
+  "start": 36.246,
+  "end": 36.486,
+  "frase": 16
+ },
+ {
+  "text": "no",
+  "start": 36.496,
+  "end": 36.66,
+  "frase": 16
+ },
+ {
+  "text": "perdértelo.",
+  "start": 36.67,
+  "end": 37.397,
+  "frase": 16
+ }
+]

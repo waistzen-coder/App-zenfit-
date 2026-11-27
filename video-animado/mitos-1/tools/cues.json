@@ -1,0 +1,212 @@
+{
+  "duracion": 37.93333333333333,
+  "voz": "assets/audio/voz.wav",
+  "musica": {
+    "archivo": "assets/music/basketball-training.mp3",
+    "desde": 60,
+    "db": -27
+  },
+  "efectos": [
+    {
+      "t": 2.05,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -15,
+      "que": "el móvil",
+      "dur": null
+    },
+    {
+      "t": 3.91,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -11,
+      "que": "la nube",
+      "dur": null
+    },
+    {
+      "t": 4.31,
+      "archivo": "assets/sfx/boing.mp3",
+      "db": -11,
+      "que": "se hincha como un globo",
+      "dur": null
+    },
+    {
+      "t": 6.3,
+      "archivo": "assets/sfx/campanilla.mp3",
+      "db": -15,
+      "que": "entra en la tienda",
+      "dur": null
+    },
+    {
+      "t": 8.31,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -12,
+      "que": "¿ENGORDA?",
+      "dur": null
+    },
+    {
+      "t": 8.99,
+      "archivo": "assets/sfx/punch.mp3",
+      "db": -8,
+      "que": "sello MITO",
+      "dur": null
+    },
+    {
+      "t": 9.55,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -11,
+      "que": "tarjeta REALIDAD",
+      "dur": null
+    },
+    {
+      "t": 9.69,
+      "archivo": "assets/sfx/golpe-madera.mp3",
+      "db": -13,
+      "que": "el bote en el mostrador",
+      "dur": null
+    },
+    {
+      "t": 10.7,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -14,
+      "que": "fila agua",
+      "dur": null
+    },
+    {
+      "t": 13.957,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -14,
+      "que": "fila kilos",
+      "dur": null
+    },
+    {
+      "t": 17.386,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -14,
+      "que": "fila no grasa",
+      "dur": null
+    },
+    {
+      "t": 18.18,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -14,
+      "que": "fila 3 g",
+      "dur": null
+    },
+    {
+      "t": 21.485,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -14,
+      "que": "fila rendimiento",
+      "dur": null
+    },
+    {
+      "t": 25.326,
+      "archivo": "assets/sfx/datafono.mp3",
+      "db": -14,
+      "que": "se lo lleva",
+      "dur": null
+    },
+    {
+      "t": 25.576,
+      "archivo": "assets/sfx/whoosh-2.mp3",
+      "db": -14,
+      "que": "se va corriendo al gimnasio",
+      "dur": null
+    },
+    {
+      "t": 26.193,
+      "archivo": "assets/sfx/click-2.mp3",
+      "db": -11,
+      "que": "marcador: semana 4",
+      "dur": null
+    },
+    {
+      "t": 26.743,
+      "archivo": "assets/sfx/disco-metal.mp3",
+      "db": -15,
+      "que": "levanta",
+      "dur": null
+    },
+    {
+      "t": 27.843,
+      "archivo": "assets/sfx/disco-metal.mp3",
+      "db": -16,
+      "que": "levanta",
+      "dur": null
+    },
+    {
+      "t": 28.943,
+      "archivo": "assets/sfx/disco-metal.mp3",
+      "db": -16,
+      "que": "levanta",
+      "dur": null
+    },
+    {
+      "t": 29.751,
+      "archivo": "assets/sfx/whoosh-1.mp3",
+      "db": -10,
+      "que": "sube al veredicto",
+      "dur": null
+    },
+    {
+      "t": 30.926,
+      "archivo": "assets/sfx/golpe-climax.mp3",
+      "db": -8,
+      "que": "sello MITO",
+      "dur": 1.6
+    },
+    {
+      "t": 31.477,
+      "archivo": "assets/sfx/whoosh-3.mp3",
+      "db": -13,
+      "que": "baja a la llamada",
+      "dur": null
+    },
+    {
+      "t": 35.77,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -13,
+      "que": "la mano",
+      "dur": null
+    },
+    {
+      "t": 35.92,
+      "archivo": "assets/sfx/click-1.mp3",
+      "db": -8,
+      "que": "SEGUIR",
+      "dur": null
+    }
+  ],
+  "apariciones": {
+    "mito1": 0.12,
+    "laura1": 2.05,
+    "foro": 3.23,
+    "y1": 3.91,
+    "imagino": 4.287,
+    "por1": 5.45,
+    "dependiente": 7.27,
+    "engorda2": 8.31,
+    "no1": 8.99,
+    "la2": 9.55,
+    "creatina2": 9.69,
+    "agua1": 10.7,
+    "uno": 13.957,
+    "kilos": 14.641,
+    "no2": 17.386,
+    "grasa": 17.518,
+    "tres": 18.18,
+    "todos": 19.5,
+    "rendir": 21.485,
+    "intensos": 23.496,
+    "laura2": 24.431,
+    "llevo": 25.226,
+    "mes": 25.993,
+    "miraba2": 28.451,
+    "barra": 29.134,
+    "veredicto": 30.071,
+    "mito2": 30.926,
+    "que": 31.777,
+    "comentarios": 34.557,
+    "siguenos": 35.67,
+    "fin": 37.397
+  }
+}
