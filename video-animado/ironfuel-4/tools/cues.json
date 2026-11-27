@@ -1,0 +1,392 @@
+{
+  "duracion": 45.96666666666667,
+  "voz": "assets/audio/voz.wav",
+  "musica": {
+    "archivo": "assets/music/basketball-training.mp3",
+    "desde": 4,
+    "db": -27
+  },
+  "efectos": [
+    {
+      "t": 0,
+      "archivo": "assets/sfx/whoosh-1.mp3",
+      "db": -9,
+      "que": "golpe de cámara inicial",
+      "dur": null
+    },
+    {
+      "t": 1.342,
+      "archivo": "assets/sfx/boing.mp3",
+      "db": -12,
+      "que": "no quería músculo",
+      "dur": null
+    },
+    {
+      "t": 2.522,
+      "archivo": "assets/sfx/whoosh-2.mp3",
+      "db": -10,
+      "que": "echa a correr",
+      "dur": null
+    },
+    {
+      "t": 4.119,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -10,
+      "que": "reloj: objetivo 10 km",
+      "dur": null
+    },
+    {
+      "t": 5.776,
+      "archivo": "assets/sfx/click-2.mp3",
+      "db": -11,
+      "que": "3 km",
+      "dur": null
+    },
+    {
+      "t": 6.609,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -10,
+      "que": "¡agua!",
+      "dur": null
+    },
+    {
+      "t": 7.182,
+      "archivo": "assets/sfx/whoosh-3.mp3",
+      "db": -10,
+      "que": "vuelve a la tienda",
+      "dur": null
+    },
+    {
+      "t": 8.121,
+      "archivo": "assets/sfx/campanilla.mp3",
+      "db": -14,
+      "que": "entra",
+      "dur": null
+    },
+    {
+      "t": 8.583,
+      "archivo": "assets/sfx/teclado-1.mp3",
+      "db": -16,
+      "que": "escribe «algo para aguantar la carrera entera»",
+      "dur": 2.119
+    },
+    {
+      "t": 12.033,
+      "archivo": "assets/sfx/golpe-madera.mp3",
+      "db": -6,
+      "que": "cae la isotónica",
+      "dur": null
+    },
+    {
+      "t": 12.197,
+      "archivo": "assets/sfx/golpe-madera.mp3",
+      "db": -6,
+      "que": "cae el magnesio",
+      "dur": null
+    },
+    {
+      "t": 12.68,
+      "archivo": "assets/sfx/whoosh-1.mp3",
+      "db": -12,
+      "que": "viaje a la isotónica",
+      "dur": null
+    },
+    {
+      "t": 12.88,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -10,
+      "que": "1",
+      "dur": null
+    },
+    {
+      "t": 15.896,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -9,
+      "que": "tarjeta de la isotónica",
+      "dur": null
+    },
+    {
+      "t": 16.783,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -12,
+      "que": "mientras corres",
+      "dur": null
+    },
+    {
+      "t": 18.385,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -11,
+      "que": "resistencia",
+      "dur": null
+    },
+    {
+      "t": 20.461,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -11,
+      "que": "agua",
+      "dur": null
+    },
+    {
+      "t": 21.759,
+      "archivo": "assets/sfx/whoosh-2.mp3",
+      "db": -12,
+      "que": "viaje al magnesio",
+      "dur": null
+    },
+    {
+      "t": 21.879,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -10,
+      "que": "2",
+      "dur": null
+    },
+    {
+      "t": 22.865,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -9,
+      "que": "tarjeta del magnesio",
+      "dur": null
+    },
+    {
+      "t": 23.769,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -12,
+      "que": "con la cena",
+      "dur": null
+    },
+    {
+      "t": 24.985,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -11,
+      "que": "músculos",
+      "dur": null
+    },
+    {
+      "t": 27.328,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -11,
+      "que": "la pila se carga",
+      "dur": null
+    },
+    {
+      "t": 28.308,
+      "archivo": "assets/sfx/whoosh-3.mp3",
+      "db": -13,
+      "que": "cámara al dependiente",
+      "dur": null
+    },
+    {
+      "t": 29.584,
+      "archivo": "assets/sfx/whoosh-1.mp3",
+      "db": -11,
+      "que": "la cámara se aleja",
+      "dur": null
+    },
+    {
+      "t": 29.734,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -10,
+      "que": "entrenar",
+      "dur": null
+    },
+    {
+      "t": 30.567,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -11,
+      "que": "botes",
+      "dur": null
+    },
+    {
+      "t": 31.621,
+      "archivo": "assets/sfx/whoosh-2.mp3",
+      "db": -13,
+      "que": "vuelta al mostrador",
+      "dur": null
+    },
+    {
+      "t": 31.721,
+      "archivo": "assets/sfx/datafono.mp3",
+      "db": -10,
+      "que": "pago aceptado",
+      "dur": null
+    },
+    {
+      "t": 32.338,
+      "archivo": "assets/sfx/campanilla.mp3",
+      "db": -14,
+      "que": "sale por la puerta",
+      "dur": null
+    },
+    {
+      "t": 33.336,
+      "archivo": "assets/sfx/click-2.mp3",
+      "db": -11,
+      "que": "semana 1",
+      "dur": null
+    },
+    {
+      "t": 33.528,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -12,
+      "que": "3 km",
+      "dur": null
+    },
+    {
+      "t": 34.772,
+      "archivo": "assets/sfx/click-2.mp3",
+      "db": -11,
+      "que": "semana 4",
+      "dur": null
+    },
+    {
+      "t": 35.157,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -12,
+      "que": "6 km",
+      "dur": null
+    },
+    {
+      "t": 36.728,
+      "archivo": "assets/sfx/click-2.mp3",
+      "db": -11,
+      "que": "semana 8",
+      "dur": null
+    },
+    {
+      "t": 37.71,
+      "archivo": "assets/sfx/whoosh-3.mp3",
+      "db": -10,
+      "que": "día de la carrera",
+      "dur": null
+    },
+    {
+      "t": 38.789,
+      "archivo": "assets/sfx/golpe-climax.mp3",
+      "db": -6,
+      "que": "cruza la meta (clímax)",
+      "dur": 2.6
+    },
+    {
+      "t": 40.465,
+      "archivo": "assets/sfx/boing.mp3",
+      "db": -11,
+      "que": "el bastón en alto",
+      "dur": null
+    },
+    {
+      "t": 42.024,
+      "archivo": "assets/sfx/whoosh-1.mp3",
+      "db": -12,
+      "que": "el compañero de piso",
+      "dur": null
+    },
+    {
+      "t": 42.124,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -11,
+      "que": "la hoja",
+      "dur": null
+    },
+    {
+      "t": 43.046,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -9,
+      "que": "tarjeta final",
+      "dur": null
+    },
+    {
+      "t": 43.346,
+      "archivo": "assets/sfx/click-1.mp3",
+      "db": -8,
+      "que": "seguir",
+      "dur": null
+    },
+    {
+      "t": 43.396,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -11,
+      "que": "siguiendo",
+      "dur": null
+    },
+    {
+      "t": 44.754,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -11,
+      "que": "parte 5",
+      "dur": null
+    }
+  ],
+  "apariciones": {
+    "vecina": 0.052,
+    "musculo": 1.342,
+    "queria2": 2.204,
+    "correr": 2.522,
+    "carrera1": 3.39,
+    "diez": 4.119,
+    "kilometro": 5.358,
+    "tres1": 5.776,
+    "pidiendo": 6.375,
+    "agua1": 6.609,
+    "asi": 7.182,
+    "bajo": 7.516,
+    "tienda": 8.021,
+    "pidio": 8.583,
+    "aguantar": 9.406,
+    "enteraFin": 10.602,
+    "dependiente": 11.081,
+    "saco": 11.581,
+    "dos1": 12.033,
+    "botes1": 12.197,
+    "uno1": 12.88,
+    "bebida": 13.191,
+    "isotonica": 13.566,
+    "electrolitos": 14.856,
+    "sorbos": 15.946,
+    "corres": 16.783,
+    "ayuda1": 17.405,
+    "resistencia": 18.385,
+    "absorber": 20.461,
+    "agua2Fin": 21.625,
+    "dos2": 21.859,
+    "magnesio": 22.111,
+    "uno2": 22.915,
+    "dia1": 23.251,
+    "cena": 23.769,
+    "ayuda2": 24.328,
+    "musculos": 24.985,
+    "cansancio": 27.328,
+    "cansancioFin": 27.908,
+    "recordo": 28.308,
+    "siempre": 28.96,
+    "sin": 29.548,
+    "entrenar1": 29.734,
+    "botes2": 30.567,
+    "corren": 30.882,
+    "ti": 31.397,
+    "pago": 31.721,
+    "fue": 32.038,
+    "entrenar2": 32.286,
+    "semana1": 32.984,
+    "uno3": 33.336,
+    "tres2": 33.528,
+    "semana2": 34.363,
+    "cuatro": 34.772,
+    "seis": 35.157,
+    "semana3": 36.381,
+    "ocho": 36.728,
+    "dia2": 37.133,
+    "carrera3": 37.71,
+    "meta": 38.789,
+    "esperaba": 38.985,
+    "abuelo": 39.495,
+    "baston": 40.236,
+    "alto": 40.465,
+    "queda": 41.4,
+    "uno4": 41.593,
+    "companero": 42.124,
+    "pisoFin": 43.125,
+    "siguenos": 43.346,
+    "perderte": 44.219,
+    "ultima": 44.754
+  }
+}

@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="es" data-composition-variables='[{"id":"subtitulos","type":"boolean","label":"Subtítulos","default":true}]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>IronFuel Nutrition</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #07090D; }
+      #root { position: relative; width: 1080px; height: 1920px; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="45.067" data-width="1080" data-height="1920">
+      <div id="mundo" data-composition-id="mundo" data-composition-src="compositions/mundo.html" data-start="0" data-duration="45.067" data-track-index="0" data-track-kind="graphics" data-width="1080" data-height="1920"></div>
+      <div id="subtitulos" data-composition-id="subtitulos" data-composition-src="compositions/subtitulos.html" data-start="0" data-duration="45.067" data-track-index="1" data-track-kind="captions" data-width="1080" data-height="1920"></div>
+      <audio id="mezcla" class="clip" src="assets/audio/mezcla.wav" data-start="0" data-duration="45.067" data-track-index="2" data-volume="1"></audio>
+    </div>
+    <script>
+      // render sin subtítulos: --variables '{"subtitulos":false}'
+      const vars = (window.__hyperframes && window.__hyperframes.getVariables && window.__hyperframes.getVariables()) || {};
+      if (vars.subtitulos === false) document.getElementById("subtitulos").style.opacity = "0";
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = gsap.timeline({ paused: true });
+    </script>
+  </body>
+</html>

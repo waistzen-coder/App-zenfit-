@@ -1,0 +1,890 @@
+[
+  {
+    "text": "La",
+    "start": 0.06,
+    "end": 0.1,
+    "id": "w0"
+  },
+  {
+    "text": "vecina",
+    "start": 0.11,
+    "end": 0.43,
+    "id": "w1"
+  },
+  {
+    "text": "del",
+    "start": 0.43,
+    "end": 0.58,
+    "id": "w2"
+  },
+  {
+    "text": "quinto",
+    "start": 0.58,
+    "end": 0.91,
+    "id": "w3"
+  },
+  {
+    "text": "no",
+    "start": 0.91,
+    "end": 1.02,
+    "id": "w4"
+  },
+  {
+    "text": "quería",
+    "start": 1.02,
+    "end": 1.34,
+    "id": "w5"
+  },
+  {
+    "text": "músculo.",
+    "start": 1.34,
+    "end": 1.92,
+    "id": "w6"
+  },
+  {
+    "text": "Quería",
+    "start": 1.92,
+    "end": 2.26,
+    "id": "w7"
+  },
+  {
+    "text": "correr",
+    "start": 2.26,
+    "end": 2.6,
+    "id": "w8"
+  },
+  {
+    "text": "su",
+    "start": 2.61,
+    "end": 2.72,
+    "id": "w9"
+  },
+  {
+    "text": "primera",
+    "start": 2.72,
+    "end": 3.13,
+    "id": "w10"
+  },
+  {
+    "text": "carrera",
+    "start": 3.13,
+    "end": 3.51,
+    "id": "w11"
+  },
+  {
+    "text": "de",
+    "start": 3.53,
+    "end": 3.64,
+    "id": "w12"
+  },
+  {
+    "text": "10",
+    "start": 3.64,
+    "end": 4.04,
+    "id": "w13"
+  },
+  {
+    "text": "kilómetros.",
+    "start": 4.16,
+    "end": 4.56,
+    "id": "w14"
+  },
+  {
+    "text": "Yen",
+    "start": 4.56,
+    "end": 4.78,
+    "id": "w15"
+  },
+  {
+    "text": "el",
+    "start": 4.78,
+    "end": 5,
+    "id": "w16"
+  },
+  {
+    "text": "kilómetro",
+    "start": 5,
+    "end": 5.42,
+    "id": "w17"
+  },
+  {
+    "text": "3",
+    "start": 5.42,
+    "end": 5.52,
+    "id": "w18"
+  },
+  {
+    "text": "ya",
+    "start": 5.62,
+    "end": 5.73,
+    "id": "w19"
+  },
+  {
+    "text": "iba",
+    "start": 5.73,
+    "end": 5.92,
+    "id": "w20"
+  },
+  {
+    "text": "pidiendo",
+    "start": 5.92,
+    "end": 6.42,
+    "id": "w21"
+  },
+  {
+    "text": "agua.",
+    "start": 6.42,
+    "end": 6.86,
+    "id": "w22"
+  },
+  {
+    "text": "Así",
+    "start": 6.86,
+    "end": 6.91,
+    "id": "w23"
+  },
+  {
+    "text": "que",
+    "start": 7.17,
+    "end": 7.24,
+    "id": "w24"
+  },
+  {
+    "text": "bajó",
+    "start": 7.24,
+    "end": 7.49,
+    "id": "w25"
+  },
+  {
+    "text": "a",
+    "start": 7.49,
+    "end": 7.54,
+    "id": "w26"
+  },
+  {
+    "text": "la",
+    "start": 7.55,
+    "end": 7.67,
+    "id": "w27"
+  },
+  {
+    "text": "tienda.",
+    "start": 7.67,
+    "end": 8.26,
+    "id": "w28"
+  },
+  {
+    "text": "Pidió",
+    "start": 8.35,
+    "end": 8.69,
+    "id": "w29"
+  },
+  {
+    "text": "algo",
+    "start": 8.69,
+    "end": 8.96,
+    "id": "w30"
+  },
+  {
+    "text": "para",
+    "start": 8.97,
+    "end": 9.26,
+    "id": "w31"
+  },
+  {
+    "text": "aguantar",
+    "start": 9.32,
+    "end": 9.71,
+    "id": "w32"
+  },
+  {
+    "text": "la",
+    "start": 9.71,
+    "end": 9.82,
+    "id": "w33"
+  },
+  {
+    "text": "carrera",
+    "start": 9.82,
+    "end": 10.22,
+    "id": "w34"
+  },
+  {
+    "text": "entera.",
+    "start": 10.22,
+    "end": 10.73,
+    "id": "w35"
+  },
+  {
+    "text": "El",
+    "start": 10.73,
+    "end": 10.84,
+    "id": "w36"
+  },
+  {
+    "text": "dependiente",
+    "start": 10.84,
+    "end": 11.2,
+    "id": "w37"
+  },
+  {
+    "text": "sacó",
+    "start": 11.49,
+    "end": 11.68,
+    "id": "w38"
+  },
+  {
+    "text": "otros",
+    "start": 11.68,
+    "end": 11.96,
+    "id": "w39"
+  },
+  {
+    "text": "dos",
+    "start": 11.96,
+    "end": 12.13,
+    "id": "w40"
+  },
+  {
+    "text": "botes.",
+    "start": 12.13,
+    "end": 12.68,
+    "id": "w41"
+  },
+  {
+    "text": "Uno,",
+    "start": 12.68,
+    "end": 13.02,
+    "id": "w42"
+  },
+  {
+    "text": "bebida",
+    "start": 13.02,
+    "end": 13.43,
+    "id": "w43"
+  },
+  {
+    "text": "isotónica",
+    "start": 13.43,
+    "end": 14.07,
+    "id": "w44"
+  },
+  {
+    "text": "con",
+    "start": 14.14,
+    "end": 14.27,
+    "id": "w45"
+  },
+  {
+    "text": "hidratos",
+    "start": 14.27,
+    "end": 14.78,
+    "id": "w46"
+  },
+  {
+    "text": "y",
+    "start": 14.78,
+    "end": 14.84,
+    "id": "w47"
+  },
+  {
+    "text": "electrolitos.",
+    "start": 14.84,
+    "end": 15.75,
+    "id": "w48"
+  },
+  {
+    "text": "Asorbo",
+    "start": 15.86,
+    "end": 16.05,
+    "id": "w49"
+  },
+  {
+    "text": "mientras",
+    "start": 16.31,
+    "end": 16.66,
+    "id": "w50"
+  },
+  {
+    "text": "corres.",
+    "start": 16.66,
+    "end": 17.23,
+    "id": "w51"
+  },
+  {
+    "text": "Ayuda",
+    "start": 17.23,
+    "end": 17.54,
+    "id": "w52"
+  },
+  {
+    "text": "a",
+    "start": 17.54,
+    "end": 17.59,
+    "id": "w53"
+  },
+  {
+    "text": "mantener",
+    "start": 17.61,
+    "end": 18.1,
+    "id": "w54"
+  },
+  {
+    "text": "la",
+    "start": 18.1,
+    "end": 18.13,
+    "id": "w55"
+  },
+  {
+    "text": "resistencia",
+    "start": 18.24,
+    "end": 18.9,
+    "id": "w56"
+  },
+  {
+    "text": "en",
+    "start": 19.05,
+    "end": 19.18,
+    "id": "w57"
+  },
+  {
+    "text": "los",
+    "start": 19.24,
+    "end": 19.35,
+    "id": "w58"
+  },
+  {
+    "text": "esfuerzos",
+    "start": 19.35,
+    "end": 19.77,
+    "id": "w59"
+  },
+  {
+    "text": "largos",
+    "start": 19.86,
+    "end": 20.19,
+    "id": "w60"
+  },
+  {
+    "text": "y",
+    "start": 20.19,
+    "end": 20.24,
+    "id": "w61"
+  },
+  {
+    "text": "a",
+    "start": 20.24,
+    "end": 20.27,
+    "id": "w62"
+  },
+  {
+    "text": "absorber",
+    "start": 20.38,
+    "end": 20.74,
+    "id": "w63"
+  },
+  {
+    "text": "mejor",
+    "start": 20.74,
+    "end": 21.02,
+    "id": "w64"
+  },
+  {
+    "text": "el",
+    "start": 21.02,
+    "end": 21.13,
+    "id": "w65"
+  },
+  {
+    "text": "agua.",
+    "start": 21.35,
+    "end": 21.58,
+    "id": "w66"
+  },
+  {
+    "text": "Dos,",
+    "start": 21.58,
+    "end": 21.93,
+    "id": "w67"
+  },
+  {
+    "text": "magnesio.",
+    "start": 21.93,
+    "end": 22.74,
+    "id": "w68"
+  },
+  {
+    "text": "Uno",
+    "start": 22.74,
+    "end": 22.96,
+    "id": "w69"
+  },
+  {
+    "text": "al",
+    "start": 22.96,
+    "end": 23.11,
+    "id": "w70"
+  },
+  {
+    "text": "día",
+    "start": 23.11,
+    "end": 23.23,
+    "id": "w71"
+  },
+  {
+    "text": "con",
+    "start": 23.34,
+    "end": 23.55,
+    "id": "w72"
+  },
+  {
+    "text": "la",
+    "start": 23.55,
+    "end": 23.61,
+    "id": "w73"
+  },
+  {
+    "text": "cena.",
+    "start": 23.68,
+    "end": 24.02,
+    "id": "w74"
+  },
+  {
+    "text": "Ayuda",
+    "start": 24.02,
+    "end": 24.23,
+    "id": "w75"
+  },
+  {
+    "text": "a",
+    "start": 24.23,
+    "end": 24.44,
+    "id": "w76"
+  },
+  {
+    "text": "que",
+    "start": 24.44,
+    "end": 24.56,
+    "id": "w77"
+  },
+  {
+    "text": "los",
+    "start": 24.56,
+    "end": 24.74,
+    "id": "w78"
+  },
+  {
+    "text": "músculos",
+    "start": 24.74,
+    "end": 25.18,
+    "id": "w79"
+  },
+  {
+    "text": "funcionen",
+    "start": 25.25,
+    "end": 25.77,
+    "id": "w80"
+  },
+  {
+    "text": "con",
+    "start": 25.77,
+    "end": 25.95,
+    "id": "w81"
+  },
+  {
+    "text": "normalidad",
+    "start": 25.95,
+    "end": 26.32,
+    "id": "w82"
+  },
+  {
+    "text": "y",
+    "start": 26.58,
+    "end": 26.62,
+    "id": "w83"
+  },
+  {
+    "text": "a",
+    "start": 26.62,
+    "end": 26.67,
+    "id": "w84"
+  },
+  {
+    "text": "reducir",
+    "start": 26.68,
+    "end": 27.1,
+    "id": "w85"
+  },
+  {
+    "text": "el",
+    "start": 27.1,
+    "end": 27.22,
+    "id": "w86"
+  },
+  {
+    "text": "cansancio.",
+    "start": 27.22,
+    "end": 27.94,
+    "id": "w87"
+  },
+  {
+    "text": "Yle",
+    "start": 27.94,
+    "end": 28.12,
+    "id": "w88"
+  },
+  {
+    "text": "recordó",
+    "start": 28.12,
+    "end": 28.55,
+    "id": "w89"
+  },
+  {
+    "text": "lo",
+    "start": 28.55,
+    "end": 28.8,
+    "id": "w90"
+  },
+  {
+    "text": "de",
+    "start": 28.86,
+    "end": 28.9,
+    "id": "w91"
+  },
+  {
+    "text": "siempre.",
+    "start": 28.91,
+    "end": 29.38,
+    "id": "w92"
+  },
+  {
+    "text": "Sin",
+    "start": 29.48,
+    "end": 29.6,
+    "id": "w93"
+  },
+  {
+    "text": "entrenar,",
+    "start": 29.67,
+    "end": 30.2,
+    "id": "w94"
+  },
+  {
+    "text": "los",
+    "start": 30.2,
+    "end": 30.37,
+    "id": "w95"
+  },
+  {
+    "text": "botes",
+    "start": 30.37,
+    "end": 30.65,
+    "id": "w96"
+  },
+  {
+    "text": "no",
+    "start": 30.65,
+    "end": 30.75,
+    "id": "w97"
+  },
+  {
+    "text": "corren",
+    "start": 30.76,
+    "end": 31.1,
+    "id": "w98"
+  },
+  {
+    "text": "por",
+    "start": 31.1,
+    "end": 31.25,
+    "id": "w99"
+  },
+  {
+    "text": "ti.",
+    "start": 31.34,
+    "end": 31.55,
+    "id": "w100"
+  },
+  {
+    "text": "Pagó",
+    "start": 31.55,
+    "end": 31.76,
+    "id": "w101"
+  },
+  {
+    "text": "y",
+    "start": 31.76,
+    "end": 31.84,
+    "id": "w102"
+  },
+  {
+    "text": "se",
+    "start": 31.84,
+    "end": 31.92,
+    "id": "w103"
+  },
+  {
+    "text": "fue",
+    "start": 31.92,
+    "end": 32.09,
+    "id": "w104"
+  },
+  {
+    "text": "a",
+    "start": 32.09,
+    "end": 32.12,
+    "id": "w105"
+  },
+  {
+    "text": "entrenar.",
+    "start": 32.21,
+    "end": 32.84,
+    "id": "w106"
+  },
+  {
+    "text": "Semana",
+    "start": 32.96,
+    "end": 33.23,
+    "id": "w107"
+  },
+  {
+    "text": "1,",
+    "start": 33.4,
+    "end": 33.62,
+    "id": "w108"
+  },
+  {
+    "text": "3",
+    "start": 33.64,
+    "end": 33.82,
+    "id": "w109"
+  },
+  {
+    "text": "kilómetros.",
+    "start": 33.82,
+    "end": 34.61,
+    "id": "w110"
+  },
+  {
+    "text": "Semana",
+    "start": 34.61,
+    "end": 34.94,
+    "id": "w111"
+  },
+  {
+    "text": "4,",
+    "start": 34.95,
+    "end": 35.27,
+    "id": "w112"
+  },
+  {
+    "text": "6",
+    "start": 35.27,
+    "end": 35.31,
+    "id": "w113"
+  },
+  {
+    "text": "kilómetros.",
+    "start": 35.57,
+    "end": 36.23,
+    "id": "w114"
+  },
+  {
+    "text": "Semana",
+    "start": 36.24,
+    "end": 36.6,
+    "id": "w115"
+  },
+  {
+    "text": "8,",
+    "start": 36.6,
+    "end": 36.9,
+    "id": "w116"
+  },
+  {
+    "text": "el",
+    "start": 36.9,
+    "end": 37.02,
+    "id": "w117"
+  },
+  {
+    "text": "día",
+    "start": 37.02,
+    "end": 37.19,
+    "id": "w118"
+  },
+  {
+    "text": "de",
+    "start": 37.19,
+    "end": 37.32,
+    "id": "w119"
+  },
+  {
+    "text": "la",
+    "start": 37.32,
+    "end": 37.39,
+    "id": "w120"
+  },
+  {
+    "text": "carrera.",
+    "start": 37.5,
+    "end": 38.05,
+    "id": "w121"
+  },
+  {
+    "text": "Yen",
+    "start": 38.05,
+    "end": 38.23,
+    "id": "w122"
+  },
+  {
+    "text": "la",
+    "start": 38.31,
+    "end": 38.51,
+    "id": "w123"
+  },
+  {
+    "text": "meta",
+    "start": 38.61,
+    "end": 38.72,
+    "id": "w124"
+  },
+  {
+    "text": "la",
+    "start": 38.78,
+    "end": 38.83,
+    "id": "w125"
+  },
+  {
+    "text": "esperaba",
+    "start": 38.84,
+    "end": 39.3,
+    "id": "w126"
+  },
+  {
+    "text": "el",
+    "start": 39.4,
+    "end": 39.44,
+    "id": "w127"
+  },
+  {
+    "text": "abuelo",
+    "start": 39.44,
+    "end": 39.8,
+    "id": "w128"
+  },
+  {
+    "text": "con",
+    "start": 39.8,
+    "end": 39.98,
+    "id": "w129"
+  },
+  {
+    "text": "el",
+    "start": 39.98,
+    "end": 40.1,
+    "id": "w130"
+  },
+  {
+    "text": "bastón",
+    "start": 40.1,
+    "end": 40.39,
+    "id": "w131"
+  },
+  {
+    "text": "en",
+    "start": 40.5,
+    "end": 40.58,
+    "id": "w132"
+  },
+  {
+    "text": "alto.",
+    "start": 40.58,
+    "end": 41,
+    "id": "w133"
+  },
+  {
+    "text": "Solo",
+    "start": 41,
+    "end": 41.17,
+    "id": "w134"
+  },
+  {
+    "text": "queda",
+    "start": 41.26,
+    "end": 41.53,
+    "id": "w135"
+  },
+  {
+    "text": "uno,",
+    "start": 41.53,
+    "end": 41.84,
+    "id": "w136"
+  },
+  {
+    "text": "el",
+    "start": 41.84,
+    "end": 41.96,
+    "id": "w137"
+  },
+  {
+    "text": "compañero",
+    "start": 41.96,
+    "end": 42.5,
+    "id": "w138"
+  },
+  {
+    "text": "de",
+    "start": 42.5,
+    "end": 42.62,
+    "id": "w139"
+  },
+  {
+    "text": "piso.",
+    "start": 42.62,
+    "end": 43.1,
+    "id": "w140"
+  },
+  {
+    "text": "Síguenos",
+    "start": 43.1,
+    "end": 43.76,
+    "id": "w141"
+  },
+  {
+    "text": "para",
+    "start": 43.82,
+    "end": 43.98,
+    "id": "w142"
+  },
+  {
+    "text": "no",
+    "start": 43.98,
+    "end": 44.09,
+    "id": "w143"
+  },
+  {
+    "text": "perderte",
+    "start": 44.09,
+    "end": 44.53,
+    "id": "w144"
+  },
+  {
+    "text": "la",
+    "start": 44.53,
+    "end": 44.64,
+    "id": "w145"
+  },
+  {
+    "text": "última",
+    "start": 44.64,
+    "end": 44.97,
+    "id": "w146"
+  },
+  {
+    "text": "parte.",
+    "start": 44.97,
+    "end": 45.43,
+    "id": "w147"
+  }
+]

@@ -1,0 +1,478 @@
+{
+  "duracion": 45.06666666666667,
+  "voz": "assets/audio/voz.wav",
+  "musica": {
+    "archivo": "assets/music/basketball-training.mp3",
+    "desde": 12,
+    "db": -27
+  },
+  "efectos": [
+    {
+      "t": 0,
+      "archivo": "assets/sfx/whoosh-1.mp3",
+      "db": -9,
+      "que": "golpe de cámara inicial",
+      "dur": null
+    },
+    {
+      "t": 1.36,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -10,
+      "que": "vegano",
+      "dur": null
+    },
+    {
+      "t": 2.379,
+      "archivo": "assets/sfx/whoosh-2.mp3",
+      "db": -11,
+      "que": "en el gimnasio",
+      "dur": null
+    },
+    {
+      "t": 4.48,
+      "archivo": "assets/sfx/boing.mp3",
+      "db": -11,
+      "que": "¿sin carne?",
+      "dur": null
+    },
+    {
+      "t": 5.187,
+      "archivo": "assets/sfx/whoosh-3.mp3",
+      "db": -11,
+      "que": "va a la tienda",
+      "dur": null
+    },
+    {
+      "t": 28.281,
+      "archivo": "assets/sfx/golpe-madera.mp3",
+      "db": -12,
+      "que": "deja la bolsa",
+      "dur": null
+    },
+    {
+      "t": 32.667,
+      "archivo": "assets/sfx/disco-metal.mp3",
+      "db": -12,
+      "que": "deja la barra en el soporte",
+      "dur": null
+    },
+    {
+      "t": 6.03,
+      "archivo": "assets/sfx/campanilla.mp3",
+      "db": -14,
+      "que": "entra",
+      "dur": null
+    },
+    {
+      "t": 6.286,
+      "archivo": "assets/sfx/teclado-1.mp3",
+      "db": -16,
+      "que": "escribe la pregunta",
+      "dur": 0.867
+    },
+    {
+      "t": 8.137,
+      "archivo": "assets/sfx/golpe-madera.mp3",
+      "db": -6,
+      "que": "cae la proteína vegetal",
+      "dur": null
+    },
+    {
+      "t": 8.793,
+      "archivo": "assets/sfx/golpe-madera.mp3",
+      "db": -6,
+      "que": "cae la B12",
+      "dur": null
+    },
+    {
+      "t": 9.186,
+      "archivo": "assets/sfx/whoosh-1.mp3",
+      "db": -12,
+      "que": "viaje a la proteína",
+      "dur": null
+    },
+    {
+      "t": 9.386,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -10,
+      "que": "1",
+      "dur": null
+    },
+    {
+      "t": 9.971,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -9,
+      "que": "tarjeta de la proteína",
+      "dur": null
+    },
+    {
+      "t": 10.575,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -13,
+      "que": "guisante",
+      "dur": null
+    },
+    {
+      "t": 11.128,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -13,
+      "que": "arroz",
+      "dur": null
+    },
+    {
+      "t": 11.963,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -12,
+      "que": "1 cacito",
+      "dur": null
+    },
+    {
+      "t": 12.169,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -12,
+      "que": "tras entrenar",
+      "dur": null
+    },
+    {
+      "t": 14.446,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -11,
+      "que": "músculo",
+      "dur": null
+    },
+    {
+      "t": 15.489,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -11,
+      "que": "escudo",
+      "dur": null
+    },
+    {
+      "t": 17.109,
+      "archivo": "assets/sfx/whoosh-2.mp3",
+      "db": -12,
+      "que": "viaje a la B12",
+      "dur": null
+    },
+    {
+      "t": 17.229,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -10,
+      "que": "2",
+      "dur": null
+    },
+    {
+      "t": 17.303,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -9,
+      "que": "tarjeta de la B12",
+      "dur": null
+    },
+    {
+      "t": 19.042,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -12,
+      "que": "si eres vegano",
+      "dur": null
+    },
+    {
+      "t": 20.209,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -11,
+      "que": "imprescindible",
+      "dur": null
+    },
+    {
+      "t": 21.948,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -11,
+      "que": "cansancio",
+      "dur": null
+    },
+    {
+      "t": 22.912,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -11,
+      "que": "glóbulos rojos",
+      "dur": null
+    },
+    {
+      "t": 25.139,
+      "archivo": "assets/sfx/whoosh-3.mp3",
+      "db": -12,
+      "que": "la cámara se aleja",
+      "dur": null
+    },
+    {
+      "t": 25.769,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -10,
+      "que": "entrenar",
+      "dur": null
+    },
+    {
+      "t": 26.294,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -11,
+      "que": "botes",
+      "dur": null
+    },
+    {
+      "t": 26.671,
+      "archivo": "assets/sfx/whoosh-1.mp3",
+      "db": -13,
+      "que": "vuelta al mostrador",
+      "dur": null
+    },
+    {
+      "t": 26.771,
+      "archivo": "assets/sfx/datafono.mp3",
+      "db": -10,
+      "que": "pago aceptado",
+      "dur": null
+    },
+    {
+      "t": 27.468,
+      "archivo": "assets/sfx/campanilla.mp3",
+      "db": -14,
+      "que": "sale por la puerta",
+      "dur": null
+    },
+    {
+      "t": 28.594,
+      "archivo": "assets/sfx/click-2.mp3",
+      "db": -11,
+      "que": "marcador: 1",
+      "dur": null
+    },
+    {
+      "t": 29.331,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -12,
+      "que": "le miran raro",
+      "dur": null
+    },
+    {
+      "t": 30.319,
+      "archivo": "assets/sfx/click-2.mp3",
+      "db": -11,
+      "que": "marcador: 4",
+      "dur": null
+    },
+    {
+      "t": 30.496,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -12,
+      "que": "¿qué comes?",
+      "dur": null
+    },
+    {
+      "t": 32.168,
+      "archivo": "assets/sfx/click-2.mp3",
+      "db": -11,
+      "que": "marcador: 8",
+      "dur": null
+    },
+    {
+      "t": 32.667,
+      "archivo": "assets/sfx/whoosh-1.mp3",
+      "db": -15,
+      "que": "se acercan todos",
+      "dur": null
+    },
+    {
+      "t": 33.081,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -10,
+      "que": "¡receta!",
+      "dur": null
+    },
+    {
+      "t": 33.851,
+      "archivo": "assets/sfx/golpe-climax.mp3",
+      "db": -7,
+      "que": "le piden la receta (clímax)",
+      "dur": 2.4
+    },
+    {
+      "t": 35.331,
+      "archivo": "assets/sfx/whoosh-2.mp3",
+      "db": -11,
+      "que": "vuelta a la tienda",
+      "dur": null
+    },
+    {
+      "t": 35.954,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -12,
+      "que": "cuatro clientes",
+      "dur": null
+    },
+    {
+      "t": 36.773,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -12,
+      "que": "diez botes",
+      "dur": null
+    },
+    {
+      "t": 37.023,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -13,
+      "que": "diez botes",
+      "dur": null
+    },
+    {
+      "t": 37.881,
+      "archivo": "assets/sfx/whoosh-3.mp3",
+      "db": -12,
+      "que": "un mismo consejo",
+      "dur": null
+    },
+    {
+      "t": 38.604,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -10,
+      "que": "entrena",
+      "dur": null
+    },
+    {
+      "t": 39.166,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -11,
+      "que": "come bien",
+      "dur": null
+    },
+    {
+      "t": 39.681,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -11,
+      "que": "descansa",
+      "dur": null
+    },
+    {
+      "t": 40.694,
+      "archivo": "assets/sfx/whoosh-2.mp3",
+      "db": -12,
+      "que": "a la puerta",
+      "dur": null
+    },
+    {
+      "t": 41.728,
+      "archivo": "assets/sfx/punch.mp3",
+      "db": -9,
+      "que": "el logo de la puerta",
+      "dur": null
+    },
+    {
+      "t": 42.705,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -9,
+      "que": "tarjeta final",
+      "dur": null
+    },
+    {
+      "t": 42.885,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -12,
+      "que": "5 de 5",
+      "dur": null
+    },
+    {
+      "t": 43.588,
+      "archivo": "assets/sfx/click-1.mp3",
+      "db": -8,
+      "que": "seguir",
+      "dur": null
+    },
+    {
+      "t": 43.638,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -11,
+      "que": "siguiendo",
+      "dur": null
+    },
+    {
+      "t": 44.204,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -11,
+      "que": "¿parte 6?",
+      "dur": null
+    }
+  ],
+  "apariciones": {
+    "companero": 0.305,
+    "vegano1": 1.36,
+    "gimnasio1": 2.379,
+    "dijeron": 2.96,
+    "coger": 4.158,
+    "musculo1": 4.48,
+    "musculo1Fin": 4.954,
+    "asi2": 5.187,
+    "tienda": 5.93,
+    "preguntar": 6.286,
+    "preguntarFin": 6.753,
+    "dependiente": 7.235,
+    "saco": 7.734,
+    "dos1": 8.137,
+    "botes1": 8.793,
+    "uno1": 9.386,
+    "proteina1": 9.667,
+    "vegetal": 10.021,
+    "guisante": 10.575,
+    "arroz": 11.128,
+    "cacito": 11.963,
+    "despues": 12.169,
+    "proteina2": 13.571,
+    "ganar": 14.446,
+    "perderlo": 15.489,
+    "venga1": 15.866,
+    "venga2Fin": 16.992,
+    "dos2": 17.209,
+    "vitamina": 17.353,
+    "b": 17.858,
+    "vegano2": 19.042,
+    "faltar": 20.209,
+    "ayuda2": 21.016,
+    "cansancio": 21.948,
+    "globulos": 22.912,
+    "normalidadFin": 24.631,
+    "siempre": 25.139,
+    "sin": 25.637,
+    "entrenar2": 25.769,
+    "nada": 26.294,
+    "pago": 26.771,
+    "fue2": 27.168,
+    "gimnasio2": 27.422,
+    "semana1": 28.231,
+    "uno2": 28.594,
+    "raro": 29.331,
+    "semana2": 29.914,
+    "cuatro1": 30.319,
+    "preguntaban": 30.496,
+    "comia": 31.477,
+    "semana3": 32.102,
+    "ocho": 32.168,
+    "pedian": 32.667,
+    "receta": 33.081,
+    "lentejas": 33.851,
+    "asi3": 34.923,
+    "serie": 35.531,
+    "cuatro2": 35.954,
+    "clientes": 36.216,
+    "diez": 36.773,
+    "botes2": 37.185,
+    "consejo": 37.881,
+    "entrena": 38.604,
+    "come": 39.166,
+    "descansa": 39.681,
+    "demas": 40.694,
+    "donde": 41.415,
+    "encontrarlo": 41.728,
+    "encontrarloFin": 42.487,
+    "siguenos": 42.735,
+    "para": 43.346,
+    "perderte": 43.588,
+    "venga3": 44.204
+  }
+}
