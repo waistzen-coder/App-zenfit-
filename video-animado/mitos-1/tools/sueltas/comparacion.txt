@@ -1,0 +1,13 @@
+mitos-1: guion 101 palabras · whisper 95
+   · falta en la voz: «Mito:» (frase 1)
+   · falta en la voz: «Y» (frase 3)  → la voz la dice; el transcriptor la pegó a la siguiente
+   · cambiada: guion «se» → voz «Yse» (4.05 s)  → la voz la dice; el transcriptor la pegó a la siguiente
+   · falta en la voz: «Y» (frase 10)  → la voz la dice; el transcriptor la pegó a la siguiente
+   · cambiada: guion «te» → voz «Yte» (20.26 s)  → la voz la dice; el transcriptor la pegó a la siguiente
+   · cambiada: guion «Miraba» → voz «Mirzaba» (28.01 s)
+   · falta en la voz: «barra.» (frase 13)
+   · falta en la voz: «Veredicto:» (frase 14)
+   · cambiada: guion «mito.» → voz «berra.¡Peredicto» (28.69 s)
+   · cambiada: guion «¿Qué» → voz «mito!¿Qué» (30.71 s)
+   · falta en la voz: «Y» (frase 16)  → la voz la dice; el transcriptor la pegó a la siguiente
+   · cambiada: guion «síguenos» → voz «Ysíguenos» (35.31 s)  → la voz la dice; el transcriptor la pegó a la siguiente

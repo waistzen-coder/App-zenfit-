@@ -1,0 +1,9 @@
+mitos-3: guion 92 palabras · whisper 89
+   · cambiada: guion «treinta» → voz «30» (1.77 s)
+   · falta en la voz: «Y» (frase 12)  → la voz la dice; el transcriptor la pegó a la siguiente
+   · cambiada: guion «el» → voz «Yel» (25.82 s)  → la voz la dice; el transcriptor la pegó a la siguiente
+   · falta en la voz: «Veredicto:» (frase 13)
+   · cambiada: guion «mito.» → voz «Predicto» (28.54 s)
+   · cambiada: guion «¿Qué» → voz «mito.¿Qué» (29.01 s)
+   · falta en la voz: «Y» (frase 15)  → la voz la dice; el transcriptor la pegó a la siguiente
+   · cambiada: guion «síguenos» → voz «Ysíguenos» (33.94 s)  → la voz la dice; el transcriptor la pegó a la siguiente
