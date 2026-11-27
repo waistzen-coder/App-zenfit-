@@ -1,0 +1,439 @@
+{
+  "duracion": 45.3,
+  "voz": "assets/audio/voz.wav",
+  "musica": {
+    "archivo": "assets/music/basketball-training.mp3",
+    "desde": 4,
+    "db": -27
+  },
+  "efectos": [
+    {
+      "t": 0,
+      "archivo": "assets/sfx/whoosh-1.mp3",
+      "db": -8,
+      "que": "golpe de cámara inicial",
+      "dur": null
+    },
+    {
+      "t": 2.136,
+      "archivo": "assets/sfx/disco-metal.mp3",
+      "db": -7,
+      "que": "la barra se dobla",
+      "dur": null
+    },
+    {
+      "t": 2.156,
+      "archivo": "assets/sfx/punch.mp3",
+      "db": -10,
+      "que": "golpe",
+      "dur": null
+    },
+    {
+      "t": 3.329,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -11,
+      "que": "aparece la pila",
+      "dur": null
+    },
+    {
+      "t": 5.062,
+      "archivo": "assets/sfx/boing.mp3",
+      "db": -12,
+      "que": "se queda sin pilas",
+      "dur": null
+    },
+    {
+      "t": 7.722,
+      "archivo": "assets/sfx/whoosh-2.mp3",
+      "db": -11,
+      "que": "vuelve a la tienda",
+      "dur": null
+    },
+    {
+      "t": 8.222,
+      "archivo": "assets/sfx/campanilla.mp3",
+      "db": -14,
+      "que": "entra",
+      "dur": null
+    },
+    {
+      "t": 8.72,
+      "archivo": "assets/sfx/teclado-1.mp3",
+      "db": -16,
+      "que": "escribe «Músculo ya tengo»",
+      "dur": 1.36
+    },
+    {
+      "t": 10.125,
+      "archivo": "assets/sfx/teclado-2.mp3",
+      "db": -17,
+      "que": "escribe «¿Tienes pilas?»",
+      "dur": 0.773
+    },
+    {
+      "t": 12.285,
+      "archivo": "assets/sfx/golpe-madera.mp3",
+      "db": -6,
+      "que": "cae el omega-3",
+      "dur": null
+    },
+    {
+      "t": 12.609,
+      "archivo": "assets/sfx/golpe-madera.mp3",
+      "db": -6,
+      "que": "cae el multivitamínico",
+      "dur": null
+    },
+    {
+      "t": 12.758,
+      "archivo": "assets/sfx/whoosh-3.mp3",
+      "db": -12,
+      "que": "viaje al omega-3",
+      "dur": null
+    },
+    {
+      "t": 12.957,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -10,
+      "que": "1",
+      "dur": null
+    },
+    {
+      "t": 13.624,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -9,
+      "que": "tarjeta del omega-3",
+      "dur": null
+    },
+    {
+      "t": 14.53,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -14,
+      "que": "días",
+      "dur": null
+    },
+    {
+      "t": 16.392,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -10,
+      "que": "corazón",
+      "dur": null
+    },
+    {
+      "t": 18.211,
+      "archivo": "assets/sfx/whoosh-1.mp3",
+      "db": -12,
+      "que": "viaje al multivitamínico",
+      "dur": null
+    },
+    {
+      "t": 18.331,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -10,
+      "que": "2",
+      "dur": null
+    },
+    {
+      "t": 19.823,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -9,
+      "que": "tarjeta del multivitamínico",
+      "dur": null
+    },
+    {
+      "t": 20.772,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -12,
+      "que": "desayuno",
+      "dur": null
+    },
+    {
+      "t": 22.313,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -11,
+      "que": "la pila se carga",
+      "dur": null
+    },
+    {
+      "t": 23.299,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -10,
+      "que": "escudo",
+      "dur": null
+    },
+    {
+      "t": 24.826,
+      "archivo": "assets/sfx/whoosh-2.mp3",
+      "db": -13,
+      "que": "cámara al dependiente",
+      "dur": null
+    },
+    {
+      "t": 26.255,
+      "archivo": "assets/sfx/whoosh-3.mp3",
+      "db": -11,
+      "que": "la cámara se aleja",
+      "dur": null
+    },
+    {
+      "t": 26.305,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -10,
+      "que": "tarjeta de la regla",
+      "dur": null
+    },
+    {
+      "t": 27.161,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -11,
+      "que": "comida",
+      "dur": null
+    },
+    {
+      "t": 27.707,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -11,
+      "que": "sueño",
+      "dur": null
+    },
+    {
+      "t": 28.845,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -12,
+      "que": "suman",
+      "dur": null
+    },
+    {
+      "t": 29.756,
+      "archivo": "assets/sfx/boing.mp3",
+      "db": -11,
+      "que": "no hacen magia",
+      "dur": null
+    },
+    {
+      "t": 30.175,
+      "archivo": "assets/sfx/whoosh-1.mp3",
+      "db": -13,
+      "que": "vuelta al mostrador",
+      "dur": null
+    },
+    {
+      "t": 30.276,
+      "archivo": "assets/sfx/datafono.mp3",
+      "db": -10,
+      "que": "pago aceptado",
+      "dur": null
+    },
+    {
+      "t": 30.726,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -12,
+      "que": "a la bolsa",
+      "dur": null
+    },
+    {
+      "t": 30.569,
+      "archivo": "assets/sfx/whoosh-2.mp3",
+      "db": -10,
+      "que": "sale corriendo",
+      "dur": null
+    },
+    {
+      "t": 30.969,
+      "archivo": "assets/sfx/campanilla.mp3",
+      "db": -14,
+      "que": "sale por la puerta",
+      "dur": null
+    },
+    {
+      "t": 32.119,
+      "archivo": "assets/sfx/click-2.mp3",
+      "db": -11,
+      "que": "marcador: 1",
+      "dur": null
+    },
+    {
+      "t": 32.139,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -12,
+      "que": "la pila, llena",
+      "dur": null
+    },
+    {
+      "t": 34.475,
+      "archivo": "assets/sfx/click-2.mp3",
+      "db": -11,
+      "que": "marcador: 4",
+      "dur": null
+    },
+    {
+      "t": 34.891,
+      "archivo": "assets/sfx/whoosh-3.mp3",
+      "db": -14,
+      "que": "el de al lado se va",
+      "dur": null
+    },
+    {
+      "t": 35.452,
+      "archivo": "assets/sfx/click-1.mp3",
+      "db": -12,
+      "que": "se apaga una luz",
+      "dur": null
+    },
+    {
+      "t": 36.329,
+      "archivo": "assets/sfx/click-2.mp3",
+      "db": -11,
+      "que": "marcador: 8",
+      "dur": null
+    },
+    {
+      "t": 36.973,
+      "archivo": "assets/sfx/click-1.mp3",
+      "db": -9,
+      "que": "se apagan las luces",
+      "dur": null
+    },
+    {
+      "t": 37.738,
+      "archivo": "assets/sfx/golpe-climax.mp3",
+      "db": -5,
+      "que": "se apaga el gimnasio (clímax)",
+      "dur": 2.6
+    },
+    {
+      "t": 38.692,
+      "archivo": "assets/sfx/whoosh-1.mp3",
+      "db": -11,
+      "que": "viaje al abuelo",
+      "dur": null
+    },
+    {
+      "t": 38.792,
+      "archivo": "assets/sfx/campanilla.mp3",
+      "db": -14,
+      "que": "sale el abuelo",
+      "dur": null
+    },
+    {
+      "t": 40.843,
+      "archivo": "assets/sfx/boing.mp3",
+      "db": -11,
+      "que": "el bastón como pesa",
+      "dur": null
+    },
+    {
+      "t": 41.902,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -9,
+      "que": "tarjeta final",
+      "dur": null
+    },
+    {
+      "t": 42.426,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -11,
+      "que": "parte 2",
+      "dur": null
+    },
+    {
+      "t": 42.953,
+      "archivo": "assets/sfx/click-1.mp3",
+      "db": -8,
+      "que": "seguir",
+      "dur": null
+    },
+    {
+      "t": 43.003,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -11,
+      "que": "siguiendo",
+      "dur": null
+    },
+    {
+      "t": 44.425,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -11,
+      "que": "parte 3",
+      "dur": null
+    }
+  ],
+  "apariciones": {
+    "gimnasio1": 1.14,
+    "doblaba": 2.136,
+    "barra": 2.823,
+    "pero1": 3.211,
+    "mitad": 3.329,
+    "quedaba": 4.434,
+    "pilas1": 5.062,
+    "pilas1Fin": 5.388,
+    "bostezaba": 5.627,
+    "serie1": 6.418,
+    "serie2": 6.772,
+    "asi": 7.307,
+    "volvio": 7.722,
+    "tienda": 8.146,
+    "esta": 8.72,
+    "musculo": 9.574,
+    "musculoFin": 9.979,
+    "pidio2": 10.125,
+    "pilas2": 10.442,
+    "pilas2Fin": 10.799,
+    "dependiente": 11.211,
+    "saco": 11.749,
+    "dos1": 12.285,
+    "botes1": 12.609,
+    "uno1": 12.957,
+    "omega": 13.188,
+    "con": 13.675,
+    "comida": 14.068,
+    "todos": 14.53,
+    "diasFin": 15.618,
+    "ayuda1": 15.831,
+    "corazon": 16.392,
+    "funcione": 16.887,
+    "normalidadFin": 18.058,
+    "dos2": 18.311,
+    "multi": 18.825,
+    "uno2": 19.873,
+    "dia": 20.186,
+    "desayuno": 20.772,
+    "ayuda2": 21.463,
+    "cansancio": 22.313,
+    "defensas": 23.299,
+    "pero2": 24.826,
+    "repitio": 25.059,
+    "siempre": 25.75,
+    "esto1": 26.255,
+    "sustituye": 26.568,
+    "comer": 27.161,
+    "dormir": 27.707,
+    "botes2": 28.564,
+    "suman": 28.845,
+    "magia": 29.756,
+    "magiaFin": 30.151,
+    "pago": 30.276,
+    "vuelta": 30.569,
+    "gimnasio2": 31.037,
+    "semana1": 31.839,
+    "uno3": 32.119,
+    "aguantaba": 32.286,
+    "entero": 33.416,
+    "semana2": 34.05,
+    "cuatro": 34.475,
+    "ultimo": 34.891,
+    "irse": 35.452,
+    "semana3": 35.979,
+    "ocho": 36.329,
+    "apagaba": 36.973,
+    "gimnasio3": 37.738,
+    "abuelo": 38.792,
+    "cierto": 39.366,
+    "caja": 40.843,
+    "segunda2": 41.902,
+    "parte": 42.426,
+    "siguenos": 42.953,
+    "perderte": 43.852,
+    "tercera": 44.425
+  }
+}

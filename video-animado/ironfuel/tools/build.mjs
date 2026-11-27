@@ -59,7 +59,9 @@ for (const [k, v] of Object.entries(T)) if (!Number.isFinite(v)) throw new Error
 
 // ───────────── colores ─────────────
 const C = {
-  naranja: "#FF6A1A", naranjaOsc: "#C24A0A", naranjaTxt: "#C2410C", verde: "#22C55E", verdeTxt: "#15803D", rojo: "#EF4444",
+  // marca: Iron Fuel Nutrition (azul eléctrico del logo y gama de acero)
+  azul: "#1D6BFF", azulOsc: "#0B3FB3", azulTxt: "#1550D8", azulClaro: "#5AB0FF", acero: "#C9CED6",
+  verde: "#22C55E", verdeTxt: "#15803D", rojo: "#EF4444",
   tinta: "#121317", blanco: "#FFFFFF", gris: "#8A8F98",
 };
 // iconos de Phosphor (assets/icons, licencia MIT)
@@ -114,70 +116,80 @@ function calle() {
   return s;
 }
 
-// ───────────── la tienda ─────────────
+// ───────────── la tienda (basada en la fachada real de Iron Fuel Nutrition) ─────────────
+// Común a todas las partes: aplicar_marca.py la mete en cada tools/build.mjs.
+const logo = (x, y, r, extra = "") => `<image href="assets/brand/logo.png" x="${x - r}" y="${y - r}" width="${2 * r}" height="${2 * r}" ${extra}/>`;
 function tienda() {
   let s = "";
-  // edificio de arriba
-  s += `<rect x="260" y="-320" width="2280" height="900" fill="#2A2326"/>`;
-  for (let y = -300; y < 560; y += 34) s += `<rect x="260" y="${y}" width="2280" height="2" fill="#221C1F"/>`;
-  s += `<rect x="240" y="-340" width="2320" height="34" fill="#352C30"/>`;
-  semilla = 3;
-  for (const y of [-220, 160])
-    for (let x = 380; x < 2400; x += 420) {
-      const lit = rnd() > 0.45;
-      s += `<rect x="${x}" y="${y}" width="240" height="300" rx="6" fill="${lit ? "#E9B872" : "#1A1517"}" opacity="${lit ? 0.55 : 1}"/>`;
-      s += `<rect x="${x - 10}" y="${y + 300}" width="260" height="16" fill="#3A3034"/>`;
-      s += `<rect x="${x + 118}" y="${y}" width="5" height="300" fill="#2A2326"/>`;
+  // edificio de ladrillo con balcones blancos y un aire acondicionado
+  s += `<rect x="260" y="-340" width="2280" height="900" fill="#7A4A3A"/>`;
+  for (let y = -340, f = 0; y < 560; y += 34, f++) {
+    s += `<rect x="260" y="${y}" width="2280" height="3" fill="#A08C80" opacity="0.55"/>`;
+    for (let x = 260 + (f % 2 ? 45 : 0); x < 2540; x += 90) s += `<rect x="${x}" y="${y}" width="3" height="34" fill="#A08C80" opacity="0.45"/>`;
+  }
+  for (const y of [-250, 140]) {
+    for (let x = 420; x < 2400; x += 520) {
+      s += `<rect x="${x}" y="${y}" width="260" height="300" rx="4" fill="#ECEBE7"/><rect x="${x + 16}" y="${y + 16}" width="228" height="268" fill="#1A2230"/>`;
+      s += `<rect x="${x + 16}" y="${y + 16}" width="228" height="268" fill="#E9B872" opacity="${(x / 520) % 2 ? 0.35 : 0}"/>`;
+      s += `<rect x="${x - 30}" y="${y + 200}" width="320" height="14" fill="#F2F1ED"/>`;
+      for (let bx = x - 24; bx < x + 290; bx += 26) s += `<rect x="${bx}" y="${y + 214}" width="6" height="90" fill="#F2F1ED"/>`;
+      s += `<rect x="${x - 30}" y="${y + 300}" width="320" height="12" fill="#F2F1ED"/>`;
     }
-  // interior: pared del fondo, estanterías y botes
+  }
+  // aire acondicionado (como en la foto)
+  s += `<g transform="translate(2180 300)"><rect width="260" height="190" rx="12" fill="#E6E7E9"/><circle cx="160" cy="95" r="70" fill="#C9CCD1"/><circle cx="160" cy="95" r="58" fill="none" stroke="#9EA3AA" stroke-width="6"/><circle cx="160" cy="95" r="16" fill="#9EA3AA"/>${[0, 1, 2, 3, 4].map((i) => `<rect x="20" y="${30 + i * 28}" width="56" height="8" rx="4" fill="#B5B9BF"/>`).join("")}</g>`;
+  s += `<rect x="240" y="540" width="2320" height="44" fill="#ECEAE4"/>`;
+  // interior: pared oscura, luz blanca, estanterías blancas con tira LED azul
   s += `<rect x="300" y="840" width="2200" height="960" fill="url(#pared-tienda)"/>`;
   for (const lx of [600, 1000, 1400, 1800, 2200]) {
-    s += `<path d="M${lx - 40} 860 L${lx + 40} 860 L${lx + 220} 1790 L${lx - 220} 1790 Z" fill="url(#cono)" opacity="0.55"/>`;
-    s += `<rect x="${lx - 46}" y="848" width="92" height="22" rx="8" fill="#1A1A1A"/><rect x="${lx - 34}" y="866" width="68" height="6" rx="3" fill="#FFF1D0"/>`;
+    s += `<path d="M${lx - 40} 860 L${lx + 40} 860 L${lx + 220} 1790 L${lx - 220} 1790 Z" fill="url(#cono)" opacity="0.5"/>`;
+    s += `<rect x="${lx - 60}" y="848" width="120" height="14" rx="7" fill="#F5F9FF"/>`;
   }
-  const colores = [["#111317", C.naranja], [C.naranja, "#111317"], ["#F1F1F1", C.naranja], ["#B3261E", "#F1F1F1"], ["#1F6FD1", "#F1F1F1"], ["#26834A", "#F1F1F1"], ["#F2B705", "#111317"], ["#2B2B2B", "#F2B705"]];
+  const colores = [["#0E1013", "#1D6BFF"], ["#F1F2F4", "#1D6BFF"], ["#1B2433", "#C9CED6"], ["#B3261E", "#F1F1F1"], ["#2B2F36", "#5AB0FF"], ["#26834A", "#F1F1F1"], ["#F1F2F4", "#111317"], ["#3A3F47", "#C9CED6"], ["#7B2FBE", "#F1F1F1"]];
   semilla = 21;
   for (const sy of [1080, 1300, 1520]) {
-    s += `<rect x="330" y="${sy}" width="2140" height="22" fill="#7A5434"/><rect x="330" y="${sy + 22}" width="2140" height="10" fill="#4E3420"/>`;
+    s += `<rect x="330" y="${sy}" width="2140" height="20" fill="#EEF0F3"/><rect x="330" y="${sy + 20}" width="2140" height="6" fill="#3D8BFF"/><rect x="330" y="${sy + 26}" width="2140" height="14" fill="#3D8BFF" opacity="0.18"/>`;
     for (let x = 350; x < 2440; ) {
       const w = 62 + Math.floor(rnd() * 46),
         h = 96 + Math.floor(rnd() * 70);
       const [cb, cl] = colores[Math.floor(rnd() * colores.length)];
-      s += `<g><rect x="${x}" y="${sy - h}" width="${w}" height="${h}" rx="10" fill="${cb}"/><rect x="${x - 3}" y="${sy - h - 12}" width="${w + 6}" height="22" rx="7" fill="${cl}"/><rect x="${x + 8}" y="${sy - h * 0.62}" width="${w - 16}" height="${h * 0.34}" rx="4" fill="${cl}" opacity="0.85"/><rect x="${x + 6}" y="${sy - h + 8}" width="8" height="${h - 20}" rx="4" fill="#FFFFFF" opacity="0.18"/></g>`;
+      s += `<g><rect x="${x}" y="${sy - h}" width="${w}" height="${h}" rx="10" fill="${cb}"/><rect x="${x - 3}" y="${sy - h - 12}" width="${w + 6}" height="22" rx="7" fill="${cl}"/><rect x="${x + 8}" y="${sy - h * 0.62}" width="${w - 16}" height="${h * 0.34}" rx="4" fill="${cl}" opacity="0.85"/><rect x="${x + 6}" y="${sy - h + 8}" width="8" height="${h - 20}" rx="4" fill="#FFFFFF" opacity="0.2"/></g>`;
       x += w + 10 + Math.floor(rnd() * 14);
     }
   }
-  // suelo de madera
-  s += `<rect x="300" y="1760" width="2200" height="40" fill="#5A3E2A"/>`;
-  for (let x = 300; x < 2500; x += 140) s += `<rect x="${x}" y="1760" width="3" height="40" fill="#43301F"/>`;
+  // suelo de hormigón pulido
+  s += `<rect x="300" y="1760" width="2200" height="40" fill="#4A4F57"/>`;
+  for (let x = 300; x < 2500; x += 200) s += `<rect x="${x}" y="1760" width="2" height="40" fill="#3C4047"/>`;
   return s;
 }
 function fachada() {
   let s = "";
-  // escaparate (cristal) y su marco
+  // escaparate y su marco gris oscuro
   s += `<rect id="reflejo" x="360" y="860" width="1820" height="930" fill="url(#vidrio)" opacity="0.4"/>`;
-  s += `<rect x="340" y="840" width="20" height="960" fill="#15171B"/><rect x="2180" y="840" width="30" height="960" fill="#15171B"/>`;
-  s += `<rect x="340" y="840" width="2160" height="22" fill="#15171B"/>`;
-  s += `<rect x="2470" y="840" width="30" height="960" fill="#15171B"/>`;
-  s += `<rect x="2500" y="560" width="40" height="1240" fill="#2A2326"/><rect x="260" y="560" width="40" height="1240" fill="#2A2326"/>`;
-  // puerta: marco y hoja de cristal esmerilado con el logo
-  s += `<g id="puerta-marco"><rect x="2210" y="862" width="260" height="290" fill="#1C1F24"/>${txt(2340, 1030, "ABIERTO", 46, C.naranja, 900)}${icono("bell-ringing", 2340, 940, 64, "#FFD58A")}<rect x="2200" y="1140" width="280" height="22" fill="#15171B"/></g>`;
+  s += `<rect x="340" y="840" width="20" height="960" fill="#24272C"/><rect x="2180" y="840" width="30" height="960" fill="#24272C"/>`;
+  s += `<rect x="340" y="840" width="2160" height="22" fill="#24272C"/><rect x="2470" y="840" width="30" height="960" fill="#24272C"/>`;
+  s += `<rect x="2500" y="560" width="40" height="1240" fill="#24272C"/><rect x="260" y="560" width="40" height="1240" fill="#24272C"/>`;
+  // puerta: transom con el lema y hoja de cristal con marco blanco
+  s += `<g id="puerta-marco"><rect x="2210" y="862" width="260" height="290" fill="#14181F"/>${txt(2340, 952, "CONSTRUYE", 40, "#EAF0FA", 900)}${txt(2340, 1004, "TU MEJOR", 40, "#EAF0FA", 900)}${txt(2340, 1056, "VERSIÓN", 40, C.azulClaro, 900)}<rect x="2200" y="1140" width="280" height="22" fill="#24272C"/></g>`;
   s += `<rect x="2212" y="1162" width="256" height="628" fill="#0F1012"/>`;
-  s += `<g id="puerta-hoja"><rect x="2216" y="1166" width="250" height="620" rx="6" fill="#C9D3DB" opacity="0.9"/><rect x="2216" y="1166" width="250" height="620" rx="6" fill="none" stroke="#15171B" stroke-width="10"/><circle cx="2341" cy="1420" r="58" fill="${C.naranja}"/>${txt(2341, 1440, "IF", 56, "#111", 900)}<rect x="2240" y="1480" width="18" height="120" rx="8" fill="#2A2E34"/></g>`;
-  // cartel
-  s += `<g id="cartel-tienda"><rect x="300" y="580" width="2200" height="250" rx="18" fill="#0E0F12"/><rect x="300" y="580" width="2200" height="250" rx="18" fill="none" stroke="#2C2F36" stroke-width="8"/>`;
-  s += `<g id="neon-tienda" filter="url(#neon)">${icono("fire", 560, 705, 150, C.naranja)}${txt(1270, 760, "IRONFUEL", 190, C.naranja, 900, "middle", 'letter-spacing="6"')}</g>`;
-  s += `${txt(2090, 752, "NUTRITION", 92, "#F4F4F4", 900, "middle", 'letter-spacing="10"')}</g>`;
+  s += `<g id="puerta-hoja"><rect x="2216" y="1166" width="250" height="620" rx="4" fill="#B9C6D2" opacity="0.88"/><rect x="2216" y="1166" width="250" height="620" rx="4" fill="none" stroke="#E6E8EB" stroke-width="14"/>${logo(2341, 1400, 74)}<rect x="2240" y="1440" width="16" height="170" rx="8" fill="#1A1C20"/></g>`;
+  // cartel: «IF» cromado, IRON FUEL en cursiva, NUTRITION en azul y la raya diagonal
+  s += `<g id="cartel-tienda"><rect x="300" y="580" width="2200" height="258" fill="#0E1219"/><rect x="300" y="580" width="2200" height="6" fill="#1D2532"/><rect x="300" y="832" width="2200" height="6" fill="#1D2532"/>`;
+  s += `<g transform="translate(330 0) skewX(-14)">${txt(320, 822, "IF", 280, C.azul, 900, "start")}${txt(306, 812, "IF", 280, "url(#acero)", 900, "start")}</g>`;
+  s += `<g transform="translate(0 0) skewX(-12)">${txt(1040, 746, "IRON FUEL", 150, "url(#acero-claro)", 900, "start")}</g>`;
+  s += `<g id="neon-tienda" filter="url(#neon)"><rect x="870" y="790" width="150" height="12" fill="${C.azul}"/><rect x="1680" y="790" width="150" height="12" fill="${C.azul}"/>${txt(1350, 820, "NUTRITION", 62, C.azul, 900, "middle", 'letter-spacing="16"')}<path d="M1880 806 L2010 680 H2470" stroke="${C.azul}" stroke-width="12" fill="none" stroke-linejoin="round"/></g></g>`;
   return s;
 }
 function mostrador() {
   let s = "";
-  s += `<rect x="520" y="1470" width="1000" height="330" fill="#ECE8E2"/><rect x="520" y="1470" width="1000" height="330" fill="url(#sombra-mostrador)"/>`;
-  s += `<rect x="520" y="1560" width="1000" height="40" fill="${C.naranja}"/>`;
-  s += `${txt(1020, 1720, "IRONFUEL NUTRITION", 58, "#2A2A2E", 900, "middle", 'letter-spacing="4"')}`;
-  s += `<rect x="500" y="1448" width="1040" height="30" rx="8" fill="#8A6240"/><rect x="500" y="1470" width="1040" height="10" fill="#5E4129"/>`;
+  s += `<rect x="520" y="1470" width="1000" height="330" fill="#121418"/><rect x="520" y="1470" width="1000" height="330" fill="url(#sombra-mostrador)"/>`;
+  s += `<rect x="520" y="1496" width="1000" height="10" fill="#3D8BFF"/><rect x="520" y="1506" width="1000" height="22" fill="#3D8BFF" opacity="0.18"/>`;
+  s += logo(700, 1650, 96);
+  s += `<g transform="skewX(-12)">${txt(1180, 1668, "IRON FUEL", 86, "url(#acero-claro)", 900, "start")}</g>${txt(1100, 1728, "NUTRITION", 40, C.azulClaro, 900, "middle", 'letter-spacing="10"')}`;
+  s += `<rect x="500" y="1448" width="1040" height="30" rx="8" fill="#A8AFB8"/><rect x="500" y="1470" width="1040" height="10" fill="#6B727C"/>`;
   return s;
 }
+
 // bote: origen abajo en el centro
 function bote(id, w, h, cuerpo, tapa, etiqueta, texto, colorTexto, sub, extra = "") {
   const y0 = -h * 0.72;
@@ -185,9 +197,9 @@ function bote(id, w, h, cuerpo, tapa, etiqueta, texto, colorTexto, sub, extra = 
   <rect x="${-w / 2}" y="${-h}" width="${w}" height="${h}" rx="18" fill="${cuerpo}"/>
   <rect x="${-w / 2 - 6}" y="${-h - 22}" width="${w + 12}" height="38" rx="10" fill="${tapa}"/>
   <rect x="${-w / 2}" y="${y0}" width="${w}" height="${h * 0.5}" fill="${etiqueta}"/>
-  ${txt(0, y0 + 32, "IRONFUEL", 22, etiqueta === "#111317" ? C.naranja : C.naranjaTxt, 900, "middle", 'letter-spacing="2" data-layout-ignore')}
+  ${txt(0, y0 + 32, "IRON FUEL", 22, etiqueta === "#111317" || etiqueta === "#0E1013" ? C.azulClaro : C.azulTxt, 900, "middle", 'letter-spacing="2" data-layout-ignore')}
   ${txt(0, y0 + 72, texto, 30, colorTexto, 900)}
-  <rect id="${sub}" x="${-w / 2 + 16}" y="${y0 + 84}" width="${w - 32}" height="8" rx="4" fill="${C.naranja}" transform="scale(0 1)"/>
+  <rect id="${sub}" x="${-w / 2 + 16}" y="${y0 + 84}" width="${w - 32}" height="8" rx="4" fill="${C.azul}" transform="scale(0 1)"/>
   <rect x="${-w / 2 + 10}" y="${-h + 12}" width="12" height="${h - 30}" rx="6" fill="#fff" opacity="0.22"/>${extra}</g>`;
 }
 function boteMagia() {
@@ -207,7 +219,7 @@ function tarjetaA() {
   // creatina: 3 g al día · todos los días · rinde más en series cortas e intensas
   let s = `<g id="card-a" opacity="0"><rect id="card-a-fondo" x="420" y="780" width="480" height="130" rx="30" fill="#fff" filter="url(#sombra)"/>`;
   s += `<g id="a-3g" opacity="0">${txt(530, 874, "3 g", 92, C.tinta, 900)}</g>`;
-  s += `<g id="a-dia" opacity="0">${txt(740, 866, "AL DÍA", 48, C.naranjaTxt, 900)}</g>`;
+  s += `<g id="a-dia" opacity="0">${txt(740, 866, "AL DÍA", 48, C.azulTxt, 900)}</g>`;
   ["L", "M", "X", "J", "V", "S", "D"].forEach((d, i) => {
     const cx = 470 + i * 64;
     s += `<g id="a-d${i}" opacity="0"><rect x="${cx - 28}" y="905" width="56" height="56" rx="14" fill="#E9EBEF"/><g id="a-dl${i}">${txt(cx, 948, d, 38, "#4B515B", 900)}</g><g id="a-df${i}" opacity="0"><rect x="${cx - 28}" y="905" width="56" height="56" rx="14" fill="${C.verde}"/>${icono("check-circle", cx, 933, 40, "#fff")}</g></g>`;
@@ -216,7 +228,7 @@ function tarjetaA() {
   s += `<g id="a-leyenda" opacity="0"><rect x="448" y="1030" width="22" height="22" rx="5" fill="#C5C9D0"/>${txt(478, 1050, "SIN", 28, "#5F6670", 900, "start")}<rect x="560" y="1030" width="22" height="22" rx="5" fill="${C.verde}"/>${txt(590, 1050, "CON CREATINA", 28, C.verdeTxt, 900, "start")}</g>`;
   for (let i = 0; i < 6; i++) s += `<rect id="a-b${i}" x="0" y="1182" width="44" height="0" rx="8" fill="${i % 2 ? C.verde : "#C5C9D0"}"/>`;
   s += `<rect x="440" y="1182" width="440" height="4" rx="2" fill="#D9DCE1"/>`;
-  s += `<g id="a-rayo" opacity="0">${icono("lightning", 862, 1090, 60, C.naranja)}</g>`;
+  s += `<g id="a-rayo" opacity="0">${icono("lightning", 862, 1090, 60, C.azul)}</g>`;
   return s + `</g>`;
 }
 function tarjetaB() {
@@ -229,20 +241,20 @@ function tarjetaB() {
   // cacito (dibujado: es un objeto de la escena, no un icono)
   s += `<g id="b-cacito" opacity="0"><path d="M1110 990 h80 v16 q0 42 -40 42 q-40 0 -40 -42 Z" fill="#F1F1F1" stroke="#C9CDD3" stroke-width="4"/><rect x="1186" y="994" width="62" height="14" rx="7" fill="#C9CDD3"/><ellipse cx="1150" cy="992" rx="37" ry="10" fill="#E8DCC6"/></g>`;
   // shaker
-  s += `<g id="b-shaker" opacity="0"><rect x="1272" y="960" width="96" height="140" rx="18" fill="#E9F1F7" stroke="#9EB0C0" stroke-width="5"/><rect id="b-liquido" x="1278" y="1094" width="84" height="0" rx="12" fill="#5AB8F0"/><rect x="1264" y="930" width="112" height="36" rx="10" fill="${C.naranja}"/><rect x="1338" y="912" width="28" height="22" rx="6" fill="${C.naranjaOsc}"/><rect x="1272" y="1060" width="96" height="6" fill="#fff" opacity="0.5"/></g>`;
+  s += `<g id="b-shaker" opacity="0"><rect x="1272" y="960" width="96" height="140" rx="18" fill="#E9F1F7" stroke="#9EB0C0" stroke-width="5"/><rect id="b-liquido" x="1278" y="1094" width="84" height="0" rx="12" fill="#5AB8F0"/><rect x="1264" y="930" width="112" height="36" rx="10" fill="${C.azul}"/><rect x="1338" y="912" width="28" height="22" rx="6" fill="${C.azulOsc}"/><rect x="1272" y="1060" width="96" height="6" fill="#fff" opacity="0.5"/></g>`;
   s += `<g id="b-agua" opacity="0">${icono("drop", 1410, 1006, 40, "#5AB8F0")}${txt(1436, 1020, "AGUA", 34, "#1F6FA8", 900, "start")}</g>`;
   s += `<g id="b-leche" opacity="0">${icono("drop", 1410, 1066, 40, "#D9C9A8")}${txt(1436, 1080, "LECHE", 34, "#7A6236", 900, "start")}</g>`;
-  s += `<g id="b-despues" opacity="0"><rect x="1110" y="1124" width="420" height="60" rx="30" fill="${C.tinta}"/>${icono("barbell", 1150, 1154, 44, C.naranja)}${txt(1350, 1167, "TRAS ENTRENAR", 36, "#fff", 900)}</g>`;
+  s += `<g id="b-despues" opacity="0"><rect x="1110" y="1124" width="420" height="60" rx="30" fill="${C.tinta}"/>${icono("barbell", 1150, 1154, 44, C.azul)}${txt(1350, 1167, "TRAS ENTRENAR", 36, "#fff", 900)}</g>`;
   return s + `</g>`;
 }
 function bocadillo() {
   return `<g id="bocadillo" opacity="0"><path id="bocadillo-fondo" d="" fill="#fff" filter="url(#sombra)"/>
   <text id="boc-l1" x="1480" y="972" font-family="Inter" font-weight="900" font-size="50" fill="${C.tinta}" text-anchor="middle"></text>
   <text id="boc-l2" x="1480" y="1032" font-family="Inter" font-weight="900" font-size="50" fill="${C.tinta}" text-anchor="middle"></text>
-  <text id="boc-l3" x="1480" y="1098" font-family="Inter" font-weight="900" font-size="50" fill="${C.naranja}" text-anchor="middle"></text></g>`;
+  <text id="boc-l3" x="1480" y="1098" font-family="Inter" font-weight="900" font-size="50" fill="${C.azul}" text-anchor="middle"></text></g>`;
 }
 function chipRebobina() {
-  return `<g id="chip-rebobina" opacity="0"><rect x="-300" y="-46" width="600" height="92" rx="46" fill="#fff" filter="url(#sombra)"/>${icono("rewind", -235, 0, 60, C.naranja)}${txt(30, 17, "12 SEMANAS ANTES", 46, C.tinta, 900)}</g>`;
+  return `<g id="chip-rebobina" opacity="0"><rect x="-300" y="-46" width="600" height="92" rx="46" fill="#fff" filter="url(#sombra)"/>${icono("rewind", -235, 0, 60, C.azul)}${txt(30, 17, "12 SEMANAS ANTES", 46, C.tinta, 900)}</g>`;
 }
 
 // ───────────── gimnasio ─────────────
@@ -257,7 +269,7 @@ function gimnasio() {
   // espejo
   s += `<rect x="3820" y="930" width="640" height="560" rx="10" fill="#33404E"/><path d="M3880 1490 L4080 930 h50 L3930 1490 Z" fill="#fff" opacity="0.06"/><path d="M4120 1490 L4320 930 h24 L4144 1490 Z" fill="#fff" opacity="0.06"/>`;
   // marcador de semanas
-  s += `<g><rect x="3180" y="880" width="540" height="230" rx="18" fill="#08090B" stroke="#2C3138" stroke-width="8"/>${txt(3345, 1018, "SEMANA", 64, C.naranja, 900)}
+  s += `<g><rect x="3180" y="880" width="540" height="230" rx="18" fill="#08090B" stroke="#2C3138" stroke-width="8"/>${txt(3345, 1018, "SEMANA", 64, C.azul, 900)}
   <clipPath id="clip-marcador"><rect x="3500" y="905" width="200" height="180" rx="10"/></clipPath>
   <g clip-path="url(#clip-marcador)"><rect x="3500" y="905" width="200" height="180" fill="#101317"/>
   <g id="marcador-d">${[0, 1].map((d, i) => txt(3552, 1052 + i * 150, String(d), 150, "#3CFF8F", 900)).join("")}</g>
@@ -334,7 +346,7 @@ function personaje(id) {
   const ojo = (lado) =>
     `<g id="${id}-ojo${lado}"><ellipse rx="13" ry="16" fill="#fff"/><circle id="${id}-pup${lado}" r="7.5" fill="#1B1B1F"/></g>`;
   const ceja = (lado) => `<g id="${id}-ceja${lado}"><rect x="-15" y="-4" width="30" height="9" rx="4.5" fill="${p.pelo}"/></g>`;
-  const logo = id === "dep" ? `<g id="dep-logo">${icono("fire", -18, 0, 34, C.naranja)}${txt(14, 12, "IF", 30, C.naranja, 900)}</g>` : "";
+  const logo = id === "dep" ? `<g id="dep-logo">${txt(0, 14, "IF", 38, C.azulClaro, 900, "middle", 'font-style="italic"')}</g>` : "";
   const detalle = id === "flaco" ? `<path id="flaco-detalle" fill="none" stroke="${oscurece(p.ropa, 0.75)}" stroke-width="6" stroke-linecap="round"/>` : "";
   return `<g id="${id}-root"><g id="${id}-cuerpo">${pierna("L")}${pierna("R")}<path id="${id}-pelvis" fill="${p.pantalon}"/>
   <g id="${id}-superior">${brazo("L")}<path id="${id}-cuello" fill="${p.piel}"/><path id="${id}-tronco" fill="${p.ropa}"/>${detalle}${logo}
@@ -348,7 +360,7 @@ function objetos() {
   let s = "";
   s += `<g id="datafono" opacity="0"><rect x="-44" y="-70" width="88" height="130" rx="14" fill="#23262B"/><rect x="-32" y="-58" width="64" height="44" rx="6" fill="#0E1418"/><g id="datafono-ok" opacity="0"><rect x="-32" y="-58" width="64" height="44" rx="6" fill="${C.verde}"/>${icono("check-circle", 0, -36, 34, "#fff")}</g><rect x="-30" y="0" width="60" height="44" rx="6" fill="#3A3E45"/></g>`;
   s += `<g id="movil" opacity="0"><rect x="-26" y="-50" width="52" height="96" rx="12" fill="#111"/><rect x="-20" y="-42" width="40" height="76" rx="6" fill="#3D7BD9"/></g>`;
-  s += `<g id="bolsa" opacity="0"><path d="M-30 0 Q-30 -40 0 -40 Q30 -40 30 0" stroke="#3A2A1A" stroke-width="8" fill="none"/><rect x="-70" y="0" width="140" height="150" rx="10" fill="${C.naranja}"/><rect x="-70" y="0" width="140" height="20" fill="${C.naranjaOsc}"/>${icono("fire", 0, 70, 54, "#111")}${txt(0, 130, "IRONFUEL", 22, "#111", 900, "middle", "data-layout-ignore")}</g>`;
+  s += `<g id="bolsa" opacity="0"><path d="M-30 0 Q-30 -40 0 -40 Q30 -40 30 0" stroke="#1A1C20" stroke-width="8" fill="none"/><rect x="-70" y="0" width="140" height="150" rx="10" fill="#121418"/><rect x="-70" y="0" width="140" height="14" fill="${C.azul}"/>${logo(0, 80, 54)}</g>`;
   // estelas de velocidad
   s += `<g id="estelas" opacity="0">${[0, 1, 2, 3].map((i) => `<rect x="${-40 - i * 30}" y="${i * 90}" width="${180 - i * 20}" height="12" rx="6" fill="#fff" opacity="${0.5 - i * 0.08}"/>`).join("")}</g>`;
   // barra del flaco y del vecino del gimnasio
@@ -362,34 +374,36 @@ function objetos() {
 }
 function trazos() {
   // flecha de la tienda al gimnasio (cuando le dice que sin entrenar no hace nada)
-  let s = `<path id="flecha-gym" d="M1260 1150 C1500 300 2650 260 2980 1120" stroke="${C.naranja}" stroke-width="18" stroke-linecap="round" fill="none"/>`;
-  s += `<g id="flecha-punta" opacity="0"><path d="M2940 1080 L2984 1170 L3036 1086 Z" fill="${C.naranja}"/></g>`;
+  let s = `<path id="flecha-gym" d="M1260 1150 C1500 300 2650 260 2980 1120" stroke="${C.azul}" stroke-width="18" stroke-linecap="round" fill="none"/>`;
+  s += `<g id="flecha-punta" opacity="0"><path d="M2940 1080 L2984 1170 L3036 1086 Z" fill="${C.azul}"/></g>`;
   // línea del suelo que une el mostrador con el gimnasio
-  s += `<path id="linea-suelo" d="M1640 1808 H3450" stroke="${C.naranja}" stroke-width="14" stroke-linecap="round" fill="none"/>`;
-  s += `<path id="linea-brillo" d="M3450 1808 H1640" stroke="#FFD2A8" stroke-width="8" stroke-linecap="round" fill="none" opacity="0"/>`;
+  s += `<path id="linea-suelo" d="M1640 1808 H3450" stroke="${C.azul}" stroke-width="14" stroke-linecap="round" fill="none"/>`;
+  s += `<path id="linea-brillo" d="M3450 1808 H1640" stroke="#A9D0FF" stroke-width="8" stroke-linecap="round" fill="none" opacity="0"/>`;
   return s;
 }
 function comentario() {
   return `<g id="comentario" opacity="0"><rect x="620" y="150" width="1680" height="240" rx="120" fill="#fff" filter="url(#sombra)"/>
   ${icono("user-circle", 750, 270, 140, "#C5C9D0")}
   <text id="com-placeholder" data-layout-ignore x="850" y="298" font-family="Inter" font-weight="700" font-size="76" fill="#9AA0A9">Añade un comentario…</text>
-  <text id="com-texto" x="850" y="312" font-family="Inter" font-weight="900" font-size="120" fill="${C.naranja}" letter-spacing="6"></text>
-  <g id="com-enviar"><circle r="82" fill="${C.naranja}"/>${icono("paper-plane-right", 6, 0, 90, "#fff")}</g>
+  <text id="com-texto" x="850" y="312" font-family="Inter" font-weight="900" font-size="120" fill="${C.azul}" letter-spacing="6"></text>
+  <g id="com-enviar"><circle r="82" fill="${C.azul}"/>${icono("paper-plane-right", 6, 0, 90, "#fff")}</g>
   <g id="com-corazon" opacity="0">${icono("heart", 2180, 120, 120, C.rojo)}</g></g>`;
 }
 
 // ───────────── el mundo entero ─────────────
 const defs = `<defs>
 <linearGradient id="cielo" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#05070B"/><stop offset="0.6" stop-color="#0F1522"/><stop offset="1" stop-color="#1B1626"/></linearGradient>
-<linearGradient id="pared-tienda" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3B302A"/><stop offset="1" stop-color="#26201C"/></linearGradient>
+<linearGradient id="pared-tienda" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#30343B"/><stop offset="1" stop-color="#1F2228"/></linearGradient>
+<linearGradient id="acero" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F4F6F8"/><stop offset="0.45" stop-color="#9AA2AD"/><stop offset="0.55" stop-color="#E3E7EC"/><stop offset="1" stop-color="#6E7681"/></linearGradient>
+<linearGradient id="acero-claro" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset="0.6" stop-color="#E4E8EE"/><stop offset="1" stop-color="#AEB5BF"/></linearGradient>
 <linearGradient id="pared-gym" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2E3A46"/><stop offset="1" stop-color="#1D242C"/></linearGradient>
-<linearGradient id="cono" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFE7B8" stop-opacity="0.55"/><stop offset="1" stop-color="#FFE7B8" stop-opacity="0"/></linearGradient>
+<linearGradient id="cono" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#EAF2FF" stop-opacity="0.5"/><stop offset="1" stop-color="#EAF2FF" stop-opacity="0"/></linearGradient>
 <linearGradient id="cono-frio" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#D8F1FF" stop-opacity="0.5"/><stop offset="1" stop-color="#D8F1FF" stop-opacity="0"/></linearGradient>
 <linearGradient id="vidrio" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset="0.42" stop-color="#fff" stop-opacity="0"/><stop offset="0.45" stop-color="#fff" stop-opacity="0.16"/><stop offset="0.5" stop-color="#fff" stop-opacity="0"/><stop offset="0.6" stop-color="#fff" stop-opacity="0"/><stop offset="0.62" stop-color="#fff" stop-opacity="0.1"/><stop offset="0.66" stop-color="#fff" stop-opacity="0"/></linearGradient>
 <linearGradient id="oro" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#E39B12"/><stop offset="0.5" stop-color="#F9D45C"/><stop offset="1" stop-color="#D88A0C"/></linearGradient>
 <linearGradient id="sombra-mostrador" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#000" stop-opacity="0.18"/><stop offset="0.3" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity="0.12"/></linearGradient>
 <radialGradient id="charco"><stop offset="0" stop-color="#FFD98A" stop-opacity="0.35"/><stop offset="1" stop-color="#FFD98A" stop-opacity="0"/></radialGradient>
-<radialGradient id="brillo-suelo" cx="0.5" cy="1" r="0.7"><stop offset="0" stop-color="${C.naranja}" stop-opacity="0.28"/><stop offset="1" stop-color="${C.naranja}" stop-opacity="0"/></radialGradient>
+<radialGradient id="brillo-suelo" cx="0.5" cy="1" r="0.7"><stop offset="0" stop-color="${C.azul}" stop-opacity="0.28"/><stop offset="1" stop-color="${C.azul}" stop-opacity="0"/></radialGradient>
 <filter id="sombra" x="-20%" y="-20%" width="140%" height="160%"><feDropShadow dx="0" dy="14" stdDeviation="16" flood-color="#000" flood-opacity="0.38"/></filter>
 <filter id="neon" x="-20%" y="-40%" width="140%" height="180%"><feGaussianBlur in="SourceGraphic" stdDeviation="9" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
 </defs>`;
@@ -403,10 +417,10 @@ const mundo = `<svg id="mundo-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0
   ${personaje("dep")}
   ${mostrador()}
   ${boteMagia()}
-  ${bote("bote-creatina", 180, 200, "#F4F4F4", C.naranja, "#111317", "CREATINA", "#fff", "sub-creatina")}
-  ${bote("bote-proteina", 190, 220, "#151515", C.naranja, "#F4F4F4", "PROTEÍNA", "#111317", "sub-proteina")}
-  <g id="badge-1" opacity="0"><circle cx="630" cy="1262" r="36" fill="${C.naranja}" stroke="#fff" stroke-width="6"/>${txt(630, 1283, "1", 56, "#111", 900)}</g>
-  <g id="badge-2" opacity="0"><circle cx="1182" cy="1242" r="36" fill="${C.naranja}" stroke="#fff" stroke-width="6"/>${txt(1182, 1263, "2", 56, "#111", 900)}</g>
+  ${bote("bote-creatina", 180, 200, "#F4F4F4", C.azul, "#111317", "CREATINA", "#fff", "sub-creatina")}
+  ${bote("bote-proteina", 190, 220, "#151515", C.azul, "#F4F4F4", "PROTEÍNA", "#111317", "sub-proteina")}
+  <g id="badge-1" opacity="0"><circle cx="630" cy="1262" r="36" fill="${C.azul}" stroke="#fff" stroke-width="6"/>${txt(630, 1283, "1", 56, "#fff", 900)}</g>
+  <g id="badge-2" opacity="0"><circle cx="1182" cy="1242" r="36" fill="${C.azul}" stroke="#fff" stroke-width="6"/>${txt(1182, 1263, "2", 56, "#fff", 900)}</g>
   ${fachada()}
   ${fachadaGym()}
   <rect x="300" y="1760" width="4200" height="60" fill="url(#brillo-suelo)"/>
@@ -514,7 +528,7 @@ const subtitulosHtml = `<template>
     text-shadow: 0 4px 0 rgba(0,0,0,0.55), 0 0 18px rgba(0,0,0,0.65); letter-spacing: 0.5px; }
   #root .caja { display: inline-block; max-width: 960px; background: rgba(10,11,15,0.8); border-radius: 30px; padding: 12px 20px 16px; }
   #root .pal { display: inline-block; padding: 2px 6px; }
-  #root .clave { background: ${C.naranja}; color: #111; border-radius: 16px; padding: 2px 18px; text-shadow: none; box-shadow: 0 6px 0 rgba(0,0,0,0.35); }
+  #root .clave { background: ${C.azul}; color: #fff; border-radius: 16px; padding: 2px 18px; text-shadow: none; box-shadow: 0 6px 0 rgba(0,0,0,0.35); }
 </style>
 <div id="root" data-composition-id="subtitulos" data-width="1080" data-height="1920">
 ${subs}</div>

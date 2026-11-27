@@ -896,7 +896,7 @@
       popEl(R.chipP2, t, T.parte, 830, 370, 0.35);
       popEl(R.chipP3, t, T.tercera, 1350, 370, 0.35);
       const pulsa = pr(t, T.siguenos, 0.2, EZ.o);
-      R.botonFondo.setAttribute("fill", mezclaColor("#FF6A1A", "#E5E7EB", pulsa));
+      R.botonFondo.setAttribute("fill", mezclaColor("#1D6BFF", "#E5E7EB", pulsa));
       setOp(R.botonSeguir, 1 - pulsa);
       setOp(R.botonSiguiendo, pulsa);
       const llega = pr(t, T.siguenos - 0.45, 0.43, EZ.io);
