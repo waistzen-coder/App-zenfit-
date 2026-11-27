@@ -1,0 +1,353 @@
+{
+  "duracion": 33.266666666666666,
+  "voz": "assets/audio/voz.wav",
+  "musica": {
+    "archivo": "assets/music/basketball-training.mp3",
+    "desde": 60,
+    "db": -27
+  },
+  "efectos": [
+    {
+      "t": 0,
+      "archivo": "assets/sfx/whoosh-1.mp3",
+      "db": -9,
+      "que": "golpe de cámara inicial",
+      "dur": null
+    },
+    {
+      "t": 0.331,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -11,
+      "que": "¿qué tomas? 1",
+      "dur": null
+    },
+    {
+      "t": 0.497,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -12,
+      "que": "¿qué tomas? 2",
+      "dur": null
+    },
+    {
+      "t": 1.265,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -12,
+      "que": "¿qué tomas? 3",
+      "dur": null
+    },
+    {
+      "t": 2.689,
+      "archivo": "assets/sfx/punch.mp3",
+      "db": -9,
+      "que": "lo enseña",
+      "dur": null
+    },
+    {
+      "t": 3.396,
+      "archivo": "assets/sfx/golpe-madera.mp3",
+      "db": -8,
+      "que": "lo deja en el mostrador",
+      "dur": null
+    },
+    {
+      "t": 6.038,
+      "archivo": "assets/sfx/whoosh-1.mp3",
+      "db": -12,
+      "que": "viaje a la tarjeta",
+      "dur": null
+    },
+    {
+      "t": 6.338,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -10,
+      "que": "NAD+",
+      "dur": null
+    },
+    {
+      "t": 6.743,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -13,
+      "que": "coenzima",
+      "dur": null
+    },
+    {
+      "t": 8.003,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -13,
+      "que": "células",
+      "dur": null
+    },
+    {
+      "t": 9.053,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -11,
+      "que": "resveratrol",
+      "dur": null
+    },
+    {
+      "t": 9.861,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -13,
+      "que": "polifenol",
+      "dur": null
+    },
+    {
+      "t": 10.822,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -13,
+      "que": "piel de la uva",
+      "dur": null
+    },
+    {
+      "t": 11.426,
+      "archivo": "assets/sfx/whoosh-2.mp3",
+      "db": -12,
+      "que": "viaje a la otra tarjeta",
+      "dur": null
+    },
+    {
+      "t": 11.676,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -10,
+      "que": "2 cápsulas",
+      "dur": null
+    },
+    {
+      "t": 13.643,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -11,
+      "que": "30 días",
+      "dur": null
+    },
+    {
+      "t": 14.853,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -11,
+      "que": "¿y lo demás?",
+      "dur": null
+    },
+    {
+      "t": 15.447,
+      "archivo": "assets/sfx/whoosh-3.mp3",
+      "db": -12,
+      "que": "la cámara se aleja",
+      "dur": null
+    },
+    {
+      "t": 16.299,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -10,
+      "que": "entrena",
+      "dur": null
+    },
+    {
+      "t": 16.576,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -11,
+      "que": "come bien",
+      "dur": null
+    },
+    {
+      "t": 17.193,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -11,
+      "que": "duerme",
+      "dur": null
+    },
+    {
+      "t": 18.098,
+      "archivo": "assets/sfx/whoosh-2.mp3",
+      "db": -10,
+      "que": "al gimnasio, de madrugada",
+      "dur": null
+    },
+    {
+      "t": 19.378,
+      "archivo": "assets/sfx/click-2.mp3",
+      "db": -10,
+      "que": "7:00",
+      "dur": null
+    },
+    {
+      "t": 20.092,
+      "archivo": "assets/sfx/disco-metal.mp3",
+      "db": -13,
+      "que": "entreno",
+      "dur": null
+    },
+    {
+      "t": 20.476,
+      "archivo": "assets/sfx/whoosh-1.mp3",
+      "db": -11,
+      "que": "vuelta al mostrador",
+      "dur": null
+    },
+    {
+      "t": 20.576,
+      "archivo": "assets/sfx/click-2.mp3",
+      "db": -10,
+      "que": "8:00",
+      "dur": null
+    },
+    {
+      "t": 20.922,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -12,
+      "que": "el café",
+      "dur": null
+    },
+    {
+      "t": 21.977,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -11,
+      "que": "sus dos cápsulas",
+      "dur": null
+    },
+    {
+      "t": 23.094,
+      "archivo": "assets/sfx/click-2.mp3",
+      "db": -10,
+      "que": "9:00",
+      "dur": null
+    },
+    {
+      "t": 23.539,
+      "archivo": "assets/sfx/campanilla.mp3",
+      "db": -12,
+      "que": "abre la tienda",
+      "dur": null
+    },
+    {
+      "t": 23.589,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -11,
+      "que": "abierto",
+      "dur": null
+    },
+    {
+      "t": 24.955,
+      "archivo": "assets/sfx/click-1.mp3",
+      "db": -10,
+      "que": "9:01",
+      "dur": null
+    },
+    {
+      "t": 25.516,
+      "archivo": "assets/sfx/whoosh-3.mp3",
+      "db": -12,
+      "que": "llega el flaco corriendo",
+      "dur": null
+    },
+    {
+      "t": 26.399,
+      "archivo": "assets/sfx/golpe-climax.mp3",
+      "db": -9,
+      "que": "el flaco en la puerta (clímax)",
+      "dur": 2
+    },
+    {
+      "t": 27.209,
+      "archivo": "assets/sfx/whoosh-2.mp3",
+      "db": -12,
+      "que": "vuelta al mostrador",
+      "dur": null
+    },
+    {
+      "t": 28.09,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -10,
+      "que": "lo que toma él",
+      "dur": null
+    },
+    {
+      "t": 29.397,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -10,
+      "que": "pregúntale",
+      "dur": null
+    },
+    {
+      "t": 30.849,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -9,
+      "que": "tarjeta final",
+      "dur": null
+    },
+    {
+      "t": 31.029,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -12,
+      "que": "parte 9",
+      "dur": null
+    },
+    {
+      "t": 31.733,
+      "archivo": "assets/sfx/click-1.mp3",
+      "db": -8,
+      "que": "seguir",
+      "dur": null
+    },
+    {
+      "t": 31.783,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -11,
+      "que": "siguiendo",
+      "dur": null
+    },
+    {
+      "t": 32.506,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -11,
+      "que": "parte 10",
+      "dur": null
+    }
+  ],
+  "apariciones": {
+    "siempre1": 0,
+    "nos": 0.331,
+    "preguntais": 0.497,
+    "toma1": 1.265,
+    "dependiente": 1.671,
+    "hoy": 2.426,
+    "ensena": 2.689,
+    "nad1": 3.396,
+    "resveratrol1": 3.91,
+    "aplaid": 4.729,
+    "nutrishonFin": 5.776,
+    "nad2": 6.338,
+    "coenzima": 6.743,
+    "todas": 7.671,
+    "celulas": 8.003,
+    "resveratrol2": 9.053,
+    "polifenol": 9.861,
+    "piel": 10.822,
+    "uvaFin": 11.455,
+    "dos1": 11.676,
+    "treinta": 13.643,
+    "diasFin": 14.498,
+    "demas": 14.853,
+    "siempre2": 15.447,
+    "entrena": 16.299,
+    "come": 16.576,
+    "duerme": 17.193,
+    "asi": 17.998,
+    "siete": 19.378,
+    "entreno": 20.092,
+    "ocho": 20.526,
+    "desayuno": 20.922,
+    "dos2": 21.977,
+    "nueve1": 23.094,
+    "abre": 23.539,
+    "nueve2": 24.615,
+    "minuto": 24.955,
+    "flaco": 25.516,
+    "puerta": 26.399,
+    "ahora": 27.259,
+    "toma2": 28.09,
+    "preguntale": 29.397,
+    "quierasFin": 30.682,
+    "siguenos": 30.88,
+    "perderte": 31.733,
+    "siguiente": 32.506
+  }
+}

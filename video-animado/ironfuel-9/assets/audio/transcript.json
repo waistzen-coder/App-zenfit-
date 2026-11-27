@@ -1,0 +1,644 @@
+[
+  {
+    "text": "Siempre",
+    "start": 0.03,
+    "end": 0.35,
+    "id": "w0"
+  },
+  {
+    "text": "nos",
+    "start": 0.35,
+    "end": 0.5,
+    "id": "w1"
+  },
+  {
+    "text": "preguntáis",
+    "start": 0.5,
+    "end": 1,
+    "id": "w2"
+  },
+  {
+    "text": "qué",
+    "start": 1,
+    "end": 1.15,
+    "id": "w3"
+  },
+  {
+    "text": "toma",
+    "start": 1.15,
+    "end": 1.35,
+    "id": "w4"
+  },
+  {
+    "text": "el",
+    "start": 1.35,
+    "end": 1.45,
+    "id": "w5"
+  },
+  {
+    "text": "dependiente.",
+    "start": 1.45,
+    "end": 2.18,
+    "id": "w6"
+  },
+  {
+    "text": "Hoy",
+    "start": 2.18,
+    "end": 2.49,
+    "id": "w7"
+  },
+  {
+    "text": "lo",
+    "start": 2.49,
+    "end": 2.52,
+    "id": "w8"
+  },
+  {
+    "text": "enseña.",
+    "start": 2.53,
+    "end": 3.16,
+    "id": "w9"
+  },
+  {
+    "text": "NAD",
+    "start": 3.16,
+    "end": 3.47,
+    "id": "w10"
+  },
+  {
+    "text": "más",
+    "start": 3.47,
+    "end": 3.52,
+    "id": "w11"
+  },
+  {
+    "text": "con",
+    "start": 3.52,
+    "end": 3.7,
+    "id": "w12"
+  },
+  {
+    "text": "resveratrol",
+    "start": 3.7,
+    "end": 4.36,
+    "id": "w13"
+  },
+  {
+    "text": "de",
+    "start": 4.36,
+    "end": 4.47,
+    "id": "w14"
+  },
+  {
+    "text": "Applied",
+    "start": 4.56,
+    "end": 4.9,
+    "id": "w15"
+  },
+  {
+    "text": "Nutrition.",
+    "start": 4.9,
+    "end": 5.66,
+    "id": "w16"
+  },
+  {
+    "text": "El",
+    "start": 5.66,
+    "end": 6,
+    "id": "w17"
+  },
+  {
+    "text": "NAD",
+    "start": 6,
+    "end": 6.02,
+    "id": "w18"
+  },
+  {
+    "text": "es",
+    "start": 6.03,
+    "end": 6.14,
+    "id": "w19"
+  },
+  {
+    "text": "una",
+    "start": 6.14,
+    "end": 6.32,
+    "id": "w20"
+  },
+  {
+    "text": "coenzima",
+    "start": 6.32,
+    "end": 6.72,
+    "id": "w21"
+  },
+  {
+    "text": "que",
+    "start": 6.8,
+    "end": 6.98,
+    "id": "w22"
+  },
+  {
+    "text": "tienen",
+    "start": 6.98,
+    "end": 7.34,
+    "id": "w23"
+  },
+  {
+    "text": "todas",
+    "start": 7.34,
+    "end": 7.6,
+    "id": "w24"
+  },
+  {
+    "text": "tus",
+    "start": 7.67,
+    "end": 7.81,
+    "id": "w25"
+  },
+  {
+    "text": "células.",
+    "start": 7.81,
+    "end": 8.44,
+    "id": "w26"
+  },
+  {
+    "text": "Yel",
+    "start": 8.44,
+    "end": 8.83,
+    "id": "w27"
+  },
+  {
+    "text": "resveratrol",
+    "start": 8.83,
+    "end": 9.36,
+    "id": "w28"
+  },
+  {
+    "text": "es",
+    "start": 9.36,
+    "end": 9.49,
+    "id": "w29"
+  },
+  {
+    "text": "un",
+    "start": 9.49,
+    "end": 9.54,
+    "id": "w30"
+  },
+  {
+    "text": "polifenol,",
+    "start": 9.62,
+    "end": 10.4,
+    "id": "w31"
+  },
+  {
+    "text": "el",
+    "start": 10.4,
+    "end": 10.51,
+    "id": "w32"
+  },
+  {
+    "text": "de",
+    "start": 10.51,
+    "end": 10.62,
+    "id": "w33"
+  },
+  {
+    "text": "la",
+    "start": 10.62,
+    "end": 10.73,
+    "id": "w34"
+  },
+  {
+    "text": "piel",
+    "start": 10.73,
+    "end": 10.96,
+    "id": "w35"
+  },
+  {
+    "text": "de",
+    "start": 10.96,
+    "end": 11.07,
+    "id": "w36"
+  },
+  {
+    "text": "la",
+    "start": 11.07,
+    "end": 11.25,
+    "id": "w37"
+  },
+  {
+    "text": "uva.",
+    "start": 11.25,
+    "end": 11.42,
+    "id": "w38"
+  },
+  {
+    "text": "Dos",
+    "start": 11.42,
+    "end": 11.69,
+    "id": "w39"
+  },
+  {
+    "text": "cápsulas",
+    "start": 11.69,
+    "end": 12.19,
+    "id": "w40"
+  },
+  {
+    "text": "al",
+    "start": 12.19,
+    "end": 12.33,
+    "id": "w41"
+  },
+  {
+    "text": "día.",
+    "start": 12.33,
+    "end": 12.69,
+    "id": "w42"
+  },
+  {
+    "text": "Un",
+    "start": 12.69,
+    "end": 13.02,
+    "id": "w43"
+  },
+  {
+    "text": "bote,",
+    "start": 13.02,
+    "end": 13.36,
+    "id": "w44"
+  },
+  {
+    "text": "30",
+    "start": 13.36,
+    "end": 13.75,
+    "id": "w45"
+  },
+  {
+    "text": "días.",
+    "start": 13.82,
+    "end": 14.4,
+    "id": "w46"
+  },
+  {
+    "text": "Ylo",
+    "start": 14.4,
+    "end": 14.65,
+    "id": "w47"
+  },
+  {
+    "text": "demás,",
+    "start": 14.65,
+    "end": 15.02,
+    "id": "w48"
+  },
+  {
+    "text": "lo",
+    "start": 15.11,
+    "end": 15.17,
+    "id": "w49"
+  },
+  {
+    "text": "de",
+    "start": 15.17,
+    "end": 15.3,
+    "id": "w50"
+  },
+  {
+    "text": "siempre.",
+    "start": 15.3,
+    "end": 15.98,
+    "id": "w51"
+  },
+  {
+    "text": "Entrena,",
+    "start": 16.31,
+    "end": 16.57,
+    "id": "w52"
+  },
+  {
+    "text": "come",
+    "start": 16.57,
+    "end": 16.83,
+    "id": "w53"
+  },
+  {
+    "text": "bien",
+    "start": 16.83,
+    "end": 17.03,
+    "id": "w54"
+  },
+  {
+    "text": "y",
+    "start": 17.1,
+    "end": 17.15,
+    "id": "w55"
+  },
+  {
+    "text": "duerme.",
+    "start": 17.15,
+    "end": 17.8,
+    "id": "w56"
+  },
+  {
+    "text": "Así",
+    "start": 17.8,
+    "end": 18.05,
+    "id": "w57"
+  },
+  {
+    "text": "empieza",
+    "start": 18.05,
+    "end": 18.42,
+    "id": "w58"
+  },
+  {
+    "text": "su",
+    "start": 18.51,
+    "end": 18.64,
+    "id": "w59"
+  },
+  {
+    "text": "día.",
+    "start": 18.64,
+    "end": 19.05,
+    "id": "w60"
+  },
+  {
+    "text": "7",
+    "start": 19.05,
+    "end": 19.25,
+    "id": "w61"
+  },
+  {
+    "text": "de",
+    "start": 19.25,
+    "end": 19.45,
+    "id": "w62"
+  },
+  {
+    "text": "la",
+    "start": 19.45,
+    "end": 19.53,
+    "id": "w63"
+  },
+  {
+    "text": "mañana,",
+    "start": 19.53,
+    "end": 20.05,
+    "id": "w64"
+  },
+  {
+    "text": "entreno,",
+    "start": 20.05,
+    "end": 20.59,
+    "id": "w65"
+  },
+  {
+    "text": "8,",
+    "start": 20.69,
+    "end": 20.95,
+    "id": "w66"
+  },
+  {
+    "text": "desayuno",
+    "start": 20.95,
+    "end": 21.46,
+    "id": "w67"
+  },
+  {
+    "text": "y",
+    "start": 21.46,
+    "end": 21.53,
+    "id": "w68"
+  },
+  {
+    "text": "sus",
+    "start": 21.53,
+    "end": 21.65,
+    "id": "w69"
+  },
+  {
+    "text": "dos",
+    "start": 21.85,
+    "end": 21.9,
+    "id": "w70"
+  },
+  {
+    "text": "cápsulas.",
+    "start": 21.9,
+    "end": 22.54,
+    "id": "w71"
+  },
+  {
+    "text": "9,",
+    "start": 22.54,
+    "end": 23.13,
+    "id": "w72"
+  },
+  {
+    "text": "abre",
+    "start": 23.13,
+    "end": 23.37,
+    "id": "w73"
+  },
+  {
+    "text": "la",
+    "start": 23.37,
+    "end": 23.5,
+    "id": "w74"
+  },
+  {
+    "text": "tienda.",
+    "start": 23.58,
+    "end": 24.13,
+    "id": "w75"
+  },
+  {
+    "text": "Y",
+    "start": 24.13,
+    "end": 24.3,
+    "id": "w76"
+  },
+  {
+    "text": "9",
+    "start": 24.3,
+    "end": 24.47,
+    "id": "w77"
+  },
+  {
+    "text": "y",
+    "start": 24.47,
+    "end": 24.5,
+    "id": "w78"
+  },
+  {
+    "text": "un",
+    "start": 24.5,
+    "end": 24.62,
+    "id": "w79"
+  },
+  {
+    "text": "minuto,",
+    "start": 24.67,
+    "end": 25.15,
+    "id": "w80"
+  },
+  {
+    "text": "el",
+    "start": 25.15,
+    "end": 25.28,
+    "id": "w81"
+  },
+  {
+    "text": "flaco",
+    "start": 25.28,
+    "end": 25.6,
+    "id": "w82"
+  },
+  {
+    "text": "ya",
+    "start": 25.6,
+    "end": 25.73,
+    "id": "w83"
+  },
+  {
+    "text": "está",
+    "start": 25.73,
+    "end": 25.99,
+    "id": "w84"
+  },
+  {
+    "text": "en",
+    "start": 25.99,
+    "end": 26.12,
+    "id": "w85"
+  },
+  {
+    "text": "la",
+    "start": 26.12,
+    "end": 26.24,
+    "id": "w86"
+  },
+  {
+    "text": "puerta.",
+    "start": 26.24,
+    "end": 26.92,
+    "id": "w87"
+  },
+  {
+    "text": "Ahora",
+    "start": 26.92,
+    "end": 27.29,
+    "id": "w88"
+  },
+  {
+    "text": "ya",
+    "start": 27.29,
+    "end": 27.35,
+    "id": "w89"
+  },
+  {
+    "text": "sabes",
+    "start": 27.35,
+    "end": 27.66,
+    "id": "w90"
+  },
+  {
+    "text": "qué",
+    "start": 27.75,
+    "end": 27.85,
+    "id": "w91"
+  },
+  {
+    "text": "toma",
+    "start": 27.85,
+    "end": 28.1,
+    "id": "w92"
+  },
+  {
+    "text": "el",
+    "start": 28.1,
+    "end": 28.22,
+    "id": "w93"
+  },
+  {
+    "text": "de",
+    "start": 28.22,
+    "end": 28.29,
+    "id": "w94"
+  },
+  {
+    "text": "la",
+    "start": 28.36,
+    "end": 28.43,
+    "id": "w95"
+  },
+  {
+    "text": "tienda.",
+    "start": 28.52,
+    "end": 29.07,
+    "id": "w96"
+  },
+  {
+    "text": "Pregúntale",
+    "start": 29.49,
+    "end": 29.96,
+    "id": "w97"
+  },
+  {
+    "text": "lo",
+    "start": 29.96,
+    "end": 30.06,
+    "id": "w98"
+  },
+  {
+    "text": "que",
+    "start": 30.06,
+    "end": 30.19,
+    "id": "w99"
+  },
+  {
+    "text": "quieras,",
+    "start": 30.26,
+    "end": 30.63,
+    "id": "w100"
+  },
+  {
+    "text": "síguenos",
+    "start": 30.73,
+    "end": 31.21,
+    "id": "w101"
+  },
+  {
+    "text": "para",
+    "start": 31.21,
+    "end": 31.48,
+    "id": "w102"
+  },
+  {
+    "text": "no",
+    "start": 31.48,
+    "end": 31.6,
+    "id": "w103"
+  },
+  {
+    "text": "perderte",
+    "start": 31.61,
+    "end": 32.15,
+    "id": "w104"
+  },
+  {
+    "text": "la",
+    "start": 32.15,
+    "end": 32.32,
+    "id": "w105"
+  },
+  {
+    "text": "siguiente.",
+    "start": 32.32,
+    "end": 32.62,
+    "id": "w106"
+  }
+]
