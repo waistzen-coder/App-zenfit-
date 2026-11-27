@@ -1,0 +1,229 @@
+{
+  "duracion": 38.6,
+  "voz": "assets/audio/voz.wav",
+  "musica": {
+    "archivo": "assets/music/basketball-training.mp3",
+    "desde": 60,
+    "db": -27
+  },
+  "efectos": [
+    {
+      "t": 2.4,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -15,
+      "que": "el batido",
+      "dur": null
+    },
+    {
+      "t": 3.4,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -13,
+      "que": "cacito 1",
+      "dur": null
+    },
+    {
+      "t": 3.57,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -13,
+      "que": "cacito 2",
+      "dur": null
+    },
+    {
+      "t": 3.74,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -12,
+      "que": "cacito 3",
+      "dur": null
+    },
+    {
+      "t": 4.55,
+      "archivo": "assets/sfx/whoosh-1.mp3",
+      "db": -11,
+      "que": "como un cohete",
+      "dur": null
+    },
+    {
+      "t": 4.9,
+      "archivo": "assets/sfx/disco-metal.mp3",
+      "db": -15,
+      "que": "rep",
+      "dur": null
+    },
+    {
+      "t": 5.3,
+      "archivo": "assets/sfx/disco-metal.mp3",
+      "db": -15,
+      "que": "rep",
+      "dur": null
+    },
+    {
+      "t": 5.7,
+      "archivo": "assets/sfx/disco-metal.mp3",
+      "db": -15,
+      "que": "rep",
+      "dur": null
+    },
+    {
+      "t": 6.36,
+      "archivo": "assets/sfx/click-1.mp3",
+      "db": -10,
+      "que": "se hace de noche",
+      "dur": null
+    },
+    {
+      "t": 6.677,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -14,
+      "que": "3:00",
+      "dur": null
+    },
+    {
+      "t": 9.535,
+      "archivo": "assets/sfx/whoosh-2.mp3",
+      "db": -13,
+      "que": "a la tienda",
+      "dur": null
+    },
+    {
+      "t": 10.8,
+      "archivo": "assets/sfx/campanilla.mp3",
+      "db": -15,
+      "que": "entra en la tienda",
+      "dur": null
+    },
+    {
+      "t": 11.34,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -11,
+      "que": "tarjeta REALIDAD",
+      "dur": null
+    },
+    {
+      "t": 11.53,
+      "archivo": "assets/sfx/golpe-madera.mp3",
+      "db": -13,
+      "que": "el bote en el mostrador",
+      "dur": null
+    },
+    {
+      "t": 12.65,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -14,
+      "que": "fila cafeína",
+      "dur": null
+    },
+    {
+      "t": 16.914,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -13,
+      "que": "fila tope",
+      "dur": null
+    },
+    {
+      "t": 21.07,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -14,
+      "que": "fila sueño",
+      "dur": null
+    },
+    {
+      "t": 23.973,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -14,
+      "que": "fila media dosis",
+      "dur": null
+    },
+    {
+      "t": 25.294,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -14,
+      "que": "fila etiqueta",
+      "dur": null
+    },
+    {
+      "t": 26.18,
+      "archivo": "assets/sfx/datafono.mp3",
+      "db": -14,
+      "que": "se lo lleva",
+      "dur": null
+    },
+    {
+      "t": 28.169,
+      "archivo": "assets/sfx/disco-metal.mp3",
+      "db": -15,
+      "que": "rep tranquila",
+      "dur": null
+    },
+    {
+      "t": 29.617,
+      "archivo": "assets/sfx/click-1.mp3",
+      "db": -11,
+      "que": "apaga la luz",
+      "dur": null
+    },
+    {
+      "t": 30.409,
+      "archivo": "assets/sfx/whoosh-1.mp3",
+      "db": -10,
+      "que": "sube al veredicto",
+      "dur": null
+    },
+    {
+      "t": 31.585,
+      "archivo": "assets/sfx/golpe-climax.mp3",
+      "db": -8,
+      "que": "sello MITO",
+      "dur": 1.6
+    },
+    {
+      "t": 32.135,
+      "archivo": "assets/sfx/whoosh-3.mp3",
+      "db": -13,
+      "que": "baja a la llamada",
+      "dur": null
+    },
+    {
+      "t": 36.43,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -13,
+      "que": "la mano",
+      "dur": null
+    },
+    {
+      "t": 36.58,
+      "archivo": "assets/sfx/click-1.mp3",
+      "db": -8,
+      "que": "SEGUIR",
+      "dur": null
+    }
+  ],
+  "apariciones": {
+    "mito1": 0.12,
+    "ruben1": 2.4,
+    "tres1": 3.4,
+    "cacitos": 3.674,
+    "entreno": 4.55,
+    "cohete": 5.76,
+    "y1": 6.26,
+    "tres2": 6.677,
+    "techo": 8.62,
+    "dia": 9.435,
+    "tienda": 10.6,
+    "el2": 11.34,
+    "pre2": 11.53,
+    "cafeina1": 12.65,
+    "tope": 15.13,
+    "cuatrocientos": 16.914,
+    "tarde": 21.07,
+    "media": 23.973,
+    "etiqueta": 25.294,
+    "ruben2": 26.13,
+    "entrena": 27.769,
+    "duerme": 29.617,
+    "veredicto": 30.729,
+    "mito2": 31.585,
+    "que": 32.435,
+    "siguenos": 36.33,
+    "fin": 38.055
+  }
+}

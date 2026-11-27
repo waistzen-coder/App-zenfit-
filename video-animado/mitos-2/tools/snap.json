@@ -1,0 +1,59 @@
+{
+  "ok": true,
+  "outputDir": "/home/user/App-zenfit-/video-animado/mitos-2/.hyperframes/artifacts/snapshots/649c1808-7338-4cac-94ff-7d9cde25786d",
+  "frames": [
+    {
+      "path": "/home/user/App-zenfit-/video-animado/mitos-2/.hyperframes/artifacts/snapshots/649c1808-7338-4cac-94ff-7d9cde25786d/frame-00-at-0.5s.png",
+      "time": 0.5
+    },
+    {
+      "path": "/home/user/App-zenfit-/video-animado/mitos-2/.hyperframes/artifacts/snapshots/649c1808-7338-4cac-94ff-7d9cde25786d/frame-01-at-4.2s.png",
+      "time": 4.2
+    },
+    {
+      "path": "/home/user/App-zenfit-/video-animado/mitos-2/.hyperframes/artifacts/snapshots/649c1808-7338-4cac-94ff-7d9cde25786d/frame-02-at-7.8s.png",
+      "time": 7.8
+    },
+    {
+      "path": "/home/user/App-zenfit-/video-animado/mitos-2/.hyperframes/artifacts/snapshots/649c1808-7338-4cac-94ff-7d9cde25786d/frame-03-at-8.8s.png",
+      "time": 8.8
+    },
+    {
+      "path": "/home/user/App-zenfit-/video-animado/mitos-2/.hyperframes/artifacts/snapshots/649c1808-7338-4cac-94ff-7d9cde25786d/frame-04-at-12.8s.png",
+      "time": 12.8
+    },
+    {
+      "path": "/home/user/App-zenfit-/video-animado/mitos-2/.hyperframes/artifacts/snapshots/649c1808-7338-4cac-94ff-7d9cde25786d/frame-05-at-20s.png",
+      "time": 20
+    },
+    {
+      "path": "/home/user/App-zenfit-/video-animado/mitos-2/.hyperframes/artifacts/snapshots/649c1808-7338-4cac-94ff-7d9cde25786d/frame-06-at-27s.png",
+      "time": 27
+    },
+    {
+      "path": "/home/user/App-zenfit-/video-animado/mitos-2/.hyperframes/artifacts/snapshots/649c1808-7338-4cac-94ff-7d9cde25786d/frame-07-at-30.5s.png",
+      "time": 30.5
+    },
+    {
+      "path": "/home/user/App-zenfit-/video-animado/mitos-2/.hyperframes/artifacts/snapshots/649c1808-7338-4cac-94ff-7d9cde25786d/frame-08-at-33.5s.png",
+      "time": 33.5
+    },
+    {
+      "path": "/home/user/App-zenfit-/video-animado/mitos-2/.hyperframes/artifacts/snapshots/649c1808-7338-4cac-94ff-7d9cde25786d/frame-09-at-42.517s.png",
+      "time": 42.517
+    }
+  ],
+  "contactSheets": [
+    "/home/user/App-zenfit-/video-animado/mitos-2/.hyperframes/artifacts/snapshots/649c1808-7338-4cac-94ff-7d9cde25786d/contact-sheet-1.jpg",
+    "/home/user/App-zenfit-/video-animado/mitos-2/.hyperframes/artifacts/snapshots/649c1808-7338-4cac-94ff-7d9cde25786d/contact-sheet-2.jpg"
+  ],
+  "_meta": {
+    "version": "0.9.100",
+    "latestVersion": "0.9.103",
+    "updateAvailable": true,
+    "checkedAt": "2026-11-27T18:04:29.292Z",
+    "skillsOutdated": 0,
+    "skillsMissing": 0,
+    "updateNotice": "For the user: HyperFrames CLI 0.9.103 is available (this run is 0.9.100). To update, run: (cd ~ && npx hyperframes@latest update)"
+  }
+}

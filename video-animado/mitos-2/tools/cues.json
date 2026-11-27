@@ -1,0 +1,195 @@
+{
+  "duracion": 42.766666666666666,
+  "voz": "assets/audio/voz.wav",
+  "musica": {
+    "archivo": "assets/music/basketball-training.mp3",
+    "desde": 60,
+    "db": -27
+  },
+  "efectos": [
+    {
+      "t": 3.73,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -14,
+      "que": "65 años",
+      "dur": null
+    },
+    {
+      "t": 7.567,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -14,
+      "que": "el batido",
+      "dur": null
+    },
+    {
+      "t": 6.74,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -11,
+      "que": "la nube",
+      "dur": null
+    },
+    {
+      "t": 7.14,
+      "archivo": "assets/sfx/disco-metal.mp3",
+      "db": -12,
+      "que": "se pone como un armario",
+      "dur": null
+    },
+    {
+      "t": 9.977,
+      "archivo": "assets/sfx/campanilla.mp3",
+      "db": -15,
+      "que": "entra en la tienda",
+      "dur": null
+    },
+    {
+      "t": 11.187,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -12,
+      "que": "¿SOLO PARA CULTURISTAS?",
+      "dur": null
+    },
+    {
+      "t": 12.576,
+      "archivo": "assets/sfx/punch.mp3",
+      "db": -8,
+      "que": "sello MITO",
+      "dur": null
+    },
+    {
+      "t": 13.187,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -11,
+      "que": "tarjeta REALIDAD",
+      "dur": null
+    },
+    {
+      "t": 13.32,
+      "archivo": "assets/sfx/golpe-madera.mp3",
+      "db": -13,
+      "que": "el bote en el mostrador",
+      "dur": null
+    },
+    {
+      "t": 14.707,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -14,
+      "que": "fila leche",
+      "dur": null
+    },
+    {
+      "t": 16.68,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -14,
+      "que": "fila cacito",
+      "dur": null
+    },
+    {
+      "t": 21.78,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -14,
+      "que": "fila músculo",
+      "dur": null
+    },
+    {
+      "t": 24.209,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -14,
+      "que": "fila atajo",
+      "dur": null
+    },
+    {
+      "t": 26.054,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -14,
+      "que": "fila no hace falta",
+      "dur": null
+    },
+    {
+      "t": 27.947,
+      "archivo": "assets/sfx/datafono.mp3",
+      "db": -14,
+      "que": "se lo lleva",
+      "dur": null
+    },
+    {
+      "t": 29.787,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -13,
+      "que": "ni rastro de armario",
+      "dur": null
+    },
+    {
+      "t": 32.677,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -13,
+      "que": "marca el ritmo",
+      "dur": null
+    },
+    {
+      "t": 34.567,
+      "archivo": "assets/sfx/whoosh-1.mp3",
+      "db": -10,
+      "que": "sube al veredicto",
+      "dur": null
+    },
+    {
+      "t": 35.744,
+      "archivo": "assets/sfx/golpe-climax.mp3",
+      "db": -8,
+      "que": "sello MITO",
+      "dur": 1.6
+    },
+    {
+      "t": 36.293,
+      "archivo": "assets/sfx/whoosh-3.mp3",
+      "db": -13,
+      "que": "baja a la llamada",
+      "dur": null
+    },
+    {
+      "t": 40.58,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -13,
+      "que": "la mano",
+      "dur": null
+    },
+    {
+      "t": 40.73,
+      "archivo": "assets/sfx/click-1.mp3",
+      "db": -8,
+      "que": "SEGUIR",
+      "dur": null
+    }
+  ],
+  "apariciones": {
+    "mito1": 0.12,
+    "antonio1": 3.017,
+    "sesenta": 3.73,
+    "camina": 5.3,
+    "pensaba": 6.74,
+    "batido": 7.567,
+    "asi": 8.63,
+    "bajo": 9.227,
+    "solo2": 11.187,
+    "no1": 12.576,
+    "la3": 13.187,
+    "proteina2": 13.32,
+    "leche": 14.707,
+    "cacito": 16.68,
+    "conservar": 21.78,
+    "llegas1": 24.209,
+    "llegas2": 26.054,
+    "falta": 27.14,
+    "antonio_b": 27.897,
+    "sigue": 29.787,
+    "armario": 31.047,
+    "pero": 31.897,
+    "ritmo": 32.677,
+    "veredicto": 34.887,
+    "mito2": 35.744,
+    "que": 36.593,
+    "siguenos": 40.48,
+    "fin": 42.213
+  }
+}

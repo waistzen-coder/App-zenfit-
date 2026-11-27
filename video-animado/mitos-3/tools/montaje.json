@@ -1,0 +1,95 @@
+{
+ "frases": [
+  {
+   "n": 1,
+   "texto": "Mito: si no te tomas el batido en treinta minutos, pierdes el entreno.",
+   "inicio": 0.12,
+   "fin": 4.01
+  },
+  {
+   "n": 2,
+   "texto": "El flaco se lo creyó.",
+   "inicio": 4.25,
+   "fin": 5.73
+  },
+  {
+   "n": 3,
+   "texto": "Última repetición, y a correr.",
+   "inicio": 5.97,
+   "fin": 7.8
+  },
+  {
+   "n": 4,
+   "texto": "Sin ducha y sin estirar.",
+   "inicio": 8.04,
+   "fin": 9.651
+  },
+  {
+   "n": 5,
+   "texto": "El dependiente lo paró en la puerta.",
+   "inicio": 9.891,
+   "fin": 11.981
+  },
+  {
+   "n": 6,
+   "texto": "Respira.",
+   "inicio": 12.221,
+   "fin": 12.931
+  },
+  {
+   "n": 7,
+   "texto": "Lo que más cuenta es cuánta proteína tomas en todo el día.",
+   "inicio": 13.171,
+   "fin": 16.461
+  },
+  {
+   "n": 8,
+   "texto": "Repartida en tres o cuatro comidas.",
+   "inicio": 16.701,
+   "fin": 18.991
+  },
+  {
+   "n": 9,
+   "texto": "Esa ventana dura horas, no minutos.",
+   "inicio": 19.231,
+   "fin": 21.501
+  },
+  {
+   "n": 10,
+   "texto": "Así que dúchate tranquilo.",
+   "inicio": 21.741,
+   "fin": 23.471
+  },
+  {
+   "n": 11,
+   "texto": "Desde entonces, el flaco se ducha.",
+   "inicio": 23.711,
+   "fin": 25.981
+  },
+  {
+   "n": 12,
+   "texto": "Y el gimnasio lo agradece.",
+   "inicio": 26.221,
+   "fin": 27.901
+  },
+  {
+   "n": 13,
+   "texto": "Veredicto: mito.",
+   "inicio": 28.401,
+   "fin": 29.607
+  },
+  {
+   "n": 14,
+   "texto": "¿Qué mito desmontamos en el siguiente? Déjalo en los comentarios.",
+   "inicio": 30.107,
+   "fin": 33.667
+  },
+  {
+   "n": 15,
+   "texto": "Y síguenos para no perdértelo.",
+   "inicio": 33.907,
+   "fin": 35.727
+  }
+ ],
+ "duracion": 36.277
+}

@@ -1,0 +1,41 @@
+{
+  "ok": true,
+  "outputDir": "/home/user/App-zenfit-/video-animado/mitos-3/.hyperframes/artifacts/snapshots/33d23682-e0dc-40dd-ae88-d608e8a0df7c",
+  "frames": [
+    {
+      "path": "/home/user/App-zenfit-/video-animado/mitos-3/.hyperframes/artifacts/snapshots/33d23682-e0dc-40dd-ae88-d608e8a0df7c/frame-00-at-0.5s.png",
+      "time": 0.5
+    },
+    {
+      "path": "/home/user/App-zenfit-/video-animado/mitos-3/.hyperframes/artifacts/snapshots/33d23682-e0dc-40dd-ae88-d608e8a0df7c/frame-01-at-8.6s.png",
+      "time": 8.6
+    },
+    {
+      "path": "/home/user/App-zenfit-/video-animado/mitos-3/.hyperframes/artifacts/snapshots/33d23682-e0dc-40dd-ae88-d608e8a0df7c/frame-02-at-11.2s.png",
+      "time": 11.2
+    },
+    {
+      "path": "/home/user/App-zenfit-/video-animado/mitos-3/.hyperframes/artifacts/snapshots/33d23682-e0dc-40dd-ae88-d608e8a0df7c/frame-03-at-26.2s.png",
+      "time": 26.2
+    },
+    {
+      "path": "/home/user/App-zenfit-/video-animado/mitos-3/.hyperframes/artifacts/snapshots/33d23682-e0dc-40dd-ae88-d608e8a0df7c/frame-04-at-27.8s.png",
+      "time": 27.8
+    },
+    {
+      "path": "/home/user/App-zenfit-/video-animado/mitos-3/.hyperframes/artifacts/snapshots/33d23682-e0dc-40dd-ae88-d608e8a0df7c/frame-05-at-36.017s.png",
+      "time": 36.017
+    }
+  ],
+  "contactSheets": [
+    "/home/user/App-zenfit-/video-animado/mitos-3/.hyperframes/artifacts/snapshots/33d23682-e0dc-40dd-ae88-d608e8a0df7c/contact-sheet.jpg"
+  ],
+  "_meta": {
+    "version": "0.9.100",
+    "latestVersion": "0.9.103",
+    "updateAvailable": true,
+    "checkedAt": "2026-11-27T18:04:29.292Z",
+    "skillsOutdated": 0,
+    "skillsMissing": 0
+  }
+}

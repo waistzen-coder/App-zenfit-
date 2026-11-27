@@ -1,0 +1,54 @@
+{
+  "ok": true,
+  "outputDir": "/home/user/App-zenfit-/video-animado/mitos-5/.hyperframes/artifacts/snapshots/4542f413-a778-45d7-8b0c-a666256cd930",
+  "frames": [
+    {
+      "path": "/home/user/App-zenfit-/video-animado/mitos-5/.hyperframes/artifacts/snapshots/4542f413-a778-45d7-8b0c-a666256cd930/frame-00-at-0.5s.png",
+      "time": 0.5
+    },
+    {
+      "path": "/home/user/App-zenfit-/video-animado/mitos-5/.hyperframes/artifacts/snapshots/4542f413-a778-45d7-8b0c-a666256cd930/frame-01-at-4s.png",
+      "time": 4
+    },
+    {
+      "path": "/home/user/App-zenfit-/video-animado/mitos-5/.hyperframes/artifacts/snapshots/4542f413-a778-45d7-8b0c-a666256cd930/frame-02-at-6.4s.png",
+      "time": 6.4
+    },
+    {
+      "path": "/home/user/App-zenfit-/video-animado/mitos-5/.hyperframes/artifacts/snapshots/4542f413-a778-45d7-8b0c-a666256cd930/frame-03-at-8s.png",
+      "time": 8
+    },
+    {
+      "path": "/home/user/App-zenfit-/video-animado/mitos-5/.hyperframes/artifacts/snapshots/4542f413-a778-45d7-8b0c-a666256cd930/frame-04-at-15.5s.png",
+      "time": 15.5
+    },
+    {
+      "path": "/home/user/App-zenfit-/video-animado/mitos-5/.hyperframes/artifacts/snapshots/4542f413-a778-45d7-8b0c-a666256cd930/frame-05-at-18.8s.png",
+      "time": 18.8
+    },
+    {
+      "path": "/home/user/App-zenfit-/video-animado/mitos-5/.hyperframes/artifacts/snapshots/4542f413-a778-45d7-8b0c-a666256cd930/frame-06-at-26.6s.png",
+      "time": 26.6
+    },
+    {
+      "path": "/home/user/App-zenfit-/video-animado/mitos-5/.hyperframes/artifacts/snapshots/4542f413-a778-45d7-8b0c-a666256cd930/frame-07-at-28.9s.png",
+      "time": 28.9
+    },
+    {
+      "path": "/home/user/App-zenfit-/video-animado/mitos-5/.hyperframes/artifacts/snapshots/4542f413-a778-45d7-8b0c-a666256cd930/frame-08-at-37.183s.png",
+      "time": 37.183
+    }
+  ],
+  "contactSheets": [
+    "/home/user/App-zenfit-/video-animado/mitos-5/.hyperframes/artifacts/snapshots/4542f413-a778-45d7-8b0c-a666256cd930/contact-sheet.jpg"
+  ],
+  "_meta": {
+    "version": "0.9.100",
+    "latestVersion": "0.9.103",
+    "updateAvailable": true,
+    "checkedAt": "2026-11-27T18:04:29.292Z",
+    "skillsOutdated": 0,
+    "skillsMissing": 0,
+    "updateNotice": "For the user: HyperFrames CLI 0.9.103 is available (this run is 0.9.100). To update, run: (cd ~ && npx hyperframes@latest update)"
+  }
+}

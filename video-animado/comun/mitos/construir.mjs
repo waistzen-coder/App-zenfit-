@@ -352,7 +352,7 @@ export async function construir(RAIZ, EP) {
       case "nube": return nubeSVG(o);
       case "pildora": return pildoraSVG(o);
       case "reloj": return relojSVG(o);
-      case "noche": return `<g id="o${o.i}" opacity="0">${icono("moon", 3900, 950, 170, "#F5F0C8")}<g transform="translate(3450 1000)"><rect x="-170" y="-62" width="340" height="124" rx="62" fill="${C.tinta}"/>${icono("clock", -100, 0, 70, "#8FD3FF")}${txt(46, 26, o.hora || "3:00", 72, "#fff", 900)}</g></g>`;
+      case "noche": return `<g id="o${o.i}" opacity="0">${icono("moon", 3900, 950, 170, "#F5F0C8")}<g transform="translate(3450 995)"><rect x="-285" y="-125" width="570" height="250" rx="24" fill="#08090B" stroke="#2C3138" stroke-width="8"/>${icono("clock", -175, 0, 110, "#8FD3FF")}${txt(60, 42, o.hora || "3:00", 120, "#fff", 900)}</g></g>`;
       case "zzz": return `<g id="o${o.i}" opacity="0">${items(["Z", "Z", "Z"].map((z) => txt(0, 0, z, 70, "#fff", 900, "middle", `stroke="${C.tinta}" stroke-width="5" paint-order="stroke"`)))}</g>`;
       case "gotas": return `<g id="o${o.i}" opacity="0">${items([icono("drop", 0, 0, 44, "#8FD3FF"), icono("drop", 0, 0, 34, "#8FD3FF")])}</g>`;
       case "rayos": return `<g id="o${o.i}" opacity="0">${items([[-160, -60], [160, -80], [-180, 90], [170, 70]].map(([x, y]) => icono("lightning", x, y, 80, "#FFD23F")))}</g>`;

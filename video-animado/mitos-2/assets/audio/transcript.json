@@ -1,0 +1,710 @@
+[
+ {
+  "text": "Mito:",
+  "start": 0.12,
+  "end": 0.56,
+  "frase": 1
+ },
+ {
+  "text": "la",
+  "start": 0.57,
+  "end": 0.69,
+  "frase": 1
+ },
+ {
+  "text": "proteína",
+  "start": 0.7,
+  "end": 1.232,
+  "frase": 1
+ },
+ {
+  "text": "es",
+  "start": 1.242,
+  "end": 1.34,
+  "frase": 1
+ },
+ {
+  "text": "solo",
+  "start": 1.35,
+  "end": 1.76,
+  "frase": 1
+ },
+ {
+  "text": "para",
+  "start": 1.77,
+  "end": 1.98,
+  "frase": 1
+ },
+ {
+  "text": "culturistas.",
+  "start": 1.99,
+  "end": 2.777,
+  "frase": 1
+ },
+ {
+  "text": "Antonio",
+  "start": 3.017,
+  "end": 3.48,
+  "frase": 2
+ },
+ {
+  "text": "tiene",
+  "start": 3.49,
+  "end": 3.72,
+  "frase": 2
+ },
+ {
+  "text": "sesenta",
+  "start": 3.73,
+  "end": 4.288,
+  "frase": 2
+ },
+ {
+  "text": "y",
+  "start": 4.298,
+  "end": 4.358,
+  "frase": 2
+ },
+ {
+  "text": "cinco",
+  "start": 4.368,
+  "end": 4.802,
+  "frase": 2
+ },
+ {
+  "text": "años",
+  "start": 4.812,
+  "end": 5.157,
+  "frase": 2
+ },
+ {
+  "text": "y",
+  "start": 5.167,
+  "end": 5.29,
+  "frase": 2
+ },
+ {
+  "text": "camina",
+  "start": 5.3,
+  "end": 5.71,
+  "frase": 2
+ },
+ {
+  "text": "cada",
+  "start": 5.72,
+  "end": 5.931,
+  "frase": 2
+ },
+ {
+  "text": "mañana.",
+  "start": 5.941,
+  "end": 6.397,
+  "frase": 2
+ },
+ {
+  "text": "Y",
+  "start": 6.637,
+  "end": 6.73,
+  "frase": 3
+ },
+ {
+  "text": "pensaba",
+  "start": 6.74,
+  "end": 7.29,
+  "frase": 3
+ },
+ {
+  "text": "que",
+  "start": 7.3,
+  "end": 7.446,
+  "frase": 3
+ },
+ {
+  "text": "un",
+  "start": 7.456,
+  "end": 7.557,
+  "frase": 3
+ },
+ {
+  "text": "batido",
+  "start": 7.567,
+  "end": 7.952,
+  "frase": 3
+ },
+ {
+  "text": "le",
+  "start": 7.962,
+  "end": 8.15,
+  "frase": 3
+ },
+ {
+  "text": "pondría",
+  "start": 8.16,
+  "end": 8.62,
+  "frase": 3
+ },
+ {
+  "text": "así.",
+  "start": 8.63,
+  "end": 8.987,
+  "frase": 3
+ },
+ {
+  "text": "Bajó",
+  "start": 9.227,
+  "end": 9.58,
+  "frase": 4
+ },
+ {
+  "text": "a",
+  "start": 9.59,
+  "end": 9.655,
+  "frase": 4
+ },
+ {
+  "text": "la",
+  "start": 9.665,
+  "end": 9.82,
+  "frase": 4
+ },
+ {
+  "text": "tienda",
+  "start": 9.83,
+  "end": 10.238,
+  "frase": 4
+ },
+ {
+  "text": "a",
+  "start": 10.248,
+  "end": 10.34,
+  "frase": 4
+ },
+ {
+  "text": "preguntar.",
+  "start": 10.35,
+  "end": 10.947,
+  "frase": 4
+ },
+ {
+  "text": "¿Solo",
+  "start": 11.187,
+  "end": 11.49,
+  "frase": 5
+ },
+ {
+  "text": "para",
+  "start": 11.5,
+  "end": 11.72,
+  "frase": 5
+ },
+ {
+  "text": "culturistas?",
+  "start": 11.73,
+  "end": 12.566,
+  "frase": 5
+ },
+ {
+  "text": "No.",
+  "start": 12.576,
+  "end": 12.947,
+  "frase": 5
+ },
+ {
+  "text": "La",
+  "start": 13.187,
+  "end": 13.31,
+  "frase": 6
+ },
+ {
+  "text": "proteína",
+  "start": 13.32,
+  "end": 13.772,
+  "frase": 6
+ },
+ {
+  "text": "de",
+  "start": 13.782,
+  "end": 13.87,
+  "frase": 6
+ },
+ {
+  "text": "suero",
+  "start": 13.88,
+  "end": 14.19,
+  "frase": 6
+ },
+ {
+  "text": "sale",
+  "start": 14.2,
+  "end": 14.471,
+  "frase": 6
+ },
+ {
+  "text": "de",
+  "start": 14.481,
+  "end": 14.58,
+  "frase": 6
+ },
+ {
+  "text": "la",
+  "start": 14.59,
+  "end": 14.697,
+  "frase": 6
+ },
+ {
+  "text": "leche:",
+  "start": 14.707,
+  "end": 15.23,
+  "frase": 6
+ },
+ {
+  "text": "filtrada",
+  "start": 15.24,
+  "end": 15.767,
+  "frase": 6
+ },
+ {
+  "text": "y",
+  "start": 15.777,
+  "end": 15.837,
+  "frase": 6
+ },
+ {
+  "text": "secada.",
+  "start": 15.847,
+  "end": 16.337,
+  "frase": 6
+ },
+ {
+  "text": "Un",
+  "start": 16.577,
+  "end": 16.67,
+  "frase": 7
+ },
+ {
+  "text": "cacito",
+  "start": 16.68,
+  "end": 17.09,
+  "frase": 7
+ },
+ {
+  "text": "tiene",
+  "start": 17.1,
+  "end": 17.452,
+  "frase": 7
+ },
+ {
+  "text": "más",
+  "start": 17.462,
+  "end": 17.7,
+  "frase": 7
+ },
+ {
+  "text": "o",
+  "start": 17.71,
+  "end": 17.775,
+  "frase": 7
+ },
+ {
+  "text": "menos",
+  "start": 17.785,
+  "end": 18.135,
+  "frase": 7
+ },
+ {
+  "text": "la",
+  "start": 18.145,
+  "end": 18.27,
+  "frase": 7
+ },
+ {
+  "text": "de",
+  "start": 18.28,
+  "end": 18.475,
+  "frase": 7
+ },
+ {
+  "text": "una",
+  "start": 18.485,
+  "end": 18.73,
+  "frase": 7
+ },
+ {
+  "text": "pechuga",
+  "start": 18.74,
+  "end": 19.115,
+  "frase": 7
+ },
+ {
+  "text": "de",
+  "start": 19.125,
+  "end": 19.3,
+  "frase": 7
+ },
+ {
+  "text": "pollo",
+  "start": 19.31,
+  "end": 19.62,
+  "frase": 7
+ },
+ {
+  "text": "pequeña.",
+  "start": 19.63,
+  "end": 20.167,
+  "frase": 7
+ },
+ {
+  "text": "Y",
+  "start": 20.407,
+  "end": 20.468,
+  "frase": 8
+ },
+ {
+  "text": "la",
+  "start": 20.478,
+  "end": 20.63,
+  "frase": 8
+ },
+ {
+  "text": "proteína",
+  "start": 20.64,
+  "end": 21.26,
+  "frase": 8
+ },
+ {
+  "text": "ayuda",
+  "start": 21.27,
+  "end": 21.677,
+  "frase": 8
+ },
+ {
+  "text": "a",
+  "start": 21.687,
+  "end": 21.77,
+  "frase": 8
+ },
+ {
+  "text": "conservar",
+  "start": 21.78,
+  "end": 22.319,
+  "frase": 8
+ },
+ {
+  "text": "el",
+  "start": 22.329,
+  "end": 22.476,
+  "frase": 8
+ },
+ {
+  "text": "músculo.",
+  "start": 22.486,
+  "end": 23.037,
+  "frase": 8
+ },
+ {
+  "text": "Si",
+  "start": 23.277,
+  "end": 23.41,
+  "frase": 9
+ },
+ {
+  "text": "con",
+  "start": 23.42,
+  "end": 23.562,
+  "frase": 9
+ },
+ {
+  "text": "la",
+  "start": 23.572,
+  "end": 23.7,
+  "frase": 9
+ },
+ {
+  "text": "comida",
+  "start": 23.71,
+  "end": 24.066,
+  "frase": 9
+ },
+ {
+  "text": "no",
+  "start": 24.076,
+  "end": 24.199,
+  "frase": 9
+ },
+ {
+  "text": "llegas,",
+  "start": 24.209,
+  "end": 24.821,
+  "frase": 9
+ },
+ {
+  "text": "es",
+  "start": 24.831,
+  "end": 24.982,
+  "frase": 9
+ },
+ {
+  "text": "un",
+  "start": 24.992,
+  "end": 25.107,
+  "frase": 9
+ },
+ {
+  "text": "atajo.",
+  "start": 25.117,
+  "end": 25.627,
+  "frase": 9
+ },
+ {
+  "text": "Si",
+  "start": 25.867,
+  "end": 26.044,
+  "frase": 10
+ },
+ {
+  "text": "llegas,",
+  "start": 26.054,
+  "end": 26.656,
+  "frase": 10
+ },
+ {
+  "text": "no",
+  "start": 26.666,
+  "end": 26.78,
+  "frase": 10
+ },
+ {
+  "text": "te",
+  "start": 26.79,
+  "end": 26.928,
+  "frase": 10
+ },
+ {
+  "text": "hace",
+  "start": 26.938,
+  "end": 27.13,
+  "frase": 10
+ },
+ {
+  "text": "falta.",
+  "start": 27.14,
+  "end": 27.657,
+  "frase": 10
+ },
+ {
+  "text": "Antonio",
+  "start": 27.897,
+  "end": 28.4,
+  "frase": 11
+ },
+ {
+  "text": "se",
+  "start": 28.41,
+  "end": 28.584,
+  "frase": 11
+ },
+ {
+  "text": "llevó",
+  "start": 28.594,
+  "end": 28.999,
+  "frase": 11
+ },
+ {
+  "text": "un",
+  "start": 29.009,
+  "end": 29.139,
+  "frase": 11
+ },
+ {
+  "text": "bote.",
+  "start": 29.149,
+  "end": 29.547,
+  "frase": 11
+ },
+ {
+  "text": "Sigue",
+  "start": 29.787,
+  "end": 30.11,
+  "frase": 12
+ },
+ {
+  "text": "sin",
+  "start": 30.12,
+  "end": 30.42,
+  "frase": 12
+ },
+ {
+  "text": "parecer",
+  "start": 30.43,
+  "end": 30.866,
+  "frase": 12
+ },
+ {
+  "text": "un",
+  "start": 30.876,
+  "end": 31.037,
+  "frase": 12
+ },
+ {
+  "text": "armario.",
+  "start": 31.047,
+  "end": 31.657,
+  "frase": 12
+ },
+ {
+  "text": "Pero",
+  "start": 31.897,
+  "end": 32.206,
+  "frase": 13
+ },
+ {
+  "text": "ahora",
+  "start": 32.216,
+  "end": 32.535,
+  "frase": 13
+ },
+ {
+  "text": "el",
+  "start": 32.545,
+  "end": 32.667,
+  "frase": 13
+ },
+ {
+  "text": "ritmo",
+  "start": 32.677,
+  "end": 32.955,
+  "frase": 13
+ },
+ {
+  "text": "del",
+  "start": 32.965,
+  "end": 33.16,
+  "frase": 13
+ },
+ {
+  "text": "paseo",
+  "start": 33.17,
+  "end": 33.579,
+  "frase": 13
+ },
+ {
+  "text": "lo",
+  "start": 33.589,
+  "end": 33.751,
+  "frase": 13
+ },
+ {
+  "text": "marca",
+  "start": 33.761,
+  "end": 34.186,
+  "frase": 13
+ },
+ {
+  "text": "él.",
+  "start": 34.196,
+  "end": 34.387,
+  "frase": 13
+ },
+ {
+  "text": "Veredicto:",
+  "start": 34.887,
+  "end": 35.734,
+  "frase": 14
+ },
+ {
+  "text": "mito.",
+  "start": 35.744,
+  "end": 36.093,
+  "frase": 14
+ },
+ {
+  "text": "¿Qué",
+  "start": 36.593,
+  "end": 36.717,
+  "frase": 15
+ },
+ {
+  "text": "mito",
+  "start": 36.727,
+  "end": 36.969,
+  "frase": 15
+ },
+ {
+  "text": "desmontamos",
+  "start": 36.979,
+  "end": 37.696,
+  "frase": 15
+ },
+ {
+  "text": "en",
+  "start": 37.706,
+  "end": 37.803,
+  "frase": 15
+ },
+ {
+  "text": "el",
+  "start": 37.812,
+  "end": 37.89,
+  "frase": 15
+ },
+ {
+  "text": "siguiente?",
+  "start": 37.9,
+  "end": 38.461,
+  "frase": 15
+ },
+ {
+  "text": "Déjalo",
+  "start": 38.471,
+  "end": 38.993,
+  "frase": 15
+ },
+ {
+  "text": "en",
+  "start": 39.003,
+  "end": 39.135,
+  "frase": 15
+ },
+ {
+  "text": "los",
+  "start": 39.145,
+  "end": 39.362,
+  "frase": 15
+ },
+ {
+  "text": "comentarios.",
+  "start": 39.372,
+  "end": 40.153,
+  "frase": 15
+ },
+ {
+  "text": "Y",
+  "start": 40.393,
+  "end": 40.47,
+  "frase": 16
+ },
+ {
+  "text": "síguenos",
+  "start": 40.48,
+  "end": 41.051,
+  "frase": 16
+ },
+ {
+  "text": "para",
+  "start": 41.061,
+  "end": 41.305,
+  "frase": 16
+ },
+ {
+  "text": "no",
+  "start": 41.315,
+  "end": 41.48,
+  "frase": 16
+ },
+ {
+  "text": "perdértelo.",
+  "start": 41.49,
+  "end": 42.213,
+  "frase": 16
+ }
+]

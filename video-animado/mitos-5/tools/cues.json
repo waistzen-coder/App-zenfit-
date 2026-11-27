@@ -1,0 +1,204 @@
+{
+  "duracion": 37.43333333333333,
+  "voz": "assets/audio/voz.wav",
+  "musica": {
+    "archivo": "assets/music/basketball-training.mp3",
+    "desde": 60,
+    "db": -27
+  },
+  "efectos": [
+    {
+      "t": 3.563,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -14,
+      "que": "2 años en la cinta",
+      "dur": null
+    },
+    {
+      "t": 5.903,
+      "archivo": "assets/sfx/boing.mp3",
+      "db": -15,
+      "que": "miedo a las pesas",
+      "dur": null
+    },
+    {
+      "t": 7.27,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -11,
+      "que": "la nube",
+      "dur": null
+    },
+    {
+      "t": 7.72,
+      "archivo": "assets/sfx/disco-metal.mp3",
+      "db": -12,
+      "que": "se imagina enorme",
+      "dur": null
+    },
+    {
+      "t": 9.19,
+      "archivo": "assets/sfx/whoosh-3.mp3",
+      "db": -15,
+      "que": "va a la tienda",
+      "dur": null
+    },
+    {
+      "t": 10.351,
+      "archivo": "assets/sfx/campanilla.mp3",
+      "db": -15,
+      "que": "entra en la tienda",
+      "dur": null
+    },
+    {
+      "t": 11.33,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -11,
+      "que": "tarjeta REALIDAD",
+      "dur": null
+    },
+    {
+      "t": 12.18,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -14,
+      "que": "fila años",
+      "dur": null
+    },
+    {
+      "t": 14.242,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -14,
+      "que": "fila testosterona",
+      "dur": null
+    },
+    {
+      "t": 18.38,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -13,
+      "que": "fila fuerza",
+      "dur": null
+    },
+    {
+      "t": 18.38,
+      "archivo": "assets/sfx/punch.mp3",
+      "db": -14,
+      "que": "saca bíceps",
+      "dur": null
+    },
+    {
+      "t": 20.99,
+      "archivo": "assets/sfx/golpe-madera.mp3",
+      "db": -13,
+      "que": "el bote en el mostrador",
+      "dur": null
+    },
+    {
+      "t": 20.367,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -14,
+      "que": "fila proteína",
+      "dur": null
+    },
+    {
+      "t": 23.3,
+      "archivo": "assets/sfx/whoosh-2.mp3",
+      "db": -14,
+      "que": "vuelve al gimnasio",
+      "dur": null
+    },
+    {
+      "t": 24.84,
+      "archivo": "assets/sfx/click-2.mp3",
+      "db": -11,
+      "que": "marcador: semana 8",
+      "dur": null
+    },
+    {
+      "t": 26.52,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -13,
+      "que": "sigue siendo Marta",
+      "dur": null
+    },
+    {
+      "t": 28.634,
+      "archivo": "assets/sfx/disco-metal.mp3",
+      "db": -10,
+      "que": "el doble de peso",
+      "dur": null
+    },
+    {
+      "t": 29.284,
+      "archivo": "assets/sfx/disco-metal.mp3",
+      "db": -15,
+      "que": "rep",
+      "dur": null
+    },
+    {
+      "t": 29.24,
+      "archivo": "assets/sfx/whoosh-1.mp3",
+      "db": -10,
+      "que": "sube al veredicto",
+      "dur": null
+    },
+    {
+      "t": 30.415,
+      "archivo": "assets/sfx/golpe-climax.mp3",
+      "db": -8,
+      "que": "sello MITO",
+      "dur": 1.6
+    },
+    {
+      "t": 30.966,
+      "archivo": "assets/sfx/whoosh-3.mp3",
+      "db": -13,
+      "que": "baja a la llamada",
+      "dur": null
+    },
+    {
+      "t": 35.26,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -13,
+      "que": "la mano",
+      "dur": null
+    },
+    {
+      "t": 35.41,
+      "archivo": "assets/sfx/click-1.mp3",
+      "db": -8,
+      "que": "SEGUIR",
+      "dur": null
+    }
+  ],
+  "apariciones": {
+    "mito1": 0.12,
+    "marta1": 2.79,
+    "dos": 3.563,
+    "cinta": 4.73,
+    "le1": 5.43,
+    "miedo": 5.903,
+    "se1": 7.27,
+    "imaginaba": 7.507,
+    "hasta": 8.79,
+    "dependiente": 10.251,
+    "ganar": 11.33,
+    "cuesta": 12.18,
+    "mujeres": 14.242,
+    "testosterona": 15.895,
+    "fuerza": 18.38,
+    "comida": 19.81,
+    "llegas": 20.367,
+    "proteina": 20.99,
+    "elegir": 22.56,
+    "marta2": 23.15,
+    "barra": 24.136,
+    "ocho": 24.79,
+    "siendo": 26.52,
+    "pero": 27.62,
+    "doble": 28.634,
+    "veredicto": 29.56,
+    "mito2": 30.415,
+    "que": 31.266,
+    "siguenos": 35.16,
+    "fin": 36.886
+  }
+}

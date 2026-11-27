@@ -1,0 +1,203 @@
+{
+  "duracion": 36.266666666666666,
+  "voz": "assets/audio/voz.wav",
+  "musica": {
+    "archivo": "assets/music/basketball-training.mp3",
+    "desde": 60,
+    "db": -27
+  },
+  "efectos": [
+    {
+      "t": 6.27,
+      "archivo": "assets/sfx/disco-metal.mp3",
+      "db": -14,
+      "que": "última repetición",
+      "dur": null
+    },
+    {
+      "t": 7.477,
+      "archivo": "assets/sfx/whoosh-2.mp3",
+      "db": -12,
+      "que": "sale corriendo",
+      "dur": null
+    },
+    {
+      "t": 7.877,
+      "archivo": "assets/sfx/click-2.mp3",
+      "db": -17,
+      "que": "reloj",
+      "dur": null
+    },
+    {
+      "t": 8.877,
+      "archivo": "assets/sfx/click-2.mp3",
+      "db": -17,
+      "que": "reloj",
+      "dur": null
+    },
+    {
+      "t": 9.877,
+      "archivo": "assets/sfx/click-2.mp3",
+      "db": -17,
+      "que": "reloj",
+      "dur": null
+    },
+    {
+      "t": 8.305,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -14,
+      "que": "sin ducha",
+      "dur": null
+    },
+    {
+      "t": 9.037,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -14,
+      "que": "sin estirar",
+      "dur": null
+    },
+    {
+      "t": 10.89,
+      "archivo": "assets/sfx/punch.mp3",
+      "db": -9,
+      "que": "el dependiente lo para",
+      "dur": null
+    },
+    {
+      "t": 12.221,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -15,
+      "que": "respira",
+      "dur": null
+    },
+    {
+      "t": 13.171,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -11,
+      "que": "tarjeta REALIDAD",
+      "dur": null
+    },
+    {
+      "t": 13.664,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -14,
+      "que": "fila total del día",
+      "dur": null
+    },
+    {
+      "t": 16.701,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -14,
+      "que": "fila comidas",
+      "dur": null
+    },
+    {
+      "t": 19.453,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -14,
+      "que": "fila ventana",
+      "dur": null
+    },
+    {
+      "t": 22.215,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -14,
+      "que": "fila ducha",
+      "dur": null
+    },
+    {
+      "t": 24.011,
+      "archivo": "assets/sfx/whoosh-3.mp3",
+      "db": -14,
+      "que": "vuelve al gimnasio",
+      "dur": null
+    },
+    {
+      "t": 25.828,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -13,
+      "que": "limpio",
+      "dur": null
+    },
+    {
+      "t": 27.322,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -12,
+      "que": "pulgar",
+      "dur": null
+    },
+    {
+      "t": 27.472,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -12,
+      "que": "pulgar",
+      "dur": null
+    },
+    {
+      "t": 28.081,
+      "archivo": "assets/sfx/whoosh-1.mp3",
+      "db": -10,
+      "que": "sube al veredicto",
+      "dur": null
+    },
+    {
+      "t": 29.256,
+      "archivo": "assets/sfx/golpe-climax.mp3",
+      "db": -8,
+      "que": "sello MITO",
+      "dur": 1.6
+    },
+    {
+      "t": 29.807,
+      "archivo": "assets/sfx/whoosh-3.mp3",
+      "db": -13,
+      "que": "baja a la llamada",
+      "dur": null
+    },
+    {
+      "t": 34.1,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -13,
+      "que": "la mano",
+      "dur": null
+    },
+    {
+      "t": 34.25,
+      "archivo": "assets/sfx/click-1.mp3",
+      "db": -8,
+      "que": "SEGUIR",
+      "dur": null
+    }
+  ],
+  "apariciones": {
+    "mito1": 0.12,
+    "flaco1": 4.38,
+    "creyo": 5.18,
+    "ultima": 5.97,
+    "correr": 7.477,
+    "sin1": 8.04,
+    "ducha1": 8.305,
+    "estirar": 9.037,
+    "dependiente": 9.993,
+    "paro": 10.89,
+    "puerta": 11.49,
+    "respira": 12.221,
+    "lo3": 13.171,
+    "cuenta": 13.664,
+    "repartida": 16.701,
+    "ventana": 19.453,
+    "horas": 20.242,
+    "duchate": 22.215,
+    "tranquilo": 22.79,
+    "desde": 23.711,
+    "flaco2": 25.29,
+    "ducha2": 25.828,
+    "gimnasio": 26.544,
+    "agradece": 27.322,
+    "veredicto": 28.401,
+    "mito2": 29.256,
+    "que": 30.107,
+    "siguenos": 34,
+    "fin": 35.727
+  }
+}

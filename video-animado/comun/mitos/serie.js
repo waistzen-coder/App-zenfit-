@@ -123,6 +123,8 @@
     R.svg.style.filter = blur > 0.25 ? `blur(${blur.toFixed(2)}px)` : "none";
     R.neonTienda.setAttribute("opacity", f2(0.85 + 0.15 * Math.sin(t * 2.1)));
     R.neonGym.setAttribute("opacity", f2(0.9 + 0.1 * Math.sin(t * 2.7 + 1)));
+    // sin marcador en el episodio, el del gimnasio marca la semana 1 (no «00»)
+    if (!OBJ.some((o) => o.tipo === "marcador")) R.marcadorU.setAttribute("transform", "translate(0 -150)");
 
     // ── personajes ──
     const H = {};
@@ -137,6 +139,8 @@
     R.puerta.setAttribute("transform", `translate(2216 0) scale(${f2(1 - 0.75 * abre)} 1) translate(-2216 0)`);
 
     // ── objetos ──
+    // la noche (puede haber varias): el gimnasio a oscuras
+    R.oscuro.setAttribute("opacity", f2(0.78 * Math.max(0, ...OBJ.filter((o) => o.tipo === "noche").map((o) => visible(o, t)))));
     const cabeza = (q) => (H[q] ? H[q].cabeza : { x: 0, y: 0 });
     for (const o of OBJ) {
       const g = R.o[o.i];
@@ -211,7 +215,6 @@
         const v = `${String(mm).padStart(2, "0")}:${String(ss).padStart(2, "0")}`;
         if (g.txt.textContent !== v) g.txt.textContent = v;
       } else if (o.tipo === "noche") {
-        R.oscuro.setAttribute("opacity", f2(0.78 * vis));
         setOp(g.root, vis);
       } else if (o.tipo === "zzz" || o.tipo === "gotas" || o.tipo === "rayos" || o.tipo === "brillos") {
         const h = cabeza(o.quien);

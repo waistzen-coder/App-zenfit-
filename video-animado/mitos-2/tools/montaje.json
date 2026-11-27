@@ -1,0 +1,101 @@
+{
+ "frases": [
+  {
+   "n": 1,
+   "texto": "Mito: la proteína es solo para culturistas.",
+   "inicio": 0.12,
+   "fin": 2.777
+  },
+  {
+   "n": 2,
+   "texto": "Antonio tiene sesenta y cinco años y camina cada mañana.",
+   "inicio": 3.017,
+   "fin": 6.397
+  },
+  {
+   "n": 3,
+   "texto": "Y pensaba que un batido le pondría así.",
+   "inicio": 6.637,
+   "fin": 8.987
+  },
+  {
+   "n": 4,
+   "texto": "Bajó a la tienda a preguntar.",
+   "inicio": 9.227,
+   "fin": 10.947
+  },
+  {
+   "n": 5,
+   "texto": "¿Solo para culturistas? No.",
+   "inicio": 11.187,
+   "fin": 12.947
+  },
+  {
+   "n": 6,
+   "texto": "La proteína de suero sale de la leche: filtrada y secada.",
+   "inicio": 13.187,
+   "fin": 16.337
+  },
+  {
+   "n": 7,
+   "texto": "Un cacito tiene más o menos la de una pechuga de pollo pequeña.",
+   "inicio": 16.577,
+   "fin": 20.167
+  },
+  {
+   "n": 8,
+   "texto": "Y la proteína ayuda a conservar el músculo.",
+   "inicio": 20.407,
+   "fin": 23.037
+  },
+  {
+   "n": 9,
+   "texto": "Si con la comida no llegas, es un atajo.",
+   "inicio": 23.277,
+   "fin": 25.627
+  },
+  {
+   "n": 10,
+   "texto": "Si llegas, no te hace falta.",
+   "inicio": 25.867,
+   "fin": 27.657
+  },
+  {
+   "n": 11,
+   "texto": "Antonio se llevó un bote.",
+   "inicio": 27.897,
+   "fin": 29.547
+  },
+  {
+   "n": 12,
+   "texto": "Sigue sin parecer un armario.",
+   "inicio": 29.787,
+   "fin": 31.657
+  },
+  {
+   "n": 13,
+   "texto": "Pero ahora el ritmo del paseo lo marca él.",
+   "inicio": 31.897,
+   "fin": 34.387
+  },
+  {
+   "n": 14,
+   "texto": "Veredicto: mito.",
+   "inicio": 34.887,
+   "fin": 36.093
+  },
+  {
+   "n": 15,
+   "texto": "¿Qué mito desmontamos en el siguiente? Déjalo en los comentarios.",
+   "inicio": 36.593,
+   "fin": 40.153
+  },
+  {
+   "n": 16,
+   "texto": "Y síguenos para no perdértelo.",
+   "inicio": 40.393,
+   "fin": 42.213
+  }
+ ],
+ "duracion": 42.763
+}

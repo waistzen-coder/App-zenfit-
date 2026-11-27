@@ -1,0 +1,101 @@
+{
+ "frases": [
+  {
+   "n": 1,
+   "texto": "Mito: cuanto más pre-entreno, mejor.",
+   "inicio": 0.12,
+   "fin": 2.16
+  },
+  {
+   "n": 2,
+   "texto": "Rubén se echó tres cacitos.",
+   "inicio": 2.4,
+   "fin": 4.31
+  },
+  {
+   "n": 3,
+   "texto": "Entrenó como un cohete.",
+   "inicio": 4.55,
+   "fin": 6.02
+  },
+  {
+   "n": 4,
+   "texto": "Y a las tres de la mañana seguía mirando el techo.",
+   "inicio": 6.26,
+   "fin": 9.04
+  },
+  {
+   "n": 5,
+   "texto": "Al día siguiente, a la tienda.",
+   "inicio": 9.28,
+   "fin": 11.1
+  },
+  {
+   "n": 6,
+   "texto": "El pre-entreno lleva cafeína.",
+   "inicio": 11.34,
+   "fin": 13.28
+  },
+  {
+   "n": 7,
+   "texto": "Y la cafeína tiene un tope.",
+   "inicio": 13.52,
+   "fin": 15.34
+  },
+  {
+   "n": 8,
+   "texto": "Un adulto sano, unos cuatrocientos miligramos al día, contando los cafés.",
+   "inicio": 15.58,
+   "fin": 19.87
+  },
+  {
+   "n": 9,
+   "texto": "Si entrenas por la tarde, te puede quitar el sueño.",
+   "inicio": 20.11,
+   "fin": 23.0
+  },
+  {
+   "n": 10,
+   "texto": "Empieza con media dosis y lee la etiqueta.",
+   "inicio": 23.24,
+   "fin": 25.89
+  },
+  {
+   "n": 11,
+   "texto": "Rubén le hizo caso.",
+   "inicio": 26.13,
+   "fin": 27.529
+  },
+  {
+   "n": 12,
+   "texto": "Entrena igual de bien.",
+   "inicio": 27.769,
+   "fin": 29.269
+  },
+  {
+   "n": 13,
+   "texto": "Y duerme.",
+   "inicio": 29.509,
+   "fin": 30.229
+  },
+  {
+   "n": 14,
+   "texto": "Veredicto: mito.",
+   "inicio": 30.729,
+   "fin": 31.935
+  },
+  {
+   "n": 15,
+   "texto": "¿Qué mito desmontamos en el siguiente? Déjalo en los comentarios.",
+   "inicio": 32.435,
+   "fin": 35.995
+  },
+  {
+   "n": 16,
+   "texto": "Y síguenos para no perdértelo.",
+   "inicio": 36.235,
+   "fin": 38.055
+  }
+ ],
+ "duracion": 38.605
+}
