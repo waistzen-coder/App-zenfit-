@@ -593,6 +593,8 @@ window.__IF = {"T":{"mito1":0.12,"flaco1":4.38,"creyo":5.18,"ultima":5.97,"corre
     R.puerta.setAttribute("transform", `translate(2216 0) scale(${f2(1 - 0.75 * abre)} 1) translate(-2216 0)`);
 
     // ── objetos ──
+    // la noche (puede haber varias): el gimnasio a oscuras
+    R.oscuro.setAttribute("opacity", f2(0.78 * Math.max(0, ...OBJ.filter((o) => o.tipo === "noche").map((o) => visible(o, t)))));
     const cabeza = (q) => (H[q] ? H[q].cabeza : { x: 0, y: 0 });
     for (const o of OBJ) {
       const g = R.o[o.i];
@@ -667,7 +669,6 @@ window.__IF = {"T":{"mito1":0.12,"flaco1":4.38,"creyo":5.18,"ultima":5.97,"corre
         const v = `${String(mm).padStart(2, "0")}:${String(ss).padStart(2, "0")}`;
         if (g.txt.textContent !== v) g.txt.textContent = v;
       } else if (o.tipo === "noche") {
-        R.oscuro.setAttribute("opacity", f2(0.78 * vis));
         setOp(g.root, vis);
       } else if (o.tipo === "zzz" || o.tipo === "gotas" || o.tipo === "rayos" || o.tipo === "brillos") {
         const h = cabeza(o.quien);

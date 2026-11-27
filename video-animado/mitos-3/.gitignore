@@ -5,3 +5,6 @@ tools/check.*
 tools/render-*.log
 tools/transcribe-*
 tools/_mezcla-bruta.wav
+tools/rehacer.log
+tools/snap*.json
+tools/check.*
