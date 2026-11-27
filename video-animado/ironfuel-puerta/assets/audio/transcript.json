@@ -1,0 +1,440 @@
+[
+ {
+  "text": "En",
+  "start": 0.12,
+  "end": 0.42,
+  "frase": 1
+ },
+ {
+  "text": "nuestra",
+  "start": 0.43,
+  "end": 0.61,
+  "frase": 1
+ },
+ {
+  "text": "puerta",
+  "start": 0.62,
+  "end": 1.16,
+  "frase": 1
+ },
+ {
+  "text": "hay",
+  "start": 1.17,
+  "end": 1.51,
+  "frase": 1
+ },
+ {
+  "text": "cinco",
+  "start": 1.52,
+  "end": 1.83,
+  "frase": 1
+ },
+ {
+  "text": "palabras.",
+  "start": 1.84,
+  "end": 2.457,
+  "frase": 1
+ },
+ {
+  "text": "Fuerza.",
+  "start": 2.717,
+  "end": 3.377,
+  "frase": 2
+ },
+ {
+  "text": "Resistencia.",
+  "start": 3.654,
+  "end": 4.804,
+  "frase": 3
+ },
+ {
+  "text": "Energía.",
+  "start": 5.061,
+  "end": 5.941,
+  "frase": 4
+ },
+ {
+  "text": "Rendimiento.",
+  "start": 6.467,
+  "end": 7.467,
+  "frase": 5
+ },
+ {
+  "text": "Recuperación.",
+  "start": 7.873,
+  "end": 9.023,
+  "frase": 6
+ },
+ {
+  "text": "Cinco",
+  "start": 9.28,
+  "end": 9.5,
+  "frase": 7
+ },
+ {
+  "text": "objetivos",
+  "start": 9.51,
+  "end": 10.32,
+  "frase": 7
+ },
+ {
+  "text": "distintos.",
+  "start": 10.33,
+  "end": 11.1,
+  "frase": 7
+ },
+ {
+  "text": "Y",
+  "start": 11.389,
+  "end": 11.5,
+  "frase": 8
+ },
+ {
+  "text": "para",
+  "start": 11.51,
+  "end": 11.72,
+  "frase": 8
+ },
+ {
+  "text": "cada",
+  "start": 11.73,
+  "end": 12.1,
+  "frase": 8
+ },
+ {
+  "text": "uno,",
+  "start": 12.11,
+  "end": 12.47,
+  "frase": 8
+ },
+ {
+  "text": "un",
+  "start": 12.48,
+  "end": 12.7,
+  "frase": 8
+ },
+ {
+  "text": "plan",
+  "start": 12.71,
+  "end": 13.02,
+  "frase": 8
+ },
+ {
+  "text": "distinto.",
+  "start": 13.03,
+  "end": 13.669,
+  "frase": 8
+ },
+ {
+  "text": "Por",
+  "start": 13.968,
+  "end": 14.07,
+  "frase": 9
+ },
+ {
+  "text": "eso,",
+  "start": 14.08,
+  "end": 14.53,
+  "frase": 9
+ },
+ {
+  "text": "antes",
+  "start": 14.54,
+  "end": 14.76,
+  "frase": 9
+ },
+ {
+  "text": "de",
+  "start": 14.77,
+  "end": 15.02,
+  "frase": 9
+ },
+ {
+  "text": "venderte",
+  "start": 15.03,
+  "end": 15.37,
+  "frase": 9
+ },
+ {
+  "text": "nada,",
+  "start": 15.38,
+  "end": 15.96,
+  "frase": 9
+ },
+ {
+  "text": "te",
+  "start": 15.97,
+  "end": 16.12,
+  "frase": 9
+ },
+ {
+  "text": "preguntamos",
+  "start": 16.13,
+  "end": 16.97,
+  "frase": 9
+ },
+ {
+  "text": "para",
+  "start": 16.98,
+  "end": 17.18,
+  "frase": 9
+ },
+ {
+  "text": "qué",
+  "start": 17.19,
+  "end": 17.43,
+  "frase": 9
+ },
+ {
+  "text": "entrenas.",
+  "start": 17.44,
+  "end": 17.896,
+  "frase": 9
+ },
+ {
+  "text": "Si",
+  "start": 18.187,
+  "end": 18.27,
+  "frase": 10
+ },
+ {
+  "text": "algo",
+  "start": 18.28,
+  "end": 18.54,
+  "frase": 10
+ },
+ {
+  "text": "te",
+  "start": 18.55,
+  "end": 18.67,
+  "frase": 10
+ },
+ {
+  "text": "sirve,",
+  "start": 18.68,
+  "end": 19.34,
+  "frase": 10
+ },
+ {
+  "text": "te",
+  "start": 19.35,
+  "end": 19.49,
+  "frase": 10
+ },
+ {
+  "text": "explicamos",
+  "start": 19.5,
+  "end": 20.12,
+  "frase": 10
+ },
+ {
+  "text": "por",
+  "start": 20.13,
+  "end": 20.31,
+  "frase": 10
+ },
+ {
+  "text": "qué.",
+  "start": 20.32,
+  "end": 20.587,
+  "frase": 10
+ },
+ {
+  "text": "Si",
+  "start": 20.999,
+  "end": 21.13,
+  "frase": 11
+ },
+ {
+  "text": "no",
+  "start": 21.14,
+  "end": 21.36,
+  "frase": 11
+ },
+ {
+  "text": "te",
+  "start": 21.37,
+  "end": 21.44,
+  "frase": 11
+ },
+ {
+  "text": "hace",
+  "start": 21.45,
+  "end": 21.85,
+  "frase": 11
+ },
+ {
+  "text": "falta,",
+  "start": 21.86,
+  "end": 22.33,
+  "frase": 11
+ },
+ {
+  "text": "te",
+  "start": 22.34,
+  "end": 22.57,
+  "frase": 11
+ },
+ {
+  "text": "lo",
+  "start": 22.58,
+  "end": 22.7,
+  "frase": 11
+ },
+ {
+  "text": "decimos.",
+  "start": 22.71,
+  "end": 23.239,
+  "frase": 11
+ },
+ {
+  "text": "Aunque",
+  "start": 23.578,
+  "end": 24.09,
+  "frase": 12
+ },
+ {
+  "text": "eso",
+  "start": 24.1,
+  "end": 24.34,
+  "frase": 12
+ },
+ {
+  "text": "signifique",
+  "start": 24.35,
+  "end": 24.99,
+  "frase": 12
+ },
+ {
+  "text": "no",
+  "start": 25.0,
+  "end": 25.32,
+  "frase": 12
+ },
+ {
+  "text": "venderte",
+  "start": 25.33,
+  "end": 25.76,
+  "frase": 12
+ },
+ {
+  "text": "nada.",
+  "start": 25.77,
+  "end": 26.298,
+  "frase": 12
+ },
+ {
+  "text": "Y",
+  "start": 26.625,
+  "end": 26.74,
+  "frase": 13
+ },
+ {
+  "text": "debajo",
+  "start": 26.75,
+  "end": 27.06,
+  "frase": 13
+ },
+ {
+  "text": "de",
+  "start": 27.07,
+  "end": 27.39,
+  "frase": 13
+ },
+ {
+  "text": "las",
+  "start": 27.4,
+  "end": 27.48,
+  "frase": 13
+ },
+ {
+  "text": "cinco,",
+  "start": 27.49,
+  "end": 27.97,
+  "frase": 13
+ },
+ {
+  "text": "una",
+  "start": 27.98,
+  "end": 28.26,
+  "frase": 13
+ },
+ {
+  "text": "frase.",
+  "start": 28.27,
+  "end": 28.765,
+  "frase": 13
+ },
+ {
+  "text": "Construye",
+  "start": 28.969,
+  "end": 29.53,
+  "frase": 14
+ },
+ {
+  "text": "tu",
+  "start": 29.54,
+  "end": 29.79,
+  "frase": 14
+ },
+ {
+  "text": "mejor",
+  "start": 29.8,
+  "end": 30.32,
+  "frase": 14
+ },
+ {
+  "text": "versión.",
+  "start": 30.33,
+  "end": 30.939,
+  "frase": 14
+ },
+ {
+  "text": "Áiron",
+  "start": 31.313,
+  "end": 31.86,
+  "frase": 15
+ },
+ {
+  "text": "Fiul",
+  "start": 31.87,
+  "end": 32.04,
+  "frase": 15
+ },
+ {
+  "text": "Nutríshon.",
+  "start": 32.05,
+  "end": 32.933,
+  "frase": 15
+ },
+ {
+  "text": "Síguenos",
+  "start": 33.188,
+  "end": 33.77,
+  "frase": 16
+ },
+ {
+  "text": "y",
+  "start": 33.78,
+  "end": 33.94,
+  "frase": 16
+ },
+ {
+  "text": "ven",
+  "start": 33.95,
+  "end": 34.08,
+  "frase": 16
+ },
+ {
+  "text": "a",
+  "start": 34.09,
+  "end": 34.24,
+  "frase": 16
+ },
+ {
+  "text": "vernos.",
+  "start": 34.25,
+  "end": 34.748,
+  "frase": 16
+ }
+]

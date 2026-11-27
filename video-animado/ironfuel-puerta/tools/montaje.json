@@ -1,0 +1,109 @@
+{
+ "bpm": 127.99,
+ "tiempo": 0.4687866239549965,
+ "fase": 0.37273354689168436,
+ "desfase_musica": 53.032282391853535,
+ "bajon": [
+  22.405717608146468,
+  28.96871760814647
+ ],
+ "frases": [
+  {
+   "n": 1,
+   "texto": "En nuestra puerta hay cinco palabras.",
+   "inicio": 0.12,
+   "fin": 2.457
+  },
+  {
+   "n": 2,
+   "texto": "Fuerza.",
+   "inicio": 2.717,
+   "fin": 3.377
+  },
+  {
+   "n": 3,
+   "texto": "Resistencia.",
+   "inicio": 3.654,
+   "fin": 4.804
+  },
+  {
+   "n": 4,
+   "texto": "Energía.",
+   "inicio": 5.061,
+   "fin": 5.941
+  },
+  {
+   "n": 5,
+   "texto": "Rendimiento.",
+   "inicio": 6.467,
+   "fin": 7.467
+  },
+  {
+   "n": 6,
+   "texto": "Recuperación.",
+   "inicio": 7.873,
+   "fin": 9.023
+  },
+  {
+   "n": 7,
+   "texto": "Cinco objetivos distintos.",
+   "inicio": 9.28,
+   "fin": 11.1
+  },
+  {
+   "n": 8,
+   "texto": "Y para cada uno, un plan distinto.",
+   "inicio": 11.389,
+   "fin": 13.669
+  },
+  {
+   "n": 9,
+   "texto": "Por eso, antes de venderte nada, te preguntamos para qué entrenas.",
+   "inicio": 13.968,
+   "fin": 17.896
+  },
+  {
+   "n": 10,
+   "texto": "Si algo te sirve, te explicamos por qué.",
+   "inicio": 18.187,
+   "fin": 20.587
+  },
+  {
+   "n": 11,
+   "texto": "Si no te hace falta, te lo decimos.",
+   "inicio": 20.999,
+   "fin": 23.239
+  },
+  {
+   "n": 12,
+   "texto": "Aunque eso signifique no venderte nada.",
+   "inicio": 23.578,
+   "fin": 26.298
+  },
+  {
+   "n": 13,
+   "texto": "Y debajo de las cinco, una frase.",
+   "inicio": 26.625,
+   "fin": 28.765
+  },
+  {
+   "n": 14,
+   "texto": "Construye tu mejor versión.",
+   "inicio": 28.969,
+   "fin": 30.939
+  },
+  {
+   "n": 15,
+   "texto": "Áiron Fiul Nutríshon.",
+   "inicio": 31.313,
+   "fin": 32.933
+  },
+  {
+   "n": 16,
+   "texto": "Síguenos y ven a vernos.",
+   "inicio": 33.188,
+   "fin": 34.748
+  }
+ ],
+ "duracion": 35.298
+}

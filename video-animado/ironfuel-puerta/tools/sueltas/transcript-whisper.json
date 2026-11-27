@@ -1,0 +1,434 @@
+[
+  {
+    "text": "En",
+    "start": 0.13,
+    "end": 0.14,
+    "id": "w0"
+  },
+  {
+    "text": "nuestra",
+    "start": 0.14,
+    "end": 0.57,
+    "id": "w1"
+  },
+  {
+    "text": "puerta",
+    "start": 0.67,
+    "end": 1.01,
+    "id": "w2"
+  },
+  {
+    "text": "hay",
+    "start": 1.01,
+    "end": 1.11,
+    "id": "w3"
+  },
+  {
+    "text": "cinco",
+    "start": 1.22,
+    "end": 1.55,
+    "id": "w4"
+  },
+  {
+    "text": "palabras,",
+    "start": 1.55,
+    "end": 2.26,
+    "id": "w5"
+  },
+  {
+    "text": "fuerza,",
+    "start": 2.26,
+    "end": 3.14,
+    "id": "w6"
+  },
+  {
+    "text": "resistencia,",
+    "start": 3.14,
+    "end": 4.6,
+    "id": "w7"
+  },
+  {
+    "text": "energía,",
+    "start": 4.6,
+    "end": 5.54,
+    "id": "w8"
+  },
+  {
+    "text": "rendimiento,",
+    "start": 5.54,
+    "end": 7.26,
+    "id": "w9"
+  },
+  {
+    "text": "recuperación.",
+    "start": 7.26,
+    "end": 8.88,
+    "id": "w10"
+  },
+  {
+    "text": "Cinco",
+    "start": 9.3,
+    "end": 9.32,
+    "id": "w11"
+  },
+  {
+    "text": "objetivos",
+    "start": 9.44,
+    "end": 10.12,
+    "id": "w12"
+  },
+  {
+    "text": "distintos",
+    "start": 10.12,
+    "end": 10.92,
+    "id": "w13"
+  },
+  {
+    "text": "y",
+    "start": 10.92,
+    "end": 10.97,
+    "id": "w14"
+  },
+  {
+    "text": "para",
+    "start": 11.04,
+    "end": 11.37,
+    "id": "w15"
+  },
+  {
+    "text": "cada",
+    "start": 11.37,
+    "end": 11.69,
+    "id": "w16"
+  },
+  {
+    "text": "uno",
+    "start": 11.69,
+    "end": 12.06,
+    "id": "w17"
+  },
+  {
+    "text": "un",
+    "start": 12.06,
+    "end": 12.18,
+    "id": "w18"
+  },
+  {
+    "text": "plan",
+    "start": 12.18,
+    "end": 12.54,
+    "id": "w19"
+  },
+  {
+    "text": "distinto.",
+    "start": 12.54,
+    "end": 13.56,
+    "id": "w20"
+  },
+  {
+    "text": "Por",
+    "start": 13.56,
+    "end": 13.98,
+    "id": "w21"
+  },
+  {
+    "text": "eso,",
+    "start": 13.98,
+    "end": 14.12,
+    "id": "w22"
+  },
+  {
+    "text": "antes",
+    "start": 14.12,
+    "end": 14.46,
+    "id": "w23"
+  },
+  {
+    "text": "de",
+    "start": 14.47,
+    "end": 14.55,
+    "id": "w24"
+  },
+  {
+    "text": "venderte",
+    "start": 14.65,
+    "end": 15.09,
+    "id": "w25"
+  },
+  {
+    "text": "nada,",
+    "start": 15.19,
+    "end": 15.59,
+    "id": "w26"
+  },
+  {
+    "text": "te",
+    "start": 15.59,
+    "end": 15.73,
+    "id": "w27"
+  },
+  {
+    "text": "preguntamos",
+    "start": 15.73,
+    "end": 16.38,
+    "id": "w28"
+  },
+  {
+    "text": "para",
+    "start": 16.73,
+    "end": 16.79,
+    "id": "w29"
+  },
+  {
+    "text": "qué",
+    "start": 16.79,
+    "end": 17,
+    "id": "w30"
+  },
+  {
+    "text": "entrenas.",
+    "start": 17,
+    "end": 17.86,
+    "id": "w31"
+  },
+  {
+    "text": "Si",
+    "start": 17.86,
+    "end": 18.12,
+    "id": "w32"
+  },
+  {
+    "text": "algo",
+    "start": 18.12,
+    "end": 18.38,
+    "id": "w33"
+  },
+  {
+    "text": "te",
+    "start": 18.38,
+    "end": 18.43,
+    "id": "w34"
+  },
+  {
+    "text": "sirve,",
+    "start": 18.43,
+    "end": 18.92,
+    "id": "w35"
+  },
+  {
+    "text": "te",
+    "start": 18.92,
+    "end": 19.06,
+    "id": "w36"
+  },
+  {
+    "text": "explicamos",
+    "start": 19.06,
+    "end": 19.78,
+    "id": "w37"
+  },
+  {
+    "text": "por",
+    "start": 19.78,
+    "end": 19.99,
+    "id": "w38"
+  },
+  {
+    "text": "qué.",
+    "start": 19.99,
+    "end": 20.48,
+    "id": "w39"
+  },
+  {
+    "text": "Si",
+    "start": 20.48,
+    "end": 20.707,
+    "id": "w40"
+  },
+  {
+    "text": "no",
+    "start": 20.707,
+    "end": 20.933,
+    "id": "w41"
+  },
+  {
+    "text": "te",
+    "start": 20.933,
+    "end": 21.16,
+    "id": "w42"
+  },
+  {
+    "text": "hace",
+    "start": 21.16,
+    "end": 21.33,
+    "id": "w43"
+  },
+  {
+    "text": "falta,",
+    "start": 21.33,
+    "end": 21.87,
+    "id": "w44"
+  },
+  {
+    "text": "te",
+    "start": 21.98,
+    "end": 22.1,
+    "id": "w45"
+  },
+  {
+    "text": "lo",
+    "start": 22.1,
+    "end": 22.27,
+    "id": "w46"
+  },
+  {
+    "text": "decimos,",
+    "start": 22.27,
+    "end": 23.04,
+    "id": "w47"
+  },
+  {
+    "text": "aunque",
+    "start": 23.04,
+    "end": 23.41,
+    "id": "w48"
+  },
+  {
+    "text": "eso",
+    "start": 23.77,
+    "end": 23.81,
+    "id": "w49"
+  },
+  {
+    "text": "signifique",
+    "start": 23.81,
+    "end": 24.32,
+    "id": "w50"
+  },
+  {
+    "text": "no",
+    "start": 24.69,
+    "end": 24.83,
+    "id": "w51"
+  },
+  {
+    "text": "venderte",
+    "start": 24.83,
+    "end": 25.51,
+    "id": "w52"
+  },
+  {
+    "text": "nada.",
+    "start": 25.51,
+    "end": 26.2,
+    "id": "w53"
+  },
+  {
+    "text": "Ydebajo",
+    "start": 26.28,
+    "end": 26.75,
+    "id": "w54"
+  },
+  {
+    "text": "de",
+    "start": 26.75,
+    "end": 26.91,
+    "id": "w55"
+  },
+  {
+    "text": "las",
+    "start": 26.91,
+    "end": 27.05,
+    "id": "w56"
+  },
+  {
+    "text": "cinco,",
+    "start": 27.16,
+    "end": 27.69,
+    "id": "w57"
+  },
+  {
+    "text": "una",
+    "start": 27.69,
+    "end": 27.87,
+    "id": "w58"
+  },
+  {
+    "text": "frase.",
+    "start": 27.94,
+    "end": 28.59,
+    "id": "w59"
+  },
+  {
+    "text": "Construye",
+    "start": 29.02,
+    "end": 29.36,
+    "id": "w60"
+  },
+  {
+    "text": "tu",
+    "start": 29.36,
+    "end": 29.53,
+    "id": "w61"
+  },
+  {
+    "text": "mejor",
+    "start": 29.53,
+    "end": 29.85,
+    "id": "w62"
+  },
+  {
+    "text": "versión.",
+    "start": 29.96,
+    "end": 30.8,
+    "id": "w63"
+  },
+  {
+    "text": "Iron",
+    "start": 30.8,
+    "end": 31.15,
+    "id": "w64"
+  },
+  {
+    "text": "Fuel",
+    "start": 31.15,
+    "end": 31.5,
+    "id": "w65"
+  },
+  {
+    "text": "Nutrition.",
+    "start": 31.5,
+    "end": 32.2,
+    "id": "w66"
+  },
+  {
+    "text": "Síguenos",
+    "start": 32.2,
+    "end": 32.8,
+    "id": "w67"
+  },
+  {
+    "text": "y",
+    "start": 32.8,
+    "end": 33.4,
+    "id": "w68"
+  },
+  {
+    "text": "ven",
+    "start": 33.4,
+    "end": 33.52,
+    "id": "w69"
+  },
+  {
+    "text": "a",
+    "start": 33.52,
+    "end": 33.63,
+    "id": "w70"
+  },
+  {
+    "text": "vernos.",
+    "start": 33.63,
+    "end": 34.66,
+    "id": "w71"
+  }
+]
