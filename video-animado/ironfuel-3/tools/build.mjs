@@ -37,14 +37,14 @@ const T = {
   pidio: P("Pidió", 1), mismo: P("mismo"), chaval2: P("chaval", 2), chaval2Fin: E("chaval", 2),
   dependiente: P("dependiente"), saco: P("sacó"), dos1: P("dos", 1), botes: P("botes"),
   uno1: P("Uno", 1), colageno1: P("colágeno", 1), vitamina1: P("vitamina", 1),
-  una1: P("Una", 1), dia: P("día"), agua: P("agua"),
+  una1: P("Una", 2), dia: P("día"), agua: P("agua"),
   vitamina2: P("vitamina", 2), formar: P("formar"), colageno2: P("colágeno", 2), cartilagos: P("cartílagos"), normalidadFin: E("normalidad"),
   dos2: P("Dos", 2), vitamina3: P("vitamina", 3),
-  una2: P("Una", 2), capsula: P("cápsula"), comida: P("comida"),
-  ayuda: P("Ayuda"), huesos: P("huesos"), musculos: P("músculos"), normalesFin: E("normales"),
+  una2: P("Una", 3), capsula: P("cápsula"), comida: P("comida"),
+  ayuda: P("Ayuda", 2), huesos: P("huesos"), musculos: P("músculos"), normalesFin: E("normales"),
   dijo: P("dijo"), siempre: P("siempre"), version: P("versión"), abuelo2: P("abuelo", 2),
   duele: P("duele"), medico: P("médico"), sin: P("sin", 1), entrenar: P("entrenar"), nada: P("nada"),
-  pago: P("Pagó"), fue: P("fue"), gimnasio2: P("gimnasio", 2), ritmo: P("ritmo"),
+  pago: P("Pagó"), fue: P("fue", 2), gimnasio2: P("gimnasio", 2), ritmo: P("ritmo"),
   semana1: P("Semana", 1), uno2: P("uno", 2), chaval3: P("chaval", 3), sentadilla: P("sentadilla"),
   semana2: P("Semana", 2), cuatro: P("cuatro"), agarrarse: P("agarrarse"),
   semana3: P("Semana", 3), ocho: P("ocho"), descanso: P("descanso"), chaval4: P("chaval", 4),
@@ -52,6 +52,11 @@ const T = {
   siguenos: P("Síguenos"), cuento: P("cuento"), cuarta: P("cuarta"), parte: P("parte"),
 };
 for (const [k, v] of Object.entries(T)) if (!Number.isFinite(v)) throw new Error("tiempo raro: " + k);
+// aviso: palabras repetidas que caen antes de lo esperado (el orden del bloque T es el del guion)
+{
+  const ks = Object.keys(T);
+  for (let i = 1; i < ks.length; i++) if (T[ks[i]] + 0.05 < T[ks[i - 1]] && !ks[i].endsWith("Fin") && !ks[i - 1].endsWith("Fin")) console.log(`  ⚠ ${ks[i]} (${T[ks[i]].toFixed(2)} s) cae antes que ${ks[i - 1]} (${T[ks[i - 1]].toFixed(2)} s): ¿palabra repetida?`);
+}
 
 // ───────────── colores ─────────────
 const C = {
@@ -247,7 +252,7 @@ function regla() {
 }
 // lo que piensa el abuelo delante del gimnasio
 function pensamiento() {
-  return `<g id="pensamiento" opacity="0"><circle cx="2860" cy="1170" r="16" fill="#fff"/><circle cx="2890" cy="1120" r="24" fill="#fff"/><rect x="2730" y="900" width="470" height="190" rx="70" fill="#fff" filter="url(#sombra)"/>${icono("barbell", 2810, 995, 90, C.azul)}${txt(3020, 1018, "¡YO TAMBIÉN!", 50, C.tinta, 900)}</g>`;
+  return `<g id="pensamiento" opacity="0"><circle cx="2850" cy="1170" r="16" fill="#fff"/><circle cx="2830" cy="1120" r="24" fill="#fff"/><rect x="2600" y="900" width="480" height="190" rx="70" fill="#fff" filter="url(#sombra)"/>${icono("barbell", 2680, 995, 90, C.azul)}${txt(2890, 1018, "¡YO TAMBIÉN!", 50, C.tinta, 900)}</g>`;
 }
 // crujidos en las rodillas
 function crujidos() {
@@ -260,7 +265,7 @@ function pregunta() {
 }
 // banco del gimnasio
 function banco() {
-  return `<g><rect x="3800" y="1652" width="200" height="34" rx="10" fill="#2B2F36"/><rect x="3812" y="1686" width="16" height="114" fill="#5A616B"/><rect x="3972" y="1686" width="16" height="114" fill="#5A616B"/></g>`;
+  return `<g><rect x="3950" y="1652" width="200" height="34" rx="10" fill="#2B2F36"/><rect x="3962" y="1686" width="16" height="114" fill="#5A616B"/><rect x="4122" y="1686" width="16" height="114" fill="#5A616B"/></g>`;
 }
 // la pila que lleva encima de la cabeza
 function pila() {
@@ -270,7 +275,7 @@ function pila() {
 function seguir() {
   return `<g id="seguir" opacity="0"><rect x="540" y="80" width="1840" height="400" rx="56" fill="#fff" filter="url(#sombra)"/>
   ${logo(700, 200, 96)}
-  ${txt(830, 238, "IRONFUEL NUTRITION", 100, C.tinta, 900, "start")}
+  ${txt(830, 238, "IRON FUEL NUTRITION", 100, C.tinta, 900, "start")}
   <g id="chip-p2" opacity="0"><rect x="600" y="305" width="460" height="130" rx="65" fill="${C.tinta}"/>${txt(830, 400, "PARTE 3", 88, "#fff", 900)}</g>
   <g id="chip-p3" opacity="0"><rect x="1090" y="305" width="520" height="130" rx="65" fill="#E5E7EB"/>${icono("clock", 1160, 370, 70, "#4B515B")}${txt(1385, 400, "PARTE 4", 88, "#4B515B", 900)}</g>
   <g id="boton-seguir"><rect id="boton-fondo" x="1660" y="305" width="660" height="130" rx="65" fill="${C.azul}"/><g id="boton-seguir-txt">${txt(1990, 400, "SEGUIR", 88, "#fff", 900)}</g><g id="boton-siguiendo" opacity="0">${icono("check-circle", 1720, 370, 70, C.verdeTxt)}${txt(2030, 398, "SIGUIENDO", 80, C.tinta, 900)}</g></g>

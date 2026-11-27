@@ -80,9 +80,10 @@
     [0, 2690, 1390, 0.95],
     [0.4, 2750, 1430, 1.25, "expo"],
     [T.puerta + 0.1, 2870, 1470, 1.42, "io"],
-    [T.pero + 0.15, 3150, 1300, 0.85, "io"],
-    [T.apuntarse + 0.4, 3060, 1250, 0.92, "s"],
-    [T.asi + 0.05, 2900, 1320, 0.95, "s"],
+    [T.pero + 0.15, 3190, 1300, 0.82, "io"],
+    [T.apuntarse + 0.4, 3180, 1260, 0.82, "s"],
+    [T.asi - 0.02, 3170, 1265, 0.83, "s"],
+    [T.asi + 0.3, 2900, 1320, 0.95, "io"],
     [T.tienda + 0.3, 2150, 1360, 0.9, "io"],
     [T.pidio + 0.3, 1330, 1380, 1.03, "io3"],
     [T.chaval2Fin, 1330, 1385, 1.03, "s"],
@@ -101,11 +102,11 @@
     [T.fue, 1460, 1330, 1.0, "s"],
     [T.fue + 0.45, 2200, 1370, 0.9, "io"],
     [T.ritmo + 0.55, 3300, 1310, 0.95, "io"],
-    [T.semana1 + 0.15, 3480, 1300, 1.0, "io3"],
-    [T.cuatro + 0.3, 3500, 1300, 1.0, "s"],
-    [T.descanso, 3600, 1300, 0.95, "io"],
-    [T.chaval4 + 0.05, 3620, 1310, 1.02, "o"],
-    [T.vecina - 0.15, 3560, 1300, 0.98, "s"],
+    [T.semana1 + 0.15, 3560, 1300, 0.96, "io3"],
+    [T.cuatro + 0.3, 3570, 1300, 0.96, "s"],
+    [T.descanso, 3700, 1300, 0.9, "io"],
+    [T.chaval4 + 0.05, 3700, 1310, 0.91, "o"],
+    [T.vecina - 0.15, 3700, 1300, 0.9, "s"],
     [T.vecina + 0.45, 2200, 1360, 0.9, "io3"],
     [T.pidio2Fin, 2200, 1350, 0.92, "s"],
     [T.siguenos + 0.25, 1460, 1070, 0.51, "io3"],
@@ -369,8 +370,8 @@
   const SITIO = 1600; // delante del mostrador
   const BARRA_X = 3450; // donde levanta el chaval al principio
   const ABU_GYM = 3330; // donde hace las sentadillas el abuelo
-  const COACH = 3640; // el chaval, enseñándole
-  const BANCO = 3900; // donde acaba sentado el chaval
+  const COACH = 3820; // el chaval, enseñándole
+  const BANCO = 4050; // donde acaba sentado el chaval
   const mezclaP = (a, b, u) => {
     const o = {};
     for (const k in a) o[k] = lerp(a[k], b[k], u);
@@ -507,7 +508,7 @@
       piernas = sentadilla(q);
       agache = 118 * q;
       lean = 14 * q;
-      pose = q > 0 ? POSES.frente : t > T.agarrarse ? P("manos") : P("brazos");
+      pose = q > 0 ? P("manos") : t > T.agarrarse ? P("manos") : P("brazos");
       habla = t > T.chaval3 && t < T.sentadilla + 0.6;
       gesto = t > T.agarrarse ? G("wow") : G("sonrisa");
       mx = 0.9;
@@ -733,7 +734,7 @@
     // ── «¡yo también!» ──
     {
       const p = pop(t, T.apuntarse - 0.05, 0.35);
-      R.pensamiento.setAttribute("transform", `translate(2960 1050) scale(${f2(p.s)}) translate(-2960 -1050)`);
+      R.pensamiento.setAttribute("transform", `translate(2840 1050) scale(${f2(p.s)}) translate(-2840 -1050)`);
       setOp(R.pensamiento, p.o * popOut(t, T.asi + 0.1));
     }
 
@@ -865,6 +866,7 @@
       // la barra (doblada desde la primera parte): en sus manos al principio; luego, en el suelo
       if (t < T.asi) barra(R.barraF, t, hf.manoL, hf.manoR, 1, discos);
       else barra(R.barraF, t, { x: 4130, y: SUELO - 104 }, { x: 4390, y: SUELO - 104 }, 1, discos);
+      setOp(R.barraF.root, t < T.asi ? 1 : 0);
       barra(R.barraV, t, { x: 9000, y: 0 }, { x: 9100, y: 0 }, 0, [{ s: 0, o: 0 }, { s: 0, o: 0 }]);
       setOp(R.barraV.root, 0);
       for (const l of R.luces) setOp(l, 1);

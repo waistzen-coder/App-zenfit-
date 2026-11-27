@@ -1,7 +1,7 @@
 # Cómo rehacer el vídeo de IronFuel Nutrition · Parte 2 (omega-3 y multivitamínico)
 
 Es la continuación de `../ironfuel/` (parte 1, creatina y proteína): mismo mundo, mismos
-personajes y la misma línea naranja en el suelo, con el protagonista ya musculado.
+personajes y la misma línea azul en el suelo, con el protagonista ya musculado.
 
 Todo el vídeo sale de `guion.txt` y de la voz. Si cambias una frase o la voz, repites
 los pasos 2 a 8 y todo se recoloca solo: la cámara, los personajes, los subtítulos y
@@ -72,7 +72,7 @@ Para ver y retocar el vídeo en el navegador: `npx hyperframes preview`.
 | Efectos de sonido y su volumen | `tools/build.mjs`, lista `SFX`: `[segundo, archivo, dB, qué lo provoca]` |
 | La música | `tools/build.mjs`, `cues.musica` (archivo, desde qué segundo y dB) |
 | La tarjeta «botes + comida + sueño ≠ magia» y la de seguir | `tools/build.mjs`: `regla()` y `seguir()` |
-| Los subtítulos (palabras clave en naranja) | `tools/build.mjs`, conjunto `CLAVE` y estilos de `subtitulos.html` |
+| Los subtítulos (palabras clave en azul) | `tools/build.mjs`, conjunto `CLAVE` y estilos de `subtitulos.html` |
 
 Si cambias una frase y desaparece una palabra que usa el bloque `T`, `node tools/build.mjs`
 se para y te dice cuál es: cámbiala por la palabra nueva que nombre esa misma cosa.
@@ -80,7 +80,7 @@ se para y te dice cuál es: cámbiala por la palabra nueva que nombre esa misma 
 ## Cómo está hecho
 
 - **Un solo mundo y una sola cámara.** La calle, la tienda y el gimnasio son un único
-  lienzo SVG. Una línea naranja en el suelo une el mostrador con el gimnasio y se dibuja
+  lienzo SVG. Una línea azul en el suelo une el mostrador con el gimnasio y se dibuja
   mientras la cámara sigue al protagonista. El desenfoque solo aparece en los viajes largos.
 - **Todo es una función del tiempo.** `motor.js` pinta cada fotograma con `render(t)` y una
   única línea de tiempo de GSAP mueve `t`: la vista previa y el render salen idénticos.
@@ -92,6 +92,28 @@ se para y te dice cuál es: cámbiala por la palabra nueva que nombre esa misma 
 - **Los tiempos de la voz se corrigen con el audio.** Whisper adelanta las palabras entre
   0,2 y 0,4 s porque se come las pausas. `tiempos.mjs` coloca cada frase en su hueco
   real de voz y pega a su microsilencio las palabras que empiezan por p, t, c, b, d o g.
+
+## La marca y la tienda
+
+- Colores sacados del logo de Iron Fuel Nutrition: azul eléctrico `#1D6BFF` y gama de acero.
+  Están en `tools/build.mjs`, objeto `C`.
+- El logo está en `assets/brand/logo.png` (recorte circular del que pasaste).
+- La tienda copia la fachada real: edificio de ladrillo con balcones blancos, cartel negro con
+  «IF» cromado, «IRON FUEL» en cursiva y «NUTRITION» en azul con la raya diagonal, el lema
+  «CONSTRUYE TU MEJOR VERSIÓN» sobre la puerta y estanterías blancas con tira LED azul.
+  El original común está en `../comun/tienda.js`; `../comun/aplicar_marca.py` lo copia en
+  cada `tools/build.mjs`.
+
+## Todo de una vez
+
+Desde `video-animado/`: `bash comun/rehacer.sh NOMBRE-DE-LA-CARPETA` genera, mezcla, comprueba
+(check, zonas seguras y sincronía), renderiza los dos vídeos y verifica negros, duración y volumen.
+
+## Datos que hay que comprobar antes de publicar
+
+- [COMPROBAR] Omega-3: el efecto sobre el corazón se consigue con 250 mg diarios de EPA + DHA. Revisa la etiqueta del producto real.
+- [COMPROBAR] Multivitamínico: «reduce el cansancio» y «defensas» dependen de qué vitaminas lleve (B, C, D…) y en qué cantidad. Revisa la fórmula.
+- [COMPROBAR] Dosis («con la comida», «uno al día en el desayuno») según el producto real.
 
 ## Créditos
 

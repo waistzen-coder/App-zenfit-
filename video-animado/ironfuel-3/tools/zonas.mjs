@@ -17,22 +17,23 @@ const T = IF.T, D = IF.D;
 const ZONA = { x0: 60, x1: 1020, y0: 220, y1: 1500 };
 // [nombre, desde, hasta, caja del mundo x0, y0, x1, y1]
 const COSAS = [
-  ["chico con la barra", 0.5, T.pero1, 3150, 950, 3750, 1500],
-  ["marcador (semana 12)", 0.5, T.mitad, 3180, 880, 3720, 1110],
-  ["bocadillo", T.esta + 0.4, T.dependiente - 0.1, 1220, 900, 1740, 1150],
-  ["dependiente", T.esta + 0.4, T.pilas2Fin, 880, 1150, 1130, 1470],
-  ["chico delante del mostrador", T.esta + 0.4, T.pilas2Fin, 1420, 1110, 1780, 1800],
-  ["tarjeta del omega-3", T.con + 0.4, T.normalidadFin + 0.1, 420, 780, 900, 1200],
-  ["bote de omega-3", T.uno1 + 0.4, T.normalidadFin, 610, 1220, 790, 1470],
-  ["tarjeta del multivitamínico", T.uno2 + 0.4, T.defensas + 0.4, 1080, 780, 1560, 1140],
-  ["bote de multivitamínico", T.multi, T.defensas + 0.4, 1165, 1200, 1355, 1470],
-  ["dependiente («lo de siempre»)", T.repitio + 0.3, T.esto1, 880, 1150, 1130, 1470],
-  ["tarjeta botes + comida + sueño", T.comer + 0.1, T.magiaFin, 640, 140, 2280, 440],
+  ["abuelo (rodillas que crujen)", 0.5, T.vieja, 2780, 1250, 2980, 1800],
+  ["«¡yo también!»", T.apuntarse + 0.3, T.asi, 2600, 900, 3080, 1170],
+  ["abuelo y chaval en el gimnasio", T.apuntarse + 0.3, T.asi - 0.05, 2780, 1100, 3720, 1800],
+  ["bocadillo", T.pidio + 0.4, T.dependiente - 0.1, 1220, 900, 1740, 1150],
+  ["dependiente", T.pidio + 0.4, T.chaval2Fin, 880, 1150, 1130, 1470],
+  ["abuelo en el mostrador", T.pidio + 0.4, T.chaval2Fin, 1520, 1250, 1700, 1800],
+  ["tarjeta del colágeno", T.una1 + 0.4, T.normalidadFin + 0.1, 420, 780, 900, 1200],
+  ["bote de colágeno", T.uno1 + 0.4, T.normalidadFin, 610, 1220, 790, 1470],
+  ["tarjeta de la vitamina D", T.una2 + 0.4, T.normalesFin, 1080, 780, 1560, 1140],
+  ["bote de vitamina D", T.vitamina3, T.normalesFin, 1165, 1180, 1355, 1470],
+  ["dependiente («versión abuelo»)", T.siempre + 0.3, T.duele, 880, 1150, 1130, 1470],
+  ["tarjeta médico → entrenar → botes", T.medico + 0.1, T.pago - 0.2, 640, 140, 2280, 440],
   ["marcador de semanas", T.semana1 + 0.4, T.cuatro + 0.4, 3180, 880, 3720, 1110],
-  ["chico con la pila llena", T.semana1 + 0.4, T.gimnasio3 + 0.4, 3250, 1000, 3650, 1500],
-  ["el de al lado antes de irse", T.cuatro + 0.4, T.ultimo, 3990, 1180, 4250, 1800],
-  ["abuelo con su caja", T.caja - 0.1, T.segunda2, 1960, 1250, 2160, 1800],
-  ["tarjeta de seguir", T.segunda2 + 0.5, D, 540, 80, 2380, 480],
+  ["abuelo haciendo sentadillas", T.sentadilla, T.chaval4, 3200, 1250, 3470, 1800],
+  ["el chaval sentado en el banco", T.descanso + 0.5, T.vecina - 0.2, 3880, 1150, 4220, 1800],
+  ["la vecina y su interrogación", T.pidio2 + 0.3, T.siguenos, 2080, 1150, 2250, 1800],
+  ["tarjeta de seguir", T.siguenos + 0.5, D, 540, 80, 2380, 480],
 ];
 let fallos = 0;
 for (const [nombre, t0, t1, x0, y0, x1, y1] of COSAS) {

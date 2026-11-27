@@ -3,7 +3,7 @@
     python3 tools/mezclar.py        (después de node tools/build.mjs)
 
 Lee tools/cues.json (lo escribe build.mjs con los tiempos de la voz) y deja
-assets/audio/mezcla.wav a -14 LUFS integrados y pico real ≤ -1 dBTP.
+assets/audio/mezcla.wav a -14 LUFS integrados y pico real ≤ -2,5 dBTP (margen para el AAC).
 Cada efecto se adelanta lo que tarde en sonar su golpe, para que el golpe caiga
 un fotograma después de la imagen (la luz llega antes que el sonido).
 """
@@ -100,13 +100,13 @@ def main():
         check=True,
     )
     medida = subprocess.run(
-        ["ffmpeg", "-hide_banner", "-nostats", "-i", bruto, "-af", "loudnorm=I=-14:TP=-1.5:LRA=11:print_format=json", "-f", "null", "-"],
+        ["ffmpeg", "-hide_banner", "-nostats", "-i", bruto, "-af", "loudnorm=I=-14:TP=-2.5:LRA=11:print_format=json", "-f", "null", "-"],
         capture_output=True,
         text=True,
     ).stderr
     js = json.loads(medida[medida.rindex("{") : medida.rindex("}") + 1])
     filtro = (
-        "loudnorm=I=-14:TP=-1.5:LRA=11:linear=true:"
+        "loudnorm=I=-14:TP=-2.5:LRA=11:linear=true:"
         f"measured_I={js['input_i']}:measured_TP={js['input_tp']}:measured_LRA={js['input_lra']}:"
         f"measured_thresh={js['input_thresh']}:offset={js['target_offset']}"
     )

@@ -259,7 +259,7 @@ function pila() {
 function seguir() {
   return `<g id="seguir" opacity="0"><rect x="540" y="80" width="1840" height="400" rx="56" fill="#fff" filter="url(#sombra)"/>
   ${logo(700, 200, 96)}
-  ${txt(830, 238, "IRONFUEL NUTRITION", 100, C.tinta, 900, "start")}
+  ${txt(830, 238, "IRON FUEL NUTRITION", 100, C.tinta, 900, "start")}
   <g id="chip-p2" opacity="0"><rect x="600" y="305" width="460" height="130" rx="65" fill="${C.tinta}"/>${txt(830, 400, "PARTE 2", 88, "#fff", 900)}</g>
   <g id="chip-p3" opacity="0"><rect x="1090" y="305" width="520" height="130" rx="65" fill="#E5E7EB"/>${icono("clock", 1160, 370, 70, "#4B515B")}${txt(1385, 400, "PARTE 3", 88, "#4B515B", 900)}</g>
   <g id="boton-seguir"><rect id="boton-fondo" x="1660" y="305" width="660" height="130" rx="65" fill="${C.azul}"/><g id="boton-seguir-txt">${txt(1990, 400, "SEGUIR", 88, "#fff", 900)}</g><g id="boton-siguiendo" opacity="0">${icono("check-circle", 1720, 370, 70, C.verdeTxt)}${txt(2030, 398, "SIGUIENDO", 80, C.tinta, 900)}</g></g>
