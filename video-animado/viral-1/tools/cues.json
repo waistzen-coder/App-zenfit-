@@ -1,0 +1,259 @@
+{
+  "duracion": 27.933333333333334,
+  "voz": "assets/audio/voz.wav",
+  "musica": {
+    "archivo": "assets/music/basketball-training.mp3",
+    "desde": 60,
+    "db": -27
+  },
+  "efectos": [
+    {
+      "t": 1.14,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -15,
+      "que": "señala al flaco",
+      "dur": null
+    },
+    {
+      "t": 1.95,
+      "archivo": "assets/sfx/click-2.mp3",
+      "db": -12,
+      "que": "calendario: día 1",
+      "dur": null
+    },
+    {
+      "t": 2.72,
+      "archivo": "assets/sfx/datafono.mp3",
+      "db": -13,
+      "que": "me compra",
+      "dur": null
+    },
+    {
+      "t": 3.12,
+      "archivo": "assets/sfx/boing.mp3",
+      "db": -17,
+      "que": "salto",
+      "dur": null
+    },
+    {
+      "t": 3.47,
+      "archivo": "assets/sfx/click-2.mp3",
+      "db": -12,
+      "que": "día 2",
+      "dur": null
+    },
+    {
+      "t": 4.187,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -14,
+      "que": "cacito",
+      "dur": null
+    },
+    {
+      "t": 4.683,
+      "archivo": "assets/sfx/camara.mp3",
+      "db": -7,
+      "que": "foto",
+      "dur": null
+    },
+    {
+      "t": 5.214,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -13,
+      "que": "#NUEVAVIDA",
+      "dur": null
+    },
+    {
+      "t": 6.037,
+      "archivo": "assets/sfx/click-2.mp3",
+      "db": -12,
+      "que": "día 3",
+      "dur": null
+    },
+    {
+      "t": 6.609,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -13,
+      "que": "bocadillo: hoy no toca",
+      "dur": null
+    },
+    {
+      "t": 8.423,
+      "archivo": "assets/sfx/click-2.mp3",
+      "db": -12,
+      "que": "día 4",
+      "dur": null
+    },
+    {
+      "t": 8.623,
+      "archivo": "assets/sfx/whoosh-3.mp3",
+      "db": -18,
+      "que": "se va con el móvil",
+      "dur": null
+    },
+    {
+      "t": 10.123,
+      "archivo": "assets/sfx/click-2.mp3",
+      "db": -12,
+      "que": "día 10",
+      "dur": null
+    },
+    {
+      "t": 10.842,
+      "archivo": "assets/sfx/whoosh-2.mp3",
+      "db": -14,
+      "que": "cajas de cereales",
+      "dur": null
+    },
+    {
+      "t": 11.142,
+      "archivo": "assets/sfx/golpe-madera.mp3",
+      "db": -16,
+      "que": "caja",
+      "dur": null
+    },
+    {
+      "t": 11.292,
+      "archivo": "assets/sfx/golpe-madera.mp3",
+      "db": -18,
+      "que": "caja",
+      "dur": null
+    },
+    {
+      "t": 12.689,
+      "archivo": "assets/sfx/click-2.mp3",
+      "db": -11,
+      "que": "día 30",
+      "dur": null
+    },
+    {
+      "t": 13.557,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -13,
+      "que": "bocadillo: no funciona",
+      "dur": null
+    },
+    {
+      "t": 15.543,
+      "archivo": "assets/sfx/golpe-climax.mp3",
+      "db": -8,
+      "que": "el bote explota",
+      "dur": 1.6
+    },
+    {
+      "t": 15.593,
+      "archivo": "assets/sfx/whoosh-1.mp3",
+      "db": -11,
+      "que": "vuelan los cereales",
+      "dur": null
+    },
+    {
+      "t": 16.88,
+      "archivo": "assets/sfx/punch.mp3",
+      "db": -12,
+      "que": "le señala",
+      "dur": null
+    },
+    {
+      "t": 17.533,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -11,
+      "que": "tarjeta CÓMO TOMARLA",
+      "dur": null
+    },
+    {
+      "t": 18.76,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -14,
+      "que": "fila todos los días",
+      "dur": null
+    },
+    {
+      "t": 19.684,
+      "archivo": "assets/sfx/boing.mp3",
+      "db": -17,
+      "que": "salto de alegría",
+      "dur": null
+    },
+    {
+      "t": 19.579,
+      "archivo": "assets/sfx/pop-3.mp3",
+      "db": -14,
+      "que": "fila descanso",
+      "dur": null
+    },
+    {
+      "t": 22.048,
+      "archivo": "assets/sfx/pop-2.mp3",
+      "db": -14,
+      "que": "fila rendimiento",
+      "dur": null
+    },
+    {
+      "t": 22.934,
+      "archivo": "assets/sfx/whoosh-2.mp3",
+      "db": -14,
+      "que": "sprint",
+      "dur": null
+    },
+    {
+      "t": 24.565,
+      "archivo": "assets/sfx/whoosh-3.mp3",
+      "db": -13,
+      "que": "llamada",
+      "dur": null
+    },
+    {
+      "t": 26.862,
+      "archivo": "assets/sfx/pop-1.mp3",
+      "db": -13,
+      "que": "la mano",
+      "dur": null
+    },
+    {
+      "t": 27.012,
+      "archivo": "assets/sfx/click-1.mp3",
+      "db": -8,
+      "que": "ENVIAR",
+      "dur": null
+    }
+  ],
+  "apariciones": {
+    "soy": 0.12,
+    "flaco": 1.14,
+    "dia1": 1.95,
+    "compra": 2.72,
+    "dia2": 3.47,
+    "cacito": 4.187,
+    "foto": 4.683,
+    "instagram": 5.214,
+    "dia3": 6.037,
+    "hoy1": 6.609,
+    "entreno": 6.913,
+    "toca": 7.83,
+    "dia4": 8.423,
+    "olvida": 9.473,
+    "dia10": 10.123,
+    "esconde": 10.842,
+    "cereales": 11.909,
+    "dia30": 12.689,
+    "treinta": 12.89,
+    "dice": 13.557,
+    "funciona": 14.67,
+    "que2": 15.543,
+    "funciono": 15.8,
+    "tomas": 16.88,
+    "tres2": 17.533,
+    "todos": 18.76,
+    "dias": 19.284,
+    "tambien": 19.579,
+    "descanso": 20.238,
+    "asi": 21.093,
+    "rendir": 22.048,
+    "esfuerzos": 22.934,
+    "cortos": 23.467,
+    "etiqueta": 24.865,
+    "abandonada": 26.762,
+    "fin": 27.373
+  }
+}

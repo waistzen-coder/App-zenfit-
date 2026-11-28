@@ -74,11 +74,57 @@
     };
   }
 
+  // ── el bote que habla: caras y brazos (se pasa de una a otra en un instante) ──
+  const EMO = {
+    alegre: { cy: 0, cr: -4, c: 22, a: 4, w: 46, ojo: 1, pu: 1 },
+    feliz: { cy: -10, cr: -6, c: 30, a: 18, w: 56, ojo: 1, pu: 1 },
+    triste: { cy: 4, cr: -20, c: -18, a: 0, w: 34, ojo: 0.85, pu: 1.15 },
+    enfadada: { cy: 12, cr: 24, c: -12, a: 6, w: 44, ojo: 0.8, pu: 0.8 },
+    sorpresa: { cy: -20, cr: 0, c: 0, a: 26, w: 26, ojo: 1.2, pu: 0.7 },
+    aburrida: { cy: 6, cr: 0, c: -4, a: 0, w: 32, ojo: 0.45, pu: 1 },
+    seria: { cy: 4, cr: 8, c: 0, a: 0, w: 38, ojo: 1, pu: 1 },
+  };
+  const BRAZOS = {
+    abajo: { L: 14, R: -14 }, triste: { L: 4, R: -4 }, arriba: { L: 150, R: -150 }, saludo: { L: 14, R: -150 },
+    senala: { L: 14, R: -98 }, dedo: { L: 14, R: -165 }, posa: { L: 122, R: -122 }, jarras: { L: 42, R: -42 }, abiertos: { L: 100, R: -100 },
+  };
+  const escalones = (keys, tabla, d, e) => {
+    if (!keys.length) return [];
+    const r = [[keys[0][0], tabla[keys[0][1]]]];
+    for (let k = 1; k < keys.length; k++) {
+      if (!tabla[keys[k][1]]) throw new Error("bote: no conozco «" + keys[k][1] + "»");
+      r.push([keys[k][0], tabla[keys[k - 1][1]]], [keys[k][0] + d, tabla[keys[k][1]], keys[k][2] || e]);
+    }
+    return r;
+  };
+  // cuánto abre la boca la voz en t (0-1): sílabas dentro de cada palabra
+  const W = IF.W || [];
+  function voz(t) {
+    let a = 0;
+    for (const [s, e] of W) {
+      if (t < s - 0.02) break;
+      if (t <= e + 0.03) {
+        const u = clamp((t - s) / Math.max(0.08, e - s));
+        a = Math.max(a, Math.pow(Math.sin(Math.PI * u), 0.6) * (0.5 + 0.5 * Math.abs(Math.sin((t - s) * TAU * 4.2))));
+      }
+    }
+    return a;
+  }
+
   // ── objetos de la escena (bocadillos, nube, relojes, barra…): uno por entrada de EP.objetos ──
   const OBJ = EP.objetos.map((o, i) => {
     const r = { ...o, i, t0: tkx(o.t0), t1: o.t1 == null ? 1e9 : tkx(o.t1) };
     if (o.sello != null) r.sello = tkx(o.sello);
     if (o.reps) r.reps = resolver(o.reps);
+    if (o.tipo === "botevivo") {
+      Object.assign(r, {
+        xk: resolver(o.xk), yk: resolver(o.yk), polvoK: resolver(o.polvo), temblorK: resolver(o.temblor), rotK: resolver(o.rot),
+        miraK: resolver(o.mira), telasK: resolver(o.telas), saltos: (o.saltos || []).map(tkx), hablaR: rangos(o.habla), saludaR: rangos(o.saluda),
+        emoK: escalones(resolver(o.emo || [[0, "alegre"]]), EMO, 0.16, "o"), brazosK: escalones(resolver(o.brazos || [[0, "abajo"]]), BRAZOS, 0.24, "backS"),
+      });
+      if (r.saltos.some((v) => v == null || Number.isNaN(v))) throw new Error("bote: salto raro");
+    }
+    if (o.tipo === "calendario") r.dias = resolver(o.dias);
     if (r.t0 == null || Number.isNaN(r.t0) || Number.isNaN(r.t1)) throw new Error(`objeto ${i} (${o.tipo}): momento raro`);
     return r;
   });
@@ -86,7 +132,7 @@
 
   // ── la tarjeta REALIDAD, el producto, el veredicto y la llamada ──
   const PROD = EP.producto ? { ...EP.producto, t: tkx(EP.producto.t), t1: EP.producto.t1 == null ? 1e9 : tkx(EP.producto.t1) } : null;
-  const VER = { ...EP.veredicto, t: tkx(EP.veredicto.t), sello: tkx(EP.veredicto.sello) };
+  const VER = EP.veredicto ? { ...EP.veredicto, t: tkx(EP.veredicto.t), sello: tkx(EP.veredicto.sello) } : null;
   const CTA = { ...EP.cta, t: tkx(EP.cta.t), siguenos: tkx(EP.cta.siguenos) };
 
   let R = null;
@@ -99,13 +145,17 @@
       o: OBJ.map((o) => {
         const g = { root: $(`o${o.i}`) };
         const sub = (n) => document.getElementById(`o${o.i}-${n}`);
-        for (const n of ["in", "sello", "tacha", "nube", "fx", "txt", "bar", "cinta", "luna", "hora"]) if (sub(n)) g[n] = sub(n);
+        for (const n of ["in", "sello", "tacha", "nube", "fx", "txt", "bar", "cinta", "luna", "hora", "num", "hoja"]) if (sub(n)) g[n] = sub(n);
+        if (o.tipo === "botevivo") {
+          g.b = {};
+          for (const n of ["cuerpo", "sombra", "boca", "polvo", "telas", "ojoL", "ojoR", "pL", "pR", "cejaL", "cejaR", "brazoL", "brazoR"]) g.b[n] = $(`o${o.i}-${n}`);
+        }
         g.discos = [0, 1, 2, 3, 4, 5].map((k) => sub("d" + k)).filter(Boolean);
         g.items = [0, 1, 2, 3, 4, 5].map((k) => sub("k" + k)).filter(Boolean);
         return g;
       }),
       prod: PROD ? $("producto") : null,
-      ver: $("veredicto"), verSello: $("veredicto-sello"), verTacha: $("veredicto-tacha"),
+      ver: VER ? $("veredicto") : null, verSello: VER ? $("veredicto-sello") : null, verTacha: VER ? $("veredicto-tacha") : null,
       cta: $("cta"), ctaTxt: $("cta-escribe"), ctaCursor: $("cta-cursor"), boton: $("boton-fondo"), botonSeguir: $("boton-seguir-txt"), botonSiguiendo: $("boton-siguiendo"), dedo: $("dedo-tap"),
     };
   }
@@ -285,6 +335,91 @@
             g.root.setAttribute("transform", `translate(${f2(m.x)} ${f2(m.y)}) scale(${f2(h.st.s)})`);
           }
         }
+      } else if (o.tipo === "cocina") {
+        setOp(g.root, 1);
+      } else if (o.tipo === "calendario") {
+        setOp(g.root, vis);
+        const d = ultimo(o.dias, t);
+        const n = String(d ? d[1] : o.dia0 ?? 1);
+        if (g.num.textContent !== n) g.num.textContent = n;
+        g.num.setAttribute("font-size", n.length > 2 ? 92 : 130);
+        const u = d ? clamp((t - d[0]) / 0.24) : 1;
+        // la hoja nueva cae desde arriba y el calendario se balancea en su clavo
+        g.hoja.setAttribute("transform", `translate(0 -62) scale(1 ${f2(EZ.backS(u))}) translate(0 62)`);
+        g.root.setAttribute("transform", `rotate(${f2(Math.sin(u * Math.PI * 3) * (1 - u) * 6)} ${o.x} ${o.y - 140})`);
+      } else if (o.tipo === "botevivo") {
+        const b = g.b;
+        setOp(g.root, 1);
+        const x = Kd(t, o.xk, o.x),
+          y = Kd(t, o.yk, o.y);
+        let hop = 0,
+          sq = 0;
+        for (const s0 of o.saltos) {
+          const u = (t - s0) / 0.44;
+          if (u >= 0 && u < 1) hop = Math.max(hop, Math.sin(Math.PI * u));
+          const a = (t - s0 + 0.1) / 0.1;
+          if (a >= 0 && a < 1) sq = Math.max(sq, Math.sin(Math.PI * a) * 0.7);
+          const l = (t - s0 - 0.44) / 0.2;
+          if (l >= 0 && l < 1) sq = Math.max(sq, Math.sin(Math.PI * l));
+        }
+        const tb = Kd(t, o.temblorK, 0);
+        const talk = !o.hablaR.length || dentro(o.hablaR, t) ? voz(t) : 0;
+        const resp = Math.sin(t * 2.6 + o.i) * 0.014;
+        const sy = 1 + resp + 0.06 * hop - 0.13 * sq,
+          sx = 1 - resp * 0.6 - 0.03 * hop + 0.11 * sq;
+        const rot = Kd(t, o.rotK, 0) + Math.sin(t * 5.3) * 1.8 * talk;
+        g.root.setAttribute("transform", `translate(${f2(x + Math.sin(t * 71) * tb * 7)} ${f2(y)}) scale(${o.s ?? 1})`);
+        b.sombra.setAttribute("transform", `scale(${f2(1 - 0.35 * hop)} 1)`);
+        b.cuerpo.setAttribute("transform", `translate(0 ${f2(-hop * (o.alto ?? 110))}) rotate(${f2(rot)}) scale(${f2(sx)} ${f2(sy)})`);
+        const e = K(t, o.emoK);
+        const fb = (t + o.i * 0.37) % 3.4;
+        const parp = fb < 0.14 ? 1 - 0.92 * Math.sin((Math.PI * fb) / 0.14) : 1;
+        const mi = ultimo(o.miraK, t);
+        const mx = mi ? mi[1] : 0,
+          my = mi ? mi[2] ?? 0 : 0;
+        for (const l of ["L", "R"]) {
+          const lado = l === "L" ? 1 : -1;
+          b["ojo" + l].setAttribute("transform", `scale(1 ${f2(e.ojo * parp)})`);
+          b["p" + l].setAttribute("transform", `translate(${f2(mx * 14)} ${f2(my * 12)}) scale(${f2(e.pu)})`);
+          b["ceja" + l].setAttribute("transform", `translate(0 ${f2(e.cy - 5 * talk)}) rotate(${f2(lado * e.cr)})`);
+        }
+        const w = e.w * (1 - 0.18 * talk),
+          a = e.a + talk * 26;
+        b.boca.setAttribute("d", `M${f2(-w)} 0Q0 ${f2(e.c * 0.5 - a * 0.35)} ${f2(w)} 0Q0 ${f2(e.c + 6 + a * 1.7)} ${f2(-w)} 0Z`);
+        const br = K(t, o.brazosK);
+        const ola = dentro(o.saludaR, t) ? Math.sin(t * 13) * 18 : 0;
+        b.brazoL.setAttribute("transform", `rotate(${f2(br.L)})`);
+        b.brazoR.setAttribute("transform", `rotate(${f2(br.R + ola)})`);
+        setOp(b.polvo, Kd(t, o.polvoK, 0));
+        setOp(b.telas, Kd(t, o.telasK, 0));
+      } else if (o.tipo === "cereales") {
+        setOp(g.root, t >= o.t0 ? 1 : 0);
+        g.items.forEach((el, k) => {
+          setOp(el, 1);
+          const ent = pr(t, o.t0 + k * 0.12, 0.36, EZ.backS);
+          let x = (1 - ent) * 760,
+            y = 0,
+            r = 0;
+          if (t >= o.t1) {
+            const u = t - o.t1;
+            const dir = [-1, 0.3, 1][k];
+            x += dir * 1000 * u;
+            y = -1000 * u + 3000 * u * u;
+            r = dir * 420 * u;
+          }
+          el.setAttribute("transform", `translate(${f2(x)} ${f2(y)}) rotate(${f2(r)} ${[-170, 0, 170][k]} -160)`);
+        });
+      } else if (o.tipo === "flash") {
+        const u = (t - o.t0) / 0.45;
+        const on = u >= 0 && u < 1;
+        setOp(g.root, on ? 1 - u : 0);
+        if (on) {
+          const m = o.quien ? H[o.quien].manoR : { x: o.x, y: o.y };
+          g.root.setAttribute("transform", `translate(${f2(m.x + (o.dx ?? 0))} ${f2(m.y + (o.dy ?? -60))}) scale(${f2(1 + 3 * EZ.o(u))})`);
+          setOp(g.in, 0.5 * (1 - u) * (1 - u));
+        }
+      } else if (o.tipo === "telarana") {
+        setOp(g.root, visible(o, t, 0.8, 0.2));
       } else if (o.tipo === "estelas") {
         const h = H[o.quien];
         const vv = Math.abs(h.st.v);
@@ -303,7 +438,7 @@
     tarjetas(t);
 
     // ── veredicto: el mito tachado y el sello ──
-    {
+    if (VER) {
       const p = pop(t, VER.t, 0.4);
       setOp(R.ver, p.o);
       R.ver.setAttribute("transform", `translate(${VER.x} ${VER.y}) scale(${f2(p.s)})`);

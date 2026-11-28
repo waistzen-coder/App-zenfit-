@@ -12,7 +12,7 @@ import numpy as np
 
 RAIZ = os.getcwd()
 SR = 24000
-VOZ, VEL = "em_alex", 1.0
+VOZ, VEL = os.environ.get("VOZ", "em_alex"), float(os.environ.get("VEL", "1.0"))
 INICIO, HUECO, HUECO_LARGO, COLA = 0.12, 0.24, 0.5, 0.55
 CACHE = os.path.expanduser("~/.cache/hyperframes/tts")
 

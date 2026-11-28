@@ -1,0 +1,506 @@
+[
+ {
+  "text": "Soy",
+  "start": 0.12,
+  "end": 0.328,
+  "frase": 1
+ },
+ {
+  "text": "la",
+  "start": 0.338,
+  "end": 0.47,
+  "frase": 1
+ },
+ {
+  "text": "creatina",
+  "start": 0.48,
+  "end": 0.965,
+  "frase": 1
+ },
+ {
+  "text": "del",
+  "start": 0.975,
+  "end": 1.13,
+  "frase": 1
+ },
+ {
+  "text": "flaco.",
+  "start": 1.14,
+  "end": 1.71,
+  "frase": 1
+ },
+ {
+  "text": "Día",
+  "start": 1.95,
+  "end": 2.183,
+  "frase": 2
+ },
+ {
+  "text": "uno:",
+  "start": 2.193,
+  "end": 2.557,
+  "frase": 2
+ },
+ {
+  "text": "me",
+  "start": 2.567,
+  "end": 2.71,
+  "frase": 2
+ },
+ {
+  "text": "compra.",
+  "start": 2.72,
+  "end": 3.23,
+  "frase": 2
+ },
+ {
+  "text": "Día",
+  "start": 3.47,
+  "end": 3.692,
+  "frase": 3
+ },
+ {
+  "text": "dos:",
+  "start": 3.702,
+  "end": 4.08,
+  "frase": 3
+ },
+ {
+  "text": "un",
+  "start": 4.09,
+  "end": 4.177,
+  "frase": 3
+ },
+ {
+  "text": "cacito",
+  "start": 4.187,
+  "end": 4.603,
+  "frase": 3
+ },
+ {
+  "text": "y",
+  "start": 4.613,
+  "end": 4.673,
+  "frase": 3
+ },
+ {
+  "text": "foto",
+  "start": 4.683,
+  "end": 5.0,
+  "frase": 3
+ },
+ {
+  "text": "para",
+  "start": 5.01,
+  "end": 5.204,
+  "frase": 3
+ },
+ {
+  "text": "Instagram.",
+  "start": 5.214,
+  "end": 5.797,
+  "frase": 3
+ },
+ {
+  "text": "Día",
+  "start": 6.037,
+  "end": 6.23,
+  "frase": 4
+ },
+ {
+  "text": "tres:",
+  "start": 6.24,
+  "end": 6.599,
+  "frase": 4
+ },
+ {
+  "text": "hoy",
+  "start": 6.609,
+  "end": 6.724,
+  "frase": 4
+ },
+ {
+  "text": "no",
+  "start": 6.734,
+  "end": 6.903,
+  "frase": 4
+ },
+ {
+  "text": "entreno,",
+  "start": 6.913,
+  "end": 7.443,
+  "frase": 4
+ },
+ {
+  "text": "hoy",
+  "start": 7.453,
+  "end": 7.566,
+  "frase": 4
+ },
+ {
+  "text": "no",
+  "start": 7.576,
+  "end": 7.676,
+  "frase": 4
+ },
+ {
+  "text": "me",
+  "start": 7.686,
+  "end": 7.82,
+  "frase": 4
+ },
+ {
+  "text": "toca.",
+  "start": 7.83,
+  "end": 8.183,
+  "frase": 4
+ },
+ {
+  "text": "Día",
+  "start": 8.423,
+  "end": 8.67,
+  "frase": 5
+ },
+ {
+  "text": "cuatro:",
+  "start": 8.68,
+  "end": 9.09,
+  "frase": 5
+ },
+ {
+  "text": "se",
+  "start": 9.1,
+  "end": 9.265,
+  "frase": 5
+ },
+ {
+  "text": "le",
+  "start": 9.275,
+  "end": 9.463,
+  "frase": 5
+ },
+ {
+  "text": "olvida.",
+  "start": 9.473,
+  "end": 9.883,
+  "frase": 5
+ },
+ {
+  "text": "Día",
+  "start": 10.123,
+  "end": 10.268,
+  "frase": 6
+ },
+ {
+  "text": "diez:",
+  "start": 10.278,
+  "end": 10.665,
+  "frase": 6
+ },
+ {
+  "text": "me",
+  "start": 10.675,
+  "end": 10.832,
+  "frase": 6
+ },
+ {
+  "text": "esconde",
+  "start": 10.842,
+  "end": 11.274,
+  "frase": 6
+ },
+ {
+  "text": "detrás",
+  "start": 11.284,
+  "end": 11.609,
+  "frase": 6
+ },
+ {
+  "text": "de",
+  "start": 11.619,
+  "end": 11.712,
+  "frase": 6
+ },
+ {
+  "text": "los",
+  "start": 11.722,
+  "end": 11.899,
+  "frase": 6
+ },
+ {
+  "text": "cereales.",
+  "start": 11.909,
+  "end": 12.449,
+  "frase": 6
+ },
+ {
+  "text": "Día",
+  "start": 12.689,
+  "end": 12.88,
+  "frase": 7
+ },
+ {
+  "text": "treinta:",
+  "start": 12.89,
+  "end": 13.547,
+  "frase": 7
+ },
+ {
+  "text": "dice",
+  "start": 13.557,
+  "end": 13.86,
+  "frase": 7
+ },
+ {
+  "text": "que",
+  "start": 13.87,
+  "end": 13.945,
+  "frase": 7
+ },
+ {
+  "text": "la",
+  "start": 13.955,
+  "end": 14.06,
+  "frase": 7
+ },
+ {
+  "text": "creatina",
+  "start": 14.07,
+  "end": 14.531,
+  "frase": 7
+ },
+ {
+  "text": "no",
+  "start": 14.541,
+  "end": 14.66,
+  "frase": 7
+ },
+ {
+  "text": "funciona.",
+  "start": 14.67,
+  "end": 15.303,
+  "frase": 7
+ },
+ {
+  "text": "¿Que",
+  "start": 15.543,
+  "end": 15.665,
+  "frase": 8
+ },
+ {
+  "text": "no",
+  "start": 15.675,
+  "end": 15.79,
+  "frase": 8
+ },
+ {
+  "text": "funciono?",
+  "start": 15.8,
+  "end": 16.43,
+  "frase": 8
+ },
+ {
+  "text": "¡Si",
+  "start": 16.44,
+  "end": 16.599,
+  "frase": 8
+ },
+ {
+  "text": "no",
+  "start": 16.609,
+  "end": 16.717,
+  "frase": 8
+ },
+ {
+  "text": "me",
+  "start": 16.727,
+  "end": 16.87,
+  "frase": 8
+ },
+ {
+  "text": "tomas!",
+  "start": 16.88,
+  "end": 17.293,
+  "frase": 8
+ },
+ {
+  "text": "Tres",
+  "start": 17.533,
+  "end": 17.747,
+  "frase": 9
+ },
+ {
+  "text": "gramos",
+  "start": 17.757,
+  "end": 18.161,
+  "frase": 9
+ },
+ {
+  "text": "al",
+  "start": 18.171,
+  "end": 18.361,
+  "frase": 9
+ },
+ {
+  "text": "día.",
+  "start": 18.371,
+  "end": 18.75,
+  "frase": 9
+ },
+ {
+  "text": "Todos",
+  "start": 18.76,
+  "end": 19.039,
+  "frase": 9
+ },
+ {
+  "text": "los",
+  "start": 19.049,
+  "end": 19.274,
+  "frase": 9
+ },
+ {
+  "text": "días.",
+  "start": 19.284,
+  "end": 19.569,
+  "frase": 9
+ },
+ {
+  "text": "También",
+  "start": 19.579,
+  "end": 19.965,
+  "frase": 9
+ },
+ {
+  "text": "los",
+  "start": 19.975,
+  "end": 20.148,
+  "frase": 9
+ },
+ {
+  "text": "de",
+  "start": 20.158,
+  "end": 20.227,
+  "frase": 9
+ },
+ {
+  "text": "descanso.",
+  "start": 20.238,
+  "end": 20.853,
+  "frase": 9
+ },
+ {
+  "text": "Así",
+  "start": 21.093,
+  "end": 21.36,
+  "frase": 10
+ },
+ {
+  "text": "te",
+  "start": 21.37,
+  "end": 21.543,
+  "frase": 10
+ },
+ {
+  "text": "ayudo",
+  "start": 21.553,
+  "end": 21.964,
+  "frase": 10
+ },
+ {
+  "text": "a",
+  "start": 21.974,
+  "end": 22.038,
+  "frase": 10
+ },
+ {
+  "text": "rendir",
+  "start": 22.048,
+  "end": 22.355,
+  "frase": 10
+ },
+ {
+  "text": "más",
+  "start": 22.365,
+  "end": 22.578,
+  "frase": 10
+ },
+ {
+  "text": "en",
+  "start": 22.588,
+  "end": 22.712,
+  "frase": 10
+ },
+ {
+  "text": "los",
+  "start": 22.722,
+  "end": 22.924,
+  "frase": 10
+ },
+ {
+  "text": "esfuerzos",
+  "start": 22.934,
+  "end": 23.457,
+  "frase": 10
+ },
+ {
+  "text": "cortos",
+  "start": 23.467,
+  "end": 23.899,
+  "frase": 10
+ },
+ {
+  "text": "e",
+  "start": 23.909,
+  "end": 24.016,
+  "frase": 10
+ },
+ {
+  "text": "intensos.",
+  "start": 24.026,
+  "end": 24.625,
+  "frase": 10
+ },
+ {
+  "text": "Etiqueta",
+  "start": 24.865,
+  "end": 25.386,
+  "frase": 11
+ },
+ {
+  "text": "a",
+  "start": 25.396,
+  "end": 25.48,
+  "frase": 11
+ },
+ {
+  "text": "quien",
+  "start": 25.49,
+  "end": 25.73,
+  "frase": 11
+ },
+ {
+  "text": "tiene",
+  "start": 25.74,
+  "end": 26.02,
+  "frase": 11
+ },
+ {
+  "text": "su",
+  "start": 26.03,
+  "end": 26.22,
+  "frase": 11
+ },
+ {
+  "text": "creatina",
+  "start": 26.23,
+  "end": 26.752,
+  "frase": 11
+ },
+ {
+  "text": "abandonada.",
+  "start": 26.762,
+  "end": 27.373,
+  "frase": 11
+ }
+]

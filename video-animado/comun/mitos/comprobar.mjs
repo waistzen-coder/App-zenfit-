@@ -25,11 +25,14 @@ EP.objetos.forEach((o, i) => {
   EVENTOS.push([`${o.tipo} ${o.lineas ? "«" + o.lineas.join(" ") + "»" : o.texto || o.que || o.gag || ""}`.trim(), `o${i}`, palabra(o.t0), T[palabra(o.t0)]]);
 });
 if (EP.tarjeta) {
-  EVENTOS.push(["tarjeta REALIDAD", "r-titulo", palabra(EP.tarjeta.t0), T[palabra(EP.tarjeta.t0)]]);
+  EVENTOS.push([`tarjeta ${EP.tarjeta.titulo || "REALIDAD"}`, "r-titulo", palabra(EP.tarjeta.t0), T[palabra(EP.tarjeta.t0)]]);
   EP.tarjeta.filas.forEach((f, k) => EVENTOS.push([`fila «${[].concat(f.texto).join(" ")}»`, `r-f${k}`, palabra(f.t), T[palabra(f.t)]]));
 }
 if (EP.producto && enPalabra(EP.producto.t)) EVENTOS.push(["el bote en el mostrador", "producto", palabra(EP.producto.t), T[palabra(EP.producto.t)]]);
-const CAMBIOS = [["sello MITO del veredicto", "veredicto-sello", "opacity", palabra(EP.veredicto.sello), T[palabra(EP.veredicto.sello)]], ["SEGUIR → SIGUIENDO", "boton-siguiendo", "opacity", palabra(EP.cta.siguenos), T[palabra(EP.cta.siguenos)] + 0.25]];
+const boton = EP.cta.boton || ["SEGUIR", "SIGUIENDO"];
+const CAMBIOS = [...(EP.veredicto ? [["sello MITO del veredicto", "veredicto-sello", "opacity", palabra(EP.veredicto.sello), T[palabra(EP.veredicto.sello)]]] : []), [`${boton[0]} → ${boton[1]}`, "boton-siguiendo", "opacity", palabra(EP.cta.siguenos), T[palabra(EP.cta.siguenos)] + 0.25]];
+// el calendario cambia de hoja en cada «Día…»
+EP.objetos.forEach((o, i) => o.tipo === "calendario" && (o.dias || []).forEach(([k, n]) => enPalabra(k) && CAMBIOS.push([`calendario: día ${n}`, `o${i}-hoja`, "transform", palabra(k), T[palabra(k)]])));
 EP.objetos.forEach((o, i) => o.sello != null && CAMBIOS.push([`sello MITO del bocadillo`, `o${i}-sello`, "opacity", palabra(o.sello), T[palabra(o.sello)]]));
 
 const browser = await chromium.launch();
@@ -82,7 +85,7 @@ for (const [que, id, attr, pal, tw] of CAMBIOS) {
 const IMPORTANTES = [
   ...EP.objetos.map((o, i) => (["bocadillo", "nube", "pildora", "reloj"].includes(o.tipo) ? [`${o.tipo} ${i}`, `o${i}${o.tipo === "nube" ? "-nube" : ""}`, Math.max(0, tk(o.t0) + 0.4), o.t1 == null ? D : tk(o.t1) - 0.25] : null)).filter(Boolean),
   ...(EP.tarjeta ? [["tarjeta REALIDAD", "card-r", tk(EP.tarjeta.filas.at(-1).t) + 0.5, tk(EP.tarjeta.cierra) - 0.2]] : []),
-  ["veredicto", "veredicto", tk(EP.veredicto.sello) + 0.2, tk(EP.cta.t) - 0.4],
+  ...(EP.veredicto ? [["veredicto", "veredicto", tk(EP.veredicto.sello) + 0.2, tk(EP.cta.t) - 0.4]] : []),
   ["llamada", "cta", tk(EP.cta.t) + 0.45, D],
 ];
 const zonas = [];

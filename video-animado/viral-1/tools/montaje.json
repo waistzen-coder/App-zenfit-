@@ -1,0 +1,71 @@
+{
+ "frases": [
+  {
+   "n": 1,
+   "texto": "Soy la creatina del flaco.",
+   "inicio": 0.12,
+   "fin": 1.71
+  },
+  {
+   "n": 2,
+   "texto": "Día uno: me compra.",
+   "inicio": 1.95,
+   "fin": 3.23
+  },
+  {
+   "n": 3,
+   "texto": "Día dos: un cacito y foto para Instagram.",
+   "inicio": 3.47,
+   "fin": 5.797
+  },
+  {
+   "n": 4,
+   "texto": "Día tres: hoy no entreno, hoy no me toca.",
+   "inicio": 6.037,
+   "fin": 8.183
+  },
+  {
+   "n": 5,
+   "texto": "Día cuatro: se le olvida.",
+   "inicio": 8.423,
+   "fin": 9.883
+  },
+  {
+   "n": 6,
+   "texto": "Día diez: me esconde detrás de los cereales.",
+   "inicio": 10.123,
+   "fin": 12.449
+  },
+  {
+   "n": 7,
+   "texto": "Día treinta: dice que la creatina no funciona.",
+   "inicio": 12.689,
+   "fin": 15.303
+  },
+  {
+   "n": 8,
+   "texto": "¿Que no funciono? ¡Si no me tomas!",
+   "inicio": 15.543,
+   "fin": 17.293
+  },
+  {
+   "n": 9,
+   "texto": "Tres gramos al día. Todos los días. También los de descanso.",
+   "inicio": 17.533,
+   "fin": 20.853
+  },
+  {
+   "n": 10,
+   "texto": "Así te ayudo a rendir más en los esfuerzos cortos e intensos.",
+   "inicio": 21.093,
+   "fin": 24.625
+  },
+  {
+   "n": 11,
+   "texto": "Etiqueta a quien tiene su creatina abandonada.",
+   "inicio": 24.865,
+   "fin": 27.373
+  }
+ ],
+ "duracion": 27.923
+}

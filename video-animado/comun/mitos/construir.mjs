@@ -28,7 +28,7 @@ export async function construir(RAIZ, EP) {
   for (const [k, v] of Object.entries(T)) if (!Number.isFinite(v)) throw new Error("tiempo raro: " + k);
   const tk = (k) => (k == null ? null : typeof k === "number" ? k : Array.isArray(k) ? (typeof k[0] === "number" ? k[0] : T[k[0]]) + (k[1] || 0) : T[k]);
   // comprueba que todo lo que usa el episodio existe en T
-  const usadas = JSON.stringify([EP.cam, EP.actores, EP.objetos, EP.tarjeta, EP.producto, EP.veredicto, EP.cta, EP.sfx, EP.sacudidas]);
+  const usadas = JSON.stringify([EP.cam, EP.actores, EP.objetos, EP.tarjeta, EP.producto, EP.veredicto || null, EP.cta, EP.sfx, EP.sacudidas]);
   for (const m of usadas.matchAll(/\["([a-zA-Z0-9]+)"(?=[,\]])/g)) if (!(m[1] in T) && !/^[A-Z]/.test(m[1]) && !["dep", "rep"].includes(m[1]) && EP.actores[m[1]] === undefined && !/^(reposo|brazos|flex|flexR|senala|dedo|explica|suplica|manos|cargar|arriba|choca|pagar|bolsa|baston|bastonArriba|telefono|batido|alto|miedo|cruzados|pecho|toalla|neutro|sonrisa|esfuerzo|wow|serio|ceja|pena|orgullo|dormido|cansado|s|io|io3|o|o3|i|i3|back|backS|expo|lin|step)$/.test(m[1])) console.log(`  ⚠ ¿«${m[1]}» es una palabra del bloque T?`);
 
   // ───────────── colores ─────────────
@@ -325,7 +325,7 @@ export async function construir(RAIZ, EP) {
     const tacha = `<path id="o${o.i}-tacha" d="${o.lineas.map((l, k) => { const y = top + 36 + fs * 0.45 + k * (fs + 12); const w = ancho(l, fs) / 2 + 14; return `M${-w} ${y + 6} L${w} ${y - 6}`; }).join(" ")}" stroke="${C.rojo}" stroke-width="12" stroke-linecap="round" fill="none" pathLength="100" stroke-dasharray="100 120" stroke-dashoffset="110"/>`;
     const etq = o.etiqueta ? `<g transform="translate(${-W / 2 + 140} ${top - 4})"><rect x="-120" y="-36" width="240" height="72" rx="36" fill="${C.rojo}"/>${txt(0, 15, o.etiqueta, 42, "#fff", 900)}</g>` : "";
     const sello = o.sello != null ? `<g transform="translate(${W * 0.14} ${top + Hh / 2 + 10})"><g id="o${o.i}-sello" opacity="0"><g transform="rotate(-12)"><rect x="-170" y="-72" width="340" height="144" rx="18" fill="#FFFFFF" fill-opacity="0.82" stroke="${C.rojo}" stroke-width="10"/>${txt(0, 36, "MITO", 104, C.rojo, 900, "middle", 'letter-spacing="6"')}</g></g></g>` : "";
-    return `<g id="o${o.i}" opacity="0"><path d="M${-W / 2 + 34} ${top} H${W / 2 - 34} Q${W / 2} ${top} ${W / 2} ${top + 34} V${-74} Q${W / 2} ${-40} ${W / 2 - 34} ${-40} H${-W * 0.05} L${-W * 0.22} 0 L${-W * 0.2} ${-40} H${-W / 2 + 34} Q${-W / 2} ${-40} ${-W / 2} ${-74} V${top + 34} Q${-W / 2} ${top} ${-W / 2 + 34} ${top} Z" fill="#fff" filter="url(#sombra)"/>${lineas}${tacha}${etq}${sello}</g>`;
+    return `<g id="o${o.i}" opacity="0"><path d="M${-W / 2 + 34} ${top} H${W / 2 - 34} Q${W / 2} ${top} ${W / 2} ${top + 34} V${-74} Q${W / 2} ${-40} ${W / 2 - 34} ${-40} ${o.cola === "der" ? `H${W * 0.16} L${W * 0.2} 0 L${W * 0.0} ${-40}` : `H${-W * 0.05} L${-W * 0.22} 0 L${-W * 0.2} ${-40}`} H${-W / 2 + 34} Q${-W / 2} ${-40} ${-W / 2} ${-74} V${top + 34} Q${-W / 2} ${top} ${-W / 2 + 34} ${top} Z" fill="#fff" filter="url(#sombra)"/>${lineas}${tacha}${etq}${sello}</g>`;
   }
   function nubeSVG(o) {
     const bultos = [[-200, -40, 150], [-60, -150, 170], [120, -130, 160], [240, -10, 140], [90, 100, 150], [-120, 100, 140], [0, 0, 210]];
@@ -380,6 +380,63 @@ export async function construir(RAIZ, EP) {
         }[o.que];
         return `<g id="o${o.i}" opacity="0">${que}</g>`;
       }
+      case "cocina": {
+        const x0 = o.x;
+        let azulejos = "";
+        for (let y = 1188; y < 1500; y += 52) for (let x = x0 + 80; x < x0 + 1380; x += 52) azulejos += `<rect x="${x + 2}" y="${y + 2}" width="48" height="48" rx="4" fill="#3E4A5C"/>`;
+        let tablas = "";
+        for (let x = x0; x < x0 + 1800; x += 150) tablas += `<rect x="${x}" y="1804" width="4" height="900" fill="#4E3828"/>`;
+        return `<g id="o${o.i}">
+          <rect x="${x0}" y="-900" width="1800" height="2700" fill="#2B3442"/>
+          <rect x="${x0 + 80}" y="1188" width="1300" height="312" fill="#364253"/>${azulejos}
+          <g><rect x="${x0 + 760}" y="560" width="560" height="300" rx="10" fill="#3B4556"/><rect x="${x0 + 772}" y="572" width="262" height="276" rx="6" fill="#444F62"/><rect x="${x0 + 1046}" y="572" width="262" height="276" rx="6" fill="#444F62"/><rect x="${x0 + 1010}" y="810" width="10" height="30" rx="5" fill="#C9CED6"/><rect x="${x0 + 1060}" y="810" width="10" height="30" rx="5" fill="#C9CED6"/></g>
+          <rect x="${x0 + 60}" y="1500" width="1340" height="30" rx="6" fill="#B07A52"/><rect x="${x0 + 60}" y="1526" width="1340" height="8" fill="#8A5B3A"/>
+          <rect x="${x0 + 80}" y="1534" width="1300" height="270" fill="#262C36"/>
+          ${[0, 1, 2, 3].map((k) => `<rect x="${x0 + 96 + k * 322}" y="1550" width="306" height="238" rx="8" fill="#2F3744"/><rect x="${x0 + 230 + k * 322}" y="1570" width="38" height="10" rx="5" fill="#C9CED6"/>`).join("")}
+          <g><rect x="${x0 + 1440}" y="1000" width="330" height="804" rx="24" fill="#DDE2E8"/><rect x="${x0 + 1440}" y="1290" width="330" height="8" fill="#B9C0C8"/><rect x="${x0 + 1470}" y="1060" width="16" height="170" rx="8" fill="#9AA2AD"/><rect x="${x0 + 1470}" y="1340" width="16" height="220" rx="8" fill="#9AA2AD"/></g>
+          <rect x="${x0}" y="1764" width="1800" height="940" fill="#5E4532"/><rect x="${x0}" y="1764" width="1800" height="40" fill="#7A5A3E"/>${tablas}
+        </g>`;
+      }
+      case "calendario":
+        return `<g id="o${o.i}"><g transform="translate(${o.x} ${o.y})"><rect x="-115" y="-140" width="230" height="290" rx="16" fill="#F4F6F8" filter="url(#sombra)"/><rect x="-115" y="-140" width="230" height="78" rx="16" fill="${C.rojo}"/><rect x="-115" y="-90" width="230" height="28" fill="${C.rojo}"/>${txt(0, -84, "DÍA", 50, "#fff", 900)}<circle cx="-60" cy="-140" r="10" fill="#555"/><circle cx="60" cy="-140" r="10" fill="#555"/><g id="o${o.i}-hoja"><text id="o${o.i}-num" x="0" y="100" text-anchor="middle" font-family="Inter" font-weight="900" font-size="130" fill="${C.tinta}">1</text></g></g></g>`;
+      case "botevivo": {
+        const cap = (L, w) => `M${-w / 2} 0 Q${-w / 2} ${L / 2} ${-w / 2} ${L} A${w / 2} ${w / 2} 0 0 0 ${w / 2} ${L} Q${w / 2} ${L / 2} ${w / 2} 0 A${w / 2} ${w / 2} 0 0 0 ${-w / 2} 0 Z`;
+        const ojo = (l, x) => `<g transform="translate(${x} -262)"><g id="o${o.i}-ojo${l}"><ellipse rx="38" ry="44" fill="#fff" stroke="#1B1E24" stroke-width="5"/><g id="o${o.i}-p${l}"><circle r="18" fill="#1B1E24"/><circle cx="7" cy="-9" r="6" fill="#fff"/></g></g></g>`;
+        const ceja = (l, x) => `<g transform="translate(${x} -322)"><g id="o${o.i}-ceja${l}"><rect x="-32" y="-7" width="64" height="14" rx="7" fill="#1B1E24"/></g></g>`;
+        const brazo = (l, x) => `<g transform="translate(${x} -170)"><g id="o${o.i}-brazo${l}"><path d="${cap(120, 40)}" fill="#F4F5F7" stroke="#C9CDD3" stroke-width="5"/><circle cy="122" r="26" fill="#F4F5F7" stroke="#C9CDD3" stroke-width="5"/></g></g>`;
+        const tela = (x, y, a0, r = 95) => {
+          let d = "";
+          for (let k = 0; k <= 3; k++) { const a = a0 + (k / 3) * (Math.PI / 2); d += `M${x} ${y} L${f2(x + Math.cos(a) * r)} ${f2(y + Math.sin(a) * r)} `; }
+          for (const q of [0.4, 0.7, 1]) { d += `M${f2(x + Math.cos(a0) * r * q)} ${f2(y + Math.sin(a0) * r * q)} `; for (let k = 1; k <= 3; k++) { const a = a0 + (k / 3) * (Math.PI / 2), am = a - Math.PI / 12; d += `Q${f2(x + Math.cos(am) * r * q * 0.82)} ${f2(y + Math.sin(am) * r * q * 0.82)} ${f2(x + Math.cos(a) * r * q)} ${f2(y + Math.sin(a) * r * q)} `; } }
+          return `<path d="${d}" fill="none" stroke="#E5E7EB" stroke-width="3.5" opacity="0.85"/>`;
+        };
+        let polvo = "";
+        for (let k = 0; k < 26; k++) polvo += `<circle cx="${(((k * 97) % 280) - 140).toFixed(0)}" cy="${(-20 - ((k * 61) % 380)).toFixed(0)}" r="${4 + (k % 4) * 3}" fill="#8A8F98" opacity="0.55"/>`;
+        polvo += `<path d="M-150 -380 Q-60 -400 20 -372 Q90 -400 160 -380 L160 -350 Q60 -368 -10 -348 Q-90 -366 -150 -350 Z" fill="#9AA0A8" opacity="0.6"/>`;
+        return `<g id="o${o.i}"><ellipse id="o${o.i}-sombra" cx="0" cy="4" rx="190" ry="22" fill="#000" opacity="0.35"/><g id="o${o.i}-cuerpo">
+          ${brazo("L", -150)}${brazo("R", 150)}
+          <rect x="-152" y="-348" width="304" height="348" rx="36" fill="#F4F5F7" stroke="#D5D9DE" stroke-width="6"/>
+          <rect x="-164" y="-412" width="328" height="74" rx="20" fill="${C.azul}"/><rect x="-164" y="-350" width="328" height="6" fill="#1550D8"/>${txt(0, -362, "IRON FUEL", 34, "#fff", 900, "middle", 'letter-spacing="3" data-layout-ignore')}
+          <rect x="-152" y="-170" width="304" height="124" fill="#111317"/>${txt(0, -110, "CREATINA", 54, "#fff", 900, "middle", "data-layout-ignore")}${txt(0, -68, "MONOHIDRATO", 26, C.azulClaro, 900, "middle", 'letter-spacing="3" data-layout-ignore')}
+          <ellipse cx="-104" cy="-208" rx="26" ry="15" fill="#FF8FA3" opacity="0.6"/><ellipse cx="104" cy="-208" rx="26" ry="15" fill="#FF8FA3" opacity="0.6"/>
+          ${ojo("L", -62)}${ojo("R", 62)}${ceja("L", -62)}${ceja("R", 62)}
+          <path id="o${o.i}-boca" d="" fill="#4A1E1E" stroke="#1B1E24" stroke-width="5" stroke-linejoin="round" transform="translate(0 -205)"/>
+          <rect x="-134" y="-330" width="20" height="290" rx="10" fill="#fff" opacity="0.55"/>
+          <g id="o${o.i}-telas" opacity="0">${tela(-164, -412, 0)}${tela(164, -412, Math.PI / 2)}<path d="M-150 -400 Q-80 -350 -40 -412 M150 -400 Q90 -345 50 -412 M-20 -412 Q0 -372 25 -412" stroke="#E5E7EB" stroke-width="3" fill="none" opacity="0.75"/></g><g id="o${o.i}-polvo" opacity="0"><rect x="-164" y="-412" width="328" height="412" rx="30" fill="#6F757E" opacity="0.4"/>${polvo}</g></g></g>`;
+      }
+      case "cereales": {
+        const caja = (x, h, c1, c2, tx, r) => `<g id="o${o.i}-k${r}"><rect x="${x - 85}" y="${-h}" width="170" height="${h}" rx="8" fill="${c1}" stroke="#00000022" stroke-width="4"/><rect x="${x - 85}" y="${-h + 30}" width="170" height="70" fill="${c2}"/>${txt(x, -h + 78, tx, 34, "#fff", 900, "middle", "data-layout-ignore")}<circle cx="${x}" cy="${-h * 0.42}" r="48" fill="#F7C948"/><circle cx="${x - 14}" cy="${-h * 0.45}" r="10" fill="#B9771E"/><circle cx="${x + 16}" cy="${-h * 0.38}" r="8" fill="#B9771E"/></g>`;
+        return `<g id="o${o.i}" opacity="0"><g transform="translate(${o.x} ${o.y}) scale(${o.s || 1})">${caja(-170, 300, "#E4572E", "#B83A1A", "CHOCO", 0)}${caja(0, 336, "#F2A93B", "#C47A12", "CRUNCH", 1)}${caja(170, 290, "#2FB36C", "#1E7A48", "FIBRA", 2)}</g></g>`;
+      }
+      case "flash":
+        return `<g id="o${o.i}" opacity="0"><rect id="o${o.i}-in" x="-4000" y="-4000" width="8000" height="8000" fill="#fff" opacity="0"/><circle r="90" fill="url(#o${o.i}-g)"/><radialGradient id="o${o.i}-g"><stop offset="0" stop-color="#fff"/><stop offset="0.5" stop-color="#fff" stop-opacity="0.8"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></g>`;
+      case "telarana": {
+        const r = o.r || 150;
+        let d = "";
+        for (let k = 0; k <= 4; k++) { const a = (k / 4) * (Math.PI / 2); d += `M0 0 L${(Math.cos(a) * r).toFixed(0)} ${(Math.sin(a) * r).toFixed(0)} `; }
+        for (const q of [0.35, 0.6, 0.85]) { d += `M${(r * q).toFixed(0)} 0 `; for (let k = 1; k <= 4; k++) { const a = (k / 4) * (Math.PI / 2); d += `Q${(Math.cos(a - 0.2) * r * q * 0.8).toFixed(0)} ${(Math.sin(a - 0.2) * r * q * 0.8).toFixed(0)} ${(Math.cos(a) * r * q).toFixed(0)} ${(Math.sin(a) * r * q).toFixed(0)} `; } }
+        return `<g id="o${o.i}" opacity="0"><g transform="translate(${o.x} ${o.y}) scale(${o.sx || 1} 1)"><path d="${d}" fill="none" stroke="#E5E7EB" stroke-width="4" opacity="0.8"/></g></g>`;
+      }
       default:
         throw new Error("objeto desconocido: " + o.tipo);
     }
@@ -402,8 +459,10 @@ export async function construir(RAIZ, EP) {
     const x = tj.x,
       y = tj.y,
       w = tj.w || 820;
+    const tituloT = tj.titulo || "REALIDAD";
+    const wT = Math.round(116 + tituloT.length * 29.5);
     const filas = [
-      { id: "r-titulo", t: tj.t0, cx: x + 170, cy: y + 62, abajo: y + 104, svg: `<rect x="${x + 34}" y="${y + 26}" width="350" height="76" rx="38" fill="${C.verdeTxt}"/>${icono("check-circle", x + 84, y + 64, 50, "#fff")}${txt(x + 236, y + 81, "REALIDAD", 44, "#fff", 900)}` },
+      { id: "r-titulo", t: tj.t0, cx: x + 170, cy: y + 62, abajo: y + 104, svg: `<rect x="${x + 34}" y="${y + 26}" width="${wT}" height="76" rx="38" fill="${C.verdeTxt}"/>${icono(tj.iconoTitulo || "check-circle", x + 84, y + 64, 50, "#fff")}${txt(x + 109 + (wT - 95) / 2, y + 81, tituloT, 44, "#fff", 900)}` },
     ];
     let yy = y + 160;
     tj.filas.forEach((f, k) => {
@@ -431,13 +490,13 @@ export async function construir(RAIZ, EP) {
   // la llamada: «¿qué mito desmontamos?», el comentario que se escribe y SEGUIR
   function ctaSVG() {
     return `<g id="cta" opacity="0"><rect x="-450" y="-270" width="900" height="540" rx="48" fill="#fff" filter="url(#sombra)"/>
-    ${icono("chat-circle-dots", -370, -170, 70, C.azul)}${txt(55, -150, "¿QUÉ MITO DESMONTAMOS?", 52, C.tinta, 900)}
+    ${icono(EP.cta.icono || "chat-circle-dots", -370, -170, 70, C.azul)}${txt(55, -150, EP.cta.titulo || "¿QUÉ MITO DESMONTAMOS?", 52, C.tinta, 900)}
     <rect x="-400" y="-90" width="800" height="110" rx="55" fill="#F1F3F6"/>${logo(-345, -35, 38)}
     <text id="cta-escribe" x="-290" y="-20" font-family="Inter" font-weight="700" font-size="44" fill="#4B515B"></text><rect id="cta-cursor" x="-290" y="-62" width="5" height="52" fill="${C.azul}"/>
     ${logo(-350, 160, 62)}${txt(-275, 150, "IRON FUEL", 52, C.tinta, 900, "start")}${txt(-275, 194, "NUTRITION", 28, C.azulTxt, 900, "start", 'letter-spacing="6"')}
     <rect id="boton-fondo" x="80" y="100" width="340" height="110" rx="55" fill="${C.azul}"/>
-    <g id="boton-seguir-txt">${txt(250, 174, "SEGUIR", 56, "#fff", 900)}</g>
-    <g id="boton-siguiendo" opacity="0">${icono("check-circle", 122, 155, 52, C.verdeTxt)}${txt(280, 171, "SIGUIENDO", 44, C.tinta, 900)}</g>
+    <g id="boton-seguir-txt">${txt(250, 174, (EP.cta.boton || [])[0] || "SEGUIR", 56, "#fff", 900)}</g>
+    <g id="boton-siguiendo" opacity="0">${icono("check-circle", 122, 155, 52, C.verdeTxt)}${txt(280, 171, (EP.cta.boton || [])[1] || "SIGUIENDO", 44, C.tinta, 900)}</g>
     <g id="dedo-tap" opacity="0">${icono("hand-tap", 0, 0, 140, C.tinta)}</g></g>`;
   }
 
@@ -465,7 +524,7 @@ export async function construir(RAIZ, EP) {
   ${calle()}
   ${tienda()}
   ${gimnasio()}
-  ${E_.filter((o) => o.tipo === "cinta" || o.tipo === "noche").map(objetoSVG).join("")}
+  ${E_.filter((o) => ["cinta", "noche", "cocina", "calendario"].includes(o.tipo)).map(objetoSVG).join("")}
   ${Object.keys(EP.actores).filter((id) => EP.actores[id].detras).map(personaje).join("")}
   ${mostrador()}
   ${productoSVG()}
@@ -474,17 +533,17 @@ export async function construir(RAIZ, EP) {
   <rect x="300" y="1760" width="4200" height="60" fill="url(#brillo-suelo)"/>
   ${E_.filter((o) => o.tipo === "estelas").map(objetoSVG).join("")}
   ${Object.keys(EP.actores).filter((id) => !EP.actores[id].detras).map(personaje).join("")}
-  ${E_.filter((o) => !["cinta", "noche", "estelas"].includes(o.tipo)).map(objetoSVG).join("")}
+  ${E_.filter((o) => !["cinta", "noche", "estelas", "cocina", "calendario"].includes(o.tipo)).map(objetoSVG).join("")}
   ${validarTarjetas(CARDS).map(tarjetaSVG).join("")}
-  ${veredictoSVG()}
+  ${EP.veredicto ? veredictoSVG() : ""}
   ${ctaSVG()}
 </g></svg>`;
   // (el veredicto y la llamada van dentro de la cámara, en el cielo, encima de la tienda)
   const mundoFinal = mundo;
 
-  const VER = { x: 1350, y: -850, ...EP.veredicto };
+  const VER = EP.veredicto ? { x: 1350, y: -850, ...EP.veredicto } : null;
   const CTAd = { x: 1350, y: 450, ejemplo: "tu mito aquí…", ...EP.cta };
-  const IF = { T, D, PJ, CARDS: CARDS.map(sinSVG), EP: { ...EP, veredicto: VER, cta: CTAd } };
+  const IF = { T, D, PJ, CARDS: CARDS.map(sinSVG), EP: { ...EP, veredicto: VER, cta: CTAd }, W: V.palabras.filter((w) => Number.isFinite(w.start)).map((w) => [+w.start.toFixed(3), +w.end.toFixed(3)]) };
   const motor = ["_util.js", "_rig.js", "_obj.js", "serie.js"].map(rdC).join("\n");
   const mundoHtml = `<template>
 <style>
@@ -571,7 +630,9 @@ ${motor}
     g.forEach((w, wi) => {
       const t = Math.max(ini, w.start) - ini; // tiempos locales del grupo… pero la línea de tiempo es de la composición
       void t;
-      subsJs += `tl.fromTo("#s${gi}w${wi}", { opacity: 0, y: 18, scale: 0.86 }, { opacity: 1, y: 0, scale: 1, duration: 0.14, ease: "back.out(2)" }, ${Math.max(ini, w.start - 0.02).toFixed(3)});\n`;
+      // la primera palabra ya está cuando aparece la caja (nunca una caja vacía); las demás saltan en su palabra
+      if (wi === 0) subsJs += `tl.fromTo("#s${gi}w${wi}", { opacity: 1, y: 8, scale: 0.92 }, { opacity: 1, y: 0, scale: 1, duration: 0.14, ease: "back.out(2)" }, ${ini.toFixed(3)});\n`;
+      else subsJs += `tl.fromTo("#s${gi}w${wi}", { opacity: 0, y: 18, scale: 0.86 }, { opacity: 1, y: 0, scale: 1, duration: 0.14, ease: "back.out(2)" }, ${Math.max(ini, w.start - 0.02).toFixed(3)});\n`;
     });
     subsJs += `tl.fromTo("#s${gi}i", { opacity: 1 }, { opacity: 0, duration: 0.08, ease: "power2.in", immediateRender: false }, ${(fin - 0.08).toFixed(3)});\n`;
   });
